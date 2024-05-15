@@ -13,7 +13,7 @@ interface CardProps {
 
 const Card = (props: CardProps) => {
     return (
-        <div className="bg-gray-100 dark:bg-red-800 border border-gray-200 dark:border-gray-800 rounded-xl shadow-lg flex flex-col my-2 p-4 w-4/6 min-w-60 relative">
+        <div className="bg-gray-100 dark:bg-zinc-800 border border-gray-200 dark:border-gray-800 rounded-xl shadow-lg flex flex-col my-2 p-4 w-4/6 min-w-60 relative">
             <div className="flex flex-row justify-between items-center gap-3">
                 <div className="flex flex-row gap-3 justify-center items-center">
                     <div>
