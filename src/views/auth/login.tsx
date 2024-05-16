@@ -90,10 +90,10 @@ export default function LoginPage() {
 
                     <div className="flex flex-col justify-center items-center text-center">
 
-                        {clickedButton && !messageError && <Spinner size="md" />}
+                        {clickedButton && !messageError && <Spinner size="md" className="hidden" />}
 
                         <div className="flex flex-col justify-center items-center">
-                            <p className="text-black dark:text-white font-medium font-Poppins">Não possui conta? <a href="register" className="text-blue-500 font-semibold">entrar</a></p>
+                            <p className="text-black dark:text-white font-medium font-Poppins">Não possui conta? <a href="register" className="text-blue-500 font-semibold">criar</a></p>
                         </div>
 
                     </div>

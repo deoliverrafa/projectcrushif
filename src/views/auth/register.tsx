@@ -120,6 +120,8 @@ export default function RegisterPage() {
         }
     }
 
+    console.log(clickedButton);
+    
     return (
         <div className="flex flex-col w-full h-full bg-gray-200 dark:bg-zinc-900">
             <div className="flex flex-row w-full justify-end items-center">
@@ -177,9 +179,9 @@ export default function RegisterPage() {
                         <Button color="primary" className="w-5/6 max-w-lg font-Poppins" type="submit" onClick={() => setClickedButton(true)}>Criar</Button>
                     </div>
 
-                    <div className="flex flex-col justify-center items-center">
-                        {clickedButton ? <Spinner size="md" /> : null}
-                    </div>
+
+                    {clickedButton ? <Spinner size="md" /> : null }
+
 
                     <div className="flex flex-row justify-center items-center ">
                         <p className="text-black dark:text-white font-semibold font-Poppins">Possui conta? <a className="text-blue-500 " href="login">Entrar</a></p>

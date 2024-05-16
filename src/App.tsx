@@ -13,6 +13,7 @@ import './styles/main.css'
 import UserBasePage from "./views/public/userBasePage.tsx";
 import LoginPage from "./views/auth/login.tsx";
 import RegisterPage from "./views/auth/register.tsx";
+import Publish from "./views/public/publish.tsx";
 
 // FUNCTION - APP //
 function App() {
@@ -27,6 +28,7 @@ function App() {
               <Route path='/user' element={<UserBasePage />} />
               <Route path='/auth/login' element={<LoginPage />} />
               <Route path='/auth/register' element={<RegisterPage />} />
+              <Route path='/publish' element={<Publish />} />
             </Routes>
           </Router>
         </NextThemesProvider>

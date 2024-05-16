@@ -25,7 +25,7 @@ export function NavBar(props: userData) {
         <>
             <Navbar className={`bg-gray-100 dark:bg-zinc-800 shadow-sm ${props.className}`}>
                 <NavbarBrand>
-                    <ThemeSwitcher />
+                    <ThemeSwitcher className="flex justify-center items-center" />
                 </NavbarBrand>
                 <NavbarContent justify="center">
                     <Link href="/">
