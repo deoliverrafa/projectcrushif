@@ -31,10 +31,10 @@ export default function HomePage() {
             }
 
             try {
-                const response = await axios.get(`http://localhost:4040/user/${userId}`);
+                const response = await axios.get(`https://crushapi-4ped.onrender.com/user/${userId}`);
 
                 if (!response) {
-                    setTimeout(async () => { await axios.get(`http://localhost:4040/user/${userId}`) })
+                    setTimeout(async () => { await axios.get(`https://crushapi-4ped.onrender.com/user/${userId}`) })
                 }
                 setUserData(response.data.userFinded);
             } catch (error) {

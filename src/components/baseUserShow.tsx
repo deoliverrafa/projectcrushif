@@ -16,13 +16,12 @@ export default function BaseUserShow() {
             const formData = new FormData();
             formData.append("avatar", imageFile);
 
-            const response = await axios.post("http://localhost:4040/profile/updatePhoto", formData);
+            const response = await axios.post("https://crushapi-4ped.onrender.com/profile/updatePhoto", formData);
 
             if (response.data.message) {
                 const imageUrl = URL.createObjectURL(imageFile);
                 setImage(imageFile);
                 localStorage.setItem('avatar', imageUrl);
-                // Dispatch a custom event to notify other parts of the application
                 window.dispatchEvent(new Event('storage'));
             }
         } else {
