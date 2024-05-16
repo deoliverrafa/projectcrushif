@@ -120,8 +120,6 @@ export default function RegisterPage() {
         }
     }
 
-    console.log(clickedButton);
-    
     return (
         <div className="flex flex-col w-full h-full bg-gray-200 dark:bg-zinc-900">
             <div className="flex flex-row w-full justify-end items-center">

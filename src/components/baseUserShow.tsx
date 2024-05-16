@@ -17,8 +17,6 @@ interface userData {
 }
 
 export default function BaseUserShow(props: userData) {
-
-    const [selectedImage, setImage] = useState(null);
     const [errorImage, setErrorImage] = useState("");
 
     const handleImageChange = async (event: React.BaseSyntheticEvent) => {
@@ -32,7 +30,6 @@ export default function BaseUserShow(props: userData) {
 
             if (response.data.message) {
                 const imageUrl = URL.createObjectURL(imageFile);
-                setImage(imageFile);
                 localStorage.setItem('avatar', imageUrl);
                 window.dispatchEvent(new Event('storage'));
             }

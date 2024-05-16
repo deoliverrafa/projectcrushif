@@ -1,4 +1,4 @@
-import { Button, Input, Switch, avatar } from "@nextui-org/react";
+import { Button, Input, Switch } from "@nextui-org/react";
 import { NavBar } from "../../components/navbar";
 import { getUserData } from "../../utils/getUserData";
 import { useEffect, useState } from "react";
