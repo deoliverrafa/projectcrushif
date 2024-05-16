@@ -53,7 +53,7 @@ export function NavBar(props: userData) {
                                 <p className="font-semibold">Signed in as</p>
                                 <p className="font-semibold">{props.user?.email}</p>
                             </DropdownItem>
-                            <DropdownItem key="settings" className="font-Poppins" href="/settings" textValue="Configurações">Configurações</DropdownItem>
+                            <DropdownItem key="user" className="font-Poppins" href="/user" textValue="Configurações">Configurações</DropdownItem>
                             <DropdownItem key="share" className="font-Poppins" color="secondary">Compartilhar</DropdownItem>
                             <DropdownItem key="logout" className='text-red-500 font-Poppins' color="danger" href="/auth/login" onClick={logOutHandle}>
                                 Log Out
