@@ -5,6 +5,7 @@ import Card from "../../components/card";
 import { Spinner } from "@nextui-org/react";
 import axios from "axios";
 import { debounce } from "lodash";
+const localAvatarPath = localStorage.getItem('avatar') ?? "";
 
 export default function HomePage() {
     const cardData = {
@@ -20,8 +21,6 @@ export default function HomePage() {
     const [bottomIsVisible, setBottomVisible] = useState(true);
     const [prevScrollPos, setPrevScrollPos] = useState(window.pageYOffset);
 
-    console.log(bottomIsVisible);
-
     useEffect(() => {
         async function getUserData() {
             const userId = localStorage.getItem("userId");
@@ -32,7 +31,11 @@ export default function HomePage() {
             }
 
             try {
-                const response = await axios.get(`https://crushapi-4ped.onrender.com/user/${userId}`);
+                const response = await axios.get(`http://localhost:4040/user/${userId}`);
+
+                if (!response) {
+                    setTimeout(async () => { await axios.get(`http://localhost:4040/user/${userId}`) })
+                }
                 setUserData(response.data.userFinded);
             } catch (error) {
                 console.error("Error fetching user data:", error);
@@ -69,7 +72,7 @@ export default function HomePage() {
 
     return (
         <>
-            <NavBar user={cardData} />
+            <NavBar user={cardData} avatarPath={localAvatarPath} />
             <main className="bg-gray-200 dark:bg-zinc-700 w-full h-full flex flex-col justify-center items-center">
                 <Card CardData={cardData} />
                 <Card CardData={cardData} />

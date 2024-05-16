@@ -1,48 +1,77 @@
 import { Avatar } from "@nextui-org/react";
-import avatar from "../../public/images/RafaelImage.png"
+import avatar from "../../public/images/RafaelImage.png";
 import { Eye, Users } from "phosphor-react";
+import { useState } from "react";
+import axios from "axios";
+import { isValidImage } from "../controllers/avatarUpdate";
 
 export default function BaseUserShow() {
+    const [selectedImage, setImage] = useState(null);
+    const [errorImage, setErrorImage] = useState("");
+
+    const handleImageChange = async (event: React.BaseSyntheticEvent) => {
+        const imageFile = event.target.files[0];
+
+        if (isValidImage(imageFile)) {
+            const formData = new FormData();
+            formData.append("avatar", imageFile);
+
+            const response = await axios.post("http://localhost:4040/profile/updatePhoto", formData);
+
+            if (response.data.message) {
+                const imageUrl = URL.createObjectURL(imageFile);
+                setImage(imageFile);
+                localStorage.setItem('avatar', imageUrl);
+                // Dispatch a custom event to notify other parts of the application
+                window.dispatchEvent(new Event('storage'));
+            }
+        } else {
+            setErrorImage("Por favor, selecione uma imagem válida (JPEG, PNG ou GIF).");
+        }
+    };
+
     return (
-
-        // cabeçalho da estrutura de settings
-
         <div className="flex flex-col w-full h-full">
-            <div className="flex flex-col fixed -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2 w-5/6 h-fit rounded-lg bg-zinc-300 dark:bg-zinc-800 shadow-lg shadow-default-400">
+            <div className="flex flex-col fixed -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2 w-full h-fit max-w-[1000px] rounded-lg bg-zinc-300 dark:bg-zinc-800 shadow-lg shadow-default-400">
                 <div className="flex justify-center">
-                    <Avatar
-                        isBordered
-                        as="button"
-                        className="transition-transform mt-4"
-                        color="secondary"
-                        name="Jason Hughes"
-                        size="sm"
-                        src={avatar}
-                    />
+                    <form action="updateAvatar" method="POST" className="flex flex-col gap-4">
+                        <div className="flex flex-col gap-1 items-center">
+                            <label htmlFor="avatarInput">
+                                <Avatar
+                                    isBordered
+                                    className="transition-transform mt-4 cursor-pointer"
+                                    color="secondary"
+                                    size="sm"
+                                    src={selectedImage ? URL.createObjectURL(selectedImage) : avatar}
+                                />
+                            </label>
+                            <input className="hidden" type="file" name="avatar" id="avatarInput" accept="image/*" onChange={handleImageChange} />
+                            <div className="flex w-full justify-center mt-3">
+                                <p className="text-bold font-Poppins text-black dark:text-white">Rafael Oliveira</p>
+                            </div>
+                            <div className="mt-3">
+                                {errorImage && (
+                                    <div className="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-black dark:text-red-400" role="alert">
+                                        <span className="font-medium">Atenção!</span> {errorImage}
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    </form>
                 </div>
-
-                {/* Nickname de usuário */}
-                <div className="flex w-full justify-center mt-3">
-                    <p className="text-bold font-Poppins text-black dark:text-white">Rafael Oliveira</p>
-                </div>
-
-
-                {/* Seção seguidores seguindo.. */}
                 <div className="mt-4">
-                    <div className="flex w-full h-auto justify-around">
+                    <div className="flex w-full h-auto justify-evenly items-center gap-1">
                         <div className="flex flex-col">
                             <Users size={32} weight="bold" />
-                            <p className="text-bold font-Poppins  text-black dark:text-white">1302</p>
+                            <p className="text-bold font-Poppins text-black dark:text-white">1302</p>
                         </div>
-
                         <div className="flex flex-col">
                             <Eye size={32} weight="bold" />
-                            <p className="text-bold font-Poppins  text-black dark:text-white">1302</p>
+                            <p className="text-bold font-Poppins text-black dark:text-white">1302</p>
                         </div>
-
                         <div className="flex flex-col">
                             <Eye size={32} weight="bold" />
-                            <p className="text-bold font-Poppins  text-black dark:text-white">1302</p>
+                            <p className="text-bold font-Poppins text-black dark:text-white">1302</p>
                         </div>
                     </div>
                 </div>
