@@ -3,8 +3,8 @@ import { Bottombar } from "../../components/bottombar";
 import { useState, useEffect } from "react";
 import Card from "../../components/card";
 import { Spinner } from "@nextui-org/react";
-import { debounce } from "lodash";
 import axios from "axios";
+import { debounce } from "lodash";
 
 export default function HomePage() {
     const cardData = {

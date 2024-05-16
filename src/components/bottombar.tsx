@@ -1,5 +1,4 @@
 import { Badge, Button } from '@nextui-org/react';
-import { useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 
 interface bottomProps {
