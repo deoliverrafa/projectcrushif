@@ -8,10 +8,12 @@ interface User {
     nickname: string
     email: string
     campus: string
+    className?: string
 }
 
 interface userData{
     user: User | null
+    className?: string
 }
 
 export function NavBar(props: userData) {
@@ -22,7 +24,7 @@ export function NavBar(props: userData) {
 
     return (
         <>
-            <Navbar className="bg-gray-100 dark:bg-zinc-800 shadow-sm" >
+            <Navbar className={`bg-gray-100 dark:bg-zinc-800 shadow-sm ${props.className}`} >
                 <NavbarBrand>
                     <ThemeSwitcher />
                 </NavbarBrand>

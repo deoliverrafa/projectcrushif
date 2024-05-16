@@ -1,10 +1,16 @@
 import { Badge, Button } from '@nextui-org/react';
+import { useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 
-export function Bottombar() {
+interface bottomProps {
+    className?: string;
+}
+
+export function Bottombar({className}: bottomProps) {
+
     return (
         <>
-            <nav className="bg-gray-200 dark:bg-zinc-800 fixed bottom-0 left-0 flex flex-row justify-around items-center w-full">
+            <nav className={`bg-gray-200 dark:bg-zinc-800 fixed right-0 bottom-0 flex flex-row justify-around items-center w-full ${className} animate-appearance-in`}>
                 <NavLink to='/' >
                     {({ isActive }) => isActive ?
                         (

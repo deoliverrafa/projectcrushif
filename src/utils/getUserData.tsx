@@ -9,6 +9,7 @@ interface User {
 }
 
 export function getUserData() {
+    
     const [userData, setUserData] = useState<User | null>(null);
 
     useEffect(() => {
