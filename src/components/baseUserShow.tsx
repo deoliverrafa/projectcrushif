@@ -1,11 +1,23 @@
 import { Avatar } from "@nextui-org/react";
-import avatar from "../../public/images/RafaelImage.png";
 import { Eye, Users } from "phosphor-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { isValidImage } from "../controllers/avatarUpdate";
 
-export default function BaseUserShow() {
+interface User {
+    _id: string;
+    nickname: string;
+    email: string;
+    campus: string;
+    className?: string;
+}
+
+interface userData {
+    user: User | null
+}
+
+export default function BaseUserShow(props: userData) {
+
     const [selectedImage, setImage] = useState(null);
     const [errorImage, setErrorImage] = useState("");
 
@@ -29,6 +41,22 @@ export default function BaseUserShow() {
         }
     };
 
+
+
+    const [avatarPath, setAvatarPath] = useState(localStorage.getItem('avatar') ?? "");
+
+    useEffect(() => {
+        const handleStorageChange = () => {
+            setAvatarPath(localStorage.getItem('avatar') ?? "");
+        };
+
+        window.addEventListener('storage', handleStorageChange);
+
+        return () => {
+            window.removeEventListener('storage', handleStorageChange);
+        };
+    }, []);
+    
     return (
         <div className="flex flex-col w-full h-full">
             <div className="flex flex-col fixed -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2 w-full h-fit max-w-[1000px] rounded-lg bg-zinc-300 dark:bg-zinc-800 shadow-lg shadow-default-400">
@@ -41,7 +69,8 @@ export default function BaseUserShow() {
                                     className="transition-transform mt-4 cursor-pointer"
                                     color="secondary"
                                     size="sm"
-                                    src={selectedImage ? URL.createObjectURL(selectedImage) : avatar}
+                                    name={props.user?.nickname}
+                                    src={avatarPath ?? ""}
                                 />
                             </label>
                             <input className="hidden" type="file" name="avatar" id="avatarInput" accept="image/*" onChange={handleImageChange} />

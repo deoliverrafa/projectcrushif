@@ -22,7 +22,7 @@ export default function UserBasePage() {
     return (
         <>
             <NavBar user={userData} avatarPath={avatarPath} />
-            <BaseUserShow />
+            <BaseUserShow user={userData} />
         </>
     );
 }
