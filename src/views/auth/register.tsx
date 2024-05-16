@@ -127,7 +127,7 @@ export default function RegisterPage() {
             </div>
 
             <form action="register" method="POST" className="flex flex-col justify-center items-center mt-10" onSubmit={handleSubmit}>
-                <div className="flex flex-col relative w-2/3 h-4/6 gap-10">
+                <div className="flex flex-col relative w-full h-full gap-10">
                     <div className="flex flex-col justify-center items-center">
                         <div className="flex flex-row justify-center items-baseline mr-20">
                             <img src={logo} alt="logo crush ifto" className="w-20 h-20" />

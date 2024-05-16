@@ -8,7 +8,7 @@ export default function BaseUserShow() {
         // cabeçalho da estrutura de settings
 
         <div className="flex flex-col w-full h-full">
-            <div className="flex flex-col fixed -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2 w-2/5 h-4/6 rounded-lg bg-zinc-300 dark:bg-zinc-800 shadow-lg shadow-default-400">
+            <div className="flex flex-col fixed -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2 w-5/6 h-fit rounded-lg bg-zinc-300 dark:bg-zinc-800 shadow-lg shadow-default-400">
                 <div className="flex justify-center">
                     <Avatar
                         isBordered
