@@ -23,6 +23,7 @@ export default function BaseUserShow(props: userData) {
         const imageFile = event.target.files[0];
 
         if (isValidImage(imageFile)) {
+            setErrorImage('')
             const formData = new FormData();
             formData.append("avatar", imageFile);
 

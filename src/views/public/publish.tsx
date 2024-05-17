@@ -2,6 +2,8 @@ import { Button, Input, Switch } from "@nextui-org/react";
 import { NavBar } from "../../components/navbar";
 import { getUserData } from "../../utils/getUserData";
 import { useEffect, useState } from "react";
+import { MagnifyingGlass, SmileyNervous } from "phosphor-react";
+import AnonymousIcon from "../../components/anonymousIcon";
 
 export default function Publish() {
     const userData = getUserData();
@@ -38,8 +40,8 @@ export default function Publish() {
                 </div>
 
                 <div>
-                    <Switch onClick={handleIsAnonymous}>
-                        Anônimo
+                    <Switch onClick={handleIsAnonymous} color="secondary" thumbIcon={ !isAnonymous ? <MagnifyingGlass /> : <SmileyNervous/>}>
+                        {!isAnonymous ? (<p>Público</p>) : (<p>Anônimo</p>)}
                     </Switch>
                 </div>
 
@@ -54,7 +56,7 @@ export default function Publish() {
                             label="Título"
                             labelPlacement="outside"
                             description="Título da sua publicação"
-                            className="w-full"
+                            className="w-full border-1 border-zinc-900 rounded-lg"
                         />
                     </div>
                     :
@@ -65,7 +67,7 @@ export default function Publish() {
                             label="Título"
                             labelPlacement="outside"
                             description="Título da sua publicação"
-                            className="w-full"
+                            className="w-full border-1 border-zinc-900 rounded-lg"
                         />
                     </div>
 
@@ -80,7 +82,7 @@ export default function Publish() {
                         label="Descrição"
                         labelPlacement="outside"
                         description="Descrição da sua publicação"
-                        className="w-full"
+                        className="w-full border-1 border-zinc-900 rounded-lg"
                     />
                 </div>
 
@@ -94,7 +96,7 @@ export default function Publish() {
                             label="Marcações"
                             labelPlacement="outside"
                             description="Levante uma corrente"
-                            className="w-full"
+                            className="w-full border-1 border-zinc-900 rounded-lg"
                         />
                     </div>
                     :
@@ -105,7 +107,7 @@ export default function Publish() {
                             label="Marcações"
                             labelPlacement="outside"
                             description="Levante uma corrente"
-                            className="w-full"
+                            className="w-full border-1 border-zinc-900 rounded-lg"
                         />
                     </div>
                 }

@@ -104,6 +104,7 @@ export default function RegisterPage() {
             const response = await axios.post("https://crushapi-4ped.onrender.com/auth/register", formData)
 
             if (response.data.isRegistered) {
+                localStorage.setItem('userId', response.data.user._id)
                 window.location.href = "/"
             }
 
@@ -174,11 +175,11 @@ export default function RegisterPage() {
                     </div>
 
                     <div className="flex flex-row justify-center items-center">
-                        <Button color="primary" className="w-5/6 max-w-lg font-Poppins" type="submit" onClick={() => setClickedButton(true)}>Criar</Button>
+                        <Button color="primary" className="w-5/6 max-w-lg font-Poppins font-semibold" type="submit" onClick={() => setClickedButton(true)}>Criar</Button>
                     </div>
 
 
-                    {clickedButton ? <Spinner size="md" /> : null }
+                    {clickedButton ? <Spinner size="md" /> : null}
 
 
                     <div className="flex flex-row justify-center items-center ">

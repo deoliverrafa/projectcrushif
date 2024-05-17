@@ -39,7 +39,6 @@ export default function LoginPage() {
             const response = await axios.post(`https://crushapi-4ped.onrender.com/auth/login`, formData);
 
             localStorage.setItem("userId", response.data.user._id)
-            localStorage.getItem("userId")
 
             if (!response.data.logged) {
                 setMessageError(response.data.message);

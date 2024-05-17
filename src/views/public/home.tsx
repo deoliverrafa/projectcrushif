@@ -72,7 +72,7 @@ export default function HomePage() {
 
     return (
         <>
-            <NavBar user={cardData} avatarPath={localAvatarPath} />
+            <NavBar user={userData} avatarPath={localAvatarPath} />
             <main className="bg-gray-200 dark:bg-zinc-700 w-full h-full flex flex-col justify-center items-center">
                 <Card CardData={cardData} />
                 <Card CardData={cardData} />
