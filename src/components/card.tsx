@@ -16,15 +16,15 @@ interface CardProps {
 
 const Card = (props: CardProps) => {
     return (
-        <div className="bg-gray-100 dark:bg-zinc-800 border border-gray-200 dark:border-gray-800 rounded-xl shadow-lg flex flex-col my-2 p-4 w-4/6 min-w-60 ">
+        <div className="bg-gray-100 dark:bg-zinc-800 border border-gray-300 dark:border-gray-800 rounded-xl shadow-lg flex flex-col my-2 p-4 w-4/6 min-w-60 ">
             <div className="flex flex-row justify-between items-center relative top-0 right-0">
                 <div className="flex flex-row gap-1 justify-center items-center">
                     <div>
                         <Avatar className="ring-purple-500 ring-2" />
                     </div>
                     <div className="flex flex-col">
-                        <p className="font-semibold mx-2">{props.CardData.nickname ? props.CardData.nickname : "Anônimo"}</p>
-                        <p className="text-gray-500 dark:text-gray-400 text-sm mx-2">@deoliverrafa</p>
+                        <p className="font-semibold mx-2">{!props.CardData.isAnonymous ? props.CardData.nickname : "Anônimo"}</p>
+                        <p className="text-gray-500 dark:text-gray-400 text-sm mx-2">{!props.CardData.isAnonymous ? `@${props.CardData.nickname}` : null}</p>
                     </div>
                 </div>
                 <div className="flex justify-center items-center gap-3">
@@ -61,18 +61,25 @@ const Card = (props: CardProps) => {
                 </div>
 
                 <div className="my-1 px-2 flex flex-row gap-1">
-                    <a key={props.CardData._id} className="text-blue-500 dark:text-blue-600" id={props.CardData._id}>
+                    <a key={props.CardData._id} className="text-blue-500 dark:text-blue-600 break-words" id={props.CardData._id}>
                         {props.CardData.references}
                     </a>
                 </div>
-                <div className="flex flex-row gap-2">
-                    <p className="text-gray-500 dark:text-gray-400 mx-1">
-                        <span className="font-semibold">4 </span>Seguindo
-                    </p>
-                    <p className="text-gray-500 dark:text-gray-400 mx-1">
-                        <span className="font-semibold">10 </span>Seguidores
-                    </p>
-                </div>
+
+                {
+                    !props.CardData.isAnonymous ?
+
+                        <div className="flex flex-row gap-2">
+                            <p className="text-gray-500 dark:text-gray-400 mx-1">
+                                <span className="font-semibold">4 </span>Seguindo
+                            </p>
+                            <p className="text-gray-500 dark:text-gray-400 mx-1">
+                                <span className="font-semibold">10 </span>Seguidores
+                            </p>
+                        </div>
+                        :
+                        null
+                }
             </div>
         </div>
     );

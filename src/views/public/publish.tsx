@@ -1,8 +1,11 @@
 import { Button, Input, Switch } from "@nextui-org/react";
+import { GiDoubleFaceMask } from "react-icons/gi";
 import { NavBar } from "../../components/navbar";
 import { getUserData } from "../../utils/getUserData";
 import { ChangeEvent, useEffect, useState } from "react";
-import { MagnifyingGlass, SmileyNervous } from "phosphor-react";
+import { MdOutlinePeopleAlt } from "react-icons/md";
+
+
 import Card from "../../components/card";
 
 interface CardData {
@@ -70,6 +73,13 @@ export default function Publish() {
     }, [userData]);
 
     useEffect(() => {
+        setCardData((prevData) => ({
+            ...prevData,
+            isAnonymous: isAnonymous
+        }))
+    }, [isAnonymous]);
+
+    useEffect(() => {
         if (selectedFile) {
 
             if (selectedFile.type == "image/jpeg" || selectedFile.type == "image/png" || selectedFile.type == "image/gif") {
@@ -131,7 +141,7 @@ export default function Publish() {
                         </div>
 
                         <div>
-                            <Switch onClick={handleIsAnonymous} color="secondary" thumbIcon={!isAnonymous ? <MagnifyingGlass /> : <SmileyNervous />}>
+                            <Switch onClick={handleIsAnonymous} color="secondary" thumbIcon={!isAnonymous ? <MdOutlinePeopleAlt /> : <GiDoubleFaceMask />}>
                                 {!isAnonymous ? (<p>Público</p>) : (<p>Anônimo</p>)}
                             </Switch>
                         </div>
@@ -190,7 +200,7 @@ export default function Publish() {
                         </div>
                     </form>
 
-                    <div className="flex flex-row justify-center items-center mt-5">
+                    <div className="flex flex-row justify-center items-center max-sm:mt-5">
                         {/* Card exemplo */}
                         <div className="flex flex-col items-center  w-full text-center gap-3">
                             <h1 className="text-black dark:text-white font-semibold">Acompanhe seu Post</h1>
