@@ -1,7 +1,7 @@
-import { Button, Input, Switch, card } from "@nextui-org/react";
+import { Button, Input, Switch } from "@nextui-org/react";
 import { NavBar } from "../../components/navbar";
 import { getUserData } from "../../utils/getUserData";
-import { ChangeEvent, isValidElement, useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { MagnifyingGlass, SmileyNervous } from "phosphor-react";
 import Card from "../../components/card";
 
@@ -12,10 +12,6 @@ interface CardData {
     references?: string;
     content?: string;
     isAnonymous: boolean;
-}
-
-interface CardProps {
-    CardData: CardData;
 }
 
 
