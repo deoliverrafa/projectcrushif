@@ -5,19 +5,19 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 // IMPORt - ROUTES //
 import HomePage from './views/public/home.tsx';
-
-
-
-// IMPORT - STYLES //
-import './styles/main.css'
 import UserBasePage from "./views/public/userBasePage.tsx";
 import LoginPage from "./views/auth/login.tsx";
 import RegisterPage from "./views/auth/register.tsx";
 import Publish from "./views/public/publish.tsx";
 
+
+// IMPORT - STYLES //
+import './styles/main.css'
+
+
 // FUNCTION - APP //
 function App() {
-  
+
   return (
     <>
       <NextUIProvider>

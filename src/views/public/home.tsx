@@ -5,6 +5,8 @@ import Card from "../../components/card";
 import { Spinner } from "@nextui-org/react";
 import axios from "axios";
 import { debounce } from "lodash";
+import { getNewPosts } from "../../utils/getNewPosts";
+
 const localAvatarPath = localStorage.getItem('avatar') ?? "";
 
 export default function HomePage() {
@@ -21,11 +23,13 @@ export default function HomePage() {
     const [userData, setUserData] = useState(null);
     const [bottomIsVisible, setBottomVisible] = useState(true);
     const [prevScrollPos, setPrevScrollPos] = useState(window.pageYOffset);
+    const [skip, setSkip] = useState(0);
+    const [limit, setLimit] = useState(15);
 
     useEffect(() => {
-        async function getUserData() {
-            const userId = localStorage.getItem("userId");
+        const userId = localStorage.getItem("userId");
 
+        async function getUserData() {
             if (!userId || userId === "null") {
                 window.location.href = "/auth/login";
                 return;
@@ -43,6 +47,19 @@ export default function HomePage() {
             }
         }
 
+        async function getPosts() {
+            if(!userId || userId === "null"){
+                return;
+            }
+            try {
+                const response = getNewPosts(skip, limit)
+                console.log(response);
+                
+            } catch (error) {
+                
+            }
+        }
+        getPosts()
         getUserData();
     }, []);
 

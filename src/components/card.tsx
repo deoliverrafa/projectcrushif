@@ -11,6 +11,7 @@ interface CardProps {
         title?: string;
         photo?: string;
         isAnonymous: boolean;
+        userPhotoUrl?: string;
     }
 }
 
@@ -20,7 +21,15 @@ const Card = (props: CardProps) => {
             <div className="flex flex-row justify-between items-center relative top-0 right-0">
                 <div className="flex flex-row gap-1 justify-center items-center">
                     <div>
-                        <Avatar className="ring-purple-500 ring-2" />
+                        <Avatar
+                            isBordered
+                            as="button"
+                            className="transition-transform cursor-pointer"
+                            color="secondary"
+                            name={props.CardData.nickname}
+                            size="sm"
+                            src={!props.CardData.isAnonymous ? props.CardData.userPhotoUrl : ""}    
+                        />
                     </div>
                     <div className="flex flex-col">
                         <p className="font-semibold mx-2">{!props.CardData.isAnonymous ? props.CardData.nickname : "Anônimo"}</p>
@@ -60,11 +69,18 @@ const Card = (props: CardProps) => {
                     }
                 </div>
 
-                <div className="my-1 px-2 flex flex-row gap-1">
-                    <a key={props.CardData._id} className="text-blue-500 dark:text-blue-600 break-words" id={props.CardData._id}>
-                        {props.CardData.references}
-                    </a>
-                </div>
+                {
+                    !props.CardData.isAnonymous ?
+                        (
+                            <div className="my-1 px-2 flex flex-row gap-1">
+                                <a key={props.CardData._id} className="text-blue-500 dark:text-blue-600 break-words" id={props.CardData._id}>
+                                    {props.CardData.references}
+                                </a>
+                            </div>
+                        )
+                        :
+                        null
+                }
 
                 {
                     !props.CardData.isAnonymous ?

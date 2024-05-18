@@ -4,8 +4,6 @@ import { NavBar } from "../../components/navbar";
 import { getUserData } from "../../utils/getUserData";
 import { ChangeEvent, useEffect, useState } from "react";
 import { MdOutlinePeopleAlt } from "react-icons/md";
-
-
 import Card from "../../components/card";
 
 interface CardData {
@@ -21,6 +19,7 @@ interface CardData {
 export default function Publish() {
 
     const userData = getUserData();
+
 
     const [isAnonymous, setAnonymous] = useState<boolean>(false);
     const [avatarPath, setAvatarPath] = useState(localStorage.getItem('avatar') ?? "");
@@ -55,12 +54,7 @@ export default function Publish() {
         }
     }
 
-    function handleAvatar() {
-        setAvatarPath(localStorage.getItem('avatar') ?? "");
-    }
-
     useEffect(() => {
-        handleAvatar
         if (userData) {
             setCardData((prevData) => ({
                 ...prevData,
@@ -76,25 +70,23 @@ export default function Publish() {
         setCardData((prevData) => ({
             ...prevData,
             isAnonymous: isAnonymous
-        }))
+        }));
     }, [isAnonymous]);
 
     useEffect(() => {
         if (selectedFile) {
-
-            if (selectedFile.type == "image/jpeg" || selectedFile.type == "image/png" || selectedFile.type == "image/gif") {
+            if (selectedFile.type === "image/jpeg" || selectedFile.type === "image/png" || selectedFile.type === "image/gif") {
                 setErrorMessage('');
                 const imageUrl = URL.createObjectURL(selectedFile);
                 setCardData((prevData) => ({
                     ...prevData,
                     photo: imageUrl
-                }))
+                }));
             } else {
-                setErrorMessage("Por favor, selecione uma imagem válida (JPEG, PNG ou GIF).")
+                setErrorMessage("Por favor, selecione uma imagem válida (JPEG, PNG ou GIF).");
             }
-
         }
-    }, [selectedFile])
+    }, [selectedFile]);
 
     async function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
@@ -105,13 +97,14 @@ export default function Publish() {
         formData.append('campus', cardData.campus);
         formData.append('content', cardData.content || "");
         formData.append('references', cardData.references ? cardData.references : "");
+        formData.append('isAnonymous', isAnonymous.toString());
 
         if (selectedFile) {
-            formData.append('foto', selectedFile);
+            formData.append('photo', selectedFile);
         }
 
         try {
-            const response = await fetch('YOUR_BACKEND_URL', {
+            const response = await fetch('https://crushapi-4ped.onrender.com/post/publish', {
                 method: 'POST',
                 body: formData,
             });
@@ -125,18 +118,13 @@ export default function Publish() {
         }
     }
 
-
     return (
         <>
             <div className="flex flex-col justify-center items-center">
                 <NavBar user={userData} avatarPath={avatarPath} />
-
-
                 <div className="flex flex-row items-start max-sm:flex-col max-sm:justify-start max-sm:items-center pl-20 pr-20 w-full relative top-20 text-black dark:text-white">
                     <form onSubmit={handleSubmit} className="flex flex-col w-full gap-5 max-sm:justify-center max-sm:items-center">
                         <div className="">
-
-
                             <h1 className="font-Poppins font-semibold text-xl">Publique</h1>
                         </div>
 
@@ -146,7 +134,6 @@ export default function Publish() {
                             </Switch>
                         </div>
 
-                        {/* Texto */}
                         <div className="flex flex-col gap-1 w-1/3 min-w-56 max-w-96">
                             <Input
                                 key="content"
@@ -160,8 +147,7 @@ export default function Publish() {
                             />
                         </div>
 
-                        {/* Marcações */}
-                        {!isAnonymous ?
+                        {!isAnonymous &&
                             <div className="flex flex-col gap-1 w-1/3 min-w-56 max-w-96">
                                 <Input
                                     key="references"
@@ -174,8 +160,6 @@ export default function Publish() {
                                     onChange={handleChangeData}
                                 />
                             </div>
-                            :
-                            null
                         }
 
                         <div className="flex flex-col gap-1 w-1/3 min-w-56 max-w-96">
@@ -201,23 +185,16 @@ export default function Publish() {
                     </form>
 
                     <div className="flex flex-row justify-center items-center max-sm:mt-5">
-                        {/* Card exemplo */}
-                        <div className="flex flex-col items-center  w-full text-center gap-3">
+                        <div className="flex flex-col items-center w-full text-center gap-3">
                             <h1 className="text-black dark:text-white font-semibold">Acompanhe seu Post</h1>
                             <Card CardData={cardData} />
-                            <div>
-                                {
-                                    isAnonymous ? (
-                                        <div>
-                                            <h1 className="animate-appearance-in text-center text-black dark:text-white font-semibold">Seu nome não aparecerá no seu post</h1>
-                                        </div>
-                                    ) :
-                                        null
-                                }
-                            </div>
+                            {isAnonymous && (
+                                <div>
+                                    <h1 className="animate-appearance-in text-center text-black dark:text-white font-semibold">Seu nome não aparecerá no seu post</h1>
+                                </div>
+                            )}
                         </div>
                     </div>
-
                 </div>
             </div>
         </>
