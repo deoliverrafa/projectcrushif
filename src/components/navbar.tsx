@@ -23,7 +23,7 @@ export function NavBar(props: userData) {
 
     return (
         <>
-            <Navbar className={`bg-gray-100 dark:bg-zinc-800 shadow-sm ${props.className}`}>
+            <Navbar className={`bg-gray-100 dark:bg-zinc-800 shadow-sm border-b-1 border-b-zinc-300 dark:border-b-zinc-600 ${props.className}`}>
                 <NavbarBrand>
                     <ThemeSwitcher className="flex justify-center items-center" />
                 </NavbarBrand>

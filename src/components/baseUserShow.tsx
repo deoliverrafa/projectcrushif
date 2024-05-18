@@ -21,13 +21,12 @@ export default function BaseUserShow(props: userData) {
 
     const handleImageChange = async (event: React.BaseSyntheticEvent) => {
         const imageFile = event.target.files[0];
-
         if (isValidImage(imageFile)) {
             setErrorImage('')
             const formData = new FormData();
             formData.append("avatar", imageFile);
 
-            const response = await axios.post("https://crushapi-4ped.onrender.com/profile/updatePhoto", formData);
+            const response = await axios.post("http://localhost:4040/profile/updatePhoto", formData);
 
             if (response.data.message) {
                 const imageUrl = URL.createObjectURL(imageFile);

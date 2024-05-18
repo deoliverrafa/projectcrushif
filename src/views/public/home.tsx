@@ -13,8 +13,9 @@ export default function HomePage() {
         nickname: "deoliverrafa",
         email: "deoliverrafa@gmail.com",
         campus: "IFTO",
-        references: ["#IFTO", "#ÉOCRUSH"],
-        content: "Alguem sabe onde compro meio kilo de JavaScript? "
+        references: "#IFTO #ÉOCRUSH",
+        content: "Alguem sabe onde compro meio kilo de JavaScript? ",
+        isAnonymous: false
     }
 
     const [userData, setUserData] = useState(null);
@@ -31,10 +32,10 @@ export default function HomePage() {
             }
 
             try {
-                const response = await axios.get(`https://crushapi-4ped.onrender.com/user/${userId}`);
+                const response = await axios.get(`http://localhost:4040/user/${userId}`);
 
                 if (!response) {
-                    setTimeout(async () => { await axios.get(`https://crushapi-4ped.onrender.com/user/${userId}`) })
+                    setTimeout(async () => { await axios.get(`http://localhost:4040/user/${userId}`) })
                 }
                 setUserData(response.data.userFinded);
             } catch (error) {
@@ -60,30 +61,33 @@ export default function HomePage() {
         };
     }, [prevScrollPos]);
 
-    if (!userData) {
-        return (
-            <>
-                <main className="bg-gray-200 dark:bg-zinc-700 p-5 h-auto w-full flex flex-col justify-center items-center">
-                    <Spinner />
-                </main>
-            </>
-        )
-    }
-
     return (
         <>
-            <NavBar user={userData} avatarPath={localAvatarPath} />
-            <main className="bg-gray-200 dark:bg-zinc-700 w-full h-full flex flex-col justify-center items-center">
-                <Card CardData={cardData} />
-                <Card CardData={cardData} />
-                <Card CardData={cardData} />
-                <Card CardData={cardData} />
-                <Card CardData={cardData} />
-                <Card CardData={cardData} />
-                <Card CardData={cardData} />
-                <Card CardData={cardData} />
-            </main>
-            <Bottombar className={`${bottomIsVisible ? 'animate-appearance-in' : 'animate-appearance-out'}`} />
+            {userData ?
+                (
+                    <div className="">
+                        < NavBar user={userData} avatarPath={localAvatarPath} />
+                        <main className="bg-gray-200 dark:bg-zinc-700 w-full h-full flex flex-col justify-center items-center">
+                            <Card CardData={cardData} />
+                            <Card CardData={cardData} />
+                            <Card CardData={cardData} />
+                            <Card CardData={cardData} />
+                            <Card CardData={cardData} />
+                        </main>
+                        <Bottombar className={`${bottomIsVisible ? 'animate-appearance-in' : 'animate-appearance-out'}`} />
+                    </div>
+                )
+                :
+                (
+                    <div className="w-dvw h-dvh flex flex-row justify-center items-center">
+                        <div className="flex flex-row gap-3 justify-center items-center">
+                            <Spinner size="lg" />
+                            <h1>Aguarde...</h1>
+                        </div>
+                    </div>
+                )
+
+            }
         </>
     );
 }

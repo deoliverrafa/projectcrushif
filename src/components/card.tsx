@@ -1,26 +1,29 @@
-import { Avatar, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from "@nextui-org/react";
+import { Avatar, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, Image } from "@nextui-org/react";
 
 interface CardProps {
     CardData: {
-        _id: string;
+        _id?: string;
         nickname: string;
         email: string;
         campus: string;
-        references?: string[];
+        references?: string;
         content?: string;
-    } | null;
+        title?: string;
+        photo?: string;
+        isAnonymous: boolean;
+    }
 }
 
 const Card = (props: CardProps) => {
     return (
         <div className="bg-gray-100 dark:bg-zinc-800 border border-gray-200 dark:border-gray-800 rounded-xl shadow-lg flex flex-col my-2 p-4 w-4/6 min-w-60 ">
             <div className="flex flex-row justify-between items-center relative top-0 right-0">
-                <div className="flex flex-row gap-3 justify-center items-center">
+                <div className="flex flex-row gap-1 justify-center items-center">
                     <div>
                         <Avatar className="ring-purple-500 ring-2" />
                     </div>
                     <div className="flex flex-col">
-                        <p className="font-semibold mx-2">{props.CardData?.nickname ? props.CardData.nickname : "Anônimo"}</p>
+                        <p className="font-semibold mx-2">{props.CardData.nickname ? props.CardData.nickname : "Anônimo"}</p>
                         <p className="text-gray-500 dark:text-gray-400 text-sm mx-2">@deoliverrafa</p>
                     </div>
                 </div>
@@ -40,15 +43,27 @@ const Card = (props: CardProps) => {
             <div className="flex flex-col mt-4 justify-center items-start">
                 <div className="my-1 px-2 flex flex-row gap-1">
                     <p className="text-sm font-Poppins text-black dark:text-white break-words">
-                        {props.CardData?.content || ""}
+                        {props.CardData.content || ""}
                     </p>
                 </div>
+
+                <div className="p-2">
+                    {props.CardData.photo ? (
+                        <Image
+                            width={300}
+                            height={200}
+                            src={props.CardData.photo}
+                            alt="Imagem Post"
+                        />
+                    ) :
+                        null
+                    }
+                </div>
+
                 <div className="my-1 px-2 flex flex-row gap-1">
-                    {props.CardData?.references?.map((reference, index) => (
-                        <a key={index} className="text-blue-500 dark:text-blue-600" id={reference}>
-                            {reference}
-                        </a>
-                    ))}
+                    <a key={props.CardData._id} className="text-blue-500 dark:text-blue-600" id={props.CardData._id}>
+                        {props.CardData.references}
+                    </a>
                 </div>
                 <div className="flex flex-row gap-2">
                     <p className="text-gray-500 dark:text-gray-400 mx-1">
