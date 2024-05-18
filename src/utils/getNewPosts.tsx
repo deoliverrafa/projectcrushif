@@ -27,8 +27,8 @@ export function getNewPosts(skip: number, limit: number) {
             try {
                 const response = await axios.get(`https://crushapi-4ped.onrender.com/posts/get/${userId}/${userId}/${skip}/${limit}`);
                 console.log(response);
+                setNewPosts(response.data.posts);
                 return response.data.posts
-                // setNewPosts(response.data.);
             } catch (error) {
                 console.log("Erro ao buscar postagens", error);
             }

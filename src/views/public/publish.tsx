@@ -63,6 +63,7 @@ export default function Publish() {
                 campus: userData.campus,
                 isAnonymous: isAnonymous
             }));
+            setAvatarPath(localStorage.getItem('avatar') ?? "")
         }
     }, [userData]);
 
