@@ -16,7 +16,6 @@ interface CardData {
 
 
 export default function Publish() {
-    console.log("Renderizei");
 
     const userData = getUserData();
 
@@ -72,7 +71,6 @@ export default function Publish() {
 
     useEffect(() => {
         if (selectedFile) {
-            console.log(selectedFile);
 
             if (selectedFile.type == "image/jpeg" || selectedFile.type == "image/png" || selectedFile.type == "image/gif") {
                 setErrorMessage('');
@@ -124,9 +122,11 @@ export default function Publish() {
                 <NavBar user={userData} avatarPath={avatarPath} />
 
 
-                <div className="flex flex-row items-start max-sm:flex-col max-sm:justify-center max-sm:items-center pl-20 pr-20 w-full relative top-20 text-black dark:text-white">
+                <div className="flex flex-row items-start max-sm:flex-col max-sm:justify-start max-sm:items-center pl-20 pr-20 w-full relative top-20 text-black dark:text-white">
                     <form onSubmit={handleSubmit} className="flex flex-col w-full gap-5 max-sm:justify-center max-sm:items-center">
                         <div className="">
+
+
                             <h1 className="font-Poppins font-semibold text-xl">Publique</h1>
                         </div>
 
@@ -137,7 +137,7 @@ export default function Publish() {
                         </div>
 
                         {/* Texto */}
-                        <div className="flex flex-col gap-1 w-1/3 min-w-56">
+                        <div className="flex flex-col gap-1 w-1/3 min-w-56 max-w-96">
                             <Input
                                 key="content"
                                 type="text"
@@ -152,7 +152,7 @@ export default function Publish() {
 
                         {/* Marcações */}
                         {!isAnonymous ?
-                            <div className="flex flex-col gap-1 w-1/3 min-w-56">
+                            <div className="flex flex-col gap-1 w-1/3 min-w-56 max-w-96">
                                 <Input
                                     key="references"
                                     type="text"
@@ -168,7 +168,7 @@ export default function Publish() {
                             null
                         }
 
-                        <div className="flex flex-col gap-1 w-1/3 min-w-56">
+                        <div className="flex flex-col gap-1 w-1/3 min-w-56 max-w-96">
                             <label htmlFor="inputFoto" className="w-full h-fit cursor-pointer">
                                 <Button className="w-full" as="span">
                                     Selecione uma Foto
@@ -185,29 +185,29 @@ export default function Publish() {
                             </div>
                         </div>
 
-                        <div className="w-1/3 min-w-56">
+                        <div className="w-1/3 min-w-56 max-w-96">
                             <Button type="submit" color="secondary" className="w-full">Enviar</Button>
                         </div>
                     </form>
 
-                    <div className="flex justify-center items-center mt-5">
+                    <div className="flex flex-row justify-center items-center mt-5">
                         {/* Card exemplo */}
-                        <div className="flex flex-col w-full text-center">
-                            <h1>Acompanhe seu Post</h1>
+                        <div className="flex flex-col items-center  w-full text-center gap-3">
+                            <h1 className="text-black dark:text-white font-semibold">Acompanhe seu Post</h1>
                             <Card CardData={cardData} />
-                        </div>
-
-                        <div>
-                            {
-                                isAnonymous ? (
-                                    <div>
-                                        <h1 className="animate-appearance-in text-center text-black dark:text-white font-semibold">Seu nome não aparecerá no seu post</h1>
-                                    </div>
-                                ) :
-                                    null
-                            }
+                            <div>
+                                {
+                                    isAnonymous ? (
+                                        <div>
+                                            <h1 className="animate-appearance-in text-center text-black dark:text-white font-semibold">Seu nome não aparecerá no seu post</h1>
+                                        </div>
+                                    ) :
+                                        null
+                                }
+                            </div>
                         </div>
                     </div>
+
                 </div>
             </div>
         </>
