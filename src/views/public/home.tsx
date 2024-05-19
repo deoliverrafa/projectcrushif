@@ -27,7 +27,7 @@ export default function HomePage() {
     const [bottomIsVisible, setBottomVisible] = useState(true);
     const [prevScrollPos, setPrevScrollPos] = useState(window.pageYOffset);
     const [skip, setSkip] = useState(0);
-    const [limit, setLimit] = useState(10);
+    const [limit, setLimit] = useState(0);
 
     useEffect(() => {
         const userId = localStorage.getItem("userId");
@@ -52,8 +52,9 @@ export default function HomePage() {
 
         async function getPosts() {
             try {
+                setSkip(0)
+                setLimit(10)
                 const response = await axios.get(`https://crushapi-4ped.onrender.com/post/get/${userId}/${skip}/${limit}`)
-                console.log(response.data.posts);
 
                 setPosts(response.data.posts)
             } catch (error) {
