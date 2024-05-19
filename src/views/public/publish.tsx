@@ -10,9 +10,11 @@ interface CardData {
     nickname: string;
     email: string;
     campus: string;
-    references?: string;
-    content?: string;
+    references: string;
+    content: string;
     isAnonymous: boolean;
+    photoURL?: string;
+    userPhotoUrl?: string
 }
 
 
@@ -81,7 +83,7 @@ export default function Publish() {
                 const imageUrl = URL.createObjectURL(selectedFile);
                 setCardData((prevData) => ({
                     ...prevData,
-                    photo: imageUrl
+                    photoURL: imageUrl
                 }));
             } else {
                 setErrorMessage("Por favor, selecione uma imagem válida (JPEG, PNG ou GIF).");
@@ -188,7 +190,15 @@ export default function Publish() {
                     <div className="flex flex-row justify-center items-center max-sm:mt-5">
                         <div className="flex flex-col items-center w-full text-center gap-3">
                             <h1 className="text-black dark:text-white font-semibold">Acompanhe seu Post</h1>
-                            <Card CardData={cardData} />
+                            <Card
+                                campus={cardData.campus}
+                                content={cardData.content}
+                                email={cardData.email}
+                                isAnonymous={cardData.isAnonymous}
+                                nickname={cardData.nickname}
+                                references={cardData.references}
+                                photoURL={cardData.photoURL}
+                            />
                             {isAnonymous && (
                                 <div>
                                     <h1 className="animate-appearance-in text-center text-black dark:text-white font-semibold">Seu nome não aparecerá no seu post</h1>

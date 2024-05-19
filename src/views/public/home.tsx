@@ -9,6 +9,17 @@ import { debounce } from "lodash";
 
 const localAvatarPath = localStorage.getItem('avatar') ?? "";
 
+interface CardProps {
+    _id: string;
+    nickname: string;
+    email: string;
+    campus: string;
+    references: string;
+    content: string;
+    isAnonymous: boolean;
+    photoURL: string;
+}
+
 export default function HomePage() {
     const cardData = {
         _id: "123981391",
@@ -21,10 +32,11 @@ export default function HomePage() {
     }
 
     const [userData, setUserData] = useState(null);
+    const [posts, setPosts] = useState<CardProps[] | null>([]);
     const [bottomIsVisible, setBottomVisible] = useState(true);
     const [prevScrollPos, setPrevScrollPos] = useState(window.pageYOffset);
-    // const [skip, setSkip] = useState(0);
-    // const [limit, setLimit] = useState(15);
+    const [skip, setSkip] = useState(0);
+    const [limit, setLimit] = useState(10);
 
     useEffect(() => {
         const userId = localStorage.getItem("userId");
@@ -48,17 +60,17 @@ export default function HomePage() {
         }
 
         async function getPosts() {
-            if(!userId || userId === "null"){
-                return;
-            }
             try {
-                // const response = getNewPosts(skip, limit)
-                // console.log(response);
-                
+                const response = await axios.get(`https://crushapi-4ped.onrender.com/post/get/${userId}/${skip}/${limit}`)
+                console.log(response.data.posts);
+
+                setPosts(response.data.posts)
             } catch (error) {
-                
+                console.log("Erro ao buscar posts", error);
             }
+
         }
+
         getPosts()
         getUserData();
     }, []);
@@ -84,12 +96,23 @@ export default function HomePage() {
                 (
                     <div className="">
                         < NavBar user={userData} avatarPath={localAvatarPath} />
-                        <main className="bg-gray-200 dark:bg-zinc-700 w-full h-full flex flex-col justify-center items-center">
-                            <Card CardData={cardData} />
-                            <Card CardData={cardData} />
-                            <Card CardData={cardData} />
-                            <Card CardData={cardData} />
-                            <Card CardData={cardData} />
+                        <main className="bg-gray-200 dark:bg-zinc-700 w-full h-full flex flex-col-reverse justify-center items-center">
+                            {
+                                posts?.map((post) => {
+
+                                    return <Card key={post._id} 
+                                    _id={post._id}
+                                    campus={post.campus}
+                                    content={post.content}
+                                    email={post.email}
+                                    isAnonymous={post.isAnonymous}
+                                    nickname={post.nickname}
+                                    references={post.references}
+                                    photoURL={post.photoURL}
+                                     />
+                                    return null;
+                                })
+                            }
                         </main>
                         <Bottombar className={`${bottomIsVisible ? 'animate-appearance-in' : 'animate-appearance-out'}`} />
                     </div>

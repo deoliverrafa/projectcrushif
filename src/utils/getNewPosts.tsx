@@ -12,30 +12,25 @@ interface Posts {
     photoURL: string
 }
 
-export function getNewPosts(skip: number, limit: number) {
+export function getNewPosts(skip: number, limit: number, userId: string) {
 
     const [posts, setNewPosts] = useState<Posts[]>([]);
 
     useEffect(() => {
         async function getPosts() {
-            const userId = localStorage.getItem("userId");
 
-            if (!userId) {
+            if (!userId || userId == "") {
                 return;
             }
 
             try {
-                const response = await axios.get(`https://crushapi-4ped.onrender.com/posts/get/${userId}/${userId}/${skip}/${limit}`);
-                console.log(response);
+                const response = await axios.get(`https://crushapi-4ped.onrender.com/posts/get/${userId}/${skip}/${limit}`);
                 setNewPosts(response.data.posts);
-                return response.data.posts
             } catch (error) {
                 console.log("Erro ao buscar postagens", error);
             }
         }
         getPosts();
-
     }, []);
-
     return posts;
 }
