@@ -115,7 +115,12 @@ export default function Publish() {
                 throw new Error('Network response was not ok');
             }
             const result = await response.json();
-            console.log('Success:', result);
+            console.log(result);
+            
+            if (result.posted) {
+                window.location.href = "/"
+            }
+
         } catch (error) {
             console.error('Error:', error);
         }
