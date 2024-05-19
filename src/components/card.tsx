@@ -24,7 +24,7 @@ const Card = (props: CardProps) => {
                             as="button"
                             className="transition-transform cursor-pointer"
                             color="secondary"
-                            name={props.nickname}
+                            name={!props.isAnonymous ? props.nickname : ""}
                             size="sm"
                             src={!props.isAnonymous ? props.userPhotoUrl : ""}
                         />
