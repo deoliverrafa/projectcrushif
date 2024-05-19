@@ -21,16 +21,7 @@ interface CardProps {
 }
 
 export default function HomePage() {
-    const cardData = {
-        _id: "123981391",
-        nickname: "deoliverrafa",
-        email: "deoliverrafa@gmail.com",
-        campus: "IFTO",
-        references: "#IFTO #ÉOCRUSH",
-        content: "Alguem sabe onde compro meio kilo de JavaScript? ",
-        isAnonymous: false
-    }
-
+    
     const [userData, setUserData] = useState(null);
     const [posts, setPosts] = useState<CardProps[] | null>([]);
     const [bottomIsVisible, setBottomVisible] = useState(true);
