@@ -80,20 +80,14 @@ const Card = (props: CardProps) => {
                         null
                 }
 
-                {
-                    !props.isAnonymous ?
-
-                        <div className="flex flex-row gap-2">
-                            <p className="text-gray-500 dark:text-gray-400 mx-1">
-                                <span className="font-semibold">4 </span>Seguindo
-                            </p>
-                            <p className="text-gray-500 dark:text-gray-400 mx-1">
-                                <span className="font-semibold">10 </span>Seguidores
-                            </p>
-                        </div>
-                        :
-                        null
-                }
+                <div className="flex flex-row gap-2">
+                    <p className="text-gray-500 dark:text-gray-400 mx-1">
+                        <span className="font-semibold">0 </span>Likes
+                    </p>
+                    <p className="text-gray-500 dark:text-gray-400 mx-1">
+                        <span className="font-semibold">0 </span>Comentários
+                    </p>
+                </div>
             </div>
         </div>
     );

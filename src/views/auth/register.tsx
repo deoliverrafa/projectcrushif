@@ -95,7 +95,7 @@ export default function RegisterPage() {
     };
 
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-        setClickedButton(false);
+        setClickedButton(true);
         setMessageError("")
 
         e.preventDefault()
@@ -175,12 +175,13 @@ export default function RegisterPage() {
                     </div>
 
                     <div className="flex flex-row justify-center items-center">
-                        <Button color="primary" className="w-5/6 max-w-lg font-Poppins font-semibold" type="submit" onClick={() => setClickedButton(true)}>Criar</Button>
+                        <Button color="primary" className="w-5/6 max-w-lg font-Poppins font-semibold" type="submit" >Criar</Button>
                     </div>
 
 
-                    {clickedButton ? <Spinner size="md" /> : null}
-
+                    <div>
+                        {clickedButton ? <Spinner size="lg" /> : null}
+                    </div>
 
                     <div className="flex flex-row justify-center items-center ">
                         <p className="text-black dark:text-white font-semibold font-Poppins">Possui conta? <a className="text-blue-500 " href="login">Entrar</a></p>

@@ -11,7 +11,7 @@ interface UserDataLogin {
 }
 
 export default function LoginPage() {
-    const [clickedButton, setClickedButton] = useState(Boolean);
+    const [clickedButton, setClickedButton] = useState(false);
     const [messageError, setMessageError] = useState(String);
 
     const [formData, setFormData] = useState({
@@ -89,7 +89,9 @@ export default function LoginPage() {
 
                     <div className="flex flex-col justify-center items-center text-center">
 
-                        {clickedButton && !messageError && <Spinner size="md" className="hidden" />}
+                        <div className="mb-3">
+                            {clickedButton ? <Spinner size="lg" /> : null}
+                        </div>
 
                         <div className="flex flex-col justify-center items-center">
                             <p className="text-black dark:text-white font-medium font-Poppins">Não possui conta? <a href="register" className="text-blue-500 font-semibold">criar</a></p>
