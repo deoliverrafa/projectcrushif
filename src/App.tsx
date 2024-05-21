@@ -20,7 +20,7 @@ function App() {
 
   return (
     <>
-      <NextUIProvider>
+      <NextUIProvider className="">
         <NextThemesProvider attribute="class" defaultTheme="dark">
           <Router>
             <Routes>

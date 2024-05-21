@@ -116,7 +116,7 @@ export default function Publish() {
             }
             const result = await response.json();
             console.log(result);
-            
+
             if (result.posted) {
                 window.location.href = "/"
             }
@@ -127,21 +127,22 @@ export default function Publish() {
     }
 
     return (
-        <>
-            <div className="flex flex-col justify-center items-center">
-                <NavBar user={userData} avatarPath={avatarPath} />
-                <div className="flex flex-row items-start max-sm:flex-col max-sm:justify-start max-sm:items-center pl-20 pr-20 w-full relative top-20 text-black dark:text-white">
-                    <form onSubmit={handleSubmit} className="flex flex-col w-full gap-5 max-sm:justify-center max-sm:items-center">
-                        <div className="">
-                            <h1 className="font-Poppins font-semibold text-xl">Publique</h1>
-                        </div>
+        <div className="flex flex-col justify-center items-center w-full h-full ">
+            <NavBar user={userData} avatarPath={avatarPath} />
+            <div className="flex flex-row items-start max-sm:flex-col max-sm:justify-start max-sm:items-center pl-20 pr-20 w-full h-full relative top-20 text-black dark:text-white">
+                <form onSubmit={handleSubmit} className="flex flex-col w-2/3 h-full gap-5 max-sm:justify-center max-sm:items-center">
+                    <div className="">
+                        <h1 className="font-Poppins font-semibold text-xl">Publique</h1>
+                    </div>
 
-                        <div>
-                            <Switch onClick={handleIsAnonymous} color="secondary" thumbIcon={!isAnonymous ? <MdOutlinePeopleAlt /> : <GiDoubleFaceMask />}>
-                                {!isAnonymous ? (<p>Público</p>) : (<p>Anônimo</p>)}
-                            </Switch>
-                        </div>
+                    <div>
+                        <Switch onClick={handleIsAnonymous} color="secondary" thumbIcon={!isAnonymous ? <MdOutlinePeopleAlt /> : <GiDoubleFaceMask />}>
+                            {!isAnonymous ? (<p>Público</p>) : (<p>Anônimo</p>)}
+                        </Switch>
+                    </div>
 
+                    {/* Wrap inputs */}
+                    <div className="flex flex-col gap-4">
                         <div className="flex flex-col gap-1 w-1/3 min-w-56 max-w-96">
                             <Input
                                 key="content"
@@ -190,29 +191,29 @@ export default function Publish() {
                         <div className="w-1/3 min-w-56 max-w-96">
                             <Button type="submit" color="secondary" className="w-full">Enviar</Button>
                         </div>
-                    </form>
+                    </div>
+                </form>
 
-                    <div className="flex flex-row justify-center items-center max-sm:mt-5">
-                        <div className="flex flex-col items-center w-full text-center gap-3">
-                            <h1 className="text-black dark:text-white font-semibold">Acompanhe seu Post</h1>
-                            <Card
-                                campus={cardData.campus}
-                                content={cardData.content}
-                                email={cardData.email}
-                                isAnonymous={cardData.isAnonymous}
-                                nickname={cardData.nickname}
-                                references={cardData.references}
-                                photoURL={cardData.photoURL}
-                            />
-                            {isAnonymous && (
-                                <div>
-                                    <h1 className="animate-appearance-in text-center text-black dark:text-white font-semibold">Seu nome não aparecerá no seu post</h1>
-                                </div>
-                            )}
-                        </div>
+                <div className="flex flex-row justify-center items-center max-sm:mt-5 w-full h-full">
+                    <div className="flex flex-col items-center w-full text-center gap-3">
+                        <h1 className="text-black dark:text-white font-semibold">Acompanhe seu Post</h1>
+                        <Card
+                            campus={cardData.campus}
+                            content={cardData.content}
+                            email={cardData.email}
+                            isAnonymous={cardData.isAnonymous}
+                            nickname={cardData.nickname}
+                            references={cardData.references}
+                            photoURL={cardData.photoURL}
+                        />
+                        {isAnonymous && (
+                            <div>
+                                <h1 className="animate-appearance-in text-center text-black dark:text-white font-semibold">Seu nome não aparecerá no seu post</h1>
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>
-        </>
+        </div>
     );
 }

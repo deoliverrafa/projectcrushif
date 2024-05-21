@@ -86,9 +86,9 @@ export default function HomePage() {
         <>
             {userData ?
                 (
-                    <div className="">
+                    <div className="bg-gray-200 dark:bg-zinc-900">
                         < NavBar user={userData} avatarPath={localAvatarPath} />
-                        <main className="bg-gray-200 dark:bg-zinc-700 w-full h-full flex flex-col-reverse justify-center items-center">
+                        <main className="bg-gray-200 dark:bg-zinc-900 w-full h-full flex flex-col-reverse justify-center items-center">
                             {
                                 posts?.map((post) => {
 

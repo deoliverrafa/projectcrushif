@@ -26,9 +26,9 @@ export default function BaseUserShow(props: userData) {
             const formData = new FormData();
             formData.append("avatar", imageFile);
 
-            const response = await axios.post("https://crushapi-4ped.onrender.com/profile/updatePhoto", formData);
+            const response = await axios.post(`https://crushapi-4ped.onrender.com/profile/updatePhoto/${localStorage.getItem('userId')}`, formData);
 
-            if (response.data.message) {
+            if (response.data.updated) {
                 const imageUrl = URL.createObjectURL(imageFile);
                 localStorage.setItem('avatar', imageUrl);
                 window.dispatchEvent(new Event('storage'));

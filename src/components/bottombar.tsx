@@ -9,7 +9,7 @@ export function Bottombar({className}: bottomProps) {
 
     return (
         <>
-            <nav className={`bg-gray-200 dark:bg-zinc-800 fixed right-0 bottom-0 flex flex-row justify-around items-center w-full animate-appearance-in border-t-1 border-t-zinc-300 dark:border-t-zinc-600 z-10 ${className}`}>
+            <nav className={`bg-gray-200/70 dark:bg-zinc-900/70 backdrop-blur-sm fixed right-0 bottom-0 flex flex-row justify-around items-center w-full animate-appearance-in z-10 ${className}`}>
                 <NavLink to='/' >
                     {({ isActive }) => isActive ?
                         (
