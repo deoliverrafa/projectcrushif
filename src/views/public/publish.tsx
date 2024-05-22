@@ -207,6 +207,7 @@ export default function Publish() {
                             references={cardData.references}
                             photoURL={cardData.photoURL}
                             userAvatar={userData?.avatar}
+                            insertAt="00:00"
                         />
                         {isAnonymous && (
                             <div>

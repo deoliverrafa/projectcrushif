@@ -19,6 +19,7 @@ interface CardProps {
     isAnonymous: boolean;
     photoURL: string;
     userAvatar: string;
+    insertAt: string;
 }
 
 interface userData {
@@ -36,6 +37,9 @@ export default function HomePage() {
     const [prevScrollPos, setPrevScrollPos] = useState(window.pageYOffset);
     const [skip, setSkip] = useState(0);
     const [limit, setLimit] = useState(0);
+
+    console.log(posts);
+    
 
     useEffect(() => {
         const userId = localStorage.getItem("userId");
@@ -110,6 +114,7 @@ export default function HomePage() {
                                     references={post.references}
                                     userAvatar={post.userAvatar}
                                     photoURL={post.photoURL}
+                                    insertAt={post.insertAt}
                                      />
                                     return null;
                                 })

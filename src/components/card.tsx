@@ -1,4 +1,6 @@
 import { Avatar, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, Image } from "@nextui-org/react";
+import { formatDistanceToNow, parseISO } from "date-fns";
+import { ptBR } from "date-fns/locale";
 
 interface CardProps {
     _id?: string;
@@ -10,12 +12,15 @@ interface CardProps {
     isAnonymous: boolean;
     photoURL?: string;
     userAvatar?: string
+    insertAt: string;
 }
 
 const Card = (props: CardProps) => {
+    const parseDated = parseISO(props.insertAt ?? "")
+    const formattedData = formatDistanceToNow(parseDated, {locale: ptBR})
 
     return (
-        <div className="bg-gray-100 dark:bg-zinc-800 border border-gray-300 dark:border-gray-800 rounded-xl shadow-lg flex flex-col my-2 p-4 w-11/12 max-w-[350px] ">
+        <div className="bg-gray-100 dark:bg-zinc-800 border border-gray-300 dark:border-gray-800 rounded-xl shadow-lg flex flex-col my-2 p-4 w-11/12 max-w-[400px] ">
             <div className="flex flex-row justify-between items-center relative top-0 right-0">
                 <div className="flex flex-row gap-1 justify-center items-center">
                     <div>
@@ -80,14 +85,21 @@ const Card = (props: CardProps) => {
                         null
                 }
 
-                <div className="flex flex-row gap-2">
+                <div className="flex flex-row gap-2 w-full text-balance">
                     <p className="text-gray-500 dark:text-gray-400 mx-1">
                         <span className="font-semibold">0 </span>Likes
                     </p>
                     <p className="text-gray-500 dark:text-gray-400 mx-1">
                         <span className="font-semibold">0 </span>Comentários
                     </p>
+                    <div className="flex flex-row relative">
+                        <p className="text-gray-500 dark:text-gray-400">
+                            {formattedData}
+                        </p>
+                    </div>
                 </div>
+
+
             </div>
         </div>
     );
