@@ -85,14 +85,14 @@ const Card = (props: CardProps) => {
                         null
                 }
 
-                <div className="flex flex-row gap-2 w-full text-balance">
-                    <p className="text-gray-500 dark:text-gray-400 mx-1">
+                <div className="flex flex-row gap-4 w-full text-balance items-center">
+                    <p className="text-gray-500 dark:text-gray-400 ">
                         <span className="font-semibold">0 </span>Likes
                     </p>
-                    <p className="text-gray-500 dark:text-gray-400 mx-1">
+                    <p className="text-gray-500 dark:text-gray-400 ">
                         <span className="font-semibold">0 </span>Comentários
                     </p>
-                    <div className="flex flex-row relative">
+                    <div className="flex flex-row relative ">
                         <p className="text-gray-500 dark:text-gray-400">
                             {formattedData}
                         </p>

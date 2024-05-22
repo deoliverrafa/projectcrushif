@@ -33,7 +33,7 @@ export default function HomePage() {
     
     const [userData, setUserData] = useState<userData | null>();
     const [posts, setPosts] = useState<CardProps[] | null>([]);
-    const [bottomIsVisible, setBottomVisible] = useState(false);
+    const [bottomIsVisible, setBottomVisible] = useState(true);
     const [prevScrollPos, setPrevScrollPos] = useState(window.pageYOffset);
     const [skip, setSkip] = useState(0);
     const [limit, setLimit] = useState(0);
@@ -79,20 +79,20 @@ export default function HomePage() {
         getUserData();
     }, []);
 
-    useEffect(() => {
-        const handleScroll = debounce(() => {
-            const currentScrollPos = window.pageYOffset;
-            const isVisible = prevScrollPos > currentScrollPos;
-            setBottomVisible(isVisible);
-            setPrevScrollPos(currentScrollPos);
-        }, 20);
+    // useEffect(() => {
+    //     const handleScroll = debounce(() => {
+    //         const currentScrollPos = window.pageYOffset;
+    //         const isVisible = prevScrollPos > currentScrollPos;
+    //         setBottomVisible(isVisible);
+    //         setPrevScrollPos(currentScrollPos);
+    //     }, 20);
 
-        window.addEventListener('scroll', handleScroll);
+    //     window.addEventListener('scroll', handleScroll);
 
-        return () => {
-            window.removeEventListener('scroll', handleScroll);
-        };
-    }, [prevScrollPos]);
+    //     return () => {
+    //         window.removeEventListener('scroll', handleScroll);
+    //     };
+    // }, []);
 
     return (
         <>
@@ -116,7 +116,6 @@ export default function HomePage() {
                                     photoURL={post.photoURL}
                                     insertAt={post.insertAt}
                                      />
-                                    return null;
                                 })
                             }
                         </main>
