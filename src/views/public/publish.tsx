@@ -5,6 +5,7 @@ import { getUserData } from "../../utils/getUserData";
 import { ChangeEvent, useEffect, useState } from "react";
 import { MdOutlinePeopleAlt } from "react-icons/md";
 import Card from "../../components/card";
+import { format } from "date-fns";
 
 interface CardData {
     nickname: string;
@@ -21,7 +22,6 @@ interface CardData {
 export default function Publish() {
 
     const userData = getUserData();
-
 
     const [isAnonymous, setAnonymous] = useState<boolean>(false);
     const [avatarPath, setAvatarPath] = useState(localStorage.getItem('avatar') ?? "");
@@ -207,7 +207,6 @@ export default function Publish() {
                             references={cardData.references}
                             photoURL={cardData.photoURL}
                             userAvatar={userData?.avatar}
-                            insertAt="00:00"
                         />
                         {isAnonymous && (
                             <div>

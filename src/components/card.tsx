@@ -12,12 +12,15 @@ interface CardProps {
     isAnonymous: boolean;
     photoURL?: string;
     userAvatar?: string
-    insertAt: string;
+    insertAt?: string;
 }
 
 const Card = (props: CardProps) => {
-    const parseDated = parseISO(props.insertAt ?? "")
-    const formattedData = formatDistanceToNow(parseDated, {locale: ptBR})
+    let formattedData
+    if (props.insertAt) {
+        const parseDated = parseISO(props.insertAt ?? "")
+        formattedData = formatDistanceToNow(parseDated, { locale: ptBR })
+    }
 
     return (
         <div className="bg-gray-100 dark:bg-zinc-800 border border-gray-300 dark:border-gray-800 rounded-xl shadow-lg flex flex-col my-2 p-4 w-11/12 max-w-[400px] ">
@@ -53,8 +56,8 @@ const Card = (props: CardProps) => {
                 </div>
             </div>
             <div className="flex flex-col mt-4 justify-center items-start">
-                <div className="my-1 px-2 flex flex-row gap-1">
-                    <p className="text-sm font-Poppins text-black dark:text-white break-words">
+                <div className="my-1 flex flex-row gap-1 items-start justify-start">
+                    <p className=" font-Poppins text-black dark:text-white break-words">
                         {props.content || ""}
                     </p>
                 </div>
@@ -75,7 +78,7 @@ const Card = (props: CardProps) => {
                 {
                     !props.isAnonymous ?
                         (
-                            <div className="my-1 px-2 flex flex-row gap-1">
+                            <div className="my-1 flex flex-row gap-1">
                                 <a key={props._id} className="text-blue-500 dark:text-blue-600 break-words" id={props._id}>
                                     {props.references}
                                 </a>
@@ -85,19 +88,24 @@ const Card = (props: CardProps) => {
                         null
                 }
 
-                <div className="flex flex-row gap-4 w-full text-balance items-center">
-                    <p className="text-gray-500 dark:text-gray-400 ">
-                        <span className="font-semibold">0 </span>Likes
-                    </p>
-                    <p className="text-gray-500 dark:text-gray-400 ">
-                        <span className="font-semibold">0 </span>Comentários
-                    </p>
-                    <div className="flex flex-row relative ">
-                        <p className="text-gray-500 dark:text-gray-400">
-                            {formattedData}
+
+                {formattedData ?
+                    <div className="flex flex-row gap-4 w-full text-balance items-center">
+                        <p className="text-gray-500 dark:text-gray-400 ">
+                            <span className="font-semibold">0 </span>Likes
                         </p>
+                        <p className="text-gray-500 dark:text-gray-400 ">
+                            <span className="font-semibold">0 </span>Comentários
+                        </p>
+                        <div className="flex flex-row relative ">
+                            <p className="text-gray-500 dark:text-gray-400">
+                                {formattedData}
+                            </p>
+                        </div>
                     </div>
-                </div>
+                    :
+                    null
+                }
 
 
             </div>
