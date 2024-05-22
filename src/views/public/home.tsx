@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Card from "../../components/card";
 import { Spinner } from "@nextui-org/react";
 import axios from "axios";
-import { debounce } from "lodash";
+// import { debounce } from "lodash";
 
 
 const localAvatarPath = localStorage.getItem('avatar') ?? "";
@@ -33,8 +33,8 @@ export default function HomePage() {
     
     const [userData, setUserData] = useState<userData | null>();
     const [posts, setPosts] = useState<CardProps[] | null>([]);
-    const [bottomIsVisible, setBottomVisible] = useState(true);
-    const [prevScrollPos, setPrevScrollPos] = useState(window.pageYOffset);
+    // const [bottomIsVisible, setBottomVisible] = useState(true);
+    // const [prevScrollPos, setPrevScrollPos] = useState(window.pageYOffset);
     const [skip, setSkip] = useState(0);
     const [limit, setLimit] = useState(0);
 
@@ -119,7 +119,7 @@ export default function HomePage() {
                                 })
                             }
                         </main>
-                        <Bottombar className={`${bottomIsVisible ? 'animate-appearance-in' : 'animate-appearance-out'}`} />
+                        <Bottombar className="appearance-in" />
                     </div>
                 )
                 :
@@ -131,7 +131,6 @@ export default function HomePage() {
                         </div>
                     </div>
                 )
-
             }
         </>
     );
