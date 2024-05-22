@@ -47,12 +47,10 @@ export default function HomePage() {
             }
 
             try {
-                const response = await axios.get(`https://crushapi-4ped.onrender.com/
-http://localhost:4040//user/${userId}`);
+                const response = await axios.get(`https://crushapi-4ped.onrender.com/user/${userId}`);
 
                 if (!response) {
-                    setTimeout(async () => { await axios.get(`https://crushapi-4ped.onrender.com/
-http://localhost:4040//user/${userId}`) })
+                    setTimeout(async () => { await axios.get(`https://crushapi-4ped.onrender.com/user/${userId}`) })
                 }
                 setUserData(response.data.userFinded);
             } catch (error) {
@@ -64,8 +62,7 @@ http://localhost:4040//user/${userId}`) })
             try {
                 setSkip(0)
                 setLimit(10)
-                const response = await axios.get(`https://crushapi-4ped.onrender.com/
-http://localhost:4040//post/get/${userId}/${skip}/${limit}`)
+                const response = await axios.get(`https://crushapi-4ped.onrender.com/post/get/${userId}/${skip}/${limit}`)
 
                 setPosts(response.data.posts)
             } catch (error) {

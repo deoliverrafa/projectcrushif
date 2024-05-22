@@ -24,8 +24,7 @@ export function getUserData() {
 
 
             
-            const response = await axios.get(`https://crushapi-4ped.onrender.com/
-http://localhost:4040//user/${userId}`);
+            const response = await axios.get(`https://crushapi-4ped.onrender.com/user/${userId}`);
 
             setUserData(response.data.userFinded);
         }
