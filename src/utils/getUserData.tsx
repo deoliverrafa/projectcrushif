@@ -6,6 +6,7 @@ interface User {
     nickname: string
     email: string
     campus: string
+    avatar: string
 }
 
 export function getUserData() {
@@ -23,7 +24,7 @@ export function getUserData() {
 
 
             
-            const response = await axios.get(`https://crushapi-4ped.onrender.com/user/${userId}`);
+            const response = await axios.get(`http://localhost:4040/user/${userId}`);
 
             setUserData(response.data.userFinded);
         }

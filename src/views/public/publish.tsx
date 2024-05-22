@@ -100,6 +100,7 @@ export default function Publish() {
         formData.append('campus', cardData.campus);
         formData.append('content', cardData.content || "");
         formData.append('references', cardData.references ? cardData.references : "");
+        formData.append('avatar', userData?.avatar ? userData.avatar : localStorage.getItem('avatar') ?? "F")
         formData.append('isAnonymous', isAnonymous.toString());
 
         if (selectedFile) {
@@ -107,7 +108,7 @@ export default function Publish() {
         }
 
         try {
-            const response = await fetch('https://crushapi-4ped.onrender.com/post/publish', {
+            const response = await fetch(`http://localhost:4040/post/publish/${localStorage.getItem('userId')}`, {
                 method: 'POST',
                 body: formData,
             });
@@ -128,7 +129,7 @@ export default function Publish() {
 
     return (
         <div className="flex flex-col justify-center items-center w-full h-full ">
-            <NavBar user={userData} avatarPath={avatarPath} />
+            <NavBar user={userData} avatarPath={userData?.avatar ? userData.avatar : avatarPath} />
             <div className="flex flex-row items-start max-sm:flex-col max-sm:justify-start max-sm:items-center pl-20 pr-20 w-full h-full relative top-20 text-black dark:text-white">
                 <form onSubmit={handleSubmit} className="flex flex-col w-2/3 h-full gap-5 max-sm:justify-center max-sm:items-center">
                     <div className="">
@@ -205,6 +206,7 @@ export default function Publish() {
                             nickname={cardData.nickname}
                             references={cardData.references}
                             photoURL={cardData.photoURL}
+                            userAvatar={userData?.avatar}
                         />
                         {isAnonymous && (
                             <div>

@@ -18,13 +18,21 @@ interface CardProps {
     content: string;
     isAnonymous: boolean;
     photoURL: string;
+    userAvatar: string;
 }
 
+interface userData {
+    _id: string
+    nickname: string,
+    email: string,
+    campus: string,
+    avatar: string,
+}
 export default function HomePage() {
     
-    const [userData, setUserData] = useState(null);
+    const [userData, setUserData] = useState<userData | null>();
     const [posts, setPosts] = useState<CardProps[] | null>([]);
-    const [bottomIsVisible, setBottomVisible] = useState(true);
+    const [bottomIsVisible, setBottomVisible] = useState(false);
     const [prevScrollPos, setPrevScrollPos] = useState(window.pageYOffset);
     const [skip, setSkip] = useState(0);
     const [limit, setLimit] = useState(0);
@@ -39,10 +47,10 @@ export default function HomePage() {
             }
 
             try {
-                const response = await axios.get(`https://crushapi-4ped.onrender.com/user/${userId}`);
+                const response = await axios.get(`http://localhost:4040/user/${userId}`);
 
                 if (!response) {
-                    setTimeout(async () => { await axios.get(`https://crushapi-4ped.onrender.com/user/${userId}`) })
+                    setTimeout(async () => { await axios.get(`http://localhost:4040/user/${userId}`) })
                 }
                 setUserData(response.data.userFinded);
             } catch (error) {
@@ -54,7 +62,7 @@ export default function HomePage() {
             try {
                 setSkip(0)
                 setLimit(10)
-                const response = await axios.get(`https://crushapi-4ped.onrender.com/post/get/${userId}/${skip}/${limit}`)
+                const response = await axios.get(`http://localhost:4040/post/get/${userId}/${skip}/${limit}`)
 
                 setPosts(response.data.posts)
             } catch (error) {
@@ -87,7 +95,7 @@ export default function HomePage() {
             {userData ?
                 (
                     <div className="bg-gray-200 dark:bg-zinc-900">
-                        < NavBar user={userData} avatarPath={localAvatarPath} />
+                        < NavBar user={userData} avatarPath={userData.avatar ? userData.avatar : localAvatarPath} />
                         <main className="bg-gray-200 dark:bg-zinc-900 w-full h-full flex flex-col-reverse justify-center items-center">
                             {
                                 posts?.map((post) => {
@@ -100,6 +108,7 @@ export default function HomePage() {
                                     isAnonymous={post.isAnonymous}
                                     nickname={post.nickname}
                                     references={post.references}
+                                    userAvatar={post.userAvatar}
                                     photoURL={post.photoURL}
                                      />
                                     return null;

@@ -40,9 +40,9 @@ export function NavBar(props: userData) {
                                 as="button"
                                 className="transition-transform cursor-pointer"
                                 color="secondary"
-                                name={props.user?.nickname}
+                                name={props.user?.nickname ? props.user.nickname : ""}
                                 size="sm"
-                                src={props.avatarPath}
+                                src={props.avatarPath ? props.avatarPath : ""}
                             />
                         </DropdownTrigger>
                         <DropdownMenu aria-label="Profile Actions" variant="flat">

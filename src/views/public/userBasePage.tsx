@@ -21,7 +21,7 @@ export default function UserBasePage() {
 
     return (
         <>
-            <NavBar user={userData} avatarPath={avatarPath} />
+            <NavBar user={userData} avatarPath={userData?.avatar ? userData.avatar : avatarPath } />
             <BaseUserShow user={userData} />
         </>
     );

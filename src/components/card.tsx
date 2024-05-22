@@ -9,13 +9,13 @@ interface CardProps {
     content: string;
     isAnonymous: boolean;
     photoURL?: string;
-    userPhotoUrl?: string
+    userAvatar?: string
 }
 
 const Card = (props: CardProps) => {
 
     return (
-        <div className="bg-gray-100 dark:bg-zinc-800 border border-gray-300 dark:border-gray-800 rounded-xl shadow-lg flex flex-col my-2 p-4 w-full min-w-52 max-w-[350px] ">
+        <div className="bg-gray-100 dark:bg-zinc-800 border border-gray-300 dark:border-gray-800 rounded-xl shadow-lg flex flex-col my-2 p-4 w-11/12 max-w-[350px] ">
             <div className="flex flex-row justify-between items-center relative top-0 right-0">
                 <div className="flex flex-row gap-1 justify-center items-center">
                     <div>
@@ -26,7 +26,7 @@ const Card = (props: CardProps) => {
                             color="secondary"
                             name={!props.isAnonymous ? props.nickname : ""}
                             size="sm"
-                            src={!props.isAnonymous ? props.userPhotoUrl : ""}
+                            src={!props.isAnonymous ? props.userAvatar : ""}
                         />
                     </div>
                     <div className="flex flex-col">

@@ -10,6 +10,7 @@ interface User {
     email: string;
     campus: string;
     className?: string;
+    avatar: string;
 }
 
 interface userData {
@@ -26,13 +27,14 @@ export default function BaseUserShow(props: userData) {
             const formData = new FormData();
             formData.append("avatar", imageFile);
 
-            const response = await axios.post(`https://crushapi-4ped.onrender.com/profile/updatePhoto/${localStorage.getItem('userId')}`, formData);
+            const response = await axios.post(`http://localhost:4040/profile/updatePhoto/${localStorage.getItem('userId')}`, formData);
 
             if (response.data.updated) {
                 const imageUrl = URL.createObjectURL(imageFile);
                 localStorage.setItem('avatar', imageUrl);
                 window.dispatchEvent(new Event('storage'));
             }
+            response.data.error
         } else {
             setErrorImage("Por favor, selecione uma imagem válida (JPEG, PNG ou GIF).");
         }
@@ -67,7 +69,7 @@ export default function BaseUserShow(props: userData) {
                                     color="secondary"
                                     size="sm"
                                     name={props.user?.nickname}
-                                    src={avatarPath ?? ""}
+                                    src={props.user?.avatar ? props.user.avatar : avatarPath}
                                 />
                             </label>
                             <input className="hidden" type="file" name="avatar" id="avatarInput" accept="image/*" onChange={handleImageChange} />
