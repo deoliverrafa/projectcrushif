@@ -5,7 +5,6 @@ import { getUserData } from "../../utils/getUserData";
 import { ChangeEvent, useEffect, useState } from "react";
 import { MdOutlinePeopleAlt } from "react-icons/md";
 import Card from "../../components/card";
-import { format } from "date-fns";
 
 interface CardData {
     nickname: string;
