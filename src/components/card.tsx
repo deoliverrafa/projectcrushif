@@ -1,8 +1,11 @@
 import { Avatar, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, Image } from "@nextui-org/react";
 import { formatDistanceToNow, parseISO } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import { ChatCircle, HeartStraight } from "phosphor-react";
 
 interface CardProps {
+    clasName?: string;
+    userId?: string;
     _id?: string;
     nickname: string;
     email: string;
@@ -23,7 +26,7 @@ const Card = (props: CardProps) => {
     }
 
     return (
-        <div className="bg-gray-100 dark:bg-zinc-800 border border-gray-300 dark:border-gray-800 rounded-xl shadow-lg flex flex-col my-2 p-4 w-11/12 max-w-[400px] ">
+        <div className={`bg-gray-100 dark:bg-zinc-800 border border-gray-300 dark:border-gray-800 rounded-xl shadow-lg flex flex-col my-2 p-4 w-11/12 max-w-[400px] ${props.clasName}`}>
             <div className="flex flex-row justify-between items-center relative top-0 right-0">
                 <div className="flex flex-row gap-1 justify-center items-center">
                     <div>
@@ -91,17 +94,18 @@ const Card = (props: CardProps) => {
 
                 {formattedData ?
                     <div className="flex flex-row gap-4 w-full text-balance items-center">
-                        <p className="text-gray-500 dark:text-gray-400 ">
-                            <span className="font-semibold">0 </span>Likes
-                        </p>
-                        <p className="text-gray-500 dark:text-gray-400 ">
-                            <span className="font-semibold">0 </span>Comentários
-                        </p>
-                        <div className="flex flex-row relative ">
-                            <p className="text-gray-500 dark:text-gray-400">
-                                {formattedData}
-                            </p>
+                        <div className="flex flex-row items-center gap-2 justify-items-center">
+                            <HeartStraight weight="bold" size={21} /><p>{0}</p>
                         </div>
+
+                        <div className="flex flex-row items-center gap-2 justify-items-center">
+                            <ChatCircle weight="bold" size={21} /><p>{0}</p>
+                        </div>
+
+                        <div className="flex flex-row items-center gap-2 justify-items-center">
+                            {formattedData}
+                        </div>
+
                     </div>
                     :
                     null

@@ -99,7 +99,7 @@ export default function Publish() {
         formData.append('campus', cardData.campus);
         formData.append('content', cardData.content || "");
         formData.append('references', cardData.references ? cardData.references : "");
-        formData.append('avatar', userData?.avatar ? userData.avatar : localStorage.getItem('avatar') ?? "F")
+        formData.append('avatar', userData?.avatar ? userData.avatar : "")
         formData.append('isAnonymous', isAnonymous.toString());
 
         if (selectedFile) {

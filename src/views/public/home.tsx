@@ -30,7 +30,7 @@ interface userData {
     avatar: string,
 }
 export default function HomePage() {
-    
+
     const [userData, setUserData] = useState<userData | null>();
     const [posts, setPosts] = useState<CardProps[] | null>([]);
     // const [bottomIsVisible, setBottomVisible] = useState(true);
@@ -38,8 +38,6 @@ export default function HomePage() {
     const [skip, setSkip] = useState(0);
     const [limit, setLimit] = useState(0);
 
-    console.log(posts);
-    
 
     useEffect(() => {
         const userId = localStorage.getItem("userId");
@@ -98,29 +96,33 @@ export default function HomePage() {
         <>
             {userData ?
                 (
-                    <div className="bg-gray-200 dark:bg-zinc-900">
+                    <div className="bg-gray-200 dark:bg-zinc-900 flex flex-col">
                         < NavBar user={userData} avatarPath={userData.avatar ? userData.avatar : localAvatarPath} />
                         <main className="bg-gray-200 dark:bg-zinc-900 w-full h-full flex flex-col-reverse justify-center items-center">
                             {
-                                posts?.map((post) => {
 
-                                    return <Card key={post._id} 
-                                    _id={post._id}
-                                    campus={post.campus}
-                                    content={post.content}
-                                    email={post.email}
-                                    isAnonymous={post.isAnonymous}
-                                    nickname={post.nickname}
-                                    references={post.references}
-                                    userAvatar={post.userAvatar}
-                                    photoURL={post.photoURL}
-                                    insertAt={post.insertAt}
-                                     />
+                                posts?.map((post, index) => {
+                                    console.log(index);
+
+                                    return <Card
+                                        key={post._id}
+                                        _id={post._id}
+                                        campus={post.campus}
+                                        content={post.content}
+                                        email={post.email}
+                                        isAnonymous={post.isAnonymous}
+                                        nickname={post.nickname}
+                                        references={post.references}
+                                        userAvatar={post.userAvatar}
+                                        photoURL={post.photoURL}
+                                        insertAt={post.insertAt}
+                                    />
                                 })
                             }
-                        </main>
-                        <Bottombar className="appearance-in" />
-                    </div>
+                        </main >
+                        <div className="mt-10"></div>
+                        < Bottombar className="appearance-in" />
+                    </div >
                 )
                 :
                 (
