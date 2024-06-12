@@ -1,5 +1,5 @@
-import { Avatar, Button, Input } from "@nextui-org/react";
-import { useEffect, useState } from "react";
+import { Avatar, Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, Input } from "@nextui-org/react";
+import { useState } from "react";
 import axios from "axios";
 import { isValidImage } from "../controllers/avatarUpdate";
 import { Pencil } from "phosphor-react";
@@ -42,37 +42,26 @@ export default function BaseUserShow(props: userData) {
         }
     };
 
-
-
-    const [avatarPath, setAvatarPath] = useState(localStorage.getItem('avatar') ?? "");
-
-    useEffect(() => {
-        const handleStorageChange = () => {
-            setAvatarPath(localStorage.getItem('avatar') ?? "");
-        };
-
-        window.addEventListener('storage', handleStorageChange);
-
-        return () => {
-            window.removeEventListener('storage', handleStorageChange);
-        };
-    }, []);
-
     // User changeData Logic
 
     const [changeDataErrorMessage, setChangeDataErrorMessage] = useState<String>();
+    const [selectedData, setSelectedData] = useState<String>('nome');
+
+    function handleSelectedData(data: string) {
+        setSelectedData(data);
+    }
 
     const handleChangeData = () => {
         try {
-            const response = axios.post('https://crushapi-4ped.onrender.com/profile/changeProfile').then()
+            // const response = axios.post('https://crushapi-4ped.onrender.com/profile/changeProfile').then()
             setChangeDataErrorMessage('Opção indisponível no momento')
         } catch (error) {
         }
     }
     return (
         <div className="flex flex-col w-full h-full">
-            <div className="flex flex-col fixed -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2 h-fit w-3/4 min-w-[300px] max-w-[1000px] rounded-lg bg-zinc-300 dark:bg-zinc-800 shadow-lg shadow-default-400">
-                <div className="flex justify-center">
+            <div className="flex flex-col fixed -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2 h-fit w-3/4 min-w-[200px] max-w-[1000px] rounded-lg bg-zinc-300 dark:bg-zinc-800 shadow-lg shadow-default-400">
+                <div className="flex justify-center relative">
                     <form action="updateAvatar" method="POST" className="flex flex-col gap-4">
                         <div className="flex flex-col gap-1 items-center">
                             <label htmlFor="avatarInput">
@@ -98,19 +87,94 @@ export default function BaseUserShow(props: userData) {
                             </div>
                         </div>
                     </form>
+
+                    <div className="absolute right-3 top-3">
+                        <Dropdown className="bg-gray-300 dark:bg-zinc-800 w-auto h-auto" placement="bottom-end">
+                            <DropdownTrigger>
+                                <i className="fi fi-rr-menu-dots-vertical"></i>
+                            </DropdownTrigger>
+
+                            <DropdownMenu aria-label="Profile Actions" variant="flat">
+
+                                {selectedData !== "email" ?
+                                    (
+                                        <DropdownItem key="email" className="font-Poppins" color="default" onClick={() => { handleSelectedData('email') }}>Email </DropdownItem>
+                                    )
+                                    :
+                                    (
+                                        <DropdownItem key="email" className="hidden" color="default" onClick={() => { handleSelectedData('email') }}>Email </DropdownItem>
+                                    )
+                                }
+
+                                {selectedData !== "password" ?
+                                    (
+                                        <DropdownItem key="password" className="font-Poppins" color="default" onClick={() => { handleSelectedData('password') }}>Senha</DropdownItem>
+                                    )
+                                    :
+                                    (
+                                        <DropdownItem key="password" className="hidden" color="default" onClick={() => { handleSelectedData('password') }}>Senha</DropdownItem>
+                                    )
+                                }
+
+                                {selectedData !== "nome" ?
+                                    (
+                                        <DropdownItem key="nome" className="font-Poppins" color="default" onClick={() => { handleSelectedData('nome') }}>Nome</DropdownItem>
+                                    )
+                                    :
+                                    (
+                                        <DropdownItem key="nome" className="hidden" color="default" onClick={() => { handleSelectedData('nome') }}>Nome</DropdownItem>
+                                    )
+                                }
+                            </DropdownMenu>
+                        </Dropdown>
+                    </div>
                 </div>
 
                 <div className="w-full h-full flex flex-col items-center">
                     <div className="flex flex-col w-full justify-start items-center gap-5">
                         <div className="flex flex-row w-full h-full gap-3 items-center justify-center">
 
-                            <div className="flex flex-row items-center">
-                                <Input placeholder="Nome" variant="underlined" label='Nome' value={props.user?.nickname}></Input>
-                            </div>
+                            {selectedData == 'nome' ?
 
-                            <div className="flex flex-row items-center">
-                                <Input placeholder="Campus" variant="underlined" label='Campus' value={props.user?.campus}></Input>
-                            </div>
+                                <div className="flex flex-row gap-3">
+                                    <div className="flex flex-row items-center">
+                                        <Input placeholder="Nome" variant="underlined" label='Nome' value={props.user?.nickname}></Input>
+                                    </div>
+
+                                    <div className="flex flex-row items-center">
+                                        <Input placeholder="Campus" variant="underlined" label='Campus' value={props.user?.campus}></Input>
+                                    </div>
+                                </div>
+                                :
+                                null
+                            }
+
+                            {selectedData == 'email' ?
+
+                                <div>
+                                    <div className="flex flex-row items-center">
+                                        <Input placeholder="email" variant="underlined" label='email' value={props.user?.email}></Input>
+                                    </div>
+
+                                </div>
+                                :
+                                null
+                            }
+
+                            {selectedData == 'password' ?
+                                <div>
+                                    <div className="flex flex-row items-center">
+                                        <Input type="password" variant="underlined" label='Senha' labelPlacement="inside"></Input>
+                                    </div>
+
+                                    <div className="flex flex-row items-center">
+                                        <Input type="password" variant="underlined" label='Nova Senha' labelPlacement="inside"></Input>
+                                    </div>
+
+                                </div>
+                                :
+                                null
+                            }
                         </div>
 
                         <div className="flex flex-col items-center gap-3">
@@ -120,6 +184,6 @@ export default function BaseUserShow(props: userData) {
                     </div>
                 </div>
             </div>
-        </div>
+        </div >
     );
 }
