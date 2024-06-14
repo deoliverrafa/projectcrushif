@@ -8,6 +8,7 @@ import {
   CardBody,
   Divider,
   Input,
+  Spinner,
   Link
 } from "@nextui-org/react";
 
@@ -128,7 +129,6 @@ const LoginPage = () => {
                 <Input 
                   isRequired
                   radius="full"
-                  type="password"
                   label="Senha"
                   placeholder="Ex: ******"
                   className="font-Poppins font-medium w-5/6"

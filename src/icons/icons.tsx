@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 export const BellIcon = (props: React.SVGAttributes<SVGSVGElement>) => {
-=======
-export const BellIcon = (props) => {
->>>>>>> 7edfe4a (Update bugs)
   return (
     <svg
       viewBox="0 0 1024 1024"
