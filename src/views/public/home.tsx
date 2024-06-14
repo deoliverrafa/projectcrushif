@@ -1,9 +1,10 @@
+import { useState, useEffect } from "react";
+import axios from "axios";
+
 import { NavBar } from "../../components/navbar";
 import { Bottombar } from "../../components/bottombar";
-import { useState, useEffect } from "react";
 import Card from "../../components/card";
-import { Spinner } from "@nextui-org/react";
-import axios from "axios";
+import { Loading } from "./../../components/loading.tsx";
 // import { debounce } from "lodash";
 
 
@@ -126,12 +127,7 @@ export default function HomePage() {
                 )
                 :
                 (
-                    <div className="w-dvw h-dvh flex flex-row justify-center items-center">
-                        <div className="flex flex-row gap-3 justify-center items-center">
-                            <Spinner size="lg" />
-                            <h1>Aguarde...</h1>
-                        </div>
-                    </div>
+                  <Loading />
                 )
             }
         </>

@@ -1,18 +1,44 @@
+// IMPORT - LIBRARYS //
+import React, { ChangeEvent, FormEvent, useState } from "react";
+import axios from "axios";
+import { 
+  Button,
+  Card,
+  CardHeader,
+  CardBody,
+  Divider,
+  Input,
+  Spinner,
+  Link
+} from "@nextui-org/react";
+
+// IMPORT - COMPONENTS //
 import { ThemeSwitcher } from "../../components/themeSwitcher";
-import { Button, Input, Spinner } from "@nextui-org/react";
+import { Loading } from './../../components/loading.tsx';
+
+// IMPORT - ICONS //
+import {
+  EyeIcon,
+  EyeInvisibleIcon
+} from './../../icons/icons.tsx';
+
+// IMPORT - IMAGES //
 import logo from "../../../public/images/CrushIf_Logo-removebg-preview.png"
 
-import { ChangeEvent, FormEvent, useState } from "react";
-import axios from "axios";
-
+// CREATE - INTERFACES //
 interface UserDataLogin {
     nickname: string
     password: string
 }
 
-export default function LoginPage() {
+// COMPONENT - LOGIN PAGE //
+const LoginPage = () => {
     const [clickedButton, setClickedButton] = useState(false);
     const [messageError, setMessageError] = useState(String);
+    const [isVisible, setIsVisible] = React.useState(false);
+
+    const toggleVisibility = () => setIsVisible(!isVisible);
+
 
     const [formData, setFormData] = useState({
         nickname: "",
@@ -58,49 +84,104 @@ export default function LoginPage() {
         }
     };
 
-    return (
-        <div className="flex flex-col w-screen h-screen bg-gray-200 dark:bg-zinc-900">
+  return (
+    <>
+      <div className="flex flex-row justify-end items-center w-full">
+        <ThemeSwitcher className="my-1.5 mx-2" />
+      </div>
 
-            <div className="flex flex-row w-full justify-end items-center">
-                <ThemeSwitcher className="mt-2 mr-4" />
+      <div className="flex flex-col justify-center items-center">
+        <Card>
+          <CardHeader className="flex gap-3">
+            <img 
+              src={logo} 
+              alt="logo crush ifto" 
+              className="w-20 h-20" />
+            
+            <div className="flex flex-col">
+              <h2 className="font-Poppins font-semibold text-2xl md:text-3xl">Faça Login!</h2>
+              <p className="font-Poppins text-default font-medium text-xs md:text-sm">Faça login para ter acesso a plataforma.</p>
             </div>
+          </CardHeader>
+          <Divider />
+          
+          <CardBody>
+            <form 
+              action="register" 
+              method="POST" 
+              className="flex flex-col relative gap-5" 
+              onSubmit={handleSubmit}>
+              <div className="flex flex-row justify-center items-center">
+                <Input 
+                  isClearable
+                  isRequired
+                  radius="full"
+                  type="nickname"
+                  label="Usuário"
+                  placeholder="Ex: nickname"
+                   className="font-Poppins font-medium w-5/6" 
+                   name="nickname" 
+                   onChange={handleChange} 
+                   errorMessage={messageError == "Usuário não encontrado." ? messageError : null} />
+              </div>
 
-            <div className="flex flex-col justify-center items-center mt-10 w-full h-full" >
-                <form action="register" method="POST" className="flex flex-col relative w-full h-full gap-10" onSubmit={handleSubmit}>
-                    <div className="flex flex-col justify-center items-center">
-                        <div className="flex flex-row justify-center items-baseline mr-20">
-                            <img src={logo} alt="logo crush ifto" className="w-20 h-20" />
-                            <p className="text-black dark:text-white font-Poppins font-semibold text-3xl text-center" >Crush ifto</p>
-                        </div>
-                        <p className="text-black dark:text-white font-semibold font-Poppins text-2xl mt-5">Login</p>
-                    </div>
+              <div className="flex flex-row justify-center items-center">
+                <Input 
+                  isRequired
+                  radius="full"
+                  type="password"
+                  label="Senha"
+                  placeholder="Ex: ******"
+                  className="font-Poppins font-medium w-5/6"
+                  name="password"
+                  endContent={
+                    <button className="focus:outline-none" type="button" onClick={toggleVisibility}>
+                      {isVisible ? (
+                      <EyeInvisibleIcon className="text-2xl text-default-400 pointer-events-none" />
+                      ) : (
+                      <EyeIcon className="text-2xl text-default-400 pointer-events-none"/>
+                      )}
+                    </button>
+                  }
+                  type={isVisible ? "text" : "password"}
+                  onChange={handleChange} 
+                  errorMessage={messageError == "Senha incorreta, tente novamente." ? messageError : null} />
+              </div>
+              <Divider />
 
-                    <div className="flex flex-row justify-center items-center">
-                        <Input type="nickname" label="nickname" placeholder="" isClearable className="w-5/6 max-w-lg border-1 border-zinc-900 rounded-lg" name="nickname" onChange={handleChange} errorMessage={messageError == "Nickname não encontrado" ? messageError : null} />
-                    </div>
+              <div className="flex flex-row justify-center items-center">
+                <Button 
+                  color="primary" 
+                  size="lg"
+                  radius="full"
+                  className="font-Poppins font-bold uppercase w-5/6" 
+                  type="submit" 
+                  onClick={() => setClickedButton(true)}>Entrar</Button>
+              </div>
 
-                    <div className="flex flex-row justify-center items-center">
-                        <Input type="password" label="senha" className="w-5/6 max-w-lg border-1 border-zinc-900 rounded-lg" name="password" onChange={handleChange} errorMessage={messageError == "Senha incorreta tente novamente" ? messageError : null} />
-                    </div>
+              <div className="flex flex-col justify-center items-center text-center">
+                <div>
+                {clickedButton ? <Loading /> : null}
+                </div>
 
-                    <div className="flex flex-row justify-center items-center">
-                        <Button color="primary" className="w-5/6 max-w-lg font-Poppins font-semibold" type="submit" onClick={() => setClickedButton(true)}>Entrar</Button>
-                    </div>
+                <Link className="flex flex-row justify-center items-center  w-full" href="register">
+                  <Button
+                    className="font-Poppins font-bold uppercase w-5/6"
+                    color="primary"
+                    radius="full"
+                    size="lg"
+                    variant="bordered">
+                      Registre-se
+                  </Button>
+                </Link>          
+              </div>
+            </form>
+          </CardBody>
+        </Card>
+      </div>
+    </>
+  );
+};
 
-                    <div className="flex flex-col justify-center items-center text-center">
-
-                        <div className="mb-3">
-                            {clickedButton ? <Spinner size="lg" /> : null}
-                        </div>
-
-                        <div className="flex flex-col justify-center items-center">
-                            <p className="text-black dark:text-white font-medium font-Poppins">Não possui conta? <a href="register" className="text-blue-500 font-semibold">criar</a></p>
-                        </div>
-
-                    </div>
-                </form >
-            </div>
-        </div >
-
-    );
-}
+// EXPORT - PAGE //
+export default LoginPage;
