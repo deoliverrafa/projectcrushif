@@ -14,9 +14,7 @@ import {
 } from "@nextui-org/react";
 
 // IMPORT - COMPONENTS //
-import { ThemeSwitcher } from "./themeSwitcher";
 import {
-  BellIcon,
   ProfileIcon,
   SettingIcon,
   ShareIcon,

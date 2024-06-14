@@ -1,6 +1,4 @@
-import * as React from "react";
-
-export const BellIcon = (props) => {
+export const BellIcon = (props: React.SVGAttributes<SVGSVGElement>) => {
   return (
     <svg
       viewBox="0 0 1024 1024"
@@ -14,7 +12,7 @@ export const BellIcon = (props) => {
   );
 };
 
-export const ProfileIcon = (props) => {
+export const ProfileIcon = (props: React.SVGAttributes<SVGSVGElement>) => {
   return (
     <svg fill="none" viewBox="0 0 24 24" height="1em" width="1em" {...props}>
       <path
@@ -33,7 +31,7 @@ export const ProfileIcon = (props) => {
   );
 };
 
-export const SettingIcon = (props) => {
+export const SettingIcon = (props: React.SVGAttributes<SVGSVGElement>) => {
   return (
     <svg
       fill="none"
@@ -52,7 +50,7 @@ export const SettingIcon = (props) => {
   );
 };
 
-export const ShareIcon = (props) => {
+export const ShareIcon = (props: React.SVGAttributes<SVGSVGElement>) => {
   return (
     <svg
       viewBox="0 0 24 24"
@@ -66,7 +64,7 @@ export const ShareIcon = (props) => {
   );
 };
 
-export const LogoutIcon = (props) => {
+export const LogoutIcon = (props: React.SVGAttributes<SVGSVGElement>) => {
   return (
     <svg
       viewBox="0 0 24 24"
@@ -80,7 +78,7 @@ export const LogoutIcon = (props) => {
   );
 };
 
-export const SearchIcon = (props) => {
+export const SearchIcon = (props: React.SVGAttributes<SVGSVGElement>) => {
   return (
     <svg
       fill="none"
@@ -99,7 +97,7 @@ export const SearchIcon = (props) => {
   );
 };
 
-export const EyeIcon = (props) => {
+export const EyeIcon = (props: React.SVGAttributes<SVGSVGElement>) => {
   return (
     <svg
       viewBox="0 0 1024 1024"
@@ -113,7 +111,7 @@ export const EyeIcon = (props) => {
   );
 };
 
-export const EyeInvisibleIcon = (props) => {
+export const EyeInvisibleIcon = (props: React.SVGAttributes<SVGSVGElement>) => {
   return (
     <svg
       viewBox="0 0 1024 1024"

@@ -1,5 +1,4 @@
 // IMPORT - LIBRARYS //
-import * as React from 'react';
 import { 
   Spinner,
   Card,
