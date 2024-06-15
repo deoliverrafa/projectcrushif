@@ -2,8 +2,7 @@
 import { 
   Badge, 
   Button,
-  Navbar,
-  NavbarContent
+  Navbar
 } from '@nextui-org/react';
 import { NavLink } from 'react-router-dom';
 
