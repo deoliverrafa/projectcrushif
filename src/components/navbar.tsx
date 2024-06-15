@@ -1,5 +1,6 @@
 // IMPORT - LIBRARYS //
 import { 
+  Button,
   Navbar, 
   NavbarBrand, 
   NavbarContent, 
@@ -132,7 +133,11 @@ export const NavBar = (props: userData) => {
         </NavbarContent>
         
         <NavbarContent justify="end">
-          <SearchIcon className="size-6" />
+          <Button
+            variant="light"
+            isIconOnly>
+            <SearchIcon className="size-6" />
+          </Button>
         </NavbarContent>
       </Navbar>
     </>

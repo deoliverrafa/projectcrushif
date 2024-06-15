@@ -125,3 +125,97 @@ export const EyeInvisibleIcon = (props: React.SVGAttributes<SVGSVGElement>) => {
     </svg>
   );
 };
+
+export const HomeIcon = (props: React.SVGAttributes<SVGSVGElement>) => {
+  return (
+    <svg
+      viewBox="0 0 1024 1024"
+      fill="currentColor"
+      height="1em"
+      width="1em"
+      {...props}
+    >
+      <path d="M946.5 505L560.1 118.8l-25.9-25.9a31.5 31.5 0 00-44.4 0L77.5 505a63.9 63.9 0 00-18.8 46c.4 35.2 29.7 63.3 64.9 63.3h42.5V940h691.8V614.3h43.4c17.1 0 33.2-6.7 45.3-18.8a63.6 63.6 0 0018.7-45.3c0-17-6.7-33.1-18.8-45.2zM568 868H456V664h112v204zm217.9-325.7V868H632V640c0-22.1-17.9-40-40-40H432c-22.1 0-40 17.9-40 40v228H238.1V542.3h-96l370-369.7 23.1 23.1L882 542.3h-96.1z" />
+    </svg>
+  );
+};
+
+export const CalendarIcon = (props: React.SVGAttributes<SVGSVGElement>) => {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      height="1em"
+      width="1em"
+      {...props}
+    >
+      <path d="M11 12h6v6h-6z" />
+      <path d="M19 4h-2V2h-2v2H9V2H7v2H5c-1.103 0-2 .897-2 2v14c0 1.103.897 2 2 2h14c1.103 0 2-.897 2-2V6c0-1.103-.897-2-2-2zm.001 16H5V8h14l.001 12z" />
+    </svg>
+  );
+};
+
+export const AddIcon = (props: React.SVGAttributes<SVGSVGElement>) => {
+  return (
+    <svg
+      viewBox="0 0 512 512"
+      fill="currentColor"
+      height="1em"
+      width="1em"
+      {...props}
+    >
+      <path
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={32}
+        d="M256 112v288M400 256H112"
+      />
+    </svg>
+  );
+};
+
+export const HeartArrowIcon = (props: React.SVGAttributes<SVGSVGElement>) => {
+  return (
+    <svg
+      fill="currentColor"
+      viewBox="0 0 16 16"
+      height="1em"
+      width="1em"
+      {...props}
+    >
+      <path
+        fillRule="evenodd"
+        d="M2.854 15.854A.5.5 0 012 15.5V14H.5a.5.5 0 01-.354-.854l1.5-1.5A.5.5 0 012 11.5h1.793l.53-.53c-.771-.802-1.328-1.58-1.704-2.32-.798-1.575-.775-2.996-.213-4.092C3.426 2.565 6.18 1.809 8 3.233c1.25-.98 2.944-.928 4.212-.152L13.292 2 12.147.854A.5.5 0 0112.5 0h3a.5.5 0 01.5.5v3a.5.5 0 01-.854.354L14 2.707l-1.006 1.006c.236.248.44.531.6.845.562 1.096.585 2.517-.213 4.092-.793 1.563-2.395 3.288-5.105 5.08L8 13.912l-.276-.182a21.86 21.86 0 01-2.685-2.062l-.539.54V14a.5.5 0 01-.146.354l-1.5 1.5zm2.893-4.894A20.419 20.419 0 008 12.71c2.456-1.666 3.827-3.207 4.489-4.512.679-1.34.607-2.42.215-3.185-.817-1.595-3.087-2.054-4.346-.761L8 4.62l-.358-.368c-1.259-1.293-3.53-.834-4.346.761-.392.766-.464 1.845.215 3.185.323.636.815 1.33 1.519 2.065l1.866-1.867a.5.5 0 11.708.708L5.747 10.96z"
+      />
+    </svg>
+  );
+};
+
+export const MoonIcon = (props: React.SVGAttributes<SVGSVGElement>) => {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      height="1em"
+      width="1em"
+      {...props}
+    >
+      <path d="M20.742 13.045a8.088 8.088 0 01-2.077.271c-2.135 0-4.14-.83-5.646-2.336a8.025 8.025 0 01-2.064-7.723A1 1 0 009.73 2.034a10.014 10.014 0 00-4.489 2.582c-3.898 3.898-3.898 10.243 0 14.143a9.937 9.937 0 007.072 2.93 9.93 9.93 0 007.07-2.929 10.007 10.007 0 002.583-4.491 1.001 1.001 0 00-1.224-1.224zm-2.772 4.301a7.947 7.947 0 01-5.656 2.343 7.953 7.953 0 01-5.658-2.344c-3.118-3.119-3.118-8.195 0-11.314a7.923 7.923 0 012.06-1.483 10.027 10.027 0 002.89 7.848 9.972 9.972 0 007.848 2.891 8.036 8.036 0 01-1.484 2.059z" />
+    </svg>
+  );
+};
+
+export const SunIcon = (props: React.SVGAttributes<SVGSVGElement>) => {
+  return (
+    <svg fill="none" viewBox="0 0 24 24" height="1em" width="1em" {...props}>
+      <path
+        fill="currentColor"
+        fillRule="evenodd"
+        d="M12 16a4 4 0 100-8 4 4 0 000 8zm0 2a6 6 0 100-12 6 6 0 000 12zM11 0h2v4.062a8.079 8.079 0 00-2 0V0zM7.094 5.68L4.222 2.808 2.808 4.222 5.68 7.094A8.048 8.048 0 017.094 5.68zM4.062 11H0v2h4.062a8.079 8.079 0 010-2zm1.618 5.906l-2.872 2.872 1.414 1.414 2.872-2.872a8.048 8.048 0 01-1.414-1.414zM11 19.938V24h2v-4.062a8.069 8.069 0 01-2 0zm5.906-1.618l2.872 2.872 1.414-1.414-2.872-2.872a8.048 8.048 0 01-1.414 1.414zM19.938 13H24v-2h-4.062a8.069 8.069 0 010 2zM18.32 7.094l2.872-2.872-1.414-1.414-2.872 2.872c.528.41 1.003.886 1.414 1.414z"
+        clipRule="evenodd"
+      />
+    </svg>
+  );
+};

@@ -22,6 +22,7 @@ export default function UserBasePage() {
     }, []);
 
     return (
+      <>
         <div className='flex flex-col w-full h-full'>
             <NavBar user={userData} avatarPath={userData?.avatar ? userData.avatar : avatarPath} />
             {
@@ -32,7 +33,10 @@ export default function UserBasePage() {
                         <Spinner />Aguarde...
                     </div>
             }
-            <Bottombar />
+            
         </div>
+        
+        <Bottombar />
+        </>
     );
 }

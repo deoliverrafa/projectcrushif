@@ -1,102 +1,138 @@
-import { Badge, Button } from '@nextui-org/react';
+// IMPORT - LIBRARYS //
+import { 
+  Badge, 
+  Button,
+  Navbar,
+  NavbarContent
+} from '@nextui-org/react';
 import { NavLink } from 'react-router-dom';
 
+// IMPORT - ICONS //
+import {
+  HomeIcon,
+  CalendarIcon,
+  AddIcon,
+  HeartArrowIcon,
+  BellIcon
+} from './../icons/icons.tsx';
+import {
+  HomeFilledIcon,
+  CalendarFilledIcon,
+  HeartArrowFilledIcon,
+  BellFilledIcon
+} from './../icons/iconsFilled.tsx';
+
+// CREATE - INTERFACE //
 interface bottomProps {
     className?: string;
 }
 
-export function Bottombar({className}: bottomProps) {
-
-    return (
-        <>
-            <nav className={`bg-gray-200/70 dark:bg-zinc-900/70 backdrop-blur-sm fixed bottom-0 flex flex-row justify-around items-center w-full animate-appearance-in z-10 ${className}`}>
-                <NavLink to='/' >
-                    {({ isActive }) => isActive ?
-                        (
-                            <>
-                                <div className="cursor-pointer flex flex-col justify-center items-center p-2">
-                                    <i className="fi fi-sr-home text-2xl mt-1 bg-gradient-to-br text-transparent bg-clip-text from-purple-400 via-purple-600 to-purple-800 dark:from-purple-400 dark:via-purple-500 dark:to-purple-600"></i>
-                                </div>
-                            </>
-                        )
-                        :
-                        (
-                            <>
-                                <div className="cursor-pointer flex flex-col justify-center items-center p-2">
-                                    <i className="fi fi-rr-home text-2xl mt-1 bg-gradient-to-br text-transparent bg-clip-text from-gray-500 via-gray-600 to-gray-900 dark:from-gray-200 dark:via-gray-400 dark:to-gray-500"></i>
-                                </div>
-                            </>
-                        )
-                    }
-                </NavLink>
-                <NavLink to='/events' >
-                    {({ isActive }) => isActive ?
-                        (
-                            <>
-                                <div className="cursor-pointer flex flex-col justify-center items-center">
-                                    <i className="fi fi-sr-home text-2xl mt-1 bg-gradient-to-br text-transparent bg-clip-text from-purple-400 via-purple-600 to-purple-800 dark:from-purple-400 dark:via-purple-500 dark:to-purple-600"></i>
-                                </div>
-                            </>
-                        )
-                        :
-                        (
-                            <>
-                                <div className="cursor-pointer flex flex-col justify-center items-center p-2">
-                                    <i className="fi fi-rr-blog-text text-2xl mt-1 bg-gradient-to-br text-transparent bg-clip-text from-gray-500 via-gray-600 to-gray-900 dark:from-gray-200 dark:via-gray-400 dark:to-gray-500"></i>
-                                </div>
-                            </>
-                        )
-                    }
-                </NavLink>
-                <NavLink to='/publish'>
-                    <Button className='bg-gradient-to-br from-purple-400 via-purple-600 to-purple-800 shadow-md' radius='full' isIconOnly>
-                        <i className='fi fi-rr-plus text-white dark:text-white'></i>
-                    </Button>
-                </NavLink>
-                <NavLink to='/search' >
-                    {({ isActive }) => isActive ?
-                        (
-                            <>
-                                <div className="cursor-pointer flex flex-col justify-center items-center p-2">
-                                    <i className="fi fi-sr-home text-2xl mt-1 bg-gradient-to-br text-transparent bg-clip-text from-purple-400 via-purple-600 to-purple-800 dark:from-purple-400 dark:via-purple-500 dark:to-purple-600"></i>
-                                </div>
-                            </>
-                        )
-                        :
-                        (
-                            <>
-                                <div className="cursor-pointer flex flex-col justify-center items-center">
-                                    <i className="fi fi-rr-search text-2xl mt-1 bg-gradient-to-br text-transparent bg-clip-text from-gray-500 via-gray-600 to-gray-900 dark:from-gray-200 dark:via-gray-400 dark:to-gray-500"></i>
-                                </div>
-                            </>
-                        )
-                    }
-                </NavLink>
-                <NavLink to='/notification' >
-                    {({ isActive }) => isActive ?
-
-                        (
-                            <>
-                                <div className="cursor-pointer flex flex-col justify-center items-center">
-                                    <Badge className='font-Poppins' content="10" shape="circle" color="secondary" showOutline={false}>
-                                        <i className="fi fi-sr-home text-2xl mt-1 bg-gradient-to-br text-transparent bg-clip-text from-purple-400 via-purple-600 to-purple-800 dark:from-purple-400 dark:via-purple-500 dark:to-purple-600"></i>
-                                    </Badge>
-                                </div>
-                            </>
-                        )
-                        :
-                        (
-                            <>
-                                <div className="cursor-pointer flex flex-col justify-center items-center">
-                                    <Badge className='font-Poppins' content='10' shape='circle' color='secondary' showOutline={false}>
-                                        <i className="fi fi-rr-bell text-2xl mt-1 bg-gradient-to-br text-transparent bg-clip-text from-gray-500 via-gray-600 to-gray-900 dark:from-gray-200 dark:via-gray-400 dark:to-gray-500"></i>
-                                    </Badge>
-                                </div>
-                            </>
-                        )
-                    }
-                </NavLink>
-            </nav>
-        </>
-    );
+// COMPONENT - BOTTOM BAR //
+export const Bottombar = ({className}: bottomProps) => {
+  return (
+    <>
+      <Navbar
+        isBordered
+        isBlurred={true}
+        className="justify-around bottom-0 left-0"
+        >
+        <NavLink to='/' >
+        {({ isActive }) => isActive ?
+          (
+            <Button
+              variant="light"
+              isIconOnly>
+              <HomeFilledIcon className="text-primary size-6"/>
+            </Button>
+          )
+          :
+          (
+            <Button
+              variant="light"
+              isIconOnly>
+              <HomeIcon className="size-6" />
+            </Button>
+          )}
+        </NavLink>
+          
+        <NavLink to='/events' >
+        {({ isActive }) => isActive ?
+          (
+            <Button
+              variant="light"
+              isIconOnly>
+              <CalendarFilledIcon className="text-primary size-6"/>
+            </Button>
+          )
+          :
+          (
+            <Button
+              variant="light"
+              isIconOnly>
+              <CalendarIcon className="size-6" />
+            </Button>
+          )}
+        </NavLink>
+        
+        <NavLink to="/publish">
+          <Button
+            isIconOnly
+            color="primary"
+            radius="full">
+            <AddIcon className="size-6" />
+          </Button>
+        </NavLink>
+        
+        <NavLink to='/match' >
+        {({ isActive }) => isActive ?
+          (
+            <Button
+              variant="light"
+              isIconOnly>
+              <HeartArrowFilledIcon className="text-primary size-6"/>
+            </Button>
+          )
+          :
+          (
+            <Button
+              variant="light"
+              isIconOnly>
+              <HeartArrowIcon className="size-6" />
+            </Button>
+          )}
+        </NavLink>
+        
+        <NavLink to='/notifications' >
+        {({ isActive }) => isActive ?
+          (
+            <Button
+              variant="light"
+              isIconOnly>
+              <Badge
+                content="5"
+                placement="top-right"
+                shape="rectangle"
+                color="primary">
+                <BellFilledIcon className="text-primary size-6"/>
+              </Badge>
+            </Button>
+          )
+          :
+          (
+            <Button
+              variant="light"
+              isIconOnly>
+              <Badge
+                content="5"
+                placement="top-right"
+                shape="circle"
+                color="primary">
+                <BellIcon className="size-6"/>
+              </Badge>
+            </Button>
+          )}
+        </NavLink>
+      </Navbar>
+    </>
+  );
 };

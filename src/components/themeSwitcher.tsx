@@ -1,14 +1,24 @@
+// USE CLIENT //
 "use client";
 
+// IMPORT - LIBRARYS /!
+import { useEffect, useState } from "react";
 import { Switch } from "@nextui-org/react";
 import { useTheme } from "next-themes";
-import { useEffect, useState } from "react";
 
+// IMPORT - ICONS //
+import {
+  MoonFilledIcon,
+  SunFilledIcon
+} from './../icons/iconsFilled.tsx';
+
+// CREATE - INTERFACES //
 interface themeSwitcherProps {
     className?: string
 }
 
-export function ThemeSwitcher(props: themeSwitcherProps) {
+// COMPONENT - THEME SWITCHER //
+export const ThemeSwitcher = (props: themeSwitcherProps) => {
     const [mounted, setMounted] = useState(false)
     const { theme, setTheme } = useTheme()
 
@@ -34,23 +44,22 @@ export function ThemeSwitcher(props: themeSwitcherProps) {
 
     if (!mounted) return null
 
-    return (
-        <div className={`${props.className}`}>
-            <Switch
-                onClick={toggleTheme}
-                defaultSelected={theme === 'dark'} // Define o estado selecionado com base no tema atual
-                size="lg"
-                color="secondary"
-                thumbIcon={({ className }) => (
-                    <>
-                        {theme === "dark" ? (
-                            <i className={`fi fi-rr-moon-stars  ${className}`}></i>
-                        ) : (
-                            <i className={`fi fi-rr-brightness  ${className} `}></i>
-                        )}
-                    </>
-                )}
-            />
-        </div>
-    )
+  return (
+    <div className={`${props.className}`}>
+      <Switch
+        onClick={toggleTheme}
+        defaultSelected={theme === 'dark'} // Define o estado selecionado com base no tema atual
+        size="lg"
+        color="primary"
+        thumbIcon={({ className }) => (
+        <>
+        {theme === "dark" ? (
+          <MoonFilledIcon className="text-default size-5" />
+        ) : (
+          <SunFilledIcon className="text-primary size-5" />
+        )}
+        </>
+        )}/>
+    </div>
+  );
 };
