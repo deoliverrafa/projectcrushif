@@ -2,8 +2,8 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 
 import { NavBar } from "../../components/navbar";
-import { Bottombar } from "../../components/bottombar";
-import Card from "../../components/card";
+import { BottomBar } from "../../components/bottombar";
+import { CardPost } from "../../components/card";
 import { Loading } from "./../../components/loading.tsx";
 // import { debounce } from "lodash";
 
@@ -98,14 +98,15 @@ export default function HomePage() {
             {userData ?
                 (
                     <div className="bg-gray-200 dark:bg-zinc-900 flex flex-col">
-                        < NavBar user={userData} avatarPath={userData.avatar ? userData.avatar : localAvatarPath} />
-                        <main className="bg-gray-200 dark:bg-zinc-900 w-full h-full flex flex-col-reverse justify-center items-center">
+                        <NavBar user={userData} avatarPath={userData.avatar ? userData.avatar : localAvatarPath} />
+                        <main className="w-full h-full flex flex-col-reverse justify-center items-center">
                             {
 
                                 posts?.map((post, index) => {
                                     console.log(index);
 
-                                    return <Card
+                                    return <CardPost 
+                    className="my-2"
                                         key={post._id}
                                         _id={post._id}
                                         campus={post.campus}
@@ -122,7 +123,7 @@ export default function HomePage() {
                             }
                         </main >
                         <div className="mt-10"></div>
-                        < Bottombar className="appearance-in" />
+                        <BottomBar className="appearance-in" />
                     </div >
                 )
                 :
