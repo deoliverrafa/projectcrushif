@@ -29,7 +29,7 @@ export default function BaseUserShow(props: userData) {
             const formData = new FormData();
             formData.append("avatar", imageFile);
 
-            const response = await axios.post(`https://crushapi-4ped.onrender.com/profile/updatePhoto/${localStorage.getItem('userId')}`, formData);
+            const response = await axios.post(`https://crush-api.vercel.app/profile/updatePhoto/${localStorage.getItem('userId')}`, formData);
 
             if (response.data.updated) {
                 const imageUrl = URL.createObjectURL(imageFile);
@@ -53,7 +53,7 @@ export default function BaseUserShow(props: userData) {
 
     const handleChangeData = () => {
         try {
-            // const response = axios.post('https://crushapi-4ped.onrender.com/profile/changeProfile').then()
+            // const response = axios.post('https://crush-api.vercel.app/profile/changeProfile').then()
             setChangeDataErrorMessage('Opção indisponível no momento')
         } catch (error) {
         }

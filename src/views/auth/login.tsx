@@ -61,7 +61,7 @@ const LoginPage = () => {
             setClickedButton(true);
             setMessageError("")
 
-            const response = await axios.post(`https://crushapi-4ped.onrender.com/auth/login`, formData);
+            const response = await axios.post(`https://crush-api.vercel.app/auth/login`, formData);
 
             localStorage.setItem("userId", response.data.user._id)
 

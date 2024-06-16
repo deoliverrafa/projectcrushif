@@ -107,7 +107,7 @@ export default function Publish() {
         }
 
         try {
-            const response = await fetch(`https://crushapi-4ped.onrender.com/post/publish/${localStorage.getItem('userId')}`, {
+            const response = await fetch(`https://crush-api.vercel.app/post/publish/${localStorage.getItem('userId')}`, {
                 method: 'POST',
                 body: formData,
             });

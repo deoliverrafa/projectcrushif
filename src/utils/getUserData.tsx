@@ -24,7 +24,7 @@ export function getUserData() {
 
 
             
-            const response = await axios.get(`https://crushapi-4ped.onrender.com/user/${userId}`);
+            const response = await axios.get(`https://crush-api.vercel.app/user/${userId}`);
 
             setUserData(response.data.userFinded);
         }

@@ -31,7 +31,7 @@ interface userData {
     avatar: string,
 }
 export default function HomePage() {
-
+    
     const [userData, setUserData] = useState<userData | null>();
     const [posts, setPosts] = useState<CardProps[] | null>([]);
     // const [bottomIsVisible, setBottomVisible] = useState(true);
@@ -50,10 +50,10 @@ export default function HomePage() {
             }
 
             try {
-                const response = await axios.get(`https://crushapi-4ped.onrender.com/user/${userId}`);
+                const response = await axios.get(`https://crush-api.vercel.app/user/${userId}`);
 
                 if (!response) {
-                    setTimeout(async () => { await axios.get(`https://crushapi-4ped.onrender.com/user/${userId}`) })
+                    setTimeout(async () => { await axios.get(`https://crush-api.vercel.app/user/${userId}`) })
                 }
                 setUserData(response.data.userFinded);
             } catch (error) {
@@ -65,7 +65,7 @@ export default function HomePage() {
             try {
                 setSkip(0)
                 setLimit(10)
-                const response = await axios.get(`https://crushapi-4ped.onrender.com/post/get/${userId}/${skip}/${limit}`)
+                const response = await axios.get(`https://crush-api.vercel.app/post/get/${userId}/${skip}/${limit}`)
 
                 setPosts(response.data.posts)
             } catch (error) {
@@ -102,9 +102,7 @@ export default function HomePage() {
                         <main className="bg-gray-200 dark:bg-zinc-900 w-full h-full flex flex-col-reverse justify-center items-center">
                             {
 
-                                posts?.map((post, index) => {
-                                    console.log(index);
-
+                                posts?.map((post) => {
                                     return <Card
                                         key={post._id}
                                         _id={post._id}

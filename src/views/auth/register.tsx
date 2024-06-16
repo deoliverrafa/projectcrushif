@@ -101,7 +101,7 @@ export default function RegisterPage() {
         e.preventDefault()
 
         try {
-            const response = await axios.post("https://crushapi-4ped.onrender.com/auth/register", formData)
+            const response = await axios.post("https://crush-api.vercel.app/auth/register", formData)
 
             if (response.data.isRegistered) {
                 localStorage.setItem('userId', response.data.user._id)

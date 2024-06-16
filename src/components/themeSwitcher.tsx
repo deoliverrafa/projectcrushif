@@ -54,7 +54,7 @@ export const ThemeSwitcher = (props: themeSwitcherProps) => {
         thumbIcon={({ className }) => (
         <>
         {theme === "dark" ? (
-          <MoonFilledIcon className="text-default size-5" />
+          <MoonFilledIcon className={`text-default size-5 ${className}`} />
         ) : (
           <SunFilledIcon className="text-primary size-5" />
         )}
