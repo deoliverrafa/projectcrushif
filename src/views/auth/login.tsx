@@ -90,7 +90,9 @@ const LoginPage = () => {
       </div>
 
       <div className="flex flex-col justify-center items-center">
-        <Card>
+        <Card
+          shadow="lg"
+          radius="lg">
           <CardHeader className="flex gap-3">
             <img 
               src={logo} 

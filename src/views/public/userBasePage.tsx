@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
-import { NavBar } from "../../components/navbar";
+import { NavBarReturn } from "../../components/navbar";
 import BaseUserShow from "../../components/baseUserShow";
 import { getUserData } from "../../utils/getUserData";
-import { Bottombar } from '../../components/bottombar';
 import { Spinner } from '@nextui-org/react';
 
 export default function UserBasePage() {
@@ -24,7 +23,7 @@ export default function UserBasePage() {
     return (
       <>
         <div className='flex flex-col w-full h-full'>
-            <NavBar user={userData} avatarPath={userData?.avatar ? userData.avatar : avatarPath} />
+            <NavBarReturn title="Perfil" />
             {
                 userData ?
                     <BaseUserShow user={userData} />
@@ -35,8 +34,6 @@ export default function UserBasePage() {
             }
             
         </div>
-        
-        <Bottombar />
         </>
     );
 }

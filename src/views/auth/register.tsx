@@ -1,11 +1,33 @@
-import { ThemeSwitcher } from "../../components/themeSwitcher";
-import { Button, Select, SelectItem, Spinner } from "@nextui-org/react";
-import { Input } from "@nextui-org/react";
-import logo from "../../../public/images/CrushIf_Logo-removebg-preview.png"
-import axios from "axios";
+// IMPORT - LIBRARYS //
 import { ChangeEvent, FormEvent, useState } from "react";
+import axios from "axios";
+import { 
+  Button,
+  Card,
+  CardHeader,
+  CardBody,
+  Divider,
+  Select, 
+  SelectItem, 
+  Spinner,
+  Input,
+  Link
+} from "@nextui-org/react";
 
-export default function RegisterPage() {
+// IMPORT - COMPONENTS //
+import { ThemeSwitcher } from "../../components/themeSwitcher";
+import { Loading } from './../../components/loading.tsx';
+
+// IMPORT - ICONS //
+import {
+  EyeInvisibleIcon,
+  EyeIcon
+} from './../../icons/icons.tsx';
+
+// IMPORT - IMAGES //
+import logo from "../../../public/images/CrushIf_Logo-removebg-preview.png"
+
+export const RegisterPage = () => {
 
     const institutosFederaisPorEstado = [
         // Acre
@@ -83,6 +105,10 @@ export default function RegisterPage() {
 
     const [messageError, setMessageError] = useState(String);
     const [clickedButton, setClickedButton] = useState(Boolean);
+    
+    const [isVisible, setIsVisible] = useState(false);
+
+    const toggleVisibility = () => setIsVisible(!isVisible);
 
     const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         setClickedButton(false);
@@ -121,74 +147,157 @@ export default function RegisterPage() {
         }
     }
 
-    return (
-        <div className="flex flex-col w-full h-full bg-gray-200 dark:bg-zinc-900">
-            <div className="flex flex-row w-full justify-end items-center">
-                <ThemeSwitcher className="mt-2 mr-4" />
+  return (
+    <>
+      <div className="flex flex-row justify-end items-center w-full">
+        <ThemeSwitcher className="my-1.5 mx-2" />
+      </div>
+      
+      <div className="flex flex-col justify-center items-center">
+        <Card
+          shadow="lg"
+          radius="lg">
+          <CardHeader className="flex gap-3">
+            <img 
+              src={logo} 
+              alt="logo crush ifto" 
+              className="w-20 h-20" />
+            
+            <div className="flex flex-col">
+              <h2 className="font-Poppins font-semibold text-2xl md:text-3xl">Registre-se!</h2>
+              <p className="font-Poppins text-default font-medium text-xs md:text-sm">Crie uma conta para ter acesso a plataforma.</p>
             </div>
+          </CardHeader>
+          <Divider />
+          
+          <CardBody>
+            <form 
+              action="register"
+              method="POST"
+              className="flex flex-col relative gap-5"
+              onSubmit={handleSubmit}>
+              <div className="flex flex-row justify-center items-center">
+                <Input 
+                  isClearable
+                  isRequired
+                  radius="full"
+                  type="text"
+                  label="Usuário"
+                  placeholder="Ex: nickname"
+                  className="font-Poppins font-medium w-5/6" 
+                  name="nickname"
+                  onChange={handleChange}
+                  errorMessage={messageError ? (messageError == "Usuário já está em uso. Por favor, escolha outro." ? messageError : null) : messageError} 
+                  value={formData.nickname} 
+                />
+              </div>
 
-            <form action="register" method="POST" className="flex flex-col justify-center items-center mt-10" onSubmit={handleSubmit}>
-                <div className="flex flex-col relative w-full h-full gap-10">
-                    <div className="flex flex-col justify-center items-center">
-                        <div className="flex flex-row justify-center items-baseline mr-20">
-                            <img src={logo} alt="logo crush ifto" className="w-20 h-20" />
-                            <p className="text-black dark:text-white font-Poppins font-semibold text-3xl text-center" >Crush ifto</p>
-                        </div>
-                        <p className="text-black dark:text-white font-semibold font-Poppins text-2xl mt-5">Registre-se</p>
-                    </div>
+              <div className="flex flex-row justify-center items-center">
+                <Input 
+                  isClearable
+                  isRequired
+                  radius="full"
+                  type="email"
+                  label="E-mail"
+                  placeholder="Ex: name@email.com"
+                  className="font-Poppins font-medium w-5/6" 
+                  name="email"
+                  onChange={handleChange}
+                  errorMessage={messageError ? (messageError == "E-mail já está em uso." ? messageError : null) : null}
+                  value={formData.email} />
+              </div>
 
-                    <div className="flex flex-row justify-center items-center">
-                        <Input errorMessage={messageError ? (messageError == "Nickname já está em uso. Por favor, escolha outro." ? messageError : null) : messageError} type="text" label="nickname" placeholder="" isClearable className="w-5/6 max-w-lg border-1 border-zinc-900 rounded-lg" name="nickname" value={formData.nickname} onChange={handleChange} />
-                    </div>
+              <div className="flex flex-row justify-center items-center">
+                <Input
+                  isRequired
+                  radius="full"
+                  label="Senha"
+                  placeholder="Ex: ******"
+                  className="font-Poppins font-medium w-5/6"
+                  name="password"
+                  endContent={
+                    <button className="focus:outline-none" type="button" onClick={toggleVisibility}>
+                      {isVisible ? (
+                      <EyeInvisibleIcon className="text-2xl text-default-400 pointer-events-none" />
+                      ) : (
+                      <EyeIcon className="text-2xl text-default-400 pointer-events-none"/>
+                      )}
+                    </button>
+                  }
+                  type={isVisible ? "text" : "password"}
+                  onChange={handleChange}
+                  errorMessage={messageError ? (messageError == "Preencha todos os campos" ? messageError : null) : messageError} 
+                  value={formData.password} />
+              </div>
 
-                    <div className="flex flex-row justify-center items-center">
-                        <Input errorMessage={messageError ? (messageError == "Email já está em uso" ? messageError : null) : null} type="email" label="email" placeholder="" isClearable className="w-5/6 max-w-lg border-1 border-zinc-900 rounded-lg" name="email" value={formData.email} onChange={handleChange} />
-                    </div>
+              <div className="flex flex-row justify-center items-center ">
+                <Input 
+                  isRequired
+                  radius="full"
+                  type="date"
+                  label="Nascimento"
+                  className="font-Poppins font-medium w-5/6"
+                  name="birthdaydata"
+                  onChange={handleChange}
+                  errorMessage={messageError ? (messageError == "Preencha todos os campos." ? messageError : null) : messageError} 
+                  value={formData.birthdaydata} />
+              </div>
 
-                    <div className="flex flex-row justify-center items-center">
-                        <Input errorMessage={messageError ? (messageError == "Preencha todos os campos" ? messageError : null) : messageError} type="password" label="senha" className="w-5/6 max-w-lg border-1 border-zinc-900 rounded-lg" name="password" value={formData.password} onChange={handleChange} />
-                    </div>
-
-                    <div className="flex flex-row justify-center items-center ">
-                        <Input errorMessage={messageError ? (messageError == "Preencha todos os campos" ? messageError : null) : messageError} type="date" label="nascimento" className="w-5/6 max-w-lg border-1 border-zinc-900 rounded-lg" name="birthdaydata" value={formData.birthdaydata} onChange={handleChange} />
-                    </div>
-
-                    <div className="flex flex-row justify-center items-center ">
-                        <div className="flex w-full justify-center items-center ">
-                            <Select
-                                label="Instituto"
-                                className="w-5/6 max-w-lg"
-                                name="campus"
-                                value={formData.campus}
-                                required
-                                errorMessage={messageError ? (messageError == "Preencha todos os campos" ? messageError : null) : messageError}
-                                onChange={handleChange}
-                            >
-                                {institutosFederaisPorEstado.map((instituto) => (
+              <div className="flex flex-row justify-center items-center ">
+                <div className="flex w-full justify-center items-center ">
+                  <Select
+                    isRequired
+                    radius="full"
+                    type="date"
+                    label="Instituto"
+                    className="font-Poppins font-medium w-5/6"
+                    name="campus"
+                    onChange={handleChange}
+                    errorMessage={messageError ? (messageError == "Preencha todos os campos." ? messageError : null) : messageError}
+                    value={formData.campus}>
+                  {institutosFederaisPorEstado.map((instituto) => (
                                     <SelectItem
                                         key={instituto} value={instituto}>
                                         {instituto}
                                     </SelectItem>
-                                ))}
-                            </Select>
-                        </div>
-                    </div>
-
-                    <div className="flex flex-row justify-center items-center">
-                        <Button color="primary" className="w-5/6 max-w-lg font-Poppins font-semibold" type="submit" >Criar</Button>
-                    </div>
-
-
-                    <div>
-                        {clickedButton ? <Spinner size="lg" /> : null}
-                    </div>
-
-                    <div className="flex flex-row justify-center items-center ">
-                        <p className="text-black dark:text-white font-semibold font-Poppins">Possui conta? <a className="text-blue-500 " href="login">Entrar</a></p>
-                    </div>
-
+                  ))}
+                  </Select>
                 </div>
+              </div>
+              <Divider />
+
+              <div className="flex flex-row justify-center items-center">
+                <Button 
+                  color="primary" 
+                  size="lg"
+                  radius="full"
+                  className="font-Poppins font-bold uppercase w-5/6"  
+                  type="submit" >Registrar-se</Button>
+              </div>
+              
+              <div className="flex flex-col justify-center items-center text-center">
+                <div>
+                {clickedButton ? 
+                  <Loading /> : null}
+                </div>
+
+                <Link className="flex flex-row justify-center items-center  w-full" href="login">
+                  <Button
+                    className="font-Poppins font-bold uppercase w-5/6"
+                    color="primary"
+                    radius="full"
+                    size="lg"
+                    variant="bordered">
+                      Entrar
+                  </Button>
+                </Link>
+              </div>
             </form >
-        </div >
-    )
-}
+          </CardBody>
+        </Card>
+      </div>
+    </>
+  );
+};
+
+export default RegisterPage;

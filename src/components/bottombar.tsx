@@ -27,7 +27,7 @@ interface bottomProps {
 }
 
 // COMPONENT - BOTTOM BAR //
-export const Bottombar = ({className}: bottomProps) => {
+export const BottomBar = ({className}: bottomProps) => {
   return (
     <>
       <Navbar

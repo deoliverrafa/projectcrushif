@@ -1,10 +1,26 @@
-import { Avatar, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, Image } from "@nextui-org/react";
+// IMPORT - LIBRARYS //
+import { 
+  Avatar,
+  Image,
+  Card,
+  CardHeader,
+  CardBody,
+  CardFooter,
+  Button
+} from "@nextui-org/react";
 import { formatDistanceToNow, parseISO } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import { ChatCircle, HeartStraight } from "phosphor-react";
 
+// IMPORT - ICONS //
+import { 
+  HeartIcon,
+  CommentIcon,
+  ShareIcon
+} from "./../icons/icons.tsx";
+
+// CREATE - INTERFACES //
 interface CardProps {
-    clasName?: string;
+    className?: string;
     userId?: string;
     _id?: string;
     nickname: string;
@@ -18,103 +34,117 @@ interface CardProps {
     insertAt?: string;
 }
 
-const Card = (props: CardProps) => {
+export const CardPost = (props: CardProps) => {
     let formattedData
     if (props.insertAt) {
         const parseDated = parseISO(props.insertAt ?? "")
         formattedData = formatDistanceToNow(parseDated, { locale: ptBR })
     }
 
-    return (
-        <div className={`bg-gray-100 dark:bg-zinc-800 border border-gray-300 dark:border-gray-800 rounded-xl shadow-lg flex flex-col my-2 p-4 w-11/12 max-w-[400px] ${props.clasName}`}>
-            <div className="flex flex-row justify-between items-center relative top-0 right-0">
-                <div className="flex flex-row gap-1 justify-center items-center">
-                    <div>
-                        <Avatar
-                            isBordered
-                            as="button"
-                            className="transition-transform cursor-pointer"
-                            color="secondary"
-                            name={!props.isAnonymous ? props.nickname : ""}
-                            size="sm"
-                            src={!props.isAnonymous ? props.userAvatar : ""}
-                        />
-                    </div>
-                    <div className="flex flex-col">
-                        <p className="font-semibold mx-2">{!props.isAnonymous ? props.nickname : "Anônimo"}</p>
-                        <p className="text-gray-500 dark:text-gray-400 text-sm mx-2">{!props.isAnonymous ? `@${props.nickname}` : null}</p>
-                    </div>
-                </div>
-                <div className="flex justify-center items-center gap-3">
-                    <Dropdown className="bg-gray-300 dark:bg-zinc-800 w-auto h-auto" placement="bottom-end">
-                        <DropdownTrigger>
-                            <i className="fi fi-rr-menu-dots-vertical"></i>
-                        </DropdownTrigger>
-
-                        <DropdownMenu aria-label="Profile Actions" variant="flat">
-                            <DropdownItem key="follow" className="font-Poppins" color="secondary">Seguir </DropdownItem>
-                            <DropdownItem key="share" className="font-Poppins" color="secondary">Compartilhar</DropdownItem>
-                        </DropdownMenu>
-                    </Dropdown>
-                </div>
-            </div>
-            <div className="flex flex-col mt-4 justify-center items-start">
-                <div className="my-1 flex flex-row gap-1 items-start justify-start">
-                    <p className=" font-Poppins text-black dark:text-white break-words">
-                        {props.content || ""}
-                    </p>
-                </div>
-
-                <div className="p-2">
-                    {props.photoURL ? (
-                        <Image
-                            width={500}
-                            height={500}
-                            src={props.photoURL}
-                            alt="Imagem Post"
-                        />
-                    ) :
-                        null
-                    }
-                </div>
-
-                {
-                    !props.isAnonymous ?
-                        (
-                            <div className="my-1 flex flex-row gap-1">
-                                <a key={props._id} className="text-blue-500 dark:text-blue-600 break-words" id={props._id}>
-                                    {props.references}
-                                </a>
-                            </div>
-                        )
-                        :
-                        null
-                }
-
-
-                {formattedData ?
-                    <div className="flex flex-row gap-4 w-full text-balance items-center">
-                        <div className="flex flex-row items-center gap-2 justify-items-center">
-                            <HeartStraight weight="bold" size={21} /><p>{0}</p>
-                        </div>
-
-                        <div className="flex flex-row items-center gap-2 justify-items-center">
-                            <ChatCircle weight="bold" size={21} /><p>{0}</p>
-                        </div>
-
-                        <div className="flex flex-row items-center gap-2 justify-items-center">
-                            {formattedData}
-                        </div>
-
-                    </div>
-                    :
-                    null
-                }
-
-
-            </div>
+  return (
+    <Card
+      shadow="lg"
+      radius="lg"
+      className={`flex flex-col w-11/12 ${props.className}`}>
+      <CardHeader className="justify-between items-center">
+        <div className="flex gap-5">
+          <Avatar
+            isBordered
+            as="button"
+            color="primary"
+            className="font-Poppins uppercase"
+            size="sm"
+            name={!props.isAnonymous ? props.nickname : ""}
+            src={!props.isAnonymous ? props.userAvatar : ""}/>
+          <div className="flex flex-col gap-1 items-start justify-center">
+            <h4 className="font-Poppins text-xs font-semibold leading-none">{!props.isAnonymous ? props.nickname : "Anônimo"}</h4>
+            {formattedData ? (
+              <h5 className="font-Poppins text-xs tracking-tight text-default">há {formattedData} atrás.</h5>
+            ) : (
+              null
+            )}
+          </div>
         </div>
-    );
+        
+        <Button
+          radius="full"
+          shadow="lg"
+          size="sm"
+          className="font-Poppins font-bold uppercase"
+          color="primary">
+          Seguir
+        </Button>
+      </CardHeader>
+     
+      {props.photoURL ? (
+        <CardBody>
+          <Image
+            width={500}
+            height={500}
+            radius="lg"
+            shadow="lg"
+            src={props.photoURL}
+            alt="Imagem Post"/>
+        </CardBody>
+      ) :
+        null
+      }
+      
+      <CardFooter className="flex-col justify-start items-start">
+        {formattedData ?
+        <div className="flex flex-row justify-between items-center w-full">
+          <div className="flex flex-row items-center gap-2">
+            <Button
+              variant="light"
+              isIconOnly>
+              <HeartIcon className="text-primary size-6"/>
+            </Button>
+          
+            <Button
+              variant="light"
+              isIconOnly>
+              <CommentIcon className="text-primary size-6"/>
+            </Button>
+          </div>
+          
+          <div>
+            <Button
+              variant="light"
+              isIconOnly>
+              <ShareIcon className="text-primary size-6"/>
+            </Button>
+          </div>
+        </div>
+      :
+        null
+      }
+      
+        <div className="flex flex-row justify-between items-center my-0.5 w-full">
+          <h4 className="font-Poppins text-default text-xs leading-none"><span className="font-semibold">{0}</span> curtidas</h4>
+        </div>
+        
+        <div className="flex flex-row items-center my-0.5 w-full">
+          <h4 className="font-Poppins text-xs leading-none w-full"><span className="font-semibold">{!props.isAnonymous ? props.nickname : "Anônimo"}:</span> {props.content || ""}</h4>
+        </div>
+        
+        {!props.isAnonymous ?
+        (
+        <div className="flex flex-row items-center my-0.5 w-full">
+          <div className="flex flex-row justify-center items-center">
+            <a key={props._id} className="font-Poppins text-primary text-xs tracking-tight break-words" id={props._id}>
+              {props.references}
+            </a>
+          </div>
+        </div>
+        )
+        :
+          null
+        }
+        
+        <div className="flex flex-row justify-between items-center my-0.5 w-full">
+          <h4 className="font-Poppins text-default text-xs leading-none">Ver todos os <span className="font-semibold">{0}</span> comentários.</h4>
+        </div>
+      </CardFooter>
+    </Card>
+  );
 };
-
-export default Card;
