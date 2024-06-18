@@ -68,7 +68,6 @@ export const CardPost = (props: CardProps) => {
         
         <Button
           radius="full"
-          shadow="lg"
           size="sm"
           className="font-Poppins font-bold uppercase"
           color="primary">
