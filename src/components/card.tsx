@@ -45,7 +45,7 @@ export const CardPost = (props: CardProps) => {
     <Card
       shadow="lg"
       radius="lg"
-      className={`flex flex-col w-11/12 ${props.className}`}>
+      className={`flex flex-col w-11/12 max-w-[768px] mt-5 ${props.className}`}>
       <CardHeader className="justify-between items-center">
         <div className="flex gap-5">
           <Avatar
@@ -77,7 +77,7 @@ export const CardPost = (props: CardProps) => {
       </CardHeader>
      
       {props.photoURL ? (
-        <CardBody>
+        <CardBody className="flex flex-row justify-center p-2">
           <Image
             width={500}
             height={500}
@@ -141,7 +141,7 @@ export const CardPost = (props: CardProps) => {
           null
         }
         
-        <div className="flex flex-row justify-between items-center my-0.5 w-full">
+        <div className="flex flex-row justify-between items-center my-0.5 w-full cursor-pointer">
           <h4 className="font-Poppins text-default text-xs leading-none">Ver todos os <span className="font-semibold">{0}</span> comentários.</h4>
         </div>
       </CardFooter>

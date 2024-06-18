@@ -103,7 +103,7 @@ export default function HomePage() {
                             {
 
                                 posts?.map((post) => {
-                                    return <Card
+                                    return <CardPost
                                         key={post._id}
                                         _id={post._id}
                                         campus={post.campus}
