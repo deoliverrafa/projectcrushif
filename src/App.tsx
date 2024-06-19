@@ -21,7 +21,7 @@ const HomePage = React.lazy(() => import('./views/public/home.tsx'));
 const EventsPage = React.lazy(() => import('./views/public/events.tsx'));
 const MatchPage = React.lazy(() => import('./views/public/match.tsx'));
 const NotificationsPage = React.lazy(() => import('./views/public/notifications.tsx'));
-const UserBasePage = React.lazy(() => import('./views/public/userBasePage.tsx'));
+const UserBasePage = React.lazy(() => import('./views/public/profile.tsx'));
 const LoginPage = React.lazy(() => import('./views/auth/login.tsx'));
 const RegisterPage = React.lazy(() => import('./views/auth/register.tsx'));
 const PublishPage = React.lazy(() => import('./views/public/publish.tsx'));

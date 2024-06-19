@@ -142,13 +142,13 @@ export const NavBar = (props: userData) => {
   );
 };
 
-interface NavBarReturnProps{
+interface NavBarReturnProps {
   title: string;
   [key: string]: any;
 }
 
 // COMPONENT - NAV BAR RETURN //
-export const NavBarReturn: React.FC<NavBarReturnProps> =  ({title, ...props }) => {
+export const NavBarReturn: React.FC<NavBarReturnProps> = ({ title }) => {
   const navigate = useNavigate();
 
   return (
