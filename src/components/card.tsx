@@ -1,5 +1,5 @@
 // IMPORT - LIBRARYS //
-import { 
+import {
   Avatar,
   Image,
   Card,
@@ -12,7 +12,7 @@ import { formatDistanceToNow, parseISO } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
 // IMPORT - ICONS //
-import { 
+import {
   HeartIcon,
   CommentIcon,
   ShareIcon
@@ -20,26 +20,26 @@ import {
 
 // CREATE - INTERFACES //
 interface CardProps {
-    className?: string;
-    userId?: string;
-    _id?: string;
-    nickname: string;
-    email: string;
-    campus: string;
-    references: string;
-    content: string;
-    isAnonymous: boolean;
-    photoURL?: string;
-    userAvatar?: string
-    insertAt?: string;
+  className?: string;
+  userId?: string;
+  _id?: string;
+  nickname: string;
+  email: string;
+  campus: string;
+  references: string;
+  content: string;
+  isAnonymous: boolean;
+  photoURL?: string;
+  userAvatar?: string
+  insertAt?: string;
 }
 
 export const CardPost = (props: CardProps) => {
-    let formattedData
-    if (props.insertAt) {
-        const parseDated = parseISO(props.insertAt ?? "")
-        formattedData = formatDistanceToNow(parseDated, { locale: ptBR })
-    }
+  let formattedData
+  if (props.insertAt) {
+    const parseDated = parseISO(props.insertAt ?? "")
+    formattedData = formatDistanceToNow(parseDated, { locale: ptBR })
+  }
 
   return (
     <Card
@@ -55,7 +55,7 @@ export const CardPost = (props: CardProps) => {
             className="font-Poppins uppercase"
             size="sm"
             name={!props.isAnonymous ? props.nickname : ""}
-            src={!props.isAnonymous ? props.userAvatar : ""}/>
+            src={!props.isAnonymous ? props.userAvatar : ""} />
           <div className="flex flex-col gap-1 items-start justify-center">
             <h4 className="font-Poppins text-xs font-semibold leading-none">{!props.isAnonymous ? props.nickname : "Anônimo"}</h4>
             {formattedData ? (
@@ -65,7 +65,7 @@ export const CardPost = (props: CardProps) => {
             )}
           </div>
         </div>
-        
+
         <Button
           radius="full"
           size="sm"
@@ -74,7 +74,7 @@ export const CardPost = (props: CardProps) => {
           Seguir
         </Button>
       </CardHeader>
-     
+
       {props.photoURL ? (
         <CardBody className="flex flex-row justify-center p-2">
           <Image
@@ -83,66 +83,69 @@ export const CardPost = (props: CardProps) => {
             radius="lg"
             shadow="lg"
             src={props.photoURL}
-            alt="Imagem Post"/>
+            alt="Imagem Post" />
         </CardBody>
       ) :
         null
       }
-      
+
       <CardFooter className="flex-col justify-start items-start">
-        {formattedData ?
-        <div className="flex flex-row justify-between items-center w-full">
-          <div className="flex flex-row items-center gap-2">
-            <Button
-              variant="light"
-              isIconOnly>
-              <HeartIcon className="text-primary size-6"/>
-            </Button>
-          
-            <Button
-              variant="light"
-              isIconOnly>
-              <CommentIcon className="text-primary size-6"/>
-            </Button>
-          </div>
-          
-          <div>
-            <Button
-              variant="light"
-              isIconOnly>
-              <ShareIcon className="text-primary size-6"/>
-            </Button>
-          </div>
+        <div className="flex flex-row items-center my-0.5 w-full mt-1">
+          <h4 className="font-Poppins text-xs leading-none w-full"><span className="font-semibold"></span> {props.content || ""}</h4>
         </div>
-      :
-        null
-      }
-      
-        <div className="flex flex-row justify-between items-center my-0.5 w-full">
-          <h4 className="font-Poppins text-default text-xs leading-none"><span className="font-semibold">{0}</span> curtidas</h4>
-        </div>
-        
-        <div className="flex flex-row items-center my-0.5 w-full">
-          <h4 className="font-Poppins text-xs leading-none w-full"><span className="font-semibold">{!props.isAnonymous ? props.nickname : "Anônimo"}:</span> {props.content || ""}</h4>
-        </div>
-        
+
         {!props.isAnonymous ?
-        (
-        <div className="flex flex-row items-center my-0.5 w-full">
-          <div className="flex flex-row justify-center items-center">
-            <a key={props._id} className="font-Poppins text-primary text-xs tracking-tight break-words" id={props._id}>
-              {props.references}
-            </a>
-          </div>
-        </div>
-        )
-        :
+          (
+            <div className="flex flex-row items-center my-0.5 w-full mt-1">
+              <div className="flex flex-row justify-center items-center">
+                <a key={props._id} className="font-Poppins text-primary text-xs tracking-tight break-words" id={props._id}>
+                  {props.references}
+                </a>
+              </div>
+            </div>
+          )
+          :
           null
         }
-        
-        <div className="flex flex-row justify-between items-center my-0.5 w-full cursor-pointer">
+
+        <div className="flex flex-row justify-between items-center mt-3 w-full cursor-pointer">
           <h4 className="font-Poppins text-default text-xs leading-none">Ver todos os <span className="font-semibold">{0}</span> comentários.</h4>
         </div>
+
+        {formattedData ?
+          <div className="flex flex-row justify-between items-center w-full">
+
+            {/* Ícone Coração */}
+            <div className="flex flex-row items-center gap-2 mr-2">
+              <div className="flex flex-row items-center text-center">
+                <Button
+                  variant="light"
+                  isIconOnly>
+                  <HeartIcon className="text-primary size-6" />
+                </Button>
+                <div className="flex flex-row justify-between items-center my-0.5 w-full">
+                  <h4 className="font-Poppins text-default text-xs leading-none"><span className="font-semibold">{0}</span> curtidas</h4>
+                </div>
+              </div>
+              {/* Ícone comentários */}
+              <Button
+                variant="light"
+                isIconOnly>
+                <CommentIcon className="text-primary size-6" />
+              </Button>
+            </div>
+            {/* Ícone Compartilhar */}
+            <div>
+              <Button
+                variant="light"
+                isIconOnly>
+                <ShareIcon className="text-primary size-6" />
+              </Button>
+            </div>
+          </div>
+          :
+          null
+        }
       </CardFooter>
     </Card>
   );

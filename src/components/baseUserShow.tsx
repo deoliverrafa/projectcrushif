@@ -53,8 +53,10 @@ export default function BaseUserShow(props: userData) {
 
     const handleChangeData = () => {
         try {
-            // const response = axios.post('https://crush-api.vercel.app/profile/changeProfile').then()
-            setChangeDataErrorMessage('Opção indisponível no momento')
+            setChangeDataErrorMessage('')
+
+            const response = axios.post('https://crush-api.vercel.app/profile/changeProfile').then()
+
         } catch (error) {
         }
     }
@@ -132,55 +134,58 @@ export default function BaseUserShow(props: userData) {
 
                 <div className="w-full h-full flex flex-col items-center">
                     <div className="flex flex-col w-full justify-start items-center gap-5">
-                        <div className="flex flex-row w-full h-full gap-3 items-center justify-center">
+                        <form action="updateData">
+                            <div className="flex flex-row w-full h-full gap-3 items-center justify-center">
 
-                            {selectedData == 'nome' ?
+                                {selectedData == 'nome' ?
 
-                                <div className="flex flex-row gap-3">
-                                    <div className="flex flex-row items-center">
-                                        <Input placeholder="Nome" variant="underlined" label='Nome' value={props.user?.nickname}></Input>
+                                    <div className="flex flex-row gap-3">
+                                        <div className="flex flex-row items-center">
+                                            <Input placeholder="Nome" variant="underlined" label='Nome' defaultValue={props.user?.nickname}></Input>
+                                        </div>
+
+                                        <div className="flex flex-row items-center">
+                                            <Input placeholder="Campus" variant="underlined" label='Campus' defaultValue={props.user?.campus}></Input>
+                                        </div>
                                     </div>
+                                    :
+                                    null
+                                }
 
-                                    <div className="flex flex-row items-center">
-                                        <Input placeholder="Campus" variant="underlined" label='Campus' value={props.user?.campus}></Input>
+                                {selectedData == 'email' ?
+
+                                    <div>
+                                        <div className="flex flex-row items-center">
+                                            <Input placeholder="email" variant="underlined" label='email' defaultValue={props.user?.email}></Input>
+                                        </div>
+
                                     </div>
-                                </div>
-                                :
-                                null
-                            }
+                                    :
+                                    null
+                                }
 
-                            {selectedData == 'email' ?
+                                {selectedData == 'password' ?
+                                    <div>
+                                        <div className="flex flex-row items-center">
+                                            <Input type="password" variant="underlined" label='Senha' labelPlacement="inside"></Input>
+                                        </div>
 
-                                <div>
-                                    <div className="flex flex-row items-center">
-                                        <Input placeholder="email" variant="underlined" label='email' value={props.user?.email}></Input>
+                                        <div className="flex flex-row items-center">
+                                            <Input type="password" variant="underlined" label='Nova Senha' labelPlacement="inside"></Input>
+                                        </div>
+
                                     </div>
+                                    :
+                                    null
+                                }
+                            </div>
 
-                                </div>
-                                :
-                                null
-                            }
 
-                            {selectedData == 'password' ?
-                                <div>
-                                    <div className="flex flex-row items-center">
-                                        <Input type="password" variant="underlined" label='Senha' labelPlacement="inside"></Input>
-                                    </div>
-
-                                    <div className="flex flex-row items-center">
-                                        <Input type="password" variant="underlined" label='Nova Senha' labelPlacement="inside"></Input>
-                                    </div>
-
-                                </div>
-                                :
-                                null
-                            }
-                        </div>
-
-                        <div className="flex flex-col items-center gap-3">
-                            <Button className="w-36" onClick={handleChangeData} variant="bordered" endContent={<Pencil />}>Alterar</Button>
-                            <p className="text-bold font-Poppins text-red-500/40 hover:text-red-500/90">{changeDataErrorMessage ? changeDataErrorMessage : ""}</p>
-                        </div>
+                            <div className="flex flex-col items-center gap-3">
+                                <Button className="w-36" onClick={handleChangeData} variant="bordered" endContent={<Pencil />}>Alterar</Button>
+                                <p className="text-bold font-Poppins text-red-500/40 hover:text-red-500/90">{changeDataErrorMessage ? changeDataErrorMessage : ""}</p>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
