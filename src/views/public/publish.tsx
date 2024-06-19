@@ -1,6 +1,6 @@
 // IMPORT - LIBRARYS //
 import { ChangeEvent, useEffect, useState } from "react";
-import { 
+import {
   Button,
   Input,
   Switch,
@@ -18,153 +18,151 @@ import { NavBarReturn } from "../../components/navbar";
 import { getUserData } from "../../utils/getUserData";
 
 // IMPORT - ICONS //
-import { 
+import {
   MaskIcon,
   NetworkIcon
 } from './../../icons/icons.tsx';
 
 // CREATE - INTERFACES //
 interface CardData {
-    nickname: string;
-    email: string;
-    campus: string;
-    references: string;
-    content: string;
-    isAnonymous: boolean;
-    photoURL?: string;
-    userPhotoUrl?: string
+  nickname: string;
+  email: string;
+  campus: string;
+  references: string;
+  content: string;
+  isAnonymous: boolean;
+  photoURL?: string;
+  userPhotoUrl?: string
 }
 
 
 const PublishPage = () => {
+  
+  const userData = getUserData();
 
-    const userData = getUserData();
+  const [isAnonymous, setAnonymous] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
-    const [isAnonymous, setAnonymous] = useState<boolean>(false);
-    const [avatarPath, setAvatarPath] = useState(localStorage.getItem('avatar') ?? "");
-    const [errorMessage, setErrorMessage] = useState("");
+  const [cardData, setCardData] = useState<CardData>({
+    nickname: "",
+    email: "",
+    campus: "",
+    references: "",
+    content: "",
+    isAnonymous: false
+  });
 
-    const [cardData, setCardData] = useState<CardData>({
-        nickname: "",
-        email: "",
-        campus: "",
-        references: "",
-        content: "",
-        isAnonymous: false
-    });
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
-    const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  function handleIsAnonymous() {
+    setAnonymous(!isAnonymous);
+  }
 
-    function handleIsAnonymous() {
-        setAnonymous(!isAnonymous);
+  function handleChangeData(e: ChangeEvent<HTMLInputElement>) {
+    const { name, value } = e.target;
+    setCardData((prevData) => ({
+      ...prevData,
+      [name]: value
+    }));
+  }
+
+  function handleFileChange(e: ChangeEvent<HTMLInputElement>) {
+    if (e.target.files && e.target.files[0]) {
+      setSelectedFile(e.target.files[0]);
     }
+  }
 
-    function handleChangeData(e: ChangeEvent<HTMLInputElement>) {
-        const { name, value } = e.target;
+  useEffect(() => {
+    if (userData) {
+      setCardData((prevData) => ({
+        ...prevData,
+        nickname: userData.nickname,
+        email: userData.email,
+        campus: userData.campus,
+        isAnonymous: isAnonymous
+      }));
+    }
+  }, [userData]);
+
+  useEffect(() => {
+    setCardData((prevData) => ({
+      ...prevData,
+      isAnonymous: isAnonymous
+    }));
+  }, [isAnonymous]);
+
+  useEffect(() => {
+    if (selectedFile) {
+      if (selectedFile.type === "image/jpeg" || selectedFile.type === "image/png" || selectedFile.type === "image/gif") {
+        setErrorMessage('');
+        const imageUrl = URL.createObjectURL(selectedFile);
         setCardData((prevData) => ({
-            ...prevData,
-            [name]: value
+          ...prevData,
+          photoURL: imageUrl
         }));
+      } else {
+        setErrorMessage("Por favor, selecione uma imagem válida (JPEG, PNG ou GIF).");
+      }
+    }
+  }, [selectedFile]);
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+
+    const formData = new FormData();
+    formData.append('nickname', cardData.nickname);
+    formData.append('email', cardData.email);
+    formData.append('campus', cardData.campus);
+    formData.append('content', cardData.content || "");
+    formData.append('references', cardData.references ? cardData.references : "");
+    formData.append('avatar', userData?.avatar ? userData.avatar : "")
+    formData.append('isAnonymous', isAnonymous.toString());
+
+    if (selectedFile) {
+      formData.append('photo', selectedFile);
     }
 
-    function handleFileChange(e: ChangeEvent<HTMLInputElement>) {
-        if (e.target.files && e.target.files[0]) {
-            setSelectedFile(e.target.files[0]);
-        }
+    try {
+      const response = await fetch(`https://crush-api.vercel.app/post/publish/${localStorage.getItem('userId')}`, {
+        method: 'POST',
+        body: formData,
+      });
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const result = await response.json();
+      console.log(result);
+
+      if (result.posted) {
+        window.location.href = "/"
+      }
+
+    } catch (error) {
+      console.error('Error:', error);
     }
-
-    useEffect(() => {
-        if (userData) {
-            setCardData((prevData) => ({
-                ...prevData,
-                nickname: userData.nickname,
-                email: userData.email,
-                campus: userData.campus,
-                isAnonymous: isAnonymous
-            }));
-            setAvatarPath(localStorage.getItem('avatar') ?? "")
-        }
-    }, [userData]);
-
-    useEffect(() => {
-        setCardData((prevData) => ({
-            ...prevData,
-            isAnonymous: isAnonymous
-        }));
-    }, [isAnonymous]);
-
-    useEffect(() => {
-        if (selectedFile) {
-            if (selectedFile.type === "image/jpeg" || selectedFile.type === "image/png" || selectedFile.type === "image/gif") {
-                setErrorMessage('');
-                const imageUrl = URL.createObjectURL(selectedFile);
-                setCardData((prevData) => ({
-                    ...prevData,
-                    photoURL: imageUrl
-                }));
-            } else {
-                setErrorMessage("Por favor, selecione uma imagem válida (JPEG, PNG ou GIF).");
-            }
-        }
-    }, [selectedFile]);
-
-    async function handleSubmit(e: React.FormEvent) {
-        e.preventDefault();
-
-        const formData = new FormData();
-        formData.append('nickname', cardData.nickname);
-        formData.append('email', cardData.email);
-        formData.append('campus', cardData.campus);
-        formData.append('content', cardData.content || "");
-        formData.append('references', cardData.references ? cardData.references : "");
-        formData.append('avatar', userData?.avatar ? userData.avatar : "")
-        formData.append('isAnonymous', isAnonymous.toString());
-
-        if (selectedFile) {
-            formData.append('photo', selectedFile);
-        }
-
-        try {
-            const response = await fetch(`https://crush-api.vercel.app/post/publish/${localStorage.getItem('userId')}`, {
-                method: 'POST',
-                body: formData,
-            });
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            const result = await response.json();
-            console.log(result);
-
-            if (result.posted) {
-                window.location.href = "/"
-            }
-
-        } catch (error) {
-            console.error('Error:', error);
-        }
-    }
-
+  }
+  
   return (
+
     <>
       <NavBarReturn title="Publique" />
-      
       <main>
-      <div className="flex flex-col justify-center items-center">
-        <Card
-          radius="lg"
-          shadow="lg"
-          className="flex flex-col w-11/12">
-          <CardHeader className="flex-col">
-            <Switch 
-              color="primary"
-              size="lg"
-              onClick={handleIsAnonymous}
-              thumbIcon={({className}) => (!isAnonymous ? <NetworkIcon className="text-primary size-5" /> : <MaskIcon className="text-default size-5" />)}>
-              {!isAnonymous ? (<p className="font-Poppins font-semibold">Público</p>) : (<p className="font-Poppins font-semibold">Anônimo</p>)}
-            </Switch>
-            
-            <div className="flex flex-col justify-center items-center my-1 w-full">
-              <h1 className="font-Poppins text-default text-xs tracking-tight my-0.5">Acompanhe seu post</h1>
+        <div className="flex flex-col justify-center items-center">
+          <Card
+            radius="lg"
+            shadow="lg"
+            className="flex flex-col w-11/12 max-w-[512px] mt-12">
+            <CardHeader className="flex-col">
+              <Switch
+                color="primary"
+                size="lg"
+                onClick={handleIsAnonymous}
+                thumbIcon={() => (!isAnonymous ? <NetworkIcon className="text-primary size-5" /> : <MaskIcon className="text-default size-5" />)}>
+                {!isAnonymous ? (<p className="font-Poppins font-semibold">Público</p>) : (<p className="font-Poppins font-semibold">Anônimo</p>)}
+              </Switch>
+
+              <div className="flex flex-col justify-center items-center my-1 w-full">
+                <h1 className="font-Poppins text-default text-xs tracking-tight my-0.5">Acompanhe seu post</h1>
                 <CardPost
                   className="my-0.5"
                   campus={cardData.campus}
@@ -174,79 +172,79 @@ const PublishPage = () => {
                   nickname={cardData.nickname}
                   references={cardData.references}
                   photoURL={cardData.photoURL}
-                  userAvatar={userData?.avatar}/>
+                  userAvatar={userData?.avatar} />
                 {isAnonymous && (
                   <div>
                     <h1 className="font-Poppins text-default text-xs tracking-tight my-0.5">(Seu nome não aparecerá no seu post)</h1>
                   </div>
                 )}
-            </div>
-          </CardHeader>
-          <Divider />
-          
-          <CardBody>
-            <form onSubmit={handleSubmit} className="flex flex-col relative gap-5">
-            {/* Wrap inputs */}
-              <div className="flex flex-row justify-center items-center">
-                <Input
-                  key="content"
-                  type="text"
-                  radius="full"
-                  name="content"
-                  label="Descrição"
-                  placeholder="Descrição da sua publicação"
-                  className="font-Poppins font-medium w-full"
-                  onChange={handleChangeData}/>
               </div>
+            </CardHeader>
+            <Divider />
 
-              {!isAnonymous &&
-              <div className="flex flex-row justify-center items-center">
-                <Input
-                  key="references"
-                  type="text"
-                  radius="full"
-                  name="references"
-                  label="Marcações"
-                  placeholder="Levante uma corrente"
-                  className="font-Poppins font-medium w-full"
-                  onChange={handleChangeData}
-                />
-              </div>
-              }
-
-              <div className="flex flex-row justify-center items-center">
-                <label 
-                  htmlFor="inputFoto"
-                  className="w-full h-fit cursor-pointer">
-                  <Button 
+            <CardBody>
+              <form onSubmit={handleSubmit} className="flex flex-col relative gap-5">
+                {/* Wrap inputs */}
+                <div className="flex flex-row justify-center items-center">
+                  <Input
+                    key="content"
+                    type="text"
                     radius="full"
-                    size="lg"
-                    color="default"
-                    fullWidth={true}
-                    className="font-Poppins font-bold uppercase" 
-                    as="span">
-                    Selecione uma Foto
-                  </Button>
-                </label>
-                <input 
-                  className="hidden"
-                  type="file" 
-                  name="foto" 
-                  id="inputFoto" 
-                  onChange={handleFileChange} />
+                    name="content"
+                    label="Descrição"
+                    placeholder="Descrição da sua publicação"
+                    className="font-Poppins font-medium w-full"
+                    onChange={handleChangeData} />
+                </div>
 
-                <div className="my-3">
-                                {errorMessage && (
-                                    <div className="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-black dark:text-red-400" role="alert">
-                                        <span className="font-medium">Atenção!</span> {errorMessage}
-                                    </div>
-                                )}
-                            </div>
-                        </div>
+                {!isAnonymous &&
+                  <div className="flex flex-row justify-center items-center">
+                    <Input
+                      key="references"
+                      type="text"
+                      radius="full"
+                      name="references"
+                      label="Marcações"
+                      placeholder="Levante uma corrente"
+                      className="font-Poppins font-medium w-full"
+                      onChange={handleChangeData}
+                    />
+                  </div>
+                }
 
                 <div className="flex flex-row justify-center items-center">
-                  <Button 
-                    type="submit" 
+                  <label
+                    htmlFor="inputFoto"
+                    className="w-full h-fit cursor-pointer">
+                    <Button
+                      radius="full"
+                      size="lg"
+                      color="default"
+                      fullWidth={true}
+                      className="font-Poppins font-bold uppercase"
+                      as="span">
+                      Selecione uma Foto
+                    </Button>
+                  </label>
+                  <input
+                    className="hidden"
+                    type="file"
+                    name="foto"
+                    id="inputFoto"
+                    onChange={handleFileChange} />
+
+                  <div className="my-3">
+                    {errorMessage && (
+                      <div className="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-black dark:text-red-400" role="alert">
+                        <span className="font-medium">Atenção!</span> {errorMessage}
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                <div className="flex flex-row justify-center items-center">
+                  <Button
+                    type="submit"
                     color="primary"
                     radius="full"
                     size="lg"
@@ -255,10 +253,10 @@ const PublishPage = () => {
                     Enviar
                   </Button>
                 </div>
-            </form>
-          </CardBody>
-        </Card>
-      </div>
+              </form>
+            </CardBody>
+          </Card>
+        </div>
       </main>
     </>
   );

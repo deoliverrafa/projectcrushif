@@ -84,12 +84,12 @@ const LoginPage = () => {
     };
 
   return (
-    <>
+    <div className="flex flex-col w-full h-full">
       <div className="flex flex-row justify-end items-center w-full">
         <ThemeSwitcher className="my-1.5 mx-2" />
       </div>
 
-      <div className="flex flex-col justify-center items-center">
+      <div className="flex flex-col justify-center items-center translate-y-20">
         <Card
           shadow="lg"
           radius="lg">
@@ -179,7 +179,7 @@ const LoginPage = () => {
           </CardBody>
         </Card>
       </div>
-    </>
+    </div>
   );
 };
 

@@ -1,5 +1,4 @@
 // IMPORT - LIBRARYS //
-import { useState } from 'react';
 
 // IMPORT - COMPONENTS //
 import { NavBar } from './../../components/navbar.tsx';
@@ -14,14 +13,13 @@ import {
 } from './../../icons/icons.tsx';
 
 const MatchPage = () => {
-  const [avatarPath, setAvatarPath] = useState(localStorage.getItem('avatar') ?? "");
   const userData = getUserData();
   
   return (
     <>
       <NavBar
         user={userData} 
-        avatarPath={userData?.avatar ? userData.avatar : avatarPath} />
+        avatarPath={userData?.avatar ? userData.avatar : ""} />
       
       <main className="flex flex-col justify-center items-center h-screen w-full">
         <Error404Icon className="text-default text-center size-20" />

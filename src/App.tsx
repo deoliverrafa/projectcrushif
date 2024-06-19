@@ -1,12 +1,12 @@
 // IMPORT - LIBRARYS // 
 import * as React from 'react';
 import { NextUIProvider } from "@nextui-org/react";
-import { 
-  BrowserRouter as Router, 
-  Routes, 
+import {
+  BrowserRouter as Router,
+  Routes,
   Route
 } from 'react-router-dom';
-import { 
+import {
   ThemeProvider as NextThemesProvider
 } from "next-themes";
 

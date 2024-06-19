@@ -1,17 +1,17 @@
 // IMPORT - LIBRARYS //
 import { useNavigate } from 'react-router-dom';
-import { 
+import {
   Button,
-  Navbar, 
-  NavbarBrand, 
-  NavbarContent, 
+  Navbar,
+  NavbarBrand,
+  NavbarContent,
   NavbarItem,
-  DropdownItem, 
-  DropdownTrigger, 
-  Dropdown, 
-  DropdownMenu, 
+  DropdownItem,
+  DropdownTrigger,
+  Dropdown,
+  DropdownMenu,
   DropdownSection,
-  Avatar, 
+  Avatar,
   Link,
   Image
 } from "@nextui-org/react";
@@ -28,20 +28,21 @@ import {
 
 // IMPORT - IMAGES //
 import logo from "../../public/images/CrushIf_Logo-removebg-preview.png";
+import React from 'react';
 
 // CREATE - INTERFACES //
 interface User {
-    _id: string;
-    nickname: string;
-    email: string;
-    campus: string;
-    className?: string;
+  _id: string;
+  nickname: string;
+  email: string;
+  campus: string;
+  className?: string;
 }
 
 interface userData {
-    user: User | null;
-    className?: string;
-    avatarPath?: string;
+  user: User | null;
+  className?: string;
+  avatarPath?: string;
 }
 
 // COMPONENT - NAVBAR //
@@ -51,7 +52,7 @@ export const NavBar = (props: userData) => {
   }
 
   return (
-    <Navbar 
+    <Navbar
       isBordered
       shouldHideOnScroll
       isBlurred={true}
@@ -67,48 +68,48 @@ export const NavBar = (props: userData) => {
               name={props.user?.nickname ? props.user.nickname : ""}
               src={props.avatarPath ? props.avatarPath : ""} />
           </DropdownTrigger>
-            
+
           <DropdownMenu aria-label="Profile Actions">
-            <DropdownSection 
+            <DropdownSection
               title="Conta"
               className="font-Poppins">
-              <DropdownItem 
+              <DropdownItem
                 className="gap-2">
                 <p className="font-semibold">Logado como:</p>
                 <p className="font-regular text-default">{props.user?.email}</p>
               </DropdownItem>
-                
-              <DropdownItem 
-                key="profile" 
+
+              <DropdownItem
+                key="profile"
                 description="Exibir perfil do usuário"
                 className="font-Poppins"
                 href="/user"
                 startContent={<ProfileIcon className="size-4" />}>
                 Perfil
               </DropdownItem>
-                
-              <DropdownItem 
-                key="user" 
+
+              <DropdownItem
+                key="user"
                 description="Configurações do usuário"
                 className="font-Poppins"
                 href="/user"
                 startContent={<SettingIcon className="size-4" />}>
                 Configurações
               </DropdownItem>
-                
-              <DropdownItem 
-                key="share" 
+
+              <DropdownItem
+                key="share"
                 description="Compartilhar perfil do usuário"
                 className="font-Poppins"
                 startContent={<ShareIcon className="size-4" />}>
                 Compartilhar
               </DropdownItem>
-                
-              <DropdownItem 
+
+              <DropdownItem
                 key="logout"
                 description="Deslogar da conta do usuário"
-                className="font-Poppins text-danger" 
-                href="/auth/login" 
+                className="font-Poppins text-danger"
+                href="/auth/login"
                 onClick={logOutHandle}
                 startContent={<LogoutIcon className="size-4" />}>
                 Sair
@@ -117,11 +118,11 @@ export const NavBar = (props: userData) => {
           </DropdownMenu>
         </Dropdown>
       </NavbarContent>
-        
+
       <NavbarContent justify="center">
         <Link href="/">
           <NavbarBrand>
-            <Image 
+            <Image
               className="h-10 w-10"
               alt="logo crush if"
               src={logo} />
@@ -129,7 +130,7 @@ export const NavBar = (props: userData) => {
           </NavbarBrand>
         </Link>
       </NavbarContent>
-        
+
       <NavbarContent justify="end">
         <Button
           variant="light"
@@ -141,12 +142,17 @@ export const NavBar = (props: userData) => {
   );
 };
 
+interface NavBarReturnProps{
+  title: string;
+  [key: string]: any;
+}
+
 // COMPONENT - NAV BAR RETURN //
-export const NavBarReturn = ({title, ...props}) => {
+export const NavBarReturn: React.FC<NavBarReturnProps> =  ({title, ...props }) => {
   const navigate = useNavigate();
-  
+
   return (
-    <Navbar 
+    <Navbar
       isBordered
       shouldHideOnScroll
       isBlurred={true}
@@ -157,10 +163,10 @@ export const NavBarReturn = ({title, ...props}) => {
             isIconOnly
             variant="light"
             onClick={() => navigate(-1)}>
-             <ArrowLeftIcon className="size-6" />
+            <ArrowLeftIcon className="size-6" />
           </Button>
         </NavbarItem>
-        
+
         <NavbarItem>
           <p className="font-Poppins font-bold">{title}</p>
         </NavbarItem>

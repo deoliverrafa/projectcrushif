@@ -8,8 +8,7 @@ import {
   CardBody,
   Divider,
   Select, 
-  SelectItem, 
-  Spinner,
+  SelectItem,  
   Input,
   Link
 } from "@nextui-org/react";
@@ -248,7 +247,6 @@ export const RegisterPage = () => {
                   <Select
                     isRequired
                     radius="full"
-                    type="date"
                     label="Instituto"
                     className="font-Poppins font-medium w-5/6"
                     name="campus"
