@@ -6,7 +6,8 @@ import {
   CardHeader,
   CardBody,
   CardFooter,
-  Button
+  Button,
+  Divider
 } from "@nextui-org/react";
 import { formatDistanceToNow, parseISO } from "date-fns";
 import { ptBR } from "date-fns/locale";
@@ -15,7 +16,7 @@ import { ptBR } from "date-fns/locale";
 import { 
   HeartIcon,
   CommentIcon,
-  ShareIcon
+  SendIcon
 } from "./../icons/icons.tsx";
 
 // CREATE - INTERFACES //
@@ -75,53 +76,7 @@ export const CardPost = (props: CardProps) => {
         </Button>
       </CardHeader>
      
-      {props.photoURL ? (
-        <CardBody className="flex flex-row justify-center p-2">
-          <Image
-            width={500}
-            height={500}
-            radius="lg"
-            shadow="lg"
-            src={props.photoURL}
-            alt="Imagem Post"/>
-        </CardBody>
-      ) :
-        null
-      }
-      
-      <CardFooter className="flex-col justify-start items-start">
-        {formattedData ?
-        <div className="flex flex-row justify-between items-center w-full">
-          <div className="flex flex-row items-center gap-2">
-            <Button
-              variant="light"
-              isIconOnly>
-              <HeartIcon className="text-primary size-6"/>
-            </Button>
-          
-            <Button
-              variant="light"
-              isIconOnly>
-              <CommentIcon className="text-primary size-6"/>
-            </Button>
-          </div>
-          
-          <div>
-            <Button
-              variant="light"
-              isIconOnly>
-              <ShareIcon className="text-primary size-6"/>
-            </Button>
-          </div>
-        </div>
-      :
-        null
-      }
-      
-        <div className="flex flex-row justify-between items-center my-0.5 w-full">
-          <h4 className="font-Poppins text-default text-xs leading-none"><span className="font-semibold">{0}</span> curtidas</h4>
-        </div>
-        
+      <CardBody>
         <div className="flex flex-row items-center my-0.5 w-full">
           <h4 className="font-Poppins text-xs leading-none w-full"><span className="font-semibold">{!props.isAnonymous ? props.nickname : "Anônimo"}:</span> {props.content || ""}</h4>
         </div>
@@ -129,20 +84,75 @@ export const CardPost = (props: CardProps) => {
         {!props.isAnonymous ?
         (
         <div className="flex flex-row items-center my-0.5 w-full">
-          <div className="flex flex-row justify-center items-center">
-            <a key={props._id} className="font-Poppins text-primary text-xs tracking-tight break-words" id={props._id}>
-              {props.references}
-            </a>
-          </div>
+          <a key={props._id} className="font-Poppins text-primary text-xs tracking-tight break-words" id={props._id}>
+            {props.references}
+          </a>
         </div>
         )
         :
           null
         }
-        
-        <div className="flex flex-row justify-between items-center my-0.5 w-full cursor-pointer">
-          <h4 className="font-Poppins text-default text-xs leading-none">Ver todos os <span className="font-semibold">{0}</span> comentários.</h4>
+      </CardBody>
+     
+      {props.photoURL ? (
+        <Image
+          width={500}
+          height={500}
+          radius="lg"
+          shadow="lg"
+          src={props.photoURL}
+          alt="Imagem Post"/>
+      ) :
+        null
+      }
+      
+      <CardFooter className="flex-col justify-start items-start">
+        <Divider/>
+        <div className="flex flex-row justify-between items-center w-full">
+          <Button
+            className="font-Poppins text-default text-xs tracking-tight"
+            size="sm"
+            variant="light">
+            <span className="font-semibold">{0}</span>
+            curtidas
+          </Button>
+          
+          <Button
+            className="font-Poppins text-default text-xs tracking-tight"
+            size="sm"
+            variant="light">
+            <span className="font-semibold">{0}</span>
+            comentários
+          </Button>
         </div>
+        
+        <Divider />
+        {formattedData ?
+          <div className="flex flex-row justify-between items-center w-full">
+            <Button
+              className="font-Poppins text-default text-xs uppercase tracking-tight"
+              variant="light">
+              <HeartIcon className="text-primary size-4" />
+              Curtir
+            </Button>
+          
+            <Button
+              className="font-Poppins text-default text-xs uppercase tracking-tight"
+              variant="light">
+              <CommentIcon className="text-primary size-4" />
+              Comentar
+            </Button>
+            
+            <Button
+              className="font-Poppins text-default text-xs uppercase tracking-tight"
+              variant="light">
+              <SendIcon className="text-primary size-4" />
+              Enviar
+            </Button>
+        </div>
+      :
+        null
+      }
       </CardFooter>
     </Card>
   );
