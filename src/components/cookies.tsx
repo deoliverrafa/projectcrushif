@@ -6,7 +6,7 @@ import {
 
 // CREATE - INTERFACES //
 interface cookiesToastProps {
-  onClickAccept?: string
+  onClick?: string
 }
 
 // COMPONENT - TOAST COOKIES //
@@ -27,7 +27,7 @@ export const ToastCookies = (props: cookiesToastProps) => {
           color="primary"
           variant="flat"
           className="font-Poppins font-bold uppercase"
-          onClick={props.onClickAccept}>Aceitar</Button>
+          onClick={props.onClick}>Aceitar</Button>
       </div>
     </Card>
   );
