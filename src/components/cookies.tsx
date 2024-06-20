@@ -1,9 +1,9 @@
 // IMPORT - LIBRARYS //
+import React from 'react';
 import {
   Card,
   Button
 } from '@nextui-org/react';
-import React from 'react';
 
 // CREATE - INTERFACES //
 interface cookiesToastProps {

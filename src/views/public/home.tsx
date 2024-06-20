@@ -107,7 +107,7 @@ export default function HomePage() {
 
                         {showCookies && (
                             <ToastCookies
-                                onClick={() => { (handleHideCookies) }}
+                                onClick={handleHideCookies}
                             />
                         )}
 
