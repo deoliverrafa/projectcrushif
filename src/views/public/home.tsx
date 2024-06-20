@@ -31,7 +31,7 @@ interface userData {
     avatar: string,
 }
 export default function HomePage() {
-    
+
     const [userData, setUserData] = useState<userData | null>();
     const [posts, setPosts] = useState<CardProps[] | null>([]);
     // const [bottomIsVisible, setBottomVisible] = useState(true);
@@ -39,10 +39,10 @@ export default function HomePage() {
     const [skip, setSkip] = useState(0);
     const [limit, setLimit] = useState(0);
     const [showCookies, setShowCookies] = useState(localStorage.getItem('showCookies') !== 'hidden');
-    
+
     const handleHideCookies = () => {
-      setShowCookies(false);
-      localStorage.setItem('showCookies', 'hidden');
+        setShowCookies(false);
+        localStorage.setItem('showCookies', 'hidden');
     };
 
     useEffect(() => {
@@ -99,19 +99,19 @@ export default function HomePage() {
     // }, []);
 
     return (
-      <>
-      {userData ?
-      (
-        <div className="flex flex-col">
-          <NavBar user={userData} avatarPath={userData.avatar ? userData.avatar : localAvatarPath} />
-                        
-          {showCookies && (
-          <ToastCookies 
-            onClick={handleHideCookies}
-          />
-          )}
-          
-          <main className="w-full h-full flex flex-col-reverse justify-center items-center">
+        <>
+            {userData ?
+                (
+                    <div className="flex flex-col">
+                        <NavBar user={userData} avatarPath={userData.avatar ? userData.avatar : localAvatarPath} />
+
+                        {showCookies && (
+                            <ToastCookies
+                                onClick={() => { (handleHideCookies) }}
+                            />
+                        )}
+
+                        <main className="w-full h-full flex flex-col-reverse justify-center items-center">
                             {
 
                                 posts?.map((post) => {
@@ -137,7 +137,7 @@ export default function HomePage() {
                 )
                 :
                 (
-                  <Loading />
+                    <Loading />
                 )
             }
         </>

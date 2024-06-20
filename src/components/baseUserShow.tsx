@@ -55,7 +55,7 @@ export default function BaseUserShow(props: userData) {
         try {
             setChangeDataErrorMessage('')
 
-            const response = axios.post('https://crush-api.vercel.app/profile/changeProfile').then()
+            // const response = axios.post('https://crush-api.vercel.app/profile/changeProfile').then()
 
         } catch (error) {
         }
