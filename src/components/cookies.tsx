@@ -1,9 +1,16 @@
+// IMPORT - LIBRARYS //
 import { 
   Card,
   Button
 } from '@nextui-org/react';
 
-export const ToastCookies = ({onClick, ...props}) => {
+// CREATE - INTERFACES //
+interface cookiesToastProps {
+  onClick: string
+}
+
+// COMPONENT - TOAST COOKIES //
+export const ToastCookies = (props: cookiesToastProps) => {
   return (
     <Card
       radius="lg"
