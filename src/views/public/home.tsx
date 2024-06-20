@@ -5,8 +5,8 @@ import { NavBar } from "../../components/navbar";
 import { BottomBar } from "../../components/bottombar";
 import { CardPost } from "../../components/card";
 import { Loading } from "./../../components/loading.tsx";
+import { ToastCookies } from './../../components/cookies.tsx';
 // import { debounce } from "lodash";
-
 
 const localAvatarPath = localStorage.getItem('avatar') ?? "";
 
@@ -38,7 +38,12 @@ export default function HomePage() {
     // const [prevScrollPos, setPrevScrollPos] = useState(window.pageYOffset);
     const [skip, setSkip] = useState(0);
     const [limit, setLimit] = useState(0);
-
+    const [showCookies, setShowCookies] = useState(localStorage.getItem('showCookies') !== 'hidden');
+    
+    const handleHideCookies = () => {
+      setShowCookies(false);
+      localStorage.setItem('showCookies', 'hidden');
+    };
 
     useEffect(() => {
         const userId = localStorage.getItem("userId");
@@ -94,12 +99,19 @@ export default function HomePage() {
     // }, []);
 
     return (
-        <>
-            {userData ?
-                (
-                    <div className="bg-gray-200 dark:bg-zinc-900 flex flex-col">
-                        <NavBar user={userData} avatarPath={userData.avatar ? userData.avatar : localAvatarPath} />
-                        <main className="w-full h-full flex flex-col-reverse justify-center items-center">
+      <>
+      {userData ?
+      (
+        <div className="flex flex-col">
+          <NavBar user={userData} avatarPath={userData.avatar ? userData.avatar : localAvatarPath} />
+                        
+          {showCookies && (
+          <ToastCookies 
+            onClick={handleHideCookies}
+          />
+          )}
+          
+          <main className="w-full h-full flex flex-col-reverse justify-center items-center">
                             {
 
                                 posts?.map((post) => {
@@ -121,7 +133,7 @@ export default function HomePage() {
                         </main >
                         <div className="mt-10"></div>
                         <BottomBar className="appearance-in" />
-                    </div >
+                    </div>
                 )
                 :
                 (
