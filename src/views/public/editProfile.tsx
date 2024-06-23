@@ -6,15 +6,15 @@ import { Loading } from './../../components/loading.tsx';
 // IMPORT - SCRIPTS //
 import { getUserData } from "../../utils/getUserData";
 
-const ProfilePage = () => {
+const EditProfilePage = () => {
     const userData = getUserData();
 
     return (
       <>
-        <NavBarReturn title="Perfil" />
+        <NavBarReturn title="Editando" />
           {userData ? (
-            <main>
-              <p>perfil do {userData.nickname}</p>
+            <main className="flex flex-col justify-center items-center">
+              <BaseUserShow user={userData} />
             </main>
           ) : (
             <Loading />
@@ -23,4 +23,4 @@ const ProfilePage = () => {
     );
 };
 
-export default ProfilePage;
+export default EditProfilePage;

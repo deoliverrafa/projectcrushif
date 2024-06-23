@@ -58,7 +58,7 @@ export const NavBar = (props: userData) => {
       isBlurred={true}
       position={'static'}>
       <NavbarContent justify="start">
-        <Dropdown backdrop="blur">
+        <Dropdown>
           <DropdownTrigger>
             <Avatar
               isBordered
@@ -83,7 +83,7 @@ export const NavBar = (props: userData) => {
                 key="profile"
                 description="Exibir perfil do usuário"
                 className="font-Poppins"
-                href="/user"
+                href="/profile"
                 startContent={<ProfileIcon className="size-4" />}>
                 Perfil
               </DropdownItem>
@@ -92,7 +92,7 @@ export const NavBar = (props: userData) => {
                 key="user"
                 description="Configurações do usuário"
                 className="font-Poppins"
-                href="/user"
+                href="/profile/edit"
                 startContent={<SettingIcon className="size-4" />}>
                 Configurações
               </DropdownItem>
