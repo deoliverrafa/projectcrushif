@@ -1,9 +1,37 @@
-import { Avatar, Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, Input } from "@nextui-org/react";
+// IMPORT - LIBRARYS //
 import { useState } from "react";
 import axios from "axios";
-import { isValidImage } from "../controllers/avatarUpdate";
-import { Pencil } from "phosphor-react";
+import { 
+  Avatar,
+  Button,
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
+  DropdownTrigger,
+  DropdownSection,
+  Input,
+  Card,
+  CardHeader,
+  CardBody,
+  CardFooter,
+  Divider,
+  Badge
+} from "@nextui-org/react";
 
+// IMPORT - SCRIPTS //
+import { isValidImage } from "../controllers/avatarUpdate";
+
+// IMPORT - ICONS //
+import { 
+  PencilIcon,
+  EmailIcon,
+  PasswordIcon,
+  PersonIcon,
+  EyeInvisibleIcon,
+  EyeIcon
+} from './../icons/icons.tsx';
+
+// CREATE - INTERFACE //
 interface User {
     _id: string;
     nickname: string;
@@ -17,7 +45,8 @@ interface userData {
     user: User | null
 }
 
-export default function BaseUserShow(props: userData) {
+// COMPONENT - EDIT PROFILE //
+export const BaseUserShow = (props: userData) => {
     // Change Image
 
     const [errorImage, setErrorImage] = useState("");
@@ -46,6 +75,10 @@ export default function BaseUserShow(props: userData) {
 
     const [changeDataErrorMessage, setChangeDataErrorMessage] = useState<String>();
     const [selectedData, setSelectedData] = useState<String>('nome');
+    
+    const [isVisible, setIsVisible] = useState(false);
+
+    const toggleVisibility = () => setIsVisible(!isVisible);
 
     function handleSelectedData(data: string) {
         setSelectedData(data);
@@ -61,134 +94,227 @@ export default function BaseUserShow(props: userData) {
         }
     }
     return (
-        <div className="flex flex-col w-full h-full">
-            <div className="flex flex-col fixed -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2 h-fit w-3/4 min-w-[200px] max-w-[1000px] rounded-lg bg-zinc-300 dark:bg-zinc-800 shadow-lg shadow-default-400">
-                <div className="flex justify-center relative">
-                    <form action="updateAvatar" method="POST" className="flex flex-col gap-4">
-                        <div className="flex flex-col gap-1 items-center">
-                            <label htmlFor="avatarInput">
-                                <Avatar
-                                    isBordered
-                                    className="transition-transform mt-4 cursor-pointer"
-                                    color="secondary"
-                                    size="sm"
-                                    name={props.user?.nickname}
-                                    src={props.user?.avatar}
-                                />
-                            </label>
-                            <input className="hidden" type="file" name="avatar" id="avatarInput" accept="image/*" onChange={handleImageChange} />
-                            <div className="flex w-full justify-center mt-3">
-                                <p className="text-bold font-Poppins text-zinc-700 dark:text-white">{props.user?.nickname}</p>
-                            </div>
-                            <div className="mt-3">
-                                {errorImage && (
-                                    <div className="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-black dark:text-red-400" role="alert">
-                                        <span className="font-medium">Atenção!</span> {errorImage}
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                    </form>
-
-                    <div className="absolute right-3 top-3">
-                        <Dropdown className="bg-gray-300 dark:bg-zinc-800 w-auto h-auto" placement="bottom-end">
-                            <DropdownTrigger>
-                                <i className="fi fi-rr-menu-dots-vertical"></i>
-                            </DropdownTrigger>
-
-                            <DropdownMenu aria-label="Profile Actions" variant="flat">
-
-                                {selectedData !== "email" ?
-                                    (
-                                        <DropdownItem key="email" className="font-Poppins" color="default" onClick={() => { handleSelectedData('email') }}>Email </DropdownItem>
-                                    )
-                                    :
-                                    (
-                                        <DropdownItem key="email" className="hidden" color="default" onClick={() => { handleSelectedData('email') }}>Email </DropdownItem>
-                                    )
-                                }
-
-                                {selectedData !== "password" ?
-                                    (
-                                        <DropdownItem key="password" className="font-Poppins" color="default" onClick={() => { handleSelectedData('password') }}>Senha</DropdownItem>
-                                    )
-                                    :
-                                    (
-                                        <DropdownItem key="password" className="hidden" color="default" onClick={() => { handleSelectedData('password') }}>Senha</DropdownItem>
-                                    )
-                                }
-
-                                {selectedData !== "nome" ?
-                                    (
-                                        <DropdownItem key="nome" className="font-Poppins" color="default" onClick={() => { handleSelectedData('nome') }}>Nome</DropdownItem>
-                                    )
-                                    :
-                                    (
-                                        <DropdownItem key="nome" className="hidden" color="default" onClick={() => { handleSelectedData('nome') }}>Nome</DropdownItem>
-                                    )
-                                }
-                            </DropdownMenu>
-                        </Dropdown>
-                    </div>
+      <Card className="flex flex-col w-11/12 max-w-[768px]">
+        <CardHeader className="flex flex-row justify-between items-center">
+          <form action="updateAvatar" method="POST" classNamoe="flex flex-col">
+            <div className="flex flex-row gap-5 items-center">
+              <label htmlFor="avatarInput">
+                <Badge 
+                  content={<PencilIcon />} 
+                  color="default"
+                  className="p-1"
+                  shape="rectangle"
+                  showOutline={false}>
+                  <Avatar
+                  size="lg"
+                  radius="lg"
+                  isBordered
+                  className="cursor-pointer"
+                  color="primary"
+                  name={props.user?.nickname}
+                  src={props.user?.avatar}/>
+                </Badge>
+              </label>
+              
+              <input
+                className="hidden"
+                type="file"
+                name="avatar"
+                id="avatarInput"
+                accept="image/*" 
+                onChange={handleImageChange} />
+              <div className="flex flex-col justify-center gap-1 w-full">
+                <p className="font-Poppins font-semibold leading-none">{props.user?.nickname}</p>
+                <p className="font-Poppins text-default text-xs leading-none">@{props.user?.nickname}</p>
+              </div>
+              
+              <div className="mt-3">
+                {errorImage && (
+                <div className="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-black dark:text-red-400" role="alert">
+                  <span className="font-medium">Atenção!</span> {errorImage}
                 </div>
-
-                <div className="w-full h-full flex flex-col items-center">
-                    <div className="flex flex-col w-full justify-start items-center gap-5">
-                        <form action="updateData">
-                            <div className="flex flex-row w-full h-full gap-3 items-center justify-center">
-
-                                {selectedData == 'nome' ?
-
-                                    <div className="flex flex-row gap-3">
-                                        <div className="flex flex-row items-center">
-                                            <Input placeholder="Nome" variant="underlined" label='Nome' defaultValue={props.user?.nickname}></Input>
-                                        </div>
-
-                                        <div className="flex flex-row items-center">
-                                            <Input placeholder="Campus" variant="underlined" label='Campus' defaultValue={props.user?.campus}></Input>
-                                        </div>
-                                    </div>
-                                    :
-                                    null
-                                }
-
-                                {selectedData == 'email' ?
-
-                                    <div>
-                                        <div className="flex flex-row items-center">
-                                            <Input placeholder="email" variant="underlined" label='email' defaultValue={props.user?.email}></Input>
-                                        </div>
-
-                                    </div>
-                                    :
-                                    null
-                                }
-
-                                {selectedData == 'password' ?
-                                    <div>
-                                        <div className="flex flex-row items-center">
-                                            <Input type="password" variant="underlined" label='Senha' labelPlacement="inside"></Input>
-                                        </div>
-
-                                        <div className="flex flex-row items-center">
-                                            <Input type="password" variant="underlined" label='Nova Senha' labelPlacement="inside"></Input>
-                                        </div>
-
-                                    </div>
-                                    :
-                                    null
-                                }
-                            </div>
-
-
-                            <div className="flex flex-col items-center gap-3">
-                                <Button className="w-36" onClick={handleChangeData} variant="bordered" endContent={<Pencil />}>Alterar</Button>
-                                <p className="text-bold font-Poppins text-red-500/40 hover:text-red-500/90">{changeDataErrorMessage ? changeDataErrorMessage : ""}</p>
-                            </div>
-                        </form>
-                    </div>
-                </div>
+                )}
+              </div>
             </div>
-        </div >
-    );
-}
+          </form>
+          
+          <div>
+            <Dropdown>
+              <DropdownTrigger>
+                <i className="fi fi-rr-menu-dots-vertical"></i>
+              </DropdownTrigger>
+
+              <DropdownMenu aria-label="Profile Actions">
+                <DropdownSection
+                  title="Editar"
+                  className="font-Poppins">
+                  <DropdownItem
+                className="gap-2">
+                    <p className="font-semibold">Logado como:</p>
+                    <p className="font-regular text-default">{props.user?.email}</p>
+                  </DropdownItem>
+              
+                  {selectedData !== "email" ? (
+                    <DropdownItem 
+                      key="email" 
+                      className="font-Poppins" 
+                      description="Alterar e-mail do usuário"
+                      startContent={<EmailIcon className="size-4" />}
+                      onClick={() => { handleSelectedData('email')}}>
+                      E-mail 
+                    </DropdownItem>
+                  ) : (
+                    <DropdownItem 
+                      key="email" 
+                      className="hidden"
+                      color="default" 
+                      onClick={() => { handleSelectedData('email')}}>
+                      E-mail 
+                    </DropdownItem>)}
+                    
+                    {selectedData !== "password" ? (
+                    <DropdownItem 
+                      key="password" 
+                      className="font-Poppins" 
+                      description="Alterar senha do usuário"
+                      startContent={<PasswordIcon className="size-4" />}
+                      onClick={() => { handleSelectedData('password')}}>
+                      Senha 
+                    </DropdownItem>
+                  ) : (
+                    <DropdownItem 
+                      key="password" 
+                      className="hidden"
+                      onClick={() => { handleSelectedData('password')}}>
+                      Senha 
+                    </DropdownItem>)}
+                    
+                    {selectedData !== "nome" ? (
+                    <DropdownItem 
+                      key="nome" 
+                      className="font-Poppins" 
+                      description="Alterar nome do usuário"
+                      startContent={<PersonIcon className="size-4" />}
+                      onClick={() => { handleSelectedData('nome')}}>
+                      Nome 
+                    </DropdownItem>
+                  ) : (
+                    <DropdownItem 
+                      key="nome" 
+                      className="hidden"
+                      onClick={() => { handleSelectedData('nome')}}>
+                      Nome 
+                    </DropdownItem>)}
+                </DropdownSection>
+              </DropdownMenu>
+            </Dropdown>
+          </div>
+        </CardHeader>
+        <Divider />
+                    
+        <CardBody>
+          <form 
+            action="updateData"
+            className="flex flex-col relative gap-5">
+            {selectedData == 'nome' ?
+              <div className="flex flex-row justify-between items-center gap-2">
+                <div className="flex flex-row items-center">
+                  <Input 
+                    isClearable
+                    radius="full"
+                    label='Usuário' 
+                    placeholder="Ex: nickname"
+                    className="font-Poppins font-medium w-full" 
+                    defaultValue={props.user?.nickname}></Input>
+                </div>
+
+                <div className="flex flex-row items-center">
+                  <Input
+                    isClearable
+                    radius="full"
+                    label='Campus' 
+                    placeholder="Ex: IFRS"
+                    className="font-Poppins font-medium w-full" 
+                    defaultValue={props.user?.campus}></Input>
+                </div>
+              </div>
+            :
+              null
+            }
+
+            {selectedData == 'email' ?
+              <div>
+                <div className="flex flex-row items-center">
+                  <Input 
+                    isClearable
+                    radius="full"
+                    label='E-mail' 
+                    placeholder="Ex: user@email.com"
+                    className="font-Poppins font-medium w-full"
+                    defaultValue={props.user?.email}></Input>
+                </div>
+              </div>
+            :
+              null
+            }
+
+            {selectedData == 'password' ?
+              <div>
+                <div className="flex flex-row items-center my-1">
+                  <Input 
+                    type="password"
+                    radius="full"
+                    label='Senha' 
+                    placeholder="Ex: ******"
+                    className="font-Poppins font-medium w-full"
+                    endContent={
+                    <button className="focus:outline-none" type="button" onClick={toggleVisibility}>
+                      {isVisible ? (
+                      <EyeInvisibleIcon className="text-2xl text-default-400 pointer-events-none" />
+                      ) : (
+                      <EyeIcon className="text-2xl text-default-400 pointer-events-none"/>
+                      )}
+                    </button>
+                  }
+                  type={isVisible ? "text" : "password"}></Input>
+                </div>
+                <div className="flex flex-row items-center my-1">
+                  <Input
+                    type="password" 
+                    radius="full"
+                    label='Senha' 
+                    placeholder="Ex: ******"
+                    className="font-Poppins font-medium w-full"
+                    endContent={
+                    <button className="focus:outline-none" type="button" onClick={toggleVisibility}>
+                      {isVisible ? (
+                      <EyeInvisibleIcon className="text-2xl text-default-400 pointer-events-none" />
+                      ) : (
+                      <EyeIcon className="text-2xl text-default-400 pointer-events-none"/>
+                      )}
+                    </button>
+                  }
+                  type={isVisible ? "text" : "password"}></Input>
+                </div>
+              </div>
+            :
+              null
+            }
+          </form>
+        </CardBody>
+        <Divider />
+        
+        <CardFooter className="justify-center items-center">
+          <Button
+              onClick={handleChangeData}
+              variant="flat"
+              size="lg"
+              color="primary"
+              className="font-Poppins font-semibold uppercase">
+              SALVAR
+          </Button>
+          <p className="font-Poppins font-medium">{changeDataErrorMessage ? changeDataErrorMessage : ""}</p>
+        </CardFooter>
+    </Card>
+  );
+};
