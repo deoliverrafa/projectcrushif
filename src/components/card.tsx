@@ -42,6 +42,7 @@ export const CardPost = (props: CardProps) => {
     formattedData = formatDistanceToNow(parseDated, { locale: ptBR })
   }
 
+
   return (
     <Card
       shadow="lg"
@@ -74,43 +75,44 @@ export const CardPost = (props: CardProps) => {
           color="primary">
           Seguir
         </Button>
+
       </CardHeader>
 
       <CardBody>
-        <div className="flex flex-row items-center my-0.5 w-full h-full ">
-          <h4 className="font-Poppins text-xs leading-none w-full h-full items-center"><span className="font-semibold">{!props.isAnonymous ? props.nickname : "Anônimo"}:</span> {props.content || ""}</h4>
+
+        <div className="flex flex-col">
+          {props.photoURL ? (
+            <Image
+              className="mb-3"
+              width={500}
+              height={500}
+              radius="lg"
+              shadow="lg"
+              src={props.photoURL}
+              alt="Imagem Post" />
+          ) :
+            null
+          }
+
+          <div className="flex flex-row items-center my-0.5 w-full h-full ">
+            <h4 className="font-Poppins text-xs leading-none w-full h-full items-center"><span className="font-semibold">{!props.isAnonymous ? props.nickname : "Anônimo"}:</span> {props.content || ""}</h4>
+          </div>
+
+          {props.references !== "" && !props.isAnonymous ?
+            (
+              <div className="flex flex-row items-center my-0.5 w-full">
+                <a key={props._id} className="font-Poppins text-primary text-xs tracking-tight break-words" id={props._id}>
+                  {props.references}
+                </a>
+              </div>)
+            :
+            null
+          }
         </div>
-
-        {!props.isAnonymous ?
-          (
-            <div className="flex flex-row items-center my-0.5 w-full">
-              <a key={props._id} className="font-Poppins text-primary text-xs tracking-tight break-words" id={props._id}>
-                {props.references}
-              </a>
-            </div>
-          )
-          :
-          null
-        }
-
       </CardBody>
 
-      <div className="w-full flex flex-row justify-center">
-        {props.photoURL ? (
-          <Image
-            width={500}
-            height={500}
-            radius="lg"
-            shadow="lg"
-            src={props.photoURL}
-            alt="Imagem Post" />
-        ) :
-          null
-        }
-      </div>
-
       <CardFooter className="flex-col justify-start items-start">
-        <Divider />
+
         {/* <div className="flex flex-row justify-between items-center w-full">
           <Button
             className="font-Poppins text-default text-xs tracking-tight"
@@ -130,28 +132,37 @@ export const CardPost = (props: CardProps) => {
         </div> */}
 
         <Divider />
+
         {formattedData ?
           <div className="flex flex-row justify-between items-center w-full">
-            <Button
-              className="font-Poppins text-default text-xs uppercase tracking-tight"
-              variant="light">
-              <HeartIcon className="text-primary size-4" />
-              Curtir
-            </Button>
 
-            <Button
-              className="font-Poppins text-default text-xs uppercase tracking-tight"
-              variant="light">
-              <CommentIcon className="text-primary size-4" />
-              Comentar
-            </Button>
+            <div className="font-Poppins text-default text-xs uppercase tracking-tight flex flex-row items-center">
+              <Button
+                className="font-Poppins text-default text-xs uppercase tracking-tight"
+                variant="light">
+                <HeartIcon className="text-primary " />
+                <p className="max-[340px]:hidden">Curtir</p>
+              </Button>
+            </div>
 
-            <Button
-              className="font-Poppins text-default text-xs uppercase tracking-tight"
-              variant="light">
-              <SendIcon className="text-primary size-4" />
-              Enviar
-            </Button>
+            <div className="font-Poppins text-default text-xs uppercase tracking-tight flex flex-row items-center">
+              <Button
+                className="font-Poppins text-default text-xs uppercase tracking-tight"
+                variant="light">
+                <CommentIcon className="text-primary " />
+                <p className="max-[340px]:hidden">Comentarios</p>
+              </Button>
+            </div>
+
+            <div className="font-Poppins text-default text-xs uppercase tracking-tight flex flex-row items-center">
+              <Button
+                className="font-Poppins text-default text-xs uppercase tracking-tight"
+                variant="light">
+                <SendIcon className="text-primary " />
+                <p className="max-[340px]:hidden">Enviar</p>
+              </Button>
+            </div>
+
           </div>
           :
           null

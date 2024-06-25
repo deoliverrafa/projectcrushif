@@ -33,7 +33,7 @@ export const BottomBar = ({className}: bottomProps) => {
       <Navbar
         isBordered
         isBlurred={true}
-        className={`justify-around bottom-0 left-0 ${className}`}
+        className={`justify-around bottom-0 left-0 w-full ${className}`}
         >
         <NavLink to='/' >
         {({ isActive }) => isActive ?
