@@ -58,7 +58,7 @@ export const BaseUserShow = (props: userData) => {
             const formData = new FormData();
             formData.append("avatar", imageFile);
 
-            const response = await axios.post(`https://crush-api.vercel.app/profile/updatePhoto/${localStorage.getItem('userId')}`, formData);
+            const response = await axios.post(`http://localhost:4040/profile/updatePhoto/${localStorage.getItem('userId')}`, formData);
 
             if (response.data.updated) {
                 const imageUrl = URL.createObjectURL(imageFile);
@@ -88,7 +88,7 @@ export const BaseUserShow = (props: userData) => {
         try {
             setChangeDataErrorMessage('')
 
-            // const response = axios.post('https://crush-api.vercel.app/profile/changeProfile').then()
+            // const response = axios.post('http://localhost:4040/profile/changeProfile').then()
 
         } catch (error) {
         }

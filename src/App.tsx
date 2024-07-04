@@ -45,7 +45,6 @@ const App = () => {
                 <Route path='/publish' element={<PublishPage />} />
                 <Route path='/profile' element={<ProfilePage />} />
                 <Route path='/profile/edit' element={<EditProfilePage />} />
-                
                 <Route path='/auth/login' element={<LoginPage />} />
                 <Route path='/auth/register' element={<RegisterPage />} />
               </Routes>

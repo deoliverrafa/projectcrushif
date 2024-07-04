@@ -15,16 +15,14 @@ export function getUserData() {
 
     useEffect(() => {
         async function getData() {
-            const userId = localStorage.getItem("userId");
+            const token = localStorage.getItem("token");
 
-            if (!userId || userId == "null") {
+            if (!token || token == "null") {
                 window.location.href = "/auth/login"
                 return;
             }
-
-
             
-            const response = await axios.get(`https://crush-api.vercel.app/user/${userId}`);
+            const response = await axios.get(`http://localhost:4040/user/${token}`);
 
             setUserData(response.data.userFinded);
         }

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
+import axios, { Axios } from "axios";
 
 import { NavBar } from "../../components/navbar";
 import { BottomBar } from "../../components/bottombar";
@@ -46,23 +46,26 @@ export default function HomePage() {
     };
 
     useEffect(() => {
-        const userId = localStorage.getItem("userId");
+        const token = localStorage.getItem("token");
+
+        if (token == null) {
+            window.location.href = '/auth/login'
+        }
 
         async function getUserData() {
-            if (!userId || userId === "null") {
-                window.location.href = "/auth/login";
-                return;
-            }
 
             try {
-                const response = await axios.get(`https://crush-api.vercel.app/user/${userId}`);
+                const response = await axios.get(`http://localhost:4040/user/${token}`);
 
                 if (!response) {
-                    setTimeout(async () => { await axios.get(`https://crush-api.vercel.app/user/${userId}`) })
+                    setTimeout(async () => { await axios.get(`http://localhost:4040/user/${token}`) })
                 }
                 setUserData(response.data.userFinded);
             } catch (error) {
-                console.error("Error fetching user data:", error);
+
+                if (error.reponse.data.message == "Token Inválido") {
+                    window.location.href = '/auth/login'
+                }
             }
         }
 
@@ -70,7 +73,7 @@ export default function HomePage() {
             try {
                 setSkip(0)
                 setLimit(10)
-                const response = await axios.get(`https://crush-api.vercel.app/post/get/${userId}/${skip}/${limit}`)
+                const response = await axios.get(`http://localhost:4040/post/get/${token}/${skip}/${limit}`)
 
                 setPosts(response.data.posts)
             } catch (error) {

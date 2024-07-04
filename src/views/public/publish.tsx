@@ -123,15 +123,16 @@ const PublishPage = () => {
     }
 
     try {
-      const response = await fetch(`https://crush-api.vercel.app/post/publish/${localStorage.getItem('userId')}`, {
+      const response = await fetch(`http://localhost:4040/post/publish/${localStorage.getItem('token')}`, {
         method: 'POST',
         body: formData,
       });
+
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
+
       const result = await response.json();
-      console.log(result);
 
       if (result.posted) {
         window.location.href = "/"
