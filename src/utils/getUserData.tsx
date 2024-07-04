@@ -22,7 +22,7 @@ export function getUserData() {
                 return;
             }
             
-            const response = await axios.get(`http://localhost:4040/user/${token}`);
+            const response = await axios.get(`https://crush-api.vercel.app/user/${token}`);
 
             setUserData(response.data.userFinded);
         }

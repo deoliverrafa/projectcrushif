@@ -55,10 +55,10 @@ export default function HomePage() {
         async function getUserData() {
 
             try {
-                const response = await axios.get(`http://localhost:4040/user/${token}`);
+                const response = await axios.get(`https://crush-api.vercel.app/user/${token}`);
 
                 if (!response) {
-                    setTimeout(async () => { await axios.get(`http://localhost:4040/user/${token}`) })
+                    setTimeout(async () => { await axios.get(`https://crush-api.vercel.app/user/${token}`) })
                 }
                 setUserData(response.data.userFinded);
             } catch (error) {
@@ -74,7 +74,7 @@ export default function HomePage() {
             try {
                 setSkip(0)
                 setLimit(10)
-                const response = await axios.get(`http://localhost:4040/post/get/${token}/${skip}/${limit}`)
+                const response = await axios.get(`https://crush-api.vercel.app/post/get/${token}/${skip}/${limit}`)
 
                 setPosts(response.data.posts)
             } catch (error) {

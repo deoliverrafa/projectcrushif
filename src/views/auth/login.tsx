@@ -62,7 +62,7 @@ const LoginPage = () => {
       setClickedButton(true);
       setMessageError("")
 
-      const response = await axios.post(`http://localhost:4040/auth/login`, formData);
+      const response = await axios.post(`https://crush-api.vercel.app/auth/login`, formData);
 
       if (response.status == 200) {
         localStorage.setItem('token', response.data.token)
