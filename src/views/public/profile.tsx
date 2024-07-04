@@ -7,20 +7,20 @@ import { Loading } from './../../components/loading.tsx';
 import { getUserData } from "../../utils/getUserData";
 
 const ProfilePage = () => {
-    const userData = getUserData();
+  const userData = getUserData();
 
-    return (
-      <>
-        <NavBarReturn title="Perfil" />
-          {userData ? (
-            <main>
-              <p>perfil do {userData.nickname}</p>
-            </main>
-          ) : (
-            <Loading />
-          )}
-      </>
-    );
+  return (
+    <div className="w-full h-svh flex flex-col">
+      <NavBarReturn title="Perfil" />
+      {userData ? (
+        <main className="flex flex-col h-full w-full justify-center items-center">
+          <BaseUserShow user={userData} />
+        </main>
+      ) : (
+        <Loading />
+      )}
+    </div>
+  );
 };
 
 export default ProfilePage;

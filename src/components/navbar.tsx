@@ -48,7 +48,7 @@ interface userData {
 // COMPONENT - NAVBAR //
 export const NavBar = (props: userData) => {
   function logOutHandle() {
-    localStorage.setItem('userId', "null");
+    localStorage.setItem('token', "null");
   }
 
   return (

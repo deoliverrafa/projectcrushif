@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import axios, { Axios } from "axios";
+import axios from "axios";
 
 import { NavBar } from "../../components/navbar";
 import { BottomBar } from "../../components/bottombar";
@@ -62,9 +62,10 @@ export default function HomePage() {
                 }
                 setUserData(response.data.userFinded);
             } catch (error) {
-
-                if (error.reponse.data.message == "Token Inválido") {
-                    window.location.href = '/auth/login'
+                if (axios.isAxiosError(error)) {
+                    if (error.response?.data.message == "Token Inválido") {
+                        window.location.href = '/auth/login'
+                    }
                 }
             }
         }
