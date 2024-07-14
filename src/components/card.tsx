@@ -55,7 +55,7 @@ export const CardPost = (props: CardProps) => {
       try {
         console.log(props.userId);
         
-        const response = await axios.get(`https://crush-api.vercel.app/user/id/${props.userId}`);
+        const response = await axios.get(`https://crushapi-4ped.onrender.com/user/id/${props.userId}`);
         
         setUserData(response.data.userFinded);
       } catch (error) {

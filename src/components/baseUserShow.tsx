@@ -120,7 +120,7 @@ export const BaseUserShow = (props: userData) => {
       const formData = new FormData();
       formData.append("avatar", imageFile);
 
-      const response = await axios.post(`https://crush-api.vercel.app/profile/updatePhoto/${localStorage.getItem('userId')}`, formData);
+      const response = await axios.post(`https://crushapi-4ped.onrender.com/profile/updatePhoto/${localStorage.getItem('userId')}`, formData);
 
       if (response.data.updated) {
         const imageUrl = URL.createObjectURL(imageFile);
@@ -173,7 +173,7 @@ export const BaseUserShow = (props: userData) => {
       if (selectedData == 'nome') {
         console.log('EntreiNom');
 
-        const response = await axios.post(`https://crush-api.vercel.app/profile/changeNameCampus/${localStorage.getItem('token')}`, formData);
+        const response = await axios.post(`https://crushapi-4ped.onrender.com/profile/changeNameCampus/${localStorage.getItem('token')}`, formData);
 
         if (response.data.updated == true) {
           setdataSuccessMessage('Nome alterado com sucesso')
@@ -185,7 +185,7 @@ export const BaseUserShow = (props: userData) => {
       if (selectedData == 'email') {
         console.log('Entrei email');
 
-        const response = await axios.post(`https://crush-api.vercel.app/profile/changeEmail/${localStorage.getItem('token')}`, formData)
+        const response = await axios.post(`https://crushapi-4ped.onrender.com/profile/changeEmail/${localStorage.getItem('token')}`, formData)
 
         if (response.data.updated == true) {
           setdataSuccessMessage('Email alterado com sucesso')
@@ -197,7 +197,7 @@ export const BaseUserShow = (props: userData) => {
       if (selectedData == 'password') {
         console.log("EntreiPassword");
 
-        const response = await axios.post(`https://crush-api.vercel.app/profile/changePassword/${localStorage.getItem('token')}`, formData)
+        const response = await axios.post(`https://crushapi-4ped.onrender.com/profile/changePassword/${localStorage.getItem('token')}`, formData)
 
         if (response.data.updated == true) {
           setdataSuccessMessage('Senha alterado com sucesso')
