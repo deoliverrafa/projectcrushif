@@ -46,19 +46,23 @@ interface UserData {
 export const CardPost = (props: CardProps) => {
   const [userData, setUserData] = useState<UserData>();
   const [formattedData, setFormattedData] = useState('');
-    
+
+  // console.log("UserData: ", userData);
+  // console.log("Props: ", props._id);
+
   useEffect(() => {
     const fetchUserData = async () => {
-      
       try {
-        const response = await axios.get(`https://crush-api.vercel.app/user/token/${localStorage.getItem('token')}`);
+        console.log(props.userId);
+        
+        const response = await axios.get(`https://crush-api.vercel.app/user/id/${props.userId}`);
         
         setUserData(response.data.userFinded);
       } catch (error) {
         console.error('Erro ao buscar dados do usuário:', error);
         setUserData({
           nickname: 'Deletado',
-          avatar: 'path/to/deleted-user-avatar.png',
+          avatar: '',
           email: 'Deletado'
         });
       }
@@ -71,6 +75,7 @@ export const CardPost = (props: CardProps) => {
       setFormattedData(formatDistanceToNow(parsedDate, { locale: ptBR }));
     }
   }, [props.userId, props.insertAt]);
+
 
   return (
     <Card shadow="lg" radius="lg" className={`flex flex-col w-11/12 max-w-[768px] mt-5 ${props.className}`}>

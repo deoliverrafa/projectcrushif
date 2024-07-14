@@ -106,7 +106,8 @@ export default function HomePage() {
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
     }, [loading, limit]);
-
+    console.log(posts);
+    
     return (
         <>
             {userData ? (
