@@ -126,7 +126,7 @@ export const RegisterPage = () => {
     e.preventDefault()
 
     try {
-      const response = await axios.post("http://localhost:4040/auth/register", formData)
+      const response = await axios.post("https://crush-api.vercel.app/auth/register", formData)
 
       if (response.data.isRegistered) {
         window.location.href = "/"

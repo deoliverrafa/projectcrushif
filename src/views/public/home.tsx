@@ -56,10 +56,10 @@ export default function HomePage() {
         async function getUserData() {
 
             try {
-                const response = await axios.get(`http://localhost:4040/user/token/${token}`);
+                const response = await axios.get(`https://crush-api.vercel.app/user/token/${token}`);
 
                 if (!response) {
-                    setTimeout(async () => { await axios.get(`http://localhost:4040/user/token/${token}`) }, 1000)
+                    setTimeout(async () => { await axios.get(`https://crush-api.vercel.app/user/token/${token}`) }, 1000)
                 }
 
                 setUserData(response.data.userFinded);
@@ -76,7 +76,7 @@ export default function HomePage() {
             try {
                 setSkip(0)
                 setLimit(10)
-                const response = await axios.get(`http://localhost:4040/post/get/${token}/${skip}/${limit}`)
+                const response = await axios.get(`https://crush-api.vercel.app/post/get/${token}/${skip}/${limit}`)
 
                 if (response.data.validToken == false) {
                     window.location.href = '/auth/login'
