@@ -64,22 +64,14 @@ const LoginPage = () => {
 
       const response = await axios.post(`http://localhost:4040/auth/login`, formData);
 
-      if (response.status == 200) {
+      if (response.data.logged == true) {
         localStorage.setItem('token', response.data.token)
         window.location.href = '/';
-      }
-      
-      else {
+      } else {
         setMessageError(response.data.message);
       }
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        const messageError: any = error;
-
-        console.log(messageError.response?.data.messsage);
-        setMessageError(messageError.response?.data.message ? messageError.response.data.message : "Verifique sua conexão")
-      }
-    } finally {
+    } catch (error: any) {
+      setMessageError(error.response.data.message)
       setClickedButton(false)
     }
   };
@@ -150,6 +142,10 @@ const LoginPage = () => {
                     errorMessage={messageError == "Senha incorreta, tente novamente." ? messageError : null} />
                 </div>
                 <Divider />
+
+                <div className="text-2xl text-default-400 text-center">
+                  <p className="font-Poppins text-default font-medium text-sm md:text-sm ">{messageError}</p>
+                </div>
 
                 <div className="flex flex-row justify-center items-center">
                   <Button
