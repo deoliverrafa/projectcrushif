@@ -21,6 +21,7 @@ interface CardProps {
     photoURL: string;
     userAvatar: string;
     insertAt: string;
+    userId: string
 }
 
 interface userData {
@@ -55,15 +56,16 @@ export default function HomePage() {
         async function getUserData() {
 
             try {
-                const response = await axios.get(`https://crush-api.vercel.app/user/${token}`);
+                const response = await axios.get(`http://localhost:4040/user/token/${token}`);
 
                 if (!response) {
-                    setTimeout(async () => { await axios.get(`https://crush-api.vercel.app/user/${token}`) })
+                    setTimeout(async () => { await axios.get(`http://localhost:4040/user/token/${token}`) }, 1000)
                 }
+
                 setUserData(response.data.userFinded);
             } catch (error) {
                 if (axios.isAxiosError(error)) {
-                    if (error.response?.data.message == "Token Inválido") {
+                    if (error.response?.data.validToken == false) {
                         window.location.href = '/auth/login'
                     }
                 }
@@ -74,7 +76,11 @@ export default function HomePage() {
             try {
                 setSkip(0)
                 setLimit(10)
-                const response = await axios.get(`https://crush-api.vercel.app/post/get/${token}/${skip}/${limit}`)
+                const response = await axios.get(`http://localhost:4040/post/get/${token}/${skip}/${limit}`)
+
+                if (response.data.validToken == false) {
+                    window.location.href = '/auth/login'
+                }
 
                 setPosts(response.data.posts)
             } catch (error) {
@@ -82,9 +88,8 @@ export default function HomePage() {
             }
 
         }
-
-        getPosts()
         getUserData();
+        getPosts()
     }, []);
 
     // useEffect(() => {
@@ -117,7 +122,6 @@ export default function HomePage() {
 
                         <main className="w-full h-full flex flex-col-reverse justify-center items-center">
                             {
-
                                 posts?.map((post) => {
                                     return <CardPost
                                         key={post._id}
@@ -130,6 +134,7 @@ export default function HomePage() {
                                         references={post.references}
                                         userAvatar={post.userAvatar}
                                         photoURL={post.photoURL}
+                                        userId={post.userId}
                                         insertAt={post.insertAt}
                                     />
                                 })

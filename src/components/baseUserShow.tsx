@@ -1,6 +1,7 @@
 // IMPORT - LIBRARYS //
 import { useState } from "react";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
+import { Alert } from "flowbite-react";
 import {
   Avatar,
   Button,
@@ -15,7 +16,9 @@ import {
   CardBody,
   CardFooter,
   Divider,
-  Badge
+  Badge,
+  Select,
+  SelectItem
 } from "@nextui-org/react";
 
 // IMPORT - SCRIPTS //
@@ -45,54 +48,170 @@ interface userData {
   user: User | null
 }
 
+// Campos IF'S
+
+const institutosFederaisPorEstado = [
+  // Acre
+  "IFAC",
+  // Alagoas
+  "IFAL",
+  // Amapá
+  "IFAP",
+  // Amazonas
+  "IFAM",
+  // Bahia
+  "IFBA",
+  // Ceará
+  "IFCE",
+  // Distrito Federal
+  "IFB",
+  // Espírito Santo
+  "IFES",
+  // Goiás
+  "IFG",
+  // Maranhão
+  "IFMA",
+  // Mato Grosso
+  "IFMT",
+  // Mato Grosso do Sul
+  "IFMS",
+  // Minas Gerais
+  "IFMG",
+  // Pará
+  "IFPA",
+  // Paraíba
+  "IFPB",
+  // Paraná
+  "IFPR",
+  // Pernambuco
+  "IFPE",
+  // Piauí
+  "IFPI",
+  // Rio de Janeiro
+  "IFRJ",
+  // Rio Grande do Norte
+  "IFRN",
+  // Rio Grande do Sul
+  "IFRS",
+  // Rondônia
+  "IFRO",
+  // Roraima
+  "IFRR",
+  // Santa Catarina
+  "IFSC",
+  // São Paulo
+  "IFSP",
+  // Sergipe
+  "IFS",
+  // Tocantins
+  "IFTO"
+];
+
 // COMPONENT - EDIT PROFILE //
 export const BaseUserShow = (props: userData) => {
-  // Change Image
 
   const [errorImage, setErrorImage] = useState("");
 
   const handleImageChange = async (event: React.BaseSyntheticEvent) => {
     const imageFile = event.target.files[0];
+    console.log(imageFile)
     if (isValidImage(imageFile)) {
       setErrorImage('')
       const formData = new FormData();
       formData.append("avatar", imageFile);
 
-      const response = await axios.post(`https://crush-api.vercel.app/profile/updatePhoto/${localStorage.getItem('userId')}`, formData);
+      const response = await axios.post(`http://localhost:4040/profile/updatePhoto/${localStorage.getItem('userId')}`, formData);
 
       if (response.data.updated) {
         const imageUrl = URL.createObjectURL(imageFile);
         localStorage.setItem('avatar', imageUrl);
         window.dispatchEvent(new Event('storage'));
       }
-      response.data.error
+
     } else {
       setErrorImage("Por favor, selecione uma imagem válida (JPEG, PNG ou GIF).");
     }
   };
 
   // User changeData Logic
-
-  const [changeDataErrorMessage, setChangeDataErrorMessage] = useState<String>();
+  const [errorMessage, setdataErrorMessage] = useState<String>();
+  const [successMessage, setdataSuccessMessage] = useState<String>();
   const [selectedData, setSelectedData] = useState<String>('nome');
-
   const [isVisible, setIsVisible] = useState(false);
-
   const toggleVisibility = () => setIsVisible(!isVisible);
+
+
+  // Estados de dados
+  const [nickname, setNickname] = useState(props.user?.nickname || "");
+  const [campus, setCampus] = useState(props.user?.campus || "");
+  const [email, setEmail] = useState(props.user?.email || "");
+  const [password, setPassword] = useState("");
+  const [newPassword, setnewPassword] = useState("");
 
   function handleSelectedData(data: string) {
     setSelectedData(data);
   }
 
-  const handleChangeData = () => {
+
+  const handleChangeData = async () => {
     try {
-      setChangeDataErrorMessage('')
+      setdataErrorMessage('')
+      setdataSuccessMessage('')
 
-      // const response = axios.post('https://crush-api.vercel.app/profile/changeProfile').then()
+      const formData = new FormData
 
-    } catch (error) {
+      formData.append('nickname', nickname)
+      formData.append('campus', campus)
+      formData.append('email', email)
+      formData.append('password', password)
+      formData.append('novasenha', newPassword)
+
+      formData.forEach((data) => {
+        console.log(data);
+      })
+
+      if (selectedData == 'nome') {
+        console.log('EntreiNom');
+
+        const response = await axios.post(`http://localhost:4040/profile/changeNameCampus/${localStorage.getItem('token')}`, formData);
+
+        if (response.data.updated == true) {
+          setdataSuccessMessage('Nome alterado com sucesso')
+        } else {
+          setdataErrorMessage(response.data.message)
+        }
+      }
+
+      if (selectedData == 'email') {
+        console.log('Entrei email');
+
+        const response = await axios.post(`http://localhost:4040/profile/changeEmail/${localStorage.getItem('token')}`, formData)
+
+        if (response.data.updated == true) {
+          setdataSuccessMessage('Email alterado com sucesso')
+        } else {
+          setdataErrorMessage(response.data.message)
+        }
+      }
+
+      if (selectedData == 'password') {
+        console.log("EntreiPassword");
+
+        const response = await axios.post(`http://localhost:4040/profile/changePassword/${localStorage.getItem('token')}`, formData)
+
+        if (response.data.updated == true) {
+          setdataSuccessMessage('Senha alterado com sucesso')
+        } else {
+          setdataErrorMessage(response.data.message)
+        }
+      }
+
+
+    } catch (error: any) {
+      setdataErrorMessage(error.response?.message)
     }
   }
+
   return (
     <Card className="flex flex-col w-11/12 max-w-[768px]">
       <CardHeader className="flex flex-row justify-between items-center">
@@ -124,8 +243,8 @@ export const BaseUserShow = (props: userData) => {
               accept="image/*"
               onChange={handleImageChange} />
             <div className="flex flex-col justify-center gap-1 w-full">
-              <p className="font-Poppins font-semibold leading-none">{props.user?.nickname}</p>
-              <p className="font-Poppins text-default text-xs leading-none">@{props.user?.nickname}</p>
+              <p className="font-Poppins font-semibold leading-none">{nickname}</p>
+              <p className="font-Poppins text-default text-xs leading-none">@{nickname}</p>
             </div>
 
             <div className="mt-3">
@@ -215,28 +334,40 @@ export const BaseUserShow = (props: userData) => {
       <CardBody>
         <form
           action="updateData"
-          className="flex flex-col relative gap-5">
+          className="flex flex-col relative gap-3">
           {selectedData == 'nome' ?
             <div className="flex flex-row justify-between items-center gap-2">
-              <div className="flex flex-row items-center">
+              <div className="flex flex-row items-center w-full">
                 <Input
                   isClearable
                   radius="full"
                   label='Usuário'
                   placeholder="Ex: nickname"
                   className="font-Poppins font-medium w-full"
-                  defaultValue={props.user?.nickname}></Input>
+                  defaultValue={props.user?.nickname}
+                  onChange={(e: React.BaseSyntheticEvent) => { setNickname(e.target.value) }}
+                ></Input>
               </div>
 
-              <div className="flex flex-row items-center">
-                <Input
-                  isClearable
+              <div className="w-full flex flex-row justify-center items-center">
+                <Select
+                  isRequired
                   radius="full"
-                  label='Campus'
-                  placeholder="Ex: IFRS"
-                  className="font-Poppins font-medium w-full"
-                  defaultValue={props.user?.campus}></Input>
+                  label="Instituto"
+                  className="font-Poppins font-medium w-5/6"
+                  name="campus"
+                  defaultSelectedKeys={props.user?.campus}
+                  onChange={(e: React.BaseSyntheticEvent) => { setCampus(e.target.value) }}
+                  value={campus}>
+                  {institutosFederaisPorEstado.map((instituto) => (
+                    <SelectItem
+                      key={instituto} value={instituto}>
+                      {instituto}
+                    </SelectItem>
+                  ))}
+                </Select>
               </div>
+
             </div>
             :
             null
@@ -249,8 +380,10 @@ export const BaseUserShow = (props: userData) => {
                   isClearable
                   radius="full"
                   label='E-mail'
+                  type="email"
                   placeholder="Ex: user@email.com"
                   className="font-Poppins font-medium w-full"
+                  onChange={(e: React.BaseSyntheticEvent) => { setEmail(e.target.value) }}
                   defaultValue={props.user?.email}></Input>
               </div>
             </div>
@@ -264,8 +397,9 @@ export const BaseUserShow = (props: userData) => {
                 <Input
                   radius="full"
                   label='Senha'
-                  placeholder="Ex: ******"
+                  placeholder="Ex: senha"
                   className="font-Poppins font-medium w-full"
+                  onChange={(e: React.BaseSyntheticEvent) => { setPassword(e.target.value) }}
                   endContent={
                     <button className="focus:outline-none" type="button" onClick={toggleVisibility}>
                       {isVisible ? (
@@ -280,9 +414,10 @@ export const BaseUserShow = (props: userData) => {
               <div className="flex flex-row items-center my-1">
                 <Input
                   radius="full"
-                  label='Senha'
-                  placeholder="Ex: ******"
+                  label='Nova Senha'
+                  placeholder="Ex: novasenha"
                   className="font-Poppins font-medium w-full"
+                  onChange={(e: React.BaseSyntheticEvent) => { setnewPassword(e.target.value) }}
                   endContent={
                     <button className="focus:outline-none" type="button" onClick={toggleVisibility}>
                       {isVisible ? (
@@ -298,21 +433,34 @@ export const BaseUserShow = (props: userData) => {
             :
             null
           }
-        </form>
-      </CardBody>
-      <Divider />
 
-      <CardFooter className="justify-center items-center">
-        <Button
-          onClick={handleChangeData}
-          variant="flat"
-          size="lg"
-          color="primary"
-          className="font-Poppins font-semibold uppercase">
-          SALVAR
-        </Button>
-        <p className="font-Poppins font-medium">{changeDataErrorMessage ? changeDataErrorMessage : ""}</p>
-      </CardFooter>
-    </Card>
+          <Divider />
+          <CardFooter className="flex-col justify-center items-center">
+            <Button
+              onClick={handleChangeData}
+              variant="flat"
+              size="lg"
+              color="primary"
+              className="font-Poppins font-semibold uppercase">
+              SALVAR
+            </Button>
+
+            {
+              successMessage ? (
+                <Alert color="success">
+                  <span className="font-medium">Tudo Certo!</span> {successMessage}
+                </Alert>
+              ) : errorMessage ? (
+                <Alert color="failure">
+                  <span className="font-medium">Erro!!</span> {errorMessage}
+                </Alert>
+              ) : null
+            }
+
+          </CardFooter>
+        </form>
+      </CardBody >
+
+    </Card >
   );
 };
