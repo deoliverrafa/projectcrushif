@@ -46,8 +46,7 @@ interface UserData {
 export const CardPost = (props: CardProps) => {
   const [userData, setUserData] = useState<UserData>();
   const [formattedData, setFormattedData] = useState('');
-;
-
+  
   useEffect(() => {
     const fetchUserData = async () => {
       try {

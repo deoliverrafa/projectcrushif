@@ -173,7 +173,8 @@ const PublishPage = () => {
                   nickname={cardData.nickname}
                   references={cardData.references}
                   photoURL={cardData.photoURL}
-                  userAvatar={userData?.avatar} />
+                  userAvatar={userData?.avatar}
+                  userId={userData?._id} />
                 {isAnonymous && (
                   <div>
                     <h1 className="font-Poppins text-default text-xs tracking-tight my-0.5">(Seu nome não aparecerá no seu post)</h1>
