@@ -59,15 +59,16 @@ const LoginPage = () => {
     e.preventDefault();
 
     try {
-      setClickedButton(true);
       setMessageError("")
 
       const response = await axios.post(`https://crush-api.vercel.app/auth/login`, formData);
 
       if (response.data.logged == true) {
+        setClickedButton(false);
         localStorage.setItem('token', response.data.token)
         window.location.href = '/';
       } else {
+        setClickedButton(false)
         setMessageError(response.data.message);
       }
     } catch (error: any) {
