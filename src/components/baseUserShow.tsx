@@ -45,7 +45,7 @@ interface User {
 }
 
 interface userData {
-  user: User | null
+  user: User
 }
 
 // Campos IF'S
@@ -211,7 +211,7 @@ export const BaseUserShow = (props: userData) => {
       setdataErrorMessage(error.response?.message)
     }
   }
-
+  
   return (
     <Card className="flex flex-col w-11/12 max-w-[768px]">
       <CardHeader className="flex flex-row justify-between items-center">
@@ -356,7 +356,7 @@ export const BaseUserShow = (props: userData) => {
                   label="Instituto"
                   className="font-Poppins font-medium w-5/6"
                   name="campus"
-                  defaultSelectedKeys={props.user?.campus}
+                  defaultSelectedKeys={[props.user.campus]}
                   onChange={(e: React.BaseSyntheticEvent) => { setCampus(e.target.value) }}
                   value={campus}>
                   {institutosFederaisPorEstado.map((instituto) => (
