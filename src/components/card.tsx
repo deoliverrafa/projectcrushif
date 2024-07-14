@@ -46,14 +46,11 @@ interface UserData {
 export const CardPost = (props: CardProps) => {
   const [userData, setUserData] = useState<UserData>();
   const [formattedData, setFormattedData] = useState('');
-
-  // console.log("UserData: ", userData);
-  // console.log("Props: ", props._id);
+;
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        console.log(props.userId);
         
         const response = await axios.get(`https://crushapi-4ped.onrender.com/user/id/${props.userId}`);
         

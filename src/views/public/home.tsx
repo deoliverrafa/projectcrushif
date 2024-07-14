@@ -33,12 +33,14 @@ interface userData {
 }
 
 export default function HomePage() {
+
     const [userData, setUserData] = useState<userData | null>(null);
     const [finishedPosts, setFinishedPosts] = useState(false)
     const [posts, setPosts] = useState<CardProps[]>([]);
     const [skip, setSkip] = useState(0);
     const [limit] = useState(5);
     const [loading, setLoading] = useState(false);
+    const [pageLoading, setPageLoading] = useState(false);
     const [showCookies, setShowCookies] = useState(localStorage.getItem('showCookies') !== 'hidden');
 
     const handleHideCookies = () => {
@@ -55,6 +57,7 @@ export default function HomePage() {
 
         async function getUserData() {
             try {
+                setPageLoading(true)
                 const response = await axios.get(`https://crushapi-4ped.onrender.com/user/token/${token}`);
                 setUserData(response.data.userFinded);
             } catch (error) {
@@ -86,6 +89,7 @@ export default function HomePage() {
                 console.log("Erro ao buscar posts", error);
             } finally {
                 setLoading(false);
+                setPageLoading(false)
             }
         }
 
@@ -106,8 +110,13 @@ export default function HomePage() {
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
     }, [loading, limit]);
-    console.log(posts);
-    
+
+    useEffect(() => {
+        const maxScrollY = document.body.scrollHeight - window.innerHeight;
+        
+        window.scrollTo({ top: maxScrollY, behavior: 'smooth' })
+    }, [!pageLoading])
+
     return (
         <>
             {userData ? (
