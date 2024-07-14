@@ -46,16 +46,13 @@ interface UserData {
 export const CardPost = (props: CardProps) => {
   const [userData, setUserData] = useState<UserData>();
   const [formattedData, setFormattedData] = useState('');
-
-  console.log('Id usuário', props.userId);
-  console.log("Dados usuário", userData);
-  
-
+    
   useEffect(() => {
     const fetchUserData = async () => {
+      
       try {
-        const response = await axios.get(`https://crush-api.vercel.app/user/id/${props.userId}`);
-
+        const response = await axios.get(`https://crush-api.vercel.app/user/token/${localStorage.getItem('token')}`);
+        
         setUserData(response.data.userFinded);
       } catch (error) {
         console.error('Erro ao buscar dados do usuário:', error);
@@ -85,12 +82,12 @@ export const CardPost = (props: CardProps) => {
             color="primary"
             className="font-Poppins uppercase"
             size="sm"
-            name={!props.isAnonymous ? userData?.nickname : (props.nickname ? props.nickname : '')}
-            src={!props.isAnonymous ? userData?.avatar : (props.userAvatar ? props.userAvatar : '')}
+            name={!props.isAnonymous ? userData?.nickname : ''}
+            src={!props.isAnonymous ? userData?.avatar : ''}
           />
           <div className="flex flex-col gap-1 items-start justify-center">
             <h4 className="font-Poppins text-xs font-semibold leading-none">
-              {!props.isAnonymous ? userData?.nickname : (props.nickname ? props.nickname : 'Anônimo')}
+              {!props.isAnonymous ? userData?.nickname : "Anônimo"}
             </h4>
             {formattedData && (
               <h5 className="font-Poppins text-xs tracking-tight text-default">há {formattedData} atrás.</h5>
@@ -117,7 +114,7 @@ export const CardPost = (props: CardProps) => {
           <div className="flex flex-row items-center my-0.5 w-full h-full">
             <h4 className="font-Poppins text-xs leading-none w-full h-full items-center">
               <span className="font-semibold">
-                {!props.isAnonymous ? userData?.nickname : (props.nickname ? props.nickname : 'Anônimo')}:
+                {!props.isAnonymous ? userData?.nickname : "Anônimo"}:
               </span>{' '}
               {props.content || ''}
             </h4>
