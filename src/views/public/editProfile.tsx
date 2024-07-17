@@ -6,11 +6,11 @@ import { Loading } from './../../components/loading.tsx';
 // IMPORT - SCRIPTS //
 import { getUserData } from "../../utils/getUserData";
 
-const ProfilePage = () => {
-  const userData = getUserData();
+const EditProfilePage = () => {
+    const userData = getUserData();
 
-  return (
-    <div className="w-full h-svh flex flex-col">
+    return (
+      <div className="w-full h-svh flex flex-col">
       <NavBarReturn title="Perfil" />
       {userData ? (
         <main className="flex flex-col h-full w-full justify-center items-center">
@@ -20,7 +20,7 @@ const ProfilePage = () => {
         <Loading />
       )}
     </div>
-  );
+    );
 };
 
-export default ProfilePage;
+export default EditProfilePage;

@@ -1,5 +1,9 @@
 // IMPORT - LIBRARYS //
 import { ChangeEvent, useEffect, useState } from "react";
+
+// IMPORT - COMPONENTS //
+import { CardPost } from "../../components/card";
+import { NavBarReturn } from "../../components/navbar";
 import {
   Button,
   Input,
@@ -10,18 +14,16 @@ import {
   Divider
 } from "@nextui-org/react";
 
-// IMPORT - COMPONENTS //
-import { CardPost } from "../../components/card";
-import { NavBarReturn } from "../../components/navbar";
-
 // IMPORT - SCRIPTS //
 import { getUserData } from "../../utils/getUserData";
 
 // IMPORT - ICONS //
 import {
-  MaskIcon,
-  NetworkIcon
-} from './../../icons/icons.tsx';
+  Earth,
+  Drama,
+  SendHorizontal,
+  CloudUpload
+} from 'lucide-react';
 
 // CREATE - INTERFACES //
 interface CardData {
@@ -123,15 +125,16 @@ const PublishPage = () => {
     }
 
     try {
-      const response = await fetch(`https://crush-api.vercel.app/post/publish/${localStorage.getItem('userId')}`, {
+      const response = await fetch(`https://crushapi-4ped.onrender.com/post/publish/${localStorage.getItem('token')}`, {
         method: 'POST',
         body: formData,
       });
+
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
+
       const result = await response.json();
-      console.log(result);
 
       if (result.posted) {
         window.location.href = "/"
@@ -146,23 +149,23 @@ const PublishPage = () => {
 
     <>
       <NavBarReturn title="Publique" />
+      
       <main>
         <div className="flex flex-col justify-center items-center">
           <Card
             radius="lg"
-            shadow="lg"
             className="flex flex-col w-11/12 max-w-[512px] mt-12">
             <CardHeader className="flex-col">
               <Switch
                 color="primary"
                 size="lg"
                 onClick={handleIsAnonymous}
-                thumbIcon={() => (!isAnonymous ? <NetworkIcon className="text-primary size-5" /> : <MaskIcon className="text-default size-5" />)}>
-                {!isAnonymous ? (<p className="font-Poppins font-semibold">Público</p>) : (<p className="font-Poppins font-semibold">Anônimo</p>)}
+                thumbIcon={() => (!isAnonymous ? <Earth className="text-primary size-5" /> : <Drama className="text-default-300 size-5" />)}>
+                {!isAnonymous ? (<p className="font-inter font-semibold">Público</p>) : (<p className="font-inter font-semibold">Anônimo</p>)}
               </Switch>
 
               <div className="flex flex-col justify-center items-center my-1 w-full">
-                <h1 className="font-Poppins text-default text-xs tracking-tight my-0.5">Acompanhe seu post</h1>
+                <h1 className="font-inter text-default text-xs tracking-tight my-0.5">(Acompanhe seu post)</h1>
                 <CardPost
                   className="my-0.5"
                   campus={cardData.campus}
@@ -172,10 +175,13 @@ const PublishPage = () => {
                   nickname={cardData.nickname}
                   references={cardData.references}
                   photoURL={cardData.photoURL}
-                  userAvatar={userData?.avatar} />
+                  userAvatar={userData?.avatar}
+                  userId={userData?._id}
+                  hiddenProps={true}
+                />
                 {isAnonymous && (
                   <div>
-                    <h1 className="font-Poppins text-default text-xs tracking-tight my-0.5">(Seu nome não aparecerá no seu post)</h1>
+                    <h1 className="font-inter text-default text-xs tracking-tight my-0.5">(Seu nome não aparecerá no seu post)</h1>
                   </div>
                 )}
               </div>
@@ -189,11 +195,12 @@ const PublishPage = () => {
                   <Input
                     key="content"
                     type="text"
-                    radius="full"
+                    radius="lg"
+                    size="sm"
                     name="content"
                     label="Descrição"
                     placeholder="Descrição da sua publicação"
-                    className="font-Poppins font-medium w-full"
+                    className="font-inyer font-medium w-full"
                     onChange={handleChangeData} />
                 </div>
 
@@ -202,7 +209,8 @@ const PublishPage = () => {
                     <Input
                       key="references"
                       type="text"
-                      radius="full"
+                      radius="lg"
+                      size="sm"
                       name="references"
                       label="Marcações"
                       placeholder="Levante uma corrente"
@@ -218,12 +226,17 @@ const PublishPage = () => {
                     className="w-full h-fit cursor-pointer">
                     <Button
                       radius="full"
-                      size="lg"
-                      color="default"
+                      size="md"
+                      color="primary"
+                      variant="bordered"
                       fullWidth={true}
-                      className="font-Poppins font-bold uppercase"
-                      as="span">
-                      Selecione uma Foto
+                      className="font-poppins font-bold uppercase tracking-widest"
+                      as="span"
+                      startContent={
+                        <CloudUpload />
+                      }
+                    >
+                      Upload de imagem
                     </Button>
                   </label>
                   <input
@@ -247,9 +260,11 @@ const PublishPage = () => {
                     type="submit"
                     color="primary"
                     radius="full"
-                    size="lg"
+                    size="md"
                     fullWidth={true}
-                    className="font-Poppins font-bold uppercase">
+                    className="font-poppins font-bold uppercase tracking-widest"
+                    startContent={<SendHorizontal />}
+                  >
                     Enviar
                   </Button>
                 </div>
