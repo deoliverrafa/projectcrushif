@@ -51,7 +51,7 @@ export const ThemeSwitcher = (props: themeSwitcherProps) => {
         defaultSelected={theme === 'dark'} // Define o estado selecionado com base no tema atual
         size="lg"
         color="primary"
-        thumbIcon={({ className }) => (
+        thumbIcon={() => (
         <>
         {theme === "dark" ? (
           <Moon className="text-default-300 size-5"/>
