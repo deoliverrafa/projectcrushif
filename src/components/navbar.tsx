@@ -1,9 +1,14 @@
 // IMPORT - LIBRARYS //
-import { useNavigate } from 'react-router-dom';
+import React from 'react';
+import { NavLink, useNavigate } from 'react-router-dom';
+
+// IMPORT - COMPONENTS //
+import { Profile } from './profile.tsx';
 import {
   Button,
   Navbar,
   NavbarBrand,
+  NavbarMenuToggle,
   NavbarContent,
   NavbarItem,
   DropdownItem,
@@ -18,17 +23,15 @@ import {
 
 // IMPORT - ICONS //
 import {
-  ProfileIcon,
-  SettingIcon,
-  ShareIcon,
-  LogoutIcon,
-  SearchIcon,
-  ArrowLeftIcon
-} from './../icons/icons.tsx';
+  Home,
+  Search,
+  HeartHandshake,
+  CalendarDays,
+  ArrowLeft
+} from 'lucide-react';
 
 // IMPORT - IMAGES //
-import logo from "../../public/images/CrushIf_Logo-removebg-preview.png";
-import React from 'react';
+import logo from '../../public/images/logo/logo.png';
 
 // CREATE - INTERFACES //
 interface User {
@@ -47,96 +50,126 @@ interface userData {
 
 // COMPONENT - NAVBAR //
 export const NavBar = (props: userData) => {
-  function logOutHandle() {
-    localStorage.setItem('token', "null");
-  }
 
   return (
     <Navbar
-      isBordered
+      position="static"
       shouldHideOnScroll
-      isBlurred={true}
-      position={'static'}>
+      isBordered={true}
+    >
       <NavbarContent justify="start">
-        <Dropdown>
-          <DropdownTrigger>
-            <Avatar
-              isBordered
-              className="font-Poppins uppercase"
-              color="primary"
-              size="sm"
-              name={props.user?.nickname ? props.user.nickname : ""}
-              src={props.avatarPath ? props.avatarPath : ""} />
-          </DropdownTrigger>
-
-          <DropdownMenu aria-label="Profile Actions">
-            <DropdownSection
-              title="Conta"
-              className="font-Poppins">
-              <DropdownItem
-                className="gap-2">
-                <p className="font-semibold">Logado como:</p>
-                <p className="font-regular text-default">{props.user?.email}</p>
-              </DropdownItem>
-
-              <DropdownItem
-                key="profile"
-                description="Exibir perfil do usuário"
-                className="font-Poppins"
-                href="/profile"
-                startContent={<ProfileIcon className="size-4" />}>
-                Perfil
-              </DropdownItem>
-
-              <DropdownItem
-                key="user"
-                description="Configurações do usuário"
-                className="font-Poppins"
-                href="/profile/edit"
-                startContent={<SettingIcon className="size-4" />}>
-                Configurações
-              </DropdownItem>
-
-              <DropdownItem
-                key="share"
-                description="Compartilhar perfil do usuário"
-                className="font-Poppins"
-                startContent={<ShareIcon className="size-4" />}>
-                Compartilhar
-              </DropdownItem>
-
-              <DropdownItem
-                key="logout"
-                description="Deslogar da conta do usuário"
-                className="font-Poppins text-danger"
-                href="/auth/login"
-                onClick={logOutHandle}
-                startContent={<LogoutIcon className="size-4" />}>
-                Sair
-              </DropdownItem>
-            </DropdownSection>
-          </DropdownMenu>
-        </Dropdown>
-      </NavbarContent>
-
-      <NavbarContent justify="center">
+        <NavbarMenuToggle
+          className="flex md:hidden"
+        />
         <Link href="/">
           <NavbarBrand>
             <Image
-              className="h-10 w-10"
+              className="h-10 w-12"
               alt="logo crush if"
               src={logo} />
-            <p className="font-Poppins text-foreground font-bold text-xl md:text-2xl">Crush</p>
+            <p className="text-primary font-recursive font-semibold uppercase tracking-widest">Crush</p>
           </NavbarBrand>
         </Link>
       </NavbarContent>
 
+      {/* NAVBAR - CENTER CONTENT */}
+      <NavbarContent 
+        className="hidden md:flex"
+        justify="center"
+      >
+        {/* MENU - NAV LINKS */}
+        <NavLink to="/">
+          {({ isActive }) => isActive ? (
+            <Button 
+              color="primary"
+              variant="flat"
+              radius="full"
+              startContent={<Home />}
+            >
+              <p className="font-Poppins font-semibold">Inicio</p>
+            </Button>
+          ) : (
+            <Button
+              color="primary"
+              variant="flat"
+              radius="lg"
+              isIconOnly={true}
+            >
+              <Home />
+            </Button>
+          )}
+        </NavLink>
+        <NavLink to="/search">
+          {({ isActive }) => isActive ? (
+            <Button 
+              color="primary"
+              variant="flat"
+              radius="full"
+              startContent={<Search />}
+            >
+              <p className="font-poppins font-semibold">Pesquisar</p>
+            </Button>
+          ) : (
+            <Button
+              color="primary"
+              variant="flat"
+              radius="lg"
+              isIconOnly={true}
+            >
+              <Search />
+            </Button>
+          )}
+        </NavLink>
+        <NavLink to="/match">
+          {({ isActive }) => isActive ? (
+            <Button 
+              color="primary"
+              variant="flat"
+              radius="full"
+              startContent={<HeartHandshake />}
+            >
+              <p className="font-poppins font-semibold">Crush</p>
+            </Button>
+          ) : (
+            <Button
+              color="primary"
+              variant="flat"
+              radius="lg"
+              isIconOnly={true}
+            >
+              <HeartHandshake />
+            </Button>
+          )}
+        </NavLink>
+        <NavLink to="/events">
+          {({ isActive }) => isActive ? (
+            <Button 
+              color="primary"
+              variant="flat"
+              radius="full"
+              startContent={<CalendarDays />}
+            >
+              <p className="font-poppins font-semibold">Evêntos</p>
+            </Button>
+          ) : (
+            <Button
+              color="primary"
+              variant="flat"
+              radius="lg"
+              isIconOnly={true}
+            >
+              <CalendarDays />
+            </Button>
+          )}
+        </NavLink>
+      </NavbarContent>
+
       <NavbarContent justify="end">
-        <Button
-          variant="light"
-          isIconOnly>
-          <SearchIcon className="size-6" />
-        </Button>
+        <Profile 
+          name={props.user?.nickname ? props.user.nickname : ""} 
+          email={props.user?.email ? props.user.email : ""}
+          image={props.avatarPath ? props.avatarPath : ""}
+        />
       </NavbarContent>
     </Navbar>
   );
@@ -161,14 +194,15 @@ export const NavBarReturn: React.FC<NavBarReturnProps> = ({ title }) => {
         <NavbarItem>
           <Button
             isIconOnly
-            variant="light"
+            color="primary"
+            variant="flat"
             onClick={() => navigate(-1)}>
-            <ArrowLeftIcon className="size-6" />
+            <ArrowLeft />
           </Button>
         </NavbarItem>
 
         <NavbarItem>
-          <p className="font-Poppins font-bold">{title}</p>
+          <p className="font-poppins font-semibold">{title}</p>
         </NavbarItem>
       </NavbarContent>
     </Navbar>

@@ -1,6 +1,10 @@
 // IMPORT - LIBRARYS //
 import React, { ChangeEvent, FormEvent, useState } from "react";
 import axios from "axios";
+
+// IMPORT - COMPONENTS //
+import { ThemeSwitcher } from "../../components/themeSwitcher";
+import { Loading } from './../../components/loading.tsx';
 import {
   Button,
   Card,
@@ -11,18 +15,14 @@ import {
   Link
 } from "@nextui-org/react";
 
-// IMPORT - COMPONENTS //
-import { ThemeSwitcher } from "../../components/themeSwitcher";
-import { Loading } from './../../components/loading.tsx';
-
 // IMPORT - ICONS //
 import {
-  EyeIcon,
-  EyeInvisibleIcon
-} from './../../icons/icons.tsx';
+  Eye,
+  EyeOff
+} from 'lucide-react';
 
 // IMPORT - IMAGES //
-import logo from "../../../public/images/CrushIf_Logo-removebg-preview.png"
+import logo from "../../../public/images/logo/logo.png"
 
 // CREATE - INTERFACES //
 interface UserDataLogin {
@@ -84,9 +84,8 @@ const LoginPage = () => {
           <ThemeSwitcher className="my-1.5 mx-2" />
         </div>
 
-        <div className="">
+        <div>
           <Card
-            shadow="lg"
             radius="lg">
             <CardHeader className="flex gap-3">
               <img
@@ -95,8 +94,8 @@ const LoginPage = () => {
                 className="w-20 h-20" />
 
               <div className="flex flex-col">
-                <h2 className="font-Poppins font-semibold text-2xl md:text-3xl">Faça Login!</h2>
-                <p className="font-Poppins text-default font-medium text-xs md:text-sm">Faça login para ter acesso a plataforma.</p>
+                <h2 className="font-poppins font-semibold uppercase tracking-widest text-2xl md:text-3xl">Faça Login</h2>
+                <p className="text-default font-poppins tracking-tight text-xs md:text-sm">Faça login para ter acesso a plataforma</p>
               </div>
             </CardHeader>
             <Divider />
@@ -111,11 +110,12 @@ const LoginPage = () => {
                   <Input
                     isClearable
                     isRequired
-                    radius="full"
+                    radius="lg"
+                    size="sm"
                     type="nickname"
                     label="Usuário"
-                    placeholder="Ex: nickname"
-                    className="font-Poppins font-medium w-5/6"
+                    placeholder="ex: nickname"
+                    className="font-inter font-medium w-5/6"
                     name="nickname"
                     onChange={handleChange}
                     errorMessage={messageError == "Usuário não encontrado." ? messageError : null} />
@@ -124,17 +124,18 @@ const LoginPage = () => {
                 <div className="flex flex-row justify-center items-center">
                   <Input
                     isRequired
-                    radius="full"
+                    radius="lg"
+                    size="sm"
                     label="Senha"
-                    placeholder="Ex: ******"
-                    className="font-Poppins font-medium w-5/6"
+                    placeholder="ex: ••••••"
+                    className="text-default font-inter font-medium w-5/6"
                     name="password"
                     endContent={
                       <button className="focus:outline-none" type="button" onClick={toggleVisibility}>
                         {isVisible ? (
-                          <EyeInvisibleIcon className="text-2xl text-default-400 pointer-events-none" />
+                          <EyeOff className="text-2xl text-default pointer-events-none" />
                         ) : (
-                          <EyeIcon className="text-2xl text-default-400 pointer-events-none" />
+                          <Eye className="text-2xl text-default pointer-events-none" />
                         )}
                       </button>
                     }
@@ -144,16 +145,16 @@ const LoginPage = () => {
                 </div>
                 <Divider />
 
-                <div className="text-2xl text-default-400 text-center">
-                  <p className="font-Poppins text-default font-medium text-sm md:text-sm ">{messageError}</p>
+                <div className="text-2xl text-default text-center">
+                  <p className="font-inter text-default font-medium text-sm md:text-sm ">{messageError}</p>
                 </div>
 
                 <div className="flex flex-row justify-center items-center">
                   <Button
                     color="primary"
-                    size="lg"
+                    size="md"
                     radius="full"
-                    className="font-Poppins font-bold uppercase w-5/6"
+                    className="font-poppins tracking-widest font-bold uppercase w-5/6"
                     type="submit"
                     onClick={() => setClickedButton(true)}>Entrar</Button>
                 </div>
@@ -165,10 +166,10 @@ const LoginPage = () => {
 
                   <Link className="flex flex-row justify-center items-center  w-full" href="register">
                     <Button
-                      className="font-Poppins font-bold uppercase w-5/6"
+                      className="font-poppins font-bold uppercase tracking-widest w-5/6"
                       color="primary"
                       radius="full"
-                      size="lg"
+                      size="md"
                       variant="bordered">
                       Registre-se
                     </Button>

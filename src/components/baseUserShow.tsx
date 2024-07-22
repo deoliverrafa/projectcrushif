@@ -1,6 +1,8 @@
 // IMPORT - LIBRARYS //
 import { useState } from "react";
 import axios from "axios";
+
+// IMPORT - COMPONENTS //
 import { Alert } from "flowbite-react";
 import {
   Avatar,
@@ -21,10 +23,15 @@ import {
   SelectItem
 } from "@nextui-org/react";
 
-// IMPORT - SCRIPTS //
-import { isValidImage } from "../controllers/avatarUpdate";
-
 // IMPORT - ICONS //
+import {
+  ImageUp,
+  AlignRight,
+  BadgeCheck,
+  Mail,
+  UserRoundPen,
+  KeyRound
+} from 'lucide-react';
 import {
   PencilIcon,
   EmailIcon,
@@ -33,6 +40,9 @@ import {
   EyeInvisibleIcon,
   EyeIcon
 } from './../icons/icons.tsx';
+
+// IMPORT - SCRIPTS //
+import { isValidImage } from "../controllers/avatarUpdate";
 
 // CREATE - INTERFACE //
 interface User {
@@ -136,7 +146,7 @@ export const BaseUserShow = (props: userData) => {
   // User changeData Logic
   const [errorMessage, setdataErrorMessage] = useState<String>();
   const [successMessage, setdataSuccessMessage] = useState<String>();
-  const [selectedData, setSelectedData] = useState<String>('nome');
+  const [selectedData, setSelectedData] = useState<String>('info');
   const [isVisible, setIsVisible] = useState(false);
   const toggleVisibility = () => setIsVisible(!isVisible);
 
@@ -170,7 +180,7 @@ export const BaseUserShow = (props: userData) => {
         console.log(data);
       })
 
-      if (selectedData == 'nome') {
+      if (selectedData == 'info') {
         console.log('EntreiNom');
 
         const response = await axios.post(`https://crushapi-4ped.onrender.com/profile/changeNameCampus/${localStorage.getItem('token')}`, formData);
@@ -219,15 +229,15 @@ export const BaseUserShow = (props: userData) => {
           <div className="flex flex-row gap-5 items-center">
             <label htmlFor="avatarInput">
               <Badge
-                content={<PencilIcon />}
-                color="default"
+                content={<ImageUp className="size-4" />}
+                color="primary"
                 className="p-1"
                 shape="rectangle"
                 showOutline={false}>
                 <Avatar
                   size="lg"
                   radius="lg"
-                  isBordered
+                  isBordered={true}
                   className="cursor-pointer"
                   color="primary"
                   name={props.user?.nickname}
@@ -243,8 +253,8 @@ export const BaseUserShow = (props: userData) => {
               accept="image/*"
               onChange={handleImageChange} />
             <div className="flex flex-col justify-center gap-1 w-full">
-              <p className="font-Poppins font-semibold leading-none">{nickname}</p>
-              <p className="font-Poppins text-default text-xs leading-none">@{nickname}</p>
+              <p className="font-inter text-xs font-semibold leading-none">{nickname}</p>
+              <p className="font-inter text-xs tracking-tight text-default">@{nickname}</p>
             </div>
 
             <div className="mt-3">
@@ -260,71 +270,99 @@ export const BaseUserShow = (props: userData) => {
         <div>
           <Dropdown>
             <DropdownTrigger>
-              <i className="fi fi-rr-menu-dots-vertical"></i>
+              <AlignRight />
             </DropdownTrigger>
 
-            <DropdownMenu aria-label="Profile Actions">
-              <DropdownSection
-                title="Editar"
-                className="font-Poppins">
-                <DropdownItem
-                  className="gap-2">
-                  <p className="font-semibold">Logado como:</p>
-                  <p className="font-regular text-default">{props.user?.email}</p>
-                </DropdownItem>
+            <DropdownMenu>
+              <DropdownItem
+                href="/profile"
+                showDivider={true}
+              >
+                <div className="flex flex-row items-center space-x-2">
+                  <Badge 
+                    content=""
+                    color="success"
+                    shape="circle"
+                    size="sm"
+                    placement="bottom-right"
+                  >
+                    <Avatar
+                      size="sm"
+                      src={props.user?.avatar}
+                    />
+                  </Badge>
+            <div className="flex flex-col">
+              <div className="flex flex-row items-center space-x-1">
+                <p className="font-inter font-semibold">
+                  {props.user?.nickname}
+                </p>
+                <BadgeCheck className="text-success size-3" />
+              </div>
+              <p className="text-default text-tiny font-inter tracking-tight">{props.user?.email}</p>
+            </div>
+          </div>
+        </DropdownItem>
 
-                {selectedData !== "email" ? (
-                  <DropdownItem
-                    key="email"
-                    className="font-Poppins"
-                    description="Alterar e-mail do usuário"
-                    startContent={<EmailIcon className="size-4" />}
-                    onClick={() => { handleSelectedData('email') }}>
-                    E-mail
-                  </DropdownItem>
-                ) : (
-                  <DropdownItem
-                    key="email"
-                    className="hidden"
-                    color="default"
-                    onClick={() => { handleSelectedData('email') }}>
-                    E-mail
-                  </DropdownItem>)}
+        {selectedData !== "info" ? (
+          <DropdownItem
+            className="font-inter"
+            startContent={
+              <UserRoundPen className="size-4" />
+            }
+            onClick={() => { handleSelectedData('info') }}>
+            Alterar info
+          </DropdownItem>
+        ) : (
+          <DropdownItem
+            className="hidden font-inter"
+            startContent={
+              <Mail className="size-4" />
+            }
+            onClick={() => { handleSelectedData('info') }}>
+            Alterar info
+          </DropdownItem>       
+        )}
 
-                {selectedData !== "password" ? (
-                  <DropdownItem
-                    key="password"
-                    className="font-Poppins"
-                    description="Alterar senha do usuário"
-                    startContent={<PasswordIcon className="size-4" />}
-                    onClick={() => { handleSelectedData('password') }}>
-                    Senha
-                  </DropdownItem>
-                ) : (
-                  <DropdownItem
-                    key="password"
-                    className="hidden"
-                    onClick={() => { handleSelectedData('password') }}>
-                    Senha
-                  </DropdownItem>)}
+        {selectedData !== "email" ? (
+          <DropdownItem
+            className="font-inter"
+            startContent={
+              <Mail className="size-4" />
+            }
+            onClick={() => { handleSelectedData('email') }}>
+            Alterar E-mail
+          </DropdownItem>
+        ) : (
+          <DropdownItem
+            className="hidden font-inter"
+            startContent={
+              <Mail className="size-4" />
+            }
+            onClick={() => { handleSelectedData('email') }}>
+            Alterar E-mail
+          </DropdownItem>       
+        )}
 
-                {selectedData !== "nome" ? (
-                  <DropdownItem
-                    key="nome"
-                    className="font-Poppins"
-                    description="Alterar nome do usuário"
-                    startContent={<PersonIcon className="size-4" />}
-                    onClick={() => { handleSelectedData('nome') }}>
-                    Nome
-                  </DropdownItem>
-                ) : (
-                  <DropdownItem
-                    key="nome"
-                    className="hidden"
-                    onClick={() => { handleSelectedData('nome') }}>
-                    Nome
-                  </DropdownItem>)}
-              </DropdownSection>
+        {selectedData !== "password" ? (
+          <DropdownItem
+            className="font-inter"
+            startContent={
+              <KeyRound className="size-4" />
+            }
+            onClick={() => { handleSelectedData('password') }}>
+            Alterar senha
+          </DropdownItem>
+        ) : (
+          <DropdownItem
+            className="hidden font-inter"
+            startContent={
+              <KeyRound className="size-4" />
+            }
+            onClick={() => { handleSelectedData('password') }}>
+            Alterar senha
+          </DropdownItem>       
+        )}
+                
             </DropdownMenu>
           </Dropdown>
         </div>
@@ -335,15 +373,15 @@ export const BaseUserShow = (props: userData) => {
         <form
           action="updateData"
           className="flex flex-col relative gap-3">
-          {selectedData == 'nome' ?
+          {selectedData == 'info' ?
             <div className="flex flex-row justify-between items-center gap-2">
               <div className="flex flex-row items-center w-full">
                 <Input
                   isClearable
-                  radius="full"
+                  radius="lg"
                   label='Usuário'
-                  placeholder="Ex: nickname"
-                  className="font-Poppins font-medium w-full"
+                  placeholder="ex: nickname"
+                  className="font-inter font-medium w-full"
                   defaultValue={props.user?.nickname}
                   onChange={(e: React.BaseSyntheticEvent) => { setNickname(e.target.value) }}
                 ></Input>
@@ -352,9 +390,9 @@ export const BaseUserShow = (props: userData) => {
               <div className="w-full flex flex-row justify-center items-center">
                 <Select
                   isRequired
-                  radius="full"
+                  radius="lg"
                   label="Instituto"
-                  className="font-Poppins font-medium w-5/6"
+                  className="font-inter font-medium w-5/6"
                   name="campus"
                   defaultSelectedKeys={[props.user.campus]}
                   onChange={(e: React.BaseSyntheticEvent) => { setCampus(e.target.value) }}
@@ -378,11 +416,11 @@ export const BaseUserShow = (props: userData) => {
               <div className="flex flex-row items-center">
                 <Input
                   isClearable
-                  radius="full"
+                  radius="lg"
                   label='E-mail'
                   type="email"
-                  placeholder="Ex: user@email.com"
-                  className="font-Poppins font-medium w-full"
+                  placeholder="ex: nickname@email.com"
+                  className="font-inter font-medium w-full"
                   onChange={(e: React.BaseSyntheticEvent) => { setEmail(e.target.value) }}
                   defaultValue={props.user?.email}></Input>
               </div>
@@ -395,10 +433,10 @@ export const BaseUserShow = (props: userData) => {
             <div>
               <div className="flex flex-row items-center my-1">
                 <Input
-                  radius="full"
-                  label='Senha'
-                  placeholder="Ex: senha"
-                  className="font-Poppins font-medium w-full"
+                  radius="lg"
+                  label='Senha atual'
+                  placeholder="ex: ••••••"
+                  className="font-inter font-medium w-full"
                   onChange={(e: React.BaseSyntheticEvent) => { setPassword(e.target.value) }}
                   endContent={
                     <button className="focus:outline-none" type="button" onClick={toggleVisibility}>
@@ -413,10 +451,10 @@ export const BaseUserShow = (props: userData) => {
               </div>
               <div className="flex flex-row items-center my-1">
                 <Input
-                  radius="full"
-                  label='Nova Senha'
-                  placeholder="Ex: novasenha"
-                  className="font-Poppins font-medium w-full"
+                  radius="lg"
+                  label='Nova senha'
+                  placeholder="ex: ••••••"
+                  className="font-inter font-medium w-full"
                   onChange={(e: React.BaseSyntheticEvent) => { setnewPassword(e.target.value) }}
                   endContent={
                     <button className="focus:outline-none" type="button" onClick={toggleVisibility}>
@@ -441,7 +479,9 @@ export const BaseUserShow = (props: userData) => {
               variant="flat"
               size="lg"
               color="primary"
-              className="font-Poppins font-semibold uppercase">
+              fullWidth={true}
+              className="font-poppins font-bold uppercase tracking-widest"
+            >
               SALVAR
             </Button>
 

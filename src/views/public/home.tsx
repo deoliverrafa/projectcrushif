@@ -1,12 +1,13 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { debounce } from 'lodash';
+import { debounce } from 'lodash'
 
 import { NavBar } from "../../components/navbar";
 import { BottomBar } from "../../components/bottombar";
 import { CardPost } from "../../components/card";
 import { Loading } from "./../../components/loading.tsx";
 import { ToastCookies } from './../../components/cookies.tsx';
+import { PublishButton } from './../../components/floatingButton.tsx';
 
 const localAvatarPath = localStorage.getItem('avatar') ?? "";
 
@@ -35,7 +36,7 @@ interface userData {
 export default function HomePage() {
 
     const [userData, setUserData] = useState<userData | null>(null);
-    const [finishedPosts, setFinishedPosts] = useState(false);
+    const [finishedPosts, setFinishedPosts] = useState(false)
     const [posts, setPosts] = useState<CardProps[]>([]);
     const [skip, setSkip] = useState(0);
     const [limit] = useState(5);
@@ -57,15 +58,13 @@ export default function HomePage() {
 
         async function getUserData() {
             try {
-                setPageLoading(true);
+                setPageLoading(true)
                 const response = await axios.get(`https://crushapi-4ped.onrender.com/user/token/${token}`);
                 setUserData(response.data.userFinded);
             } catch (error) {
                 if (axios.isAxiosError(error) && error.response?.data.validToken === false) {
                     window.location.href = '/auth/login';
                 }
-            } finally {
-                setPageLoading(false);
             }
         }
 
@@ -82,33 +81,42 @@ export default function HomePage() {
                 if (response.data.validToken === false) {
                     window.location.href = '/auth/login';
                 }
-                if (response.data.posts.length === 0) {
-                    setFinishedPosts(true);
-                } else {
-                    setPosts((prevPosts) => [...prevPosts, ...response.data.posts]);
+                if (response.data.posts.length == 0) {
+                    setFinishedPosts(true)
                 }
+
+                setPosts((prevPosts) => [...prevPosts, ...response.data.posts]);
             } catch (error) {
                 console.log("Erro ao buscar posts", error);
             } finally {
                 setLoading(false);
+                setPageLoading(false)
             }
         }
 
         if (!finishedPosts) {
             getPosts();
         }
-    }, [skip, finishedPosts]);
+    }, [skip]);
 
     useEffect(() => {
         const handleScroll = debounce(() => {
-            if (window.innerHeight + document.documentElement.scrollTop >= document.documentElement.offsetHeight - 100 && !loading && !finishedPosts) {
-                setSkip((prevSkip) => prevSkip + limit);
+            if (!finishedPosts) {
+                if (window.scrollY <= 2000 && !loading) {
+                    setSkip((prevSkip) => prevSkip + limit);
+                }
             }
         }, 200);
 
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
-    }, [loading, limit, finishedPosts]);
+    }, [loading, limit]);
+
+    useEffect(() => {
+        const maxScrollY = document.body.scrollHeight - window.innerHeight;
+        
+        window.scrollTo({ top: maxScrollY, behavior: 'smooth' })
+    }, [!pageLoading])
 
     return (
         <>
@@ -116,7 +124,7 @@ export default function HomePage() {
                 <div className="flex flex-col">
                     <NavBar user={userData} avatarPath={userData.avatar || localAvatarPath} />
                     {showCookies && <ToastCookies onClick={handleHideCookies} />}
-                    <main className="w-full h-full flex flex-col justify-center items-center">
+                    <main className="w-full h-full flex flex-col-reverse justify-center items-center">
                         {posts.map((post) => (
                             <CardPost
                                 key={post._id}
@@ -136,6 +144,7 @@ export default function HomePage() {
                         {loading && <Loading />}
                     </main>
                     <div className="mt-10"></div>
+                    <PublishButton />
                     <BottomBar className="appearance-in" />
                 </div>
             ) : (

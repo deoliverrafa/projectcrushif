@@ -1,6 +1,10 @@
 // IMPORT - LIBRARYS //
 import { ChangeEvent, FormEvent, useState } from "react";
 import axios from "axios";
+
+// IMPORT - COMPONENTS //
+import { ThemeSwitcher } from "../../components/themeSwitcher";
+import { Loading } from './../../components/loading.tsx';
 import {
   Button,
   Card,
@@ -13,18 +17,14 @@ import {
   Link
 } from "@nextui-org/react";
 
-// IMPORT - COMPONENTS //
-import { ThemeSwitcher } from "../../components/themeSwitcher";
-import { Loading } from './../../components/loading.tsx';
-
 // IMPORT - ICONS //
 import {
-  EyeInvisibleIcon,
-  EyeIcon
-} from './../../icons/icons.tsx';
+  Eye,
+  EyeOff
+} from 'lucide-react';
 
 // IMPORT - IMAGES //
-import logo from "../../../public/images/CrushIf_Logo-removebg-preview.png"
+import logo from "../../../public/images/logo/logo.png"
 
 export const RegisterPage = () => {
 
@@ -154,7 +154,6 @@ export const RegisterPage = () => {
         </div>
 
         <Card
-          shadow="lg"
           radius="lg">
           <CardHeader className="flex gap-3">
             <img
@@ -163,8 +162,8 @@ export const RegisterPage = () => {
               className="w-20 h-20" />
 
             <div className="flex flex-col">
-              <h2 className="font-Poppins font-semibold text-2xl md:text-3xl">Registre-se!</h2>
-              <p className="font-Poppins text-default font-medium text-xs md:text-sm">Crie uma conta para ter acesso a plataforma.</p>
+              <h2 className="font-poppins font-semibold uppercase tracking-widest text-2xl md:text-3xl">Registre-se</h2>
+              <p className="text-default font-poppins tracking-tight text-xs md:text-sm">Crie uma conta para ter acesso a plataforma.</p>
             </div>
           </CardHeader>
           <Divider />
@@ -179,11 +178,12 @@ export const RegisterPage = () => {
                 <Input
                   isClearable
                   isRequired
-                  radius="full"
+                  radius="lg"
+                  size="sm"
                   type="text"
                   label="Usuário"
-                  placeholder="Ex: nickname"
-                  className="font-Poppins font-medium w-5/6"
+                  placeholder="ex: nickname"
+                  className="font-inter font-medium w-5/6"
                   name="nickname"
                   onChange={handleChange}
                   errorMessage={messageError ? (messageError == "Usuário já está em uso. Por favor, escolha outro." ? messageError : null) : messageError}
@@ -195,11 +195,12 @@ export const RegisterPage = () => {
                 <Input
                   isClearable
                   isRequired
-                  radius="full"
+                  radius="lg"
+                  size="sm"
                   type="email"
                   label="E-mail"
-                  placeholder="Ex: name@email.com"
-                  className="font-Poppins font-medium w-5/6"
+                  placeholder="ex: nickname@email.com"
+                  className="font-inter font-medium w-5/6"
                   name="email"
                   onChange={handleChange}
                   errorMessage={messageError ? (messageError == "E-mail já está em uso." ? messageError : null) : null}
@@ -209,17 +210,18 @@ export const RegisterPage = () => {
               <div className="flex flex-row justify-center items-center">
                 <Input
                   isRequired
-                  radius="full"
+                  radius="lg"
+                  size="sm"
                   label="Senha"
-                  placeholder="Ex: ******"
-                  className="font-Poppins font-medium w-5/6"
+                  placeholder="ex: ••••••"
+                  className="font-inter font-medium w-5/6"
                   name="password"
                   endContent={
                     <button className="focus:outline-none" type="button" onClick={toggleVisibility}>
                       {isVisible ? (
-                        <EyeInvisibleIcon className="text-2xl text-default-400 pointer-events-none" />
+                        <EyeOff className="text-2xl text-default pointer-events-none" />
                       ) : (
-                        <EyeIcon className="text-2xl text-default-400 pointer-events-none" />
+                        <Eye className="text-2xl text-default pointer-events-none" />
                       )}
                     </button>
                   }
@@ -232,10 +234,11 @@ export const RegisterPage = () => {
               <div className="flex flex-row justify-center items-center ">
                 <Input
                   isRequired
-                  radius="full"
+                  radius="lg"
+                  size="sm"
                   type="date"
                   label="Nascimento"
-                  className="font-Poppins font-medium w-5/6"
+                  className="font-inter font-medium w-5/6"
                   name="birthdaydata"
                   onChange={handleChange}
                   errorMessage={messageError ? (messageError == "Preencha todos os campos." ? messageError : null) : messageError}
@@ -246,9 +249,10 @@ export const RegisterPage = () => {
                 <div className="flex w-full justify-center items-center ">
                   <Select
                     isRequired
-                    radius="full"
+                    radius="lg"
+                    size="sm"
                     label="Instituto"
-                    className="font-Poppins font-medium w-5/6"
+                    className="font-inter font-medium w-5/6"
                     name="campus"
                     onChange={handleChange}
                     errorMessage={messageError ? (messageError == "Preencha todos os campos." ? messageError : null) : messageError}
@@ -267,9 +271,9 @@ export const RegisterPage = () => {
               <div className="flex flex-row justify-center items-center">
                 <Button
                   color="primary"
-                  size="lg"
+                  size="md"
                   radius="full"
-                  className="font-Poppins font-bold uppercase w-5/6"
+                  className="font-poppins font-bold uppercase tracking-widest w-5/6"
                   type="submit" >Registrar-se</Button>
               </div>
 
@@ -281,10 +285,10 @@ export const RegisterPage = () => {
 
                 <Link className="flex flex-row justify-center items-center  w-full" href="login">
                   <Button
-                    className="font-Poppins font-bold uppercase w-5/6"
+                    className="font-poppins font-bold uppercase tracking-widest w-5/6"
                     color="primary"
                     radius="full"
-                    size="lg"
+                    size="md"
                     variant="bordered">
                     Entrar
                   </Button>

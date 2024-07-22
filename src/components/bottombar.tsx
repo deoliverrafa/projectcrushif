@@ -1,25 +1,19 @@
 // IMPORT - LIBRARYS //
-import { 
-  Badge, 
-  Button,
-  Navbar
-} from '@nextui-org/react';
 import { NavLink } from 'react-router-dom';
+
+// IMPORT - COMPONENTS //
+import { 
+  Navbar,
+  Button
+} from '@nextui-org/react';
 
 // IMPORT - ICONS //
 import {
-  HomeIcon,
-  CalendarIcon,
-  AddIcon,
-  HeartArrowIcon,
-  BellIcon
-} from './../icons/icons.tsx';
-import {
-  HomeFilledIcon,
-  CalendarFilledIcon,
-  HeartArrowFilledIcon,
-  BellFilledIcon
-} from './../icons/iconsFilled.tsx';
+  Home,
+  Search,
+  HeartHandshake,
+  CalendarDays
+} from 'lucide-react';
 
 // CREATE - INTERFACE //
 interface bottomProps {
@@ -27,111 +21,104 @@ interface bottomProps {
 }
 
 // COMPONENT - BOTTOM BAR //
-export const BottomBar = ({className}: bottomProps) => {
+export const BottomBar = () => {
+  // FUNCTION - LIBRARYS //
+  
+  // FUNCTION - USE STATES //
+
+  // FUNCTION - HANDLES //
+  
   return (
-    <>
-      <Navbar
-        isBordered
-        isBlurred={true}
-        className={`justify-around bottom-0 left-0 w-full ${className}`}
-        >
-        <NavLink to='/' >
-        {({ isActive }) => isActive ?
-          (
-            <Button
-              variant="light"
-              isIconOnly>
-              <HomeFilledIcon className="text-primary size-6"/>
-            </Button>
-          )
-          :
-          (
-            <Button
-              variant="light"
-              isIconOnly>
-              <HomeIcon className="size-6" />
-            </Button>
-          )}
-        </NavLink>
-          
-        <NavLink to='/events' >
-        {({ isActive }) => isActive ?
-          (
-            <Button
-              variant="light"
-              isIconOnly>
-              <CalendarFilledIcon className="text-primary size-6"/>
-            </Button>
-          )
-          :
-          (
-            <Button
-              variant="light"
-              isIconOnly>
-              <CalendarIcon className="size-6" />
-            </Button>
-          )}
-        </NavLink>
-        
-        <NavLink to="/publish">
-          <Button
-            isIconOnly
+    <Navbar
+      isBordered={false}
+      isBlurred={true}
+      className="border-t-1 border-default-100 flex md:hidden justify-around bottom-0 left-0"
+    >
+      {/* MENU - NAV LINKS */}
+      <NavLink to="/">
+        {({ isActive }) => isActive ? (
+          <Button 
             color="primary"
-            radius="full">
-            <AddIcon className="size-6" />
+            variant="flat"
+            radius="full"
+            startContent={<Home />}
+          >
+            <p className="font-poppins font-semibold">Inicio</p>
           </Button>
-        </NavLink>
-        
-        <NavLink to='/match' >
-        {({ isActive }) => isActive ?
-          (
-            <Button
-              variant="light"
-              isIconOnly>
-              <HeartArrowFilledIcon className="text-primary size-6"/>
-            </Button>
-          )
-          :
-          (
-            <Button
-              variant="light"
-              isIconOnly>
-              <HeartArrowIcon className="size-6" />
-            </Button>
-          )}
-        </NavLink>
-        
-        <NavLink to='/notifications' >
-        {({ isActive }) => isActive ?
-          (
-            <Button
-              variant="light"
-              isIconOnly>
-              <Badge
-                content="5"
-                placement="top-right"
-                shape="rectangle"
-                color="primary">
-                <BellFilledIcon className="text-primary size-6"/>
-              </Badge>
-            </Button>
-          )
-          :
-          (
-            <Button
-              variant="light"
-              isIconOnly>
-              <Badge
-                content="5"
-                placement="top-right"
-                shape="circle"
-                color="primary">
-                <BellIcon className="size-6"/>
-              </Badge>
-            </Button>
-          )}
-        </NavLink>
-      </Navbar>
-    </>
+        ) : (
+          <Button
+            color="primary"
+            variant="flat"
+            radius="lg"
+            isIconOnly={true}
+          >
+            <Home />
+          </Button>
+        )}
+      </NavLink>
+      <NavLink to="/search">
+        {({ isActive }) => isActive ? (
+          <Button 
+            color="primary"
+            variant="flat"
+            radius="full"
+            startContent={<Search />}
+          >
+            <p className="font-poppins font-semibold">Pesquisar</p>
+          </Button>
+        ) : (
+          <Button
+            color="primary"
+            variant="flat"
+            radius="lg"
+            isIconOnly={true}
+          >
+            <Search />
+          </Button>
+        )}
+      </NavLink>
+      <NavLink to="/match">
+        {({ isActive }) => isActive ? (
+          <Button 
+            color="primary"
+            variant="flat"
+            radius="full"
+            startContent={<HeartHandshake />}
+          >
+            <p className="font-poppins font-semibold">Crush</p>
+          </Button>
+        ) : (
+          <Button
+            color="primary"
+            variant="flat"
+            radius="lg"
+            isIconOnly={true}
+          >
+            <HeartHandshake />
+          </Button>
+        )}
+      </NavLink>
+      <NavLink to="/events">
+        {({ isActive }) => isActive ? (
+          <Button 
+            color="primary"
+            variant="flat"
+            radius="full"
+            startContent={<CalendarDays />}
+          >
+            <p className="font-poppins font-semibold">Evêntos</p>
+          </Button>
+        ) : (
+          <Button
+            color="primary"
+            variant="flat"
+            radius="lg"
+            isIconOnly={true}
+          >
+            <CalendarDays />
+          </Button>
+        )}
+      </NavLink>
+    </Navbar>
   );
 };

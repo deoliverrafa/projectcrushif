@@ -1,16 +1,16 @@
 // USE CLIENT //
 "use client";
 
-// IMPORT - LIBRARYS /!
+// IMPORT - LIBRARYS //
 import { useEffect, useState } from "react";
 import { Switch } from "@nextui-org/react";
 import { useTheme } from "next-themes";
 
 // IMPORT - ICONS //
 import {
-  MoonFilledIcon,
-  SunFilledIcon
-} from './../icons/iconsFilled.tsx';
+  Sun,
+  Moon
+} from 'lucide-react';
 
 // CREATE - INTERFACES //
 interface themeSwitcherProps {
@@ -54,9 +54,9 @@ export const ThemeSwitcher = (props: themeSwitcherProps) => {
         thumbIcon={({ className }) => (
         <>
         {theme === "dark" ? (
-          <MoonFilledIcon className={`text-default size-5 ${className}`} />
+          <Moon className="text-default-300 size-5"/>
         ) : (
-          <SunFilledIcon className="text-primary size-5" />
+          <Sun className="text-primary size-5" />
         )}
         </>
         )}/>

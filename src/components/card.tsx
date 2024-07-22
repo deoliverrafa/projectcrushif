@@ -1,6 +1,13 @@
 // IMPORT - LIBRARYS //
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { formatDistanceToNow, parseISO } from "date-fns";
+import { ptBR } from "date-fns/locale";
+
+// IMPORT - COMPONENTS //
 import {
   Avatar,
+  Badge,
   Image,
   Card,
   CardHeader,
@@ -9,21 +16,19 @@ import {
   Button,
   Divider
 } from "@nextui-org/react";
-import { formatDistanceToNow, parseISO } from "date-fns";
-import { ptBR } from "date-fns/locale";
 
 // IMPORT - ICONS //
 import {
-  HeartIcon,
-  CommentIcon,
-  SendIcon
-} from "./../icons/icons.tsx";
-import axios from "axios";
-import { useEffect, useState } from "react";
+  BadgeCheck,
+  Heart,
+  MessageCircleHeart,
+  HandHeart
+} from 'lucide-react';
 
 // CREATE - INTERFACES //
 interface CardProps {
   className?: string;
+  hiddenProps?: boolean;
   userId?: string;
   _id?: string;
   nickname: string;
@@ -74,46 +79,65 @@ export const CardPost = (props: CardProps) => {
 
 
   return (
-    <Card shadow="lg" radius="lg" className={`flex flex-col w-11/12 max-w-[768px] mt-5 ${props.className}`}>
+    <Card
+      radius="lg" 
+      className={`flex flex-col w-11/12 max-w-[768px] mt-5 ${props.className}`}
+    >
       <CardHeader className="justify-between items-center">
         <div className="flex gap-5">
-          <Avatar
-            isBordered
-            as="button"
-            color="primary"
-            className="font-Poppins uppercase"
+          <Badge
+            content=""
+            color="success"
             size="sm"
-            name={!props.isAnonymous ? userData?.nickname : ''}
-            src={!props.isAnonymous ? userData?.avatar : ''}
-          />
+            placement="bottom-right"
+            shape="circle"
+          >
+            <Avatar
+              as="button"
+              color="primary"
+              className="font-poppins uppercase"
+              size="sm"
+              isBordered={true}
+              name={!props.isAnonymous ? userData?.nickname : ''}
+              src={!props.isAnonymous ? userData?.avatar : ''}
+            />
+          </Badge>
           <div className="flex flex-col gap-1 items-start justify-center">
-            <h4 className="font-Poppins text-xs font-semibold leading-none">
-              {!props.isAnonymous ? userData?.nickname : "Anônimo"}
-            </h4>
+            <div className="flex flex-row items-center space-x-1">
+              <h4 className="font-inter text-xs font-semibold leading-none">
+                {!props.isAnonymous ? userData?.nickname : "Anônimo"}
+              </h4>
+              <BadgeCheck className="text-success size-3" />
+            </div>
             {formattedData && (
-              <h5 className="font-Poppins text-xs tracking-tight text-default">há {formattedData} atrás.</h5>
+              <h5 className="font-inter text-xs tracking-tight text-default">há {formattedData} atrás.</h5>
             )}
           </div>
         </div>
-        <Button radius="full" size="sm" className="font-Poppins font-bold uppercase" color="primary">
+        <Button 
+          radius="full" 
+          size="sm" 
+          className={`${props.hiddenProps === true ? 'hidden' : ''} font-poppins tracking-widest font-bold uppercase`} 
+          color="primary"
+          variant="bordered"
+        >
           Seguir
         </Button>
       </CardHeader>
-      <CardBody>
+      <CardBody className="pb-0">
         <div className="flex flex-col">
           {props.photoURL && (
-            <Image
-              className="mb-3"
-              width={500}
-              height={500}
-              radius="lg"
-              shadow="lg"
-              src={props.photoURL}
-              alt="Imagem Post"
-            />
+            <div className="flex justify-center items-center">
+              <Image
+                className="object-contain mb-3 max-h-[500px] max-w-[500px]"
+                radius="lg"
+                src={props.photoURL}
+                alt="Imagem Post"
+              />
+            </div>
           )}
-          <div className="flex flex-row items-center my-0.5 w-full h-full">
-            <h4 className="font-Poppins text-xs leading-none w-full h-full items-center">
+          <div className="flex flex-row items-center mb-0.5 w-full h-full">
+            <h4 className="font-inter text-xs leading-none w-full h-full items-center">
               <span className="font-semibold">
                 {!props.isAnonymous ? userData?.nickname : "Anônimo"}:
               </span>{' '}
@@ -121,36 +145,50 @@ export const CardPost = (props: CardProps) => {
             </h4>
           </div>
           {props.references !== '' && !props.isAnonymous && (
-            <div className="flex flex-row items-center my-0.5 w-full">
-              <a key={props._id} className="font-Poppins text-primary text-xs tracking-tight break-words" id={props._id}>
+            <div className="flex flex-row items-center my-0.5 space-x-1 w-full">
+              <p className="text-primary font-inter tracking-tight text-xs">Marcações:</p>
+              <a key={props._id} className="font-inter text-primary text-xs tracking-tight break-words" id={props._id}>
                 {props.references}
               </a>
             </div>
           )}
         </div>
+        <div className={`${props.hiddenProps === true ? 'hidden' : ''} flex flex-row justify-between items-center mt-0.5 w-full`}>
+          <p className="text-default font-inter tracking-tight text-xs">Ver as <span className="font-bold">{0}</span> curtidas.</p>
+          <p className="text-default font-inter tracking-tight text-xs">Ver os <span className="font-bold">{0}</span> comentários.</p>
+        </div>
       </CardBody>
       <CardFooter className="flex-col justify-start items-start">
         <Divider />
         {formattedData && (
-          <div className="flex flex-row justify-between items-center w-full">
-            <div className="font-Poppins text-default text-xs uppercase tracking-tight flex flex-row items-center">
-              <Button className="font-Poppins text-default text-xs uppercase tracking-tight" variant="light">
-                <HeartIcon className="text-primary " />
-                <p className="max-[340px]:hidden">Curtir</p>
-              </Button>
-            </div>
-            <div className="font-Poppins text-default text-xs uppercase tracking-tight flex flex-row items-center">
-              <Button className="font-Poppins text-default text-xs uppercase tracking-tight" variant="light">
-                <CommentIcon className="text-primary " />
-                <p className="max-[340px]:hidden">Comentarios</p>
-              </Button>
-            </div>
-            <div className="font-Poppins text-default text-xs uppercase tracking-tight flex flex-row items-center">
-              <Button className="font-Poppins text-default text-xs uppercase tracking-tight" variant="light">
-                <SendIcon className="text-primary " />
-                <p className="max-[340px]:hidden">Enviar</p>
-              </Button>
-            </div>
+          <div className="flex flex-row justify-between items-center py-2 w-full">
+            <Button 
+              color="primary"
+              variant="flat"
+              radius="full"
+              size="sm"
+              startContent={<Heart />}
+            >
+              <p className="font-poppins font-semibold">Curtir</p>
+            </Button>
+            <Button 
+              color="primary"
+              variant="flat"
+              radius="full"
+              size="sm"
+              startContent={<MessageCircleHeart />}
+            >
+              <p className="font-poppins font-semibold">Comentar</p>
+            </Button>
+            <Button 
+              color="primary"
+              variant="flat"
+              radius="full"
+              size="sm"
+              startContent={<HandHeart />}
+            >
+              <p className="font-poppins font-semibold">Enviar</p>
+            </Button>
           </div>
         )}
       </CardFooter>

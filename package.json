@@ -19,6 +19,7 @@
     "date-fns": "^3.6.0",
     "flowbite-react": "^0.7.2",
     "lodash": "^4.17.21",
+    "lucide-react": "^0.408.0",
     "next-themes": "^0.3.0",
     "phosphor-react": "^1.4.1",
     "react": "^18.2.0",
