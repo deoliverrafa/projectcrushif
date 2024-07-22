@@ -6,6 +6,8 @@ import { Loading } from './../../components/loading.tsx';
 // IMPORT - SCRIPTS //
 import { getUserData } from "../../utils/getUserData";
 
+// CREATE - INTERFACE //
+
 const ProfilePage = () => {
   const userData = getUserData();
 

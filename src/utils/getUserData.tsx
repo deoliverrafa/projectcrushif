@@ -10,8 +10,14 @@ interface User {
 }
 
 export function getUserData() {
-    
-    const [userData, setUserData] = useState<User | null>(null);
+
+    const [userData, setUserData] = useState<User>({
+        avatar: "",
+        _id: "",
+        campus: "",
+        email: "",
+        nickname: "",
+    });
 
     useEffect(() => {
         async function getData() {
@@ -21,9 +27,9 @@ export function getUserData() {
                 window.location.href = "/auth/login"
                 return;
             }
-            
+
             const response = await axios.get(`https://crush-api.vercel.app/user/token/${token}`);
-            
+
             setUserData(response.data.userFinded);
         }
         getData();
