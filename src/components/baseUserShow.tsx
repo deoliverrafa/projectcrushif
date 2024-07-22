@@ -1,5 +1,5 @@
 // IMPORT - LIBRARYS //
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 
 // IMPORT - COMPONENTS //
@@ -118,14 +118,13 @@ export const BaseUserShow = (props: userData) => {
   const [errorImage, setErrorImage] = useState("");
 
   const handleImageChange = async (event: React.BaseSyntheticEvent) => {
-    const imageFile = event.target.files[0];
-    console.log(imageFile)
+    const imageFile = event.target.files[0];    
     if (isValidImage(imageFile)) {
       setErrorImage('')
       const formData = new FormData();
       formData.append("avatar", imageFile);
 
-      const response = await axios.post(`https://crush-api.vercel.app/profile/updatePhoto/${localStorage.getItem('userId')}`, formData);
+      const response = await axios.post(`https://crushapi-4ped.onrender.com/profile/updatePhoto/${localStorage.getItem('userId')}`, formData);
 
       if (response.data.updated) {
         const imageUrl = URL.createObjectURL(imageFile);
@@ -145,13 +144,18 @@ export const BaseUserShow = (props: userData) => {
   const [isVisible, setIsVisible] = useState(false);
   const toggleVisibility = () => setIsVisible(!isVisible);
 
-
   // Estados de dados
   const [nickname, setNickname] = useState(props.user?.nickname || "");
   const [campus, setCampus] = useState(props.user?.campus || "");
   const [email, setEmail] = useState(props.user?.email || "");
   const [password, setPassword] = useState("");
   const [newPassword, setnewPassword] = useState("");
+
+  useEffect(() => {
+    setNickname(props.user.nickname)
+    setCampus(props.user.campus)
+    setEmail(props.user.email)
+  }, [props.user])
 
   function handleSelectedData(data: string) {
     setSelectedData(data);
@@ -171,43 +175,53 @@ export const BaseUserShow = (props: userData) => {
       formData.append('password', password)
       formData.append('novasenha', newPassword)
 
-      formData.forEach((data) => {
-        console.log(data);
-      })
-
       if (selectedData == 'info') {
-        console.log('EntreiNom');
 
-        const response = await axios.post(`https://crush-api.vercel.app/profile/changeNameCampus/${localStorage.getItem('token')}`, formData);
+        try {
 
-        if (response.data.updated == true) {
-          setdataSuccessMessage('Nome alterado com sucesso')
-        } else {
-          setdataErrorMessage(response.data.message)
+          const response = await axios.post(`https://crushapi-4ped.onrender.com/profile/changeNameCampus/${localStorage.getItem('token')}`, formData);
+
+          if (response.data.updated == true) {
+            setdataSuccessMessage('Nome alterado com sucesso')
+          } else {
+            setdataErrorMessage(response.data.message)
+          }
+
+        } catch (error: any) {
+          setdataErrorMessage(error.response.data.message)
         }
       }
 
       if (selectedData == 'email') {
-        console.log('Entrei email');
 
-        const response = await axios.post(`https://crush-api.vercel.app/profile/changeEmail/${localStorage.getItem('token')}`, formData)
+        try {
 
-        if (response.data.updated == true) {
-          setdataSuccessMessage('Email alterado com sucesso')
-        } else {
-          setdataErrorMessage(response.data.message)
+          const response = await axios.post(`https://crushapi-4ped.onrender.com/profile/changeEmail/${localStorage.getItem('token')}`, formData)
+
+          if (response.data.updated == true) {
+            setdataSuccessMessage('Email alterado com sucesso')
+          } else {
+            setdataErrorMessage(response.data.message)
+          }
+        } catch (error: any) {
+          setdataErrorMessage(error.response.data.message);
         }
       }
 
       if (selectedData == 'password') {
-        console.log("EntreiPassword");
 
-        const response = await axios.post(`https://crush-api.vercel.app/profile/changePassword/${localStorage.getItem('token')}`, formData)
+        try {
+          const response = await axios.post(`https://crushapi-4ped.onrender.com/profile/changePassword/${localStorage.getItem('token')}`, formData)
 
-        if (response.data.updated == true) {
-          setdataSuccessMessage('Senha alterado com sucesso')
-        } else {
-          setdataErrorMessage(response.data.message)
+          if (response.data.updated == true) {
+            setdataSuccessMessage('Senha alterado com sucesso')
+          } else {
+
+            setdataErrorMessage(response.data.message)
+          }
+
+        } catch (error: any) {
+          setdataErrorMessage(error.response.data.message);
         }
       }
 
@@ -216,7 +230,8 @@ export const BaseUserShow = (props: userData) => {
       setdataErrorMessage(error.response?.message)
     }
   }
-  
+
+
   return (
     <Card className="flex flex-col w-11/12 max-w-[768px]">
       <CardHeader className="flex flex-row justify-between items-center">
@@ -235,7 +250,7 @@ export const BaseUserShow = (props: userData) => {
                   isBordered={true}
                   className="cursor-pointer"
                   color="primary"
-                  name={props.user?.nickname}
+                  name={nickname}
                   src={props.user?.avatar} />
               </Badge>
             </label>
@@ -274,7 +289,7 @@ export const BaseUserShow = (props: userData) => {
                 showDivider={true}
               >
                 <div className="flex flex-row items-center space-x-2">
-                  <Badge 
+                  <Badge
                     content=""
                     color="success"
                     shape="circle"
@@ -286,78 +301,78 @@ export const BaseUserShow = (props: userData) => {
                       src={props.user?.avatar}
                     />
                   </Badge>
-            <div className="flex flex-col">
-              <div className="flex flex-row items-center space-x-1">
-                <p className="font-inter font-semibold">
-                  {props.user?.nickname}
-                </p>
-                <BadgeCheck className="text-success size-3" />
-              </div>
-              <p className="text-default text-tiny font-inter tracking-tight">{props.user?.email}</p>
-            </div>
-          </div>
-        </DropdownItem>
+                  <div className="flex flex-col">
+                    <div className="flex flex-row items-center space-x-1">
+                      <p className="font-inter font-semibold">
+                        {props.user?.nickname}
+                      </p>
+                      <BadgeCheck className="text-success size-3" />
+                    </div>
+                    <p className="text-default text-tiny font-inter tracking-tight">{props.user?.email}</p>
+                  </div>
+                </div>
+              </DropdownItem>
 
-        {selectedData !== "info" ? (
-          <DropdownItem
-            className="font-inter"
-            startContent={
-              <UserRoundPen className="size-4" />
-            }
-            onClick={() => { handleSelectedData('info') }}>
-            Alterar info
-          </DropdownItem>
-        ) : (
-          <DropdownItem
-            className="hidden font-inter"
-            startContent={
-              <Mail className="size-4" />
-            }
-            onClick={() => { handleSelectedData('info') }}>
-            Alterar info
-          </DropdownItem>       
-        )}
+              {selectedData !== "info" ? (
+                <DropdownItem
+                  className="font-inter"
+                  startContent={
+                    <UserRoundPen className="size-4" />
+                  }
+                  onClick={() => { handleSelectedData('info') }}>
+                  Alterar info
+                </DropdownItem>
+              ) : (
+                <DropdownItem
+                  className="hidden font-inter"
+                  startContent={
+                    <Mail className="size-4" />
+                  }
+                  onClick={() => { handleSelectedData('info') }}>
+                  Alterar info
+                </DropdownItem>
+              )}
 
-        {selectedData !== "email" ? (
-          <DropdownItem
-            className="font-inter"
-            startContent={
-              <Mail className="size-4" />
-            }
-            onClick={() => { handleSelectedData('email') }}>
-            Alterar E-mail
-          </DropdownItem>
-        ) : (
-          <DropdownItem
-            className="hidden font-inter"
-            startContent={
-              <Mail className="size-4" />
-            }
-            onClick={() => { handleSelectedData('email') }}>
-            Alterar E-mail
-          </DropdownItem>       
-        )}
+              {selectedData !== "email" ? (
+                <DropdownItem
+                  className="font-inter"
+                  startContent={
+                    <Mail className="size-4" />
+                  }
+                  onClick={() => { handleSelectedData('email') }}>
+                  Alterar E-mail
+                </DropdownItem>
+              ) : (
+                <DropdownItem
+                  className="hidden font-inter"
+                  startContent={
+                    <Mail className="size-4" />
+                  }
+                  onClick={() => { handleSelectedData('email') }}>
+                  Alterar E-mail
+                </DropdownItem>
+              )}
 
-        {selectedData !== "password" ? (
-          <DropdownItem
-            className="font-inter"
-            startContent={
-              <KeyRound className="size-4" />
-            }
-            onClick={() => { handleSelectedData('password') }}>
-            Alterar senha
-          </DropdownItem>
-        ) : (
-          <DropdownItem
-            className="hidden font-inter"
-            startContent={
-              <KeyRound className="size-4" />
-            }
-            onClick={() => { handleSelectedData('password') }}>
-            Alterar senha
-          </DropdownItem>       
-        )}
-                
+              {selectedData !== "password" ? (
+                <DropdownItem
+                  className="font-inter"
+                  startContent={
+                    <KeyRound className="size-4" />
+                  }
+                  onClick={() => { handleSelectedData('password') }}>
+                  Alterar senha
+                </DropdownItem>
+              ) : (
+                <DropdownItem
+                  className="hidden font-inter"
+                  startContent={
+                    <KeyRound className="size-4" />
+                  }
+                  onClick={() => { handleSelectedData('password') }}>
+                  Alterar senha
+                </DropdownItem>
+              )}
+
             </DropdownMenu>
           </Dropdown>
         </div>
@@ -377,7 +392,7 @@ export const BaseUserShow = (props: userData) => {
                   label='Usuário'
                   placeholder="ex: nickname"
                   className="font-inter font-medium w-full"
-                  defaultValue={props.user?.nickname}
+                  value={nickname}
                   onChange={(e: React.BaseSyntheticEvent) => { setNickname(e.target.value) }}
                 ></Input>
               </div>
@@ -389,7 +404,7 @@ export const BaseUserShow = (props: userData) => {
                   label="Instituto"
                   className="font-inter font-medium w-5/6"
                   name="campus"
-                  defaultSelectedKeys={[props.user.campus]}
+                  selectedKeys={[campus]}
                   onChange={(e: React.BaseSyntheticEvent) => { setCampus(e.target.value) }}
                   value={campus}>
                   {institutosFederaisPorEstado.map((instituto) => (

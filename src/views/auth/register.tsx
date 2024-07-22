@@ -126,7 +126,7 @@ export const RegisterPage = () => {
     e.preventDefault()
 
     try {
-      const response = await axios.post("https://crush-api.vercel.app/auth/register", formData)
+      const response = await axios.post("https://crushapi-4ped.onrender.com/auth/register", formData)
 
       if (response.data.isRegistered) {
         window.location.href = "/"
@@ -135,8 +135,6 @@ export const RegisterPage = () => {
     } catch (error) {
       if (axios.isAxiosError(error)) {
         const messageError = error;
-
-        console.log(messageError.response?.data.message);
 
         setMessageError(messageError.response?.data.message ? messageError.response.data.message : "Verifique sua conexão")
       }

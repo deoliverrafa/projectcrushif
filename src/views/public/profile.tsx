@@ -7,9 +7,16 @@ import { Loading } from './../../components/loading.tsx';
 import { getUserData } from "../../utils/getUserData";
 
 // CREATE - INTERFACE //
+interface User {
+  _id: string
+  nickname: string
+  email: string
+  campus: string
+  avatar: string
+}
 
 const ProfilePage = () => {
-  const userData = getUserData();
+  const userData: User | null = getUserData();
 
   return (
     <div className="w-full h-svh flex flex-col">
