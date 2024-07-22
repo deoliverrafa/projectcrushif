@@ -162,7 +162,7 @@ export const NavBar = (props: userData) => {
         <Profile 
           name={props.user?.nickname ? props.user.nickname : ""} 
           email={props.user?.email ? props.user.email : ""}
-          image={props.avatarPath ? props.avatarPath : ""}
+          avatar={props.avatarPath ? props.avatarPath : ""}
         />
       </NavbarContent>
     </Navbar>
