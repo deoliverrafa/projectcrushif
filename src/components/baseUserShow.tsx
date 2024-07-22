@@ -11,7 +11,6 @@ import {
   DropdownItem,
   DropdownMenu,
   DropdownTrigger,
-  DropdownSection,
   Input,
   Card,
   CardHeader,
@@ -33,10 +32,6 @@ import {
   KeyRound
 } from 'lucide-react';
 import {
-  PencilIcon,
-  EmailIcon,
-  PasswordIcon,
-  PersonIcon,
   EyeInvisibleIcon,
   EyeIcon
 } from './../icons/icons.tsx';

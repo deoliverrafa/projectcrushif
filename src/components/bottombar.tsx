@@ -21,7 +21,7 @@ interface bottomProps {
 }
 
 // COMPONENT - BOTTOM BAR //
-export const BottomBar = () => {
+export const BottomBar = (props: bottomProps) => {
   // FUNCTION - LIBRARYS //
   
   // FUNCTION - USE STATES //
@@ -32,7 +32,7 @@ export const BottomBar = () => {
     <Navbar
       isBordered={false}
       isBlurred={true}
-      className="border-t-1 border-default-100 flex md:hidden justify-around bottom-0 left-0"
+      className={`border-t-1 border-default-100 flex md:hidden justify-around bottom-0 left-0 ${props.className}`}
     >
       {/* MENU - NAV LINKS */}
       <NavLink to="/">

@@ -11,12 +11,6 @@ import {
   NavbarMenuToggle,
   NavbarContent,
   NavbarItem,
-  DropdownItem,
-  DropdownTrigger,
-  Dropdown,
-  DropdownMenu,
-  DropdownSection,
-  Avatar,
   Link,
   Image
 } from "@nextui-org/react";
