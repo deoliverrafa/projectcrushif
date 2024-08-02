@@ -295,9 +295,9 @@ export const BaseUserShow = (props: userData) => {
               >
                 <div className="flex flex-row items-center space-x-2">
                   <div className="flex relative">
-                    <div class="flex absolute  right-0 bottom-0 h-2 w-2 z-10">
-                      <span class="animate-ping bg-success rounded-full opacity-75 inline-flex absolute h-full w-full"></span>
-                      <span class="bg-success rounded-full inline-flex relative h-2 w-2"></span>
+                    <div className="flex absolute  right-0 bottom-0 h-2 w-2 z-10">
+                      <span className="animate-ping bg-success rounded-full opacity-75 inline-flex absolute h-full w-full"></span>
+                      <span className="bg-success rounded-full inline-flex relative h-2 w-2"></span>
                     </div>
                     <Avatar
                       size="sm"

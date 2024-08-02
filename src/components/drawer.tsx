@@ -6,7 +6,6 @@ import {
   NavbarMenu,
   NavbarMenuItem,
   Button,
-  Badge
 } from '@nextui-org/react';
 
 // IMPORT - ICONS //

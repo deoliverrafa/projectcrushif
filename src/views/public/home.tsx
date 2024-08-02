@@ -9,17 +9,17 @@ import { BottomBar } from "../../components/bottombar";
 import { Loading } from "./../../components/loading.tsx";
 import { ToastCookies } from './../../components/cookies.tsx';
 import { PublishButton } from './../../components/floatingButton.tsx';
-import { 
-  CardPost, 
-  ModalPost
+import {
+    CardPost,
+    ModalPost
 } from "../../components/card";
 import {
-  Button
+    Button
 } from '@nextui-org/react';
 
 // IMPORT - ICONS //
 import {
-  CircleChevronDown
+    CircleChevronDown
 } from 'lucide-react';
 
 const localAvatarPath = localStorage.getItem('avatar') ?? "";
@@ -47,7 +47,7 @@ interface userData {
 }
 
 export default function HomePage() {
-
+    
     const [userData, setUserData] = useState<userData | null>(null);
     const [finishedPosts, setFinishedPosts] = useState(false);
     const [posts, setPosts] = useState<CardProps[]>([]);
@@ -119,34 +119,34 @@ export default function HomePage() {
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
     }, [loading, limit, finishedPosts]);
-    
-    {/* FUNCTION - MODAL POST */}
+
+    {/* FUNCTION - MODAL POST */ }
     const [openModalPost, setOpenModalPost] = useState(false);
     const [selectedImage, setSelectedImage] = useState('');
     const [selectedText, setSelectedText] = useState('');
     const [selectedReference, setSelectedReference] = useState('');
     const [saveNickname, setSaveNickName] = useState('');
-    const [saveIsAnonymous, setSaveIsAnonymous] = useState(null);
+    const [saveIsAnonymous, setSaveIsAnonymous] = useState(false);
     const [saveAvatar, setSaveAvatar] = useState('');
-    
-    const handleModalPost = (image, text, reference, nickname, anonymous, avatar) => {
-      setSelectedImage(image);
-      setSelectedText(text);
-      setSelectedReference(reference);
-      setSaveNickName(nickname);
-      setSaveIsAnonymous(anonymous);
-      setSaveAvatar(avatar);
-      setOpenModalPost(true);
+
+    const handleModalPost = (image: string, text: string, reference: string, nickname: string, anonymous: boolean, avatar: string) => {
+        setSelectedImage(image);
+        setSelectedText(text);
+        setSelectedReference(reference);
+        setSaveNickName(nickname);
+        setSaveIsAnonymous(anonymous);
+        setSaveAvatar(avatar);
+        setOpenModalPost(true);
     };
-    
+
     const handleModalPostClose = () => {
-      setSelectedImage('');
-      setSelectedText('');
-      setSelectedReference('');
-      setSaveNickName('');
-      setSaveIsAnonymous(null);
-      setSaveAvatar('');
-      setOpenModalPost(false);
+        setSelectedImage('');
+        setSelectedText('');
+        setSelectedReference('');
+        setSaveNickName('');
+        setSaveIsAnonymous(false);
+        setSaveAvatar('');
+        setOpenModalPost(false);
     };
 
     return (
@@ -174,30 +174,32 @@ export default function HomePage() {
                                 handlePost={() => handleModalPost(post.photoURL, post.content, post.references, post.nickname, post.isAnonymous, post.userAvatar)}
                             />
                         ))}
-                        
-                    {openModalPost && (
-                      <ModalPost
-                      photoURL={selectedImage}
-                      content={selectedText}
-                      references={selectedReference}
-                      nickname={saveNickname}
-                      isAnonymous={saveIsAnonymous}
-                      userAvatar={saveAvatar}
-                      handlePostClose={ handleModalPostClose} 
-                      />
-                    )}
+
+                        {openModalPost && (
+                            <ModalPost
+                                photoURL={selectedImage}
+                                content={selectedText}
+                                references={selectedReference}
+                                nickname={saveNickname}
+                                isAnonymous={saveIsAnonymous}
+                                userAvatar={saveAvatar}
+                                email={userData.email}
+                                campus={userData.campus}
+                                handlePostClose={() => handleModalPostClose()}
+                            />
+                        )}
                         {loading && <Loading />}
                     </main>
                     <div className="mt-10"></div>
                     <div className="flex flex-col justify-center items-center">
-                      <Button 
-                        className="animate-bounce"
-                        color="primary"
-                        variant="flat"
-                        isIconOnly={true}
-                      >
-                      <CircleChevronDown   />
-                      </Button>
+                        <Button
+                            className="animate-bounce"
+                            color="primary"
+                            variant="flat"
+                            isIconOnly={true}
+                        >
+                            <CircleChevronDown />
+                        </Button>
                     </div>
                     <PublishButton />
                     <BottomBar className="appearance-in" />

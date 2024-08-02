@@ -8,7 +8,6 @@ import { ptBR } from "date-fns/locale";
 // IMPORT - COMPONENTS //
 import {
   Avatar,
-  Badge,
   Image,
   Modal,
   ModalContent,
@@ -41,14 +40,14 @@ import {
 } from 'lucide-react';
 
 // IMPORT - SCRIPTS //
-import { getUserData } from './../utils/getUserData.tsx';
+// import { getUserData } from './../utils/getUserData.tsx';
 
 // CREATE - INTERFACES //
 interface CardProps {
   className?: string;
   hiddenProps?: boolean;
-  handlePost?: string;
-  handlePostClose?: string;
+  handlePost?: () => void;
+  handlePostClose?: () => void;
   userId?: string;
   _id?: string;
   nickname: string;
@@ -71,13 +70,13 @@ interface UserData {
 export const CardPost = (props: CardProps) => {
   const [userData, setUserData] = useState<UserData>();
   const [formattedData, setFormattedData] = useState('');
-  
+
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        
+
         const response = await axios.get(`https://crush-api.vercel.app/user/id/${props.userId}`);
-        
+
         setUserData(response.data.userFinded);
       } catch (error) {
         console.error('Erro ao buscar dados do usuário:', error);
@@ -100,15 +99,15 @@ export const CardPost = (props: CardProps) => {
 
   return (
     <Card
-      radius="lg" 
+      radius="lg"
       className={`flex flex-col w-11/12 max-w-[768px] mt-5 ${props.className}`}
     >
       <CardHeader className="justify-between items-center">
         <Link to="/profile" className="flex space-x-2">
           <div className="flex relative">
-            <div class="flex absolute  right-0 bottom-0 h-2 w-2 z-10">
-              <span class="animate-ping bg-success rounded-full opacity-75 inline-flex absolute h-full w-full"></span>
-              <span class="bg-success rounded-full inline-flex relative h-2 w-2"></span>
+            <div className="flex absolute  right-0 bottom-0 h-2 w-2 z-10">
+              <span className="animate-ping bg-success rounded-full opacity-75 inline-flex absolute h-full w-full"></span>
+              <span className="bg-success rounded-full inline-flex relative h-2 w-2"></span>
             </div>
             <Avatar
               as="button"
@@ -130,10 +129,10 @@ export const CardPost = (props: CardProps) => {
             )}
           </div>
         </Link>
-        <Button 
-          radius="full" 
-          size="sm" 
-          className={`${props.hiddenProps === true ? 'hidden' : ''} font-poppins tracking-widest font-bold uppercase`} 
+        <Button
+          radius="full"
+          size="sm"
+          className={`${props.hiddenProps === true ? 'hidden' : ''} font-poppins tracking-widest font-bold uppercase`}
           color="primary"
           variant="flat"
         >
@@ -178,7 +177,7 @@ export const CardPost = (props: CardProps) => {
         <Divider />
         {formattedData && (
           <div className="flex flex-row justify-between items-center py-2 w-full">
-            <Button 
+            <Button
               color="primary"
               variant="flat"
               radius="full"
@@ -187,7 +186,7 @@ export const CardPost = (props: CardProps) => {
             >
               <p className="font-poppins font-semibold">Curtir</p>
             </Button>
-            <Button 
+            <Button
               color="primary"
               variant="flat"
               radius="full"
@@ -196,7 +195,7 @@ export const CardPost = (props: CardProps) => {
             >
               <p className="font-poppins font-semibold">Comentar</p>
             </Button>
-            <Button 
+            <Button
               color="primary"
               variant="flat"
               radius="full"
@@ -213,19 +212,19 @@ export const CardPost = (props: CardProps) => {
 };
 
 export const ModalPost = (props: CardProps) => {
-  const userData: User | null = getUserData();
-  
+  // const userData = getUserData();
+
   return (
     <Modal
       className="sm:w-full md:min-w-[500px]"
-      placement="bottom-center" 
+      placement="bottom-center"
       backdrop="blur"
       scrollBehavior="inside"
-      isOpen={true} 
+      isOpen={true}
     >
       <ModalContent>
-        <Card 
-          className="sm:w-full md:min-w-[500px]" 
+        <Card
+          className="sm:w-full md:min-w-[500px]"
           radius="lg"
         >
           <CardHeader className="justify-between items-center">
@@ -237,12 +236,12 @@ export const ModalPost = (props: CardProps) => {
             >
               <X />
             </Button>
-            
+
             <Dropdown>
               <DropdownTrigger>
                 <AlignRight />
               </DropdownTrigger>
-              
+
               <DropdownMenu>
                 <DropdownItem
                   href="/profile"
@@ -250,22 +249,22 @@ export const ModalPost = (props: CardProps) => {
                 >
                   <div className="flex flex-row items-center space-x-2">
                     <div className="flex relative">
-                      <div class="flex absolute  right-0 bottom-0 h-2 w-2 z-10">
-                        <span class="animate-ping bg-success rounded-full opacity-75 inline-flex absolute h-full w-full"></span>
-                        <span class="bg-success rounded-full inline-flex relative h-2 w-2"></span>
+                      <div className="flex absolute  right-0 bottom-0 h-2 w-2 z-10">
+                        <span className="animate-ping bg-success rounded-full opacity-75 inline-flex absolute h-full w-full"></span>
+                        <span className="bg-success rounded-full inline-flex relative h-2 w-2"></span>
                       </div>
-                    <Avatar
-                      size="sm"
-                      name={!props.isAnonymous ? props.nickname : 'Anônimo'}
-                      src={!props.isAnonymous ? props.userAvatar : ''}
-                    />
-                  </div>
-                  <div className="flex flex-row items-center space-x-1">
-                    <p className="font-inter font-semibold">
-                      {!props.isAnonymous ? props.nickname : 'Anônimo'}
-                    </p>
-                    <BadgeCheck className="text-success size-3" />
-                  </div>
+                      <Avatar
+                        size="sm"
+                        name={!props.isAnonymous ? props.nickname : 'Anônimo'}
+                        src={!props.isAnonymous ? props.userAvatar : ''}
+                      />
+                    </div>
+                    <div className="flex flex-row items-center space-x-1">
+                      <p className="font-inter font-semibold">
+                        {!props.isAnonymous ? props.nickname : 'Anônimo'}
+                      </p>
+                      <BadgeCheck className="text-success size-3" />
+                    </div>
                   </div>
                 </DropdownItem>
                 <DropdownItem
@@ -310,14 +309,14 @@ export const ModalPost = (props: CardProps) => {
           </CardHeader>
           <Divider />
           {props.photoURL && (
-          <CardBody className="pb-0">
-            <Image
-              className="object-contain max-h-[500px] w-[500px]"
-              radius="lg"
-              src={props.photoURL}
-              alt="Imagem Post"
-            />
-          </CardBody>
+            <CardBody className="pb-0">
+              <Image
+                className="object-contain max-h-[500px] w-[500px]"
+                radius="lg"
+                src={props.photoURL}
+                alt="Imagem Post"
+              />
+            </CardBody>
           )}
           <CardFooter className="flex-col justify-start items-start">
             <div className="flex flex-row items-center mb-0.5 w-full h-full">

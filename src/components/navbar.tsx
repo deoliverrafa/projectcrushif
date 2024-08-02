@@ -245,9 +245,9 @@ export const MenuBar = () => {
               size="sm"
               startContent={<BellRing />}
               endContent={
-                <div class="flex relative h-3 w-3">
-                  <span class="animate-ping bg-info rounded-full opacity-75 inline-flex absolute h-full w-full"></span>
-                  <span class="bg-info rounded-full inline-flex relative h-3 w-3"></span>
+                <div className="flex relative h-3 w-3">
+                  <span className="animate-ping bg-info rounded-full opacity-75 inline-flex absolute h-full w-full"></span>
+                  <span className="bg-info rounded-full inline-flex relative h-3 w-3"></span>
                 </div>
               }
             >
