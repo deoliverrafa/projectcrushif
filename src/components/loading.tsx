@@ -36,6 +36,7 @@ export const Loading = () => {
           radius="lg"
         >
           <CircularProgress 
+            className="font-inter font-medium"
             color="primary" 
             label="Carregando..."
             value={value}
