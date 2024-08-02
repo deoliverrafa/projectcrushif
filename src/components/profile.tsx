@@ -57,19 +57,17 @@ export const Profile = ({ name, email, avatar }: profile) => {
           showDivider={true}
         >
           <div className="flex flex-row items-center space-x-2">
-            <Badge
-              content=""
-              color="success"
-              shape="circle"
-              size="sm"
-              placement="bottom-right"
-            >
+            <div className="flex relative">
+              <div class="flex absolute  right-0 bottom-0 h-2 w-2 z-10">
+                <span class="animate-ping bg-success rounded-full opacity-75 inline-flex absolute h-full w-full"></span>
+                <span class="bg-success rounded-full inline-flex relative h-2 w-2"></span>
+              </div>
               <Avatar
                 size="sm"
                 name={name}
                 src={avatar}
               />
-            </Badge>
+            </div>
             <div className="flex flex-col">
               <div className="flex flex-row items-center space-x-1">
                 <p className="font-inter font-semibold">
@@ -82,49 +80,31 @@ export const Profile = ({ name, email, avatar }: profile) => {
           </div>
         </DropdownItem>
         <DropdownItem
-          className="font-inter"
-          href="/notifications"
-          startContent={<BellRing className="size-4" />}
-          endContent={
-            <Badge
-              children
-              content={2}
-              className="font-inter"
-              color="primary"
-              variant="faded"
-              showOutline={false}
-            />
-          }
-        >
-          Notificações
-        </DropdownItem>
-        <DropdownItem
-          className="font-inter"
           href="/profile/edit"
           startContent={<PencilRuler className="size-4" />}
         >
-          Editar
+          <p className="font-inter font-medium">Editar</p>
         </DropdownItem>
         <DropdownItem
           className="font-inter"
           startContent={<Share2 className="size-4" />}
         >
-          Compartilhar
+          <p className="font-inter font-medium">Compartilhar</p>
         </DropdownItem>
         <DropdownItem
           className="font-inter"
           showDivider={true}
           startContent={<Zap className="size-4" />}
         >
-          Upgrade
+          <p className="font-inter font-medium">Upgrade</p>
         </DropdownItem>
         <DropdownItem
-          className="font-inter"
+          className="text-danger font-inter"
           href="/auth/login"
           onClick={logOutHandle}
           startContent={<LogOut className="size-4" />}
         >
-          Deslogar
+          <p className="font-inter font-medium">Deslogar</p>
         </DropdownItem>
       </DropdownMenu>
     </Dropdown>

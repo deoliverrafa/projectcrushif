@@ -18,8 +18,11 @@ import './styles/main.css'
 
 // IMPORT - ROUTES //
 const HomePage = React.lazy(() => import('./views/public/home.tsx'));
+const SearchPage = React.lazy(() => import('./views/public/search.tsx'));
 const EventsPage = React.lazy(() => import('./views/public/events.tsx'));
 const MatchPage = React.lazy(() => import('./views/public/match.tsx'));
+const SettingsPage = React.lazy(() => import('./views/public/settings.tsx'));
+const SupportPage = React.lazy(() => import('./views/public/support.tsx'));
 const NotificationsPage = React.lazy(() => import('./views/public/notifications.tsx'));
 const PublishPage = React.lazy(() => import('./views/public/publish.tsx'));
 const ProfilePage = React.lazy(() => import('./views/public/profile.tsx'));
@@ -39,8 +42,11 @@ const App = () => {
             <Router>
               <Routes>
                 <Route path='/' element={<HomePage />} />
+                <Route path='/search' element={<SearchPage />} />
                 <Route path='/events' element={<EventsPage />} />
                 <Route path='/match' element={<MatchPage />} />
+                <Route path='/settings' element={<SettingsPage />} />
+                <Route path='/support' element={<SupportPage />} />
                 <Route path='/notifications' element={<NotificationsPage />} />
                 <Route path='/publish' element={<PublishPage />} />
                 <Route path='/profile' element={<ProfilePage />} />

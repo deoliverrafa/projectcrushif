@@ -11,7 +11,7 @@ const EditProfilePage = () => {
 
     return (
       <div className="w-full h-svh flex flex-col">
-      <NavBarReturn title="Perfil" />
+      <NavBarReturn title="Editar Perfil" />
       {userData ? (
         <main className="flex flex-col h-full w-full justify-center items-center">
           <BaseUserShow user={userData} />

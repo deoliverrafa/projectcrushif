@@ -1,9 +1,10 @@
 // IMPORT - LIBRARYS //
-import React from 'react';
+import * as React from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 
 // IMPORT - COMPONENTS //
 import { Profile } from './profile.tsx';
+import { Drawer } from './drawer.tsx';
 import {
   Button,
   Navbar,
@@ -21,7 +22,13 @@ import {
   Search,
   HeartHandshake,
   CalendarDays,
-  ArrowLeft
+  ArrowLeft,
+  CircleUserRound,
+  BellRing,
+  Heart,
+  Crown,
+  Settings,
+  BadgeHelp
 } from 'lucide-react';
 
 // IMPORT - IMAGES //
@@ -44,7 +51,8 @@ interface userData {
 
 // COMPONENT - NAVBAR //
 export const NavBar = (props: userData) => {
-
+  const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+  
   return (
     <Navbar
       position="static"
@@ -53,6 +61,7 @@ export const NavBar = (props: userData) => {
     >
       <NavbarContent justify="start">
         <NavbarMenuToggle
+          aria-label={isMenuOpen ? "Close menu" : "Open menu"}
           className="flex md:hidden"
         />
         <Link href="/">
@@ -165,6 +174,8 @@ export const NavBar = (props: userData) => {
           avatar={props.avatarPath ? props.avatarPath : ""}
         />
       </NavbarContent>
+      
+      <Drawer />
     </Navbar>
   );
 };
@@ -196,7 +207,110 @@ export const NavBarReturn: React.FC<NavBarReturnProps> = ({ title }) => {
         </NavbarItem>
 
         <NavbarItem>
-          <p className="font-poppins font-semibold">{title}</p>
+          <p className="font-poppins font-semibold uppercase tracking-widest text-xl">{title}</p>
+        </NavbarItem>
+      </NavbarContent>
+    </Navbar>
+  );
+};
+
+export const MenuBar = () => {
+  return (
+    <Navbar
+      className="hidden md:flex"
+      position="static"
+      shouldHideOnScroll
+      isBordered={true}
+    >
+      <NavbarContent justify="start">
+        <NavbarItem>
+          <Link href="/profile">
+            <Button
+              variant="light"
+              color="default"
+              radius="full"
+              size="sm"
+              startContent={<CircleUserRound />}
+            >
+              <p className="font-poppins font-semibold">Perfil</p>
+            </Button>
+          </Link>
+        </NavbarItem>
+        <NavbarItem>
+          <Link href="/notifications">
+            <Button
+              variant="light"
+              color="default"
+              radius="full"
+              size="sm"
+              startContent={<BellRing />}
+              endContent={
+                <div class="flex relative h-3 w-3">
+                  <span class="animate-ping bg-info rounded-full opacity-75 inline-flex absolute h-full w-full"></span>
+                  <span class="bg-info rounded-full inline-flex relative h-3 w-3"></span>
+                </div>
+              }
+            >
+              <p className="font-poppins font-semibold">Notificações</p>
+            </Button>
+          </Link>
+        </NavbarItem>
+      </NavbarContent>
+      
+      <NavbarContent justify="center">
+        <NavbarItem>
+          <Link href="/liked">
+            <Button
+              variant="light"
+              color="default"
+              radius="full"
+              size="sm"
+              startContent={<Heart />}
+            >
+              <p className="font-poppins font-semibold">Curtidos</p>
+            </Button>
+          </Link>
+        </NavbarItem>
+        <NavbarItem>
+          <Link href="/favorite">
+            <Button
+              variant="light"
+              color="default"
+              radius="full"
+              size="sm"
+              startContent={<Crown />}
+            >
+              <p className="font-poppins font-semibold">Favoritos</p>
+            </Button>
+          </Link>
+        </NavbarItem>
+      </NavbarContent>
+      <NavbarContent justify="end">
+        <NavbarItem>
+          <Link href="/settings">
+            <Button
+              variant="light"
+              color="default"
+              radius="full"
+              size="sm"
+              startContent={<Settings />}
+            >
+              <p className="font-poppins font-semibold">Configurações</p>
+            </Button>
+          </Link>
+        </NavbarItem>
+        <NavbarItem>
+          <Link href="/support">
+            <Button
+              variant="light"
+              color="default"
+              radius="full"
+              size="sm"
+              startContent={<BadgeHelp />}
+            >
+              <p className="font-poppins font-semibold">Suporte</p>
+            </Button>
+          </Link>
         </NavbarItem>
       </NavbarContent>
     </Navbar>

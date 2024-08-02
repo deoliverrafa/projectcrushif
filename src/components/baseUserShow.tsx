@@ -29,7 +29,7 @@ import {
   BadgeCheck,
   Mail,
   UserRoundPen,
-  KeyRound
+  KeyRound,
 } from 'lucide-react';
 import {
   EyeInvisibleIcon,
@@ -239,15 +239,15 @@ export const BaseUserShow = (props: userData) => {
           <div className="flex flex-row gap-5 items-center">
             <label htmlFor="avatarInput">
               <Badge
-                content={<ImageUp className="size-4" />}
+                content={<ImageUp className="animate-bounce size-4" />}
                 color="primary"
+                variant="faded"
                 className="p-1"
                 shape="rectangle"
                 showOutline={false}>
                 <Avatar
                   size="lg"
                   radius="lg"
-                  isBordered={true}
                   className="cursor-pointer"
                   color="primary"
                   name={nickname}
@@ -263,8 +263,13 @@ export const BaseUserShow = (props: userData) => {
               accept="image/*"
               onChange={handleImageChange} />
             <div className="flex flex-col justify-center gap-1 w-full">
-              <p className="font-inter text-xs font-semibold leading-none">{nickname}</p>
-              <p className="font-inter text-xs tracking-tight text-default">@{nickname}</p>
+              <div className="flex flex-row items-center space-x-1">
+                <p className="font-inter font-semibold">
+                  {nickname}
+                </p>
+                <BadgeCheck className="text-success size-3" />
+              </div>
+              <p className="font-inter text-xs tracking-tight text-default">{email}</p>
             </div>
 
             <div className="mt-3">
@@ -289,18 +294,17 @@ export const BaseUserShow = (props: userData) => {
                 showDivider={true}
               >
                 <div className="flex flex-row items-center space-x-2">
-                  <Badge
-                    content=""
-                    color="success"
-                    shape="circle"
-                    size="sm"
-                    placement="bottom-right"
-                  >
+                  <div className="flex relative">
+                    <div class="flex absolute  right-0 bottom-0 h-2 w-2 z-10">
+                      <span class="animate-ping bg-success rounded-full opacity-75 inline-flex absolute h-full w-full"></span>
+                      <span class="bg-success rounded-full inline-flex relative h-2 w-2"></span>
+                    </div>
                     <Avatar
                       size="sm"
+                      name={props.user?.nickname}
                       src={props.user?.avatar}
                     />
-                  </Badge>
+                  </div>
                   <div className="flex flex-col">
                     <div className="flex flex-row items-center space-x-1">
                       <p className="font-inter font-semibold">
@@ -501,8 +505,8 @@ export const BaseUserShow = (props: userData) => {
                   <span className="font-medium">Tudo Certo!</span> {successMessage}
                 </Alert>
               ) : errorMessage ? (
-                <Alert color="failure">
-                  <span className="font-medium">Erro!!</span> {errorMessage}
+                <Alert className="text-danger font-inter uppercase">
+                  <span className="font-semibold">Error: </span> {errorMessage}
                 </Alert>
               ) : null
             }

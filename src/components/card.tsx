@@ -1,5 +1,6 @@
 // IMPORT - LIBRARYS //
 import { useEffect, useState } from "react";
+import { Link } from 'react-router-dom';
 import axios from "axios";
 import { formatDistanceToNow, parseISO } from "date-fns";
 import { ptBR } from "date-fns/locale";
@@ -9,12 +10,18 @@ import {
   Avatar,
   Badge,
   Image,
+  Modal,
+  ModalContent,
   Card,
   CardHeader,
   CardBody,
   CardFooter,
   Button,
-  Divider
+  Divider,
+  Dropdown,
+  DropdownTrigger,
+  DropdownMenu,
+  DropdownItem
 } from "@nextui-org/react";
 
 // IMPORT - ICONS //
@@ -22,13 +29,26 @@ import {
   BadgeCheck,
   Heart,
   MessageCircleHeart,
-  HandHeart
+  HandHeart,
+  Share2,
+  X,
+  AlignRight,
+  ShieldX,
+  Flag,
+  Crown,
+  UserRoundPlus,
+  CircleUserRound
 } from 'lucide-react';
+
+// IMPORT - SCRIPTS //
+import { getUserData } from './../utils/getUserData.tsx';
 
 // CREATE - INTERFACES //
 interface CardProps {
   className?: string;
   hiddenProps?: boolean;
+  handlePost?: string;
+  handlePostClose?: string;
   userId?: string;
   _id?: string;
   nickname: string;
@@ -84,27 +104,23 @@ export const CardPost = (props: CardProps) => {
       className={`flex flex-col w-11/12 max-w-[768px] mt-5 ${props.className}`}
     >
       <CardHeader className="justify-between items-center">
-        <div className="flex gap-5">
-          <Badge
-            content=""
-            color="success"
-            size="sm"
-            placement="bottom-right"
-            shape="circle"
-          >
+        <Link to="/profile" className="flex space-x-2">
+          <div className="flex relative">
+            <div class="flex absolute  right-0 bottom-0 h-2 w-2 z-10">
+              <span class="animate-ping bg-success rounded-full opacity-75 inline-flex absolute h-full w-full"></span>
+              <span class="bg-success rounded-full inline-flex relative h-2 w-2"></span>
+            </div>
             <Avatar
               as="button"
-              color="primary"
               className="font-poppins uppercase"
               size="sm"
-              isBordered={true}
               name={!props.isAnonymous ? userData?.nickname : ''}
               src={!props.isAnonymous ? userData?.avatar : ''}
             />
-          </Badge>
+          </div>
           <div className="flex flex-col gap-1 items-start justify-center">
             <div className="flex flex-row items-center space-x-1">
-              <h4 className="font-inter text-xs font-semibold leading-none">
+              <h4 className="font-inter text-xs font-bold leading-none">
                 {!props.isAnonymous ? userData?.nickname : "Anônimo"}
               </h4>
               <BadgeCheck className="text-success size-3" />
@@ -113,23 +129,23 @@ export const CardPost = (props: CardProps) => {
               <h5 className="font-inter text-xs tracking-tight text-default">há {formattedData} atrás.</h5>
             )}
           </div>
-        </div>
+        </Link>
         <Button 
           radius="full" 
           size="sm" 
           className={`${props.hiddenProps === true ? 'hidden' : ''} font-poppins tracking-widest font-bold uppercase`} 
           color="primary"
-          variant="bordered"
+          variant="flat"
         >
           Seguir
         </Button>
       </CardHeader>
       <CardBody className="pb-0">
-        <div className="flex flex-col">
+        <div className="flex flex-col" onClick={props.handlePost}>
           {props.photoURL && (
             <div className="flex justify-center items-center">
               <Image
-                className="object-contain mb-3 max-h-[500px] max-w-[500px]"
+                className="object-contain mb-3 max-h-[500px] w-[500px]"
                 radius="lg"
                 src={props.photoURL}
                 alt="Imagem Post"
@@ -138,7 +154,7 @@ export const CardPost = (props: CardProps) => {
           )}
           <div className="flex flex-row items-center mb-0.5 w-full h-full">
             <h4 className="font-inter text-xs leading-none w-full h-full items-center">
-              <span className="font-semibold">
+              <span className="font-bold">
                 {!props.isAnonymous ? userData?.nickname : "Anônimo"}:
               </span>{' '}
               {props.content || ''}
@@ -154,8 +170,8 @@ export const CardPost = (props: CardProps) => {
           )}
         </div>
         <div className={`${props.hiddenProps === true ? 'hidden' : ''} flex flex-row justify-between items-center mt-0.5 w-full`}>
-          <p className="text-default font-inter tracking-tight text-xs">Ver as <span className="font-bold">{0}</span> curtidas.</p>
-          <p className="text-default font-inter tracking-tight text-xs">Ver os <span className="font-bold">{0}</span> comentários.</p>
+          <p className="text-default font-inter tracking-tight text-xs">Ver as <span className="font-semibold">{0}</span> curtidas.</p>
+          <p className="text-default font-inter tracking-tight text-xs">Ver os <span className="font-semibold">{0}</span> comentários.</p>
         </div>
       </CardBody>
       <CardFooter className="flex-col justify-start items-start">
@@ -193,5 +209,133 @@ export const CardPost = (props: CardProps) => {
         )}
       </CardFooter>
     </Card>
+  );
+};
+
+export const ModalPost = (props: CardProps) => {
+  const userData: User | null = getUserData();
+  
+  return (
+    <Modal
+      className="sm:w-full md:min-w-[500px]"
+      placement="bottom-center" 
+      backdrop="blur"
+      scrollBehavior="inside"
+      isOpen={true} 
+    >
+      <ModalContent>
+        <Card 
+          className="sm:w-full md:min-w-[500px]" 
+          radius="lg"
+        >
+          <CardHeader className="justify-between items-center">
+            <Button
+              isIconOnly
+              color="primary"
+              variant="flat"
+              onClick={props.handlePostClose}
+            >
+              <X />
+            </Button>
+            
+            <Dropdown>
+              <DropdownTrigger>
+                <AlignRight />
+              </DropdownTrigger>
+              
+              <DropdownMenu>
+                <DropdownItem
+                  href="/profile"
+                  showDivider={true}
+                >
+                  <div className="flex flex-row items-center space-x-2">
+                    <div className="flex relative">
+                      <div class="flex absolute  right-0 bottom-0 h-2 w-2 z-10">
+                        <span class="animate-ping bg-success rounded-full opacity-75 inline-flex absolute h-full w-full"></span>
+                        <span class="bg-success rounded-full inline-flex relative h-2 w-2"></span>
+                      </div>
+                    <Avatar
+                      size="sm"
+                      name={!props.isAnonymous ? props.nickname : 'Anônimo'}
+                      src={!props.isAnonymous ? props.userAvatar : ''}
+                    />
+                  </div>
+                  <div className="flex flex-row items-center space-x-1">
+                    <p className="font-inter font-semibold">
+                      {!props.isAnonymous ? props.nickname : 'Anônimo'}
+                    </p>
+                    <BadgeCheck className="text-success size-3" />
+                  </div>
+                  </div>
+                </DropdownItem>
+                <DropdownItem
+                  className="font-inter"
+                  startContent={<UserRoundPlus className="size-4" />}
+                >
+                  <p className="font-inter font-medium">Seguir</p>
+                </DropdownItem>
+                <DropdownItem
+                  className="font-inter"
+                  startContent={<CircleUserRound className="size-4" />}
+                >
+                  <p className="font-inter font-medium">Sobre está conta</p>
+                </DropdownItem>
+                <DropdownItem
+                  className="font-inter"
+                  startContent={<Share2 className="size-4" />}
+                >
+                  <p className="font-inter font-medium">Compartilhar</p>
+                </DropdownItem>
+                <DropdownItem
+                  className="font-inter"
+                  showDivider={true}
+                  startContent={<Crown className="size-4" />}
+                >
+                  <p className="font-inter font-medium">Favoritar</p>
+                </DropdownItem>
+                <DropdownItem
+                  className="text-danger font-inter"
+                  startContent={<ShieldX className="size-4" />}
+                >
+                  <p className="font-inter font-medium">Bloquear</p>
+                </DropdownItem>
+                <DropdownItem
+                  className="text-danger font-inter"
+                  startContent={<Flag className="size-4" />}
+                >
+                  <p className="font-inter font-medium">Denúnciar</p>
+                </DropdownItem>
+              </DropdownMenu>
+            </Dropdown>
+          </CardHeader>
+          <Divider />
+          {props.photoURL && (
+          <CardBody className="pb-0">
+            <Image
+              className="object-contain max-h-[500px] w-[500px]"
+              radius="lg"
+              src={props.photoURL}
+              alt="Imagem Post"
+            />
+          </CardBody>
+          )}
+          <CardFooter className="flex-col justify-start items-start">
+            <div className="flex flex-row items-center mb-0.5 w-full h-full">
+              <h4 className="font-inter text-xs leading-none w-full h-full items-center"><span className="font-bold">{!props.isAnonymous ? props.nickname : 'Anônimo'}</span>: {props.content}</h4>
+            </div>
+            <div className="flex flex-row items-center my-0.5 space-x-1 w-full">
+              <p className="text-primary font-inter tracking-tight text-xs">{props.references && "Marcações:"}</p>
+              <a className="font-inter text-primary text-xs tracking-tight break-words">
+                {props.references}
+              </a>
+            </div>
+            <div className="flex flex-row justify-between items-center mt-0.5 w-full">
+              <p className="text-default font-inter tracking-tight text-xs">Ver as <span className="font-semibold">{0}</span> curtidas.</p>
+              <p className="text-default font-inter tracking-tight text-xs">Ver os <span className="font-semibold">{0}</span> comentários.</p>
+            </div>
+          </CardFooter>
+        </Card>
+      </ModalContent>
+    </Modal>
   );
 };

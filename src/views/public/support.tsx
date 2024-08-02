@@ -13,7 +13,7 @@ import { getUserData } from "./../../utils/getUserData";
 // IMPORT - ICONS //
 import Error404 from './../../../public/images/error404.gif';
 
-const MatchPage = () => {
+const SupportPage = () => {
   const userData = getUserData();
   
   return (
@@ -32,4 +32,4 @@ const MatchPage = () => {
   );
 };
 
-export default MatchPage;
+export default SupportPage;

@@ -109,7 +109,6 @@ const LoginPage = () => {
                 <div className="flex flex-row justify-center items-center">
                   <Input
                     isClearable
-                    isRequired
                     radius="lg"
                     size="sm"
                     type="nickname"
@@ -123,7 +122,6 @@ const LoginPage = () => {
 
                 <div className="flex flex-row justify-center items-center">
                   <Input
-                    isRequired
                     radius="lg"
                     size="sm"
                     label="Senha"

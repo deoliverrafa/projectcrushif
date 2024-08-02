@@ -1,13 +1,26 @@
+// IMPORT - LIBRARYS //
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { debounce } from 'lodash';
 
-import { NavBar } from "../../components/navbar";
+// IMPORT - COMPONENTS //
+import { NavBar, MenuBar } from "../../components/navbar";
 import { BottomBar } from "../../components/bottombar";
-import { CardPost } from "../../components/card";
 import { Loading } from "./../../components/loading.tsx";
 import { ToastCookies } from './../../components/cookies.tsx';
 import { PublishButton } from './../../components/floatingButton.tsx';
+import { 
+  CardPost, 
+  ModalPost
+} from "../../components/card";
+import {
+  Button
+} from '@nextui-org/react';
+
+// IMPORT - ICONS //
+import {
+  CircleChevronDown
+} from 'lucide-react';
 
 const localAvatarPath = localStorage.getItem('avatar') ?? "";
 
@@ -106,12 +119,42 @@ export default function HomePage() {
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
     }, [loading, limit, finishedPosts]);
+    
+    {/* FUNCTION - MODAL POST */}
+    const [openModalPost, setOpenModalPost] = useState(false);
+    const [selectedImage, setSelectedImage] = useState('');
+    const [selectedText, setSelectedText] = useState('');
+    const [selectedReference, setSelectedReference] = useState('');
+    const [saveNickname, setSaveNickName] = useState('');
+    const [saveIsAnonymous, setSaveIsAnonymous] = useState(null);
+    const [saveAvatar, setSaveAvatar] = useState('');
+    
+    const handleModalPost = (image, text, reference, nickname, anonymous, avatar) => {
+      setSelectedImage(image);
+      setSelectedText(text);
+      setSelectedReference(reference);
+      setSaveNickName(nickname);
+      setSaveIsAnonymous(anonymous);
+      setSaveAvatar(avatar);
+      setOpenModalPost(true);
+    };
+    
+    const handleModalPostClose = () => {
+      setSelectedImage('');
+      setSelectedText('');
+      setSelectedReference('');
+      setSaveNickName('');
+      setSaveIsAnonymous(null);
+      setSaveAvatar('');
+      setOpenModalPost(false);
+    };
 
     return (
         <>
             {userData ? (
                 <div className="flex flex-col">
                     <NavBar user={userData} avatarPath={userData.avatar || localAvatarPath} />
+                    <MenuBar />
                     {showCookies && <ToastCookies onClick={handleHideCookies} />}
                     <main className="w-full h-full flex flex-col justify-center items-center">
                         {posts.map((post) => (
@@ -128,11 +171,34 @@ export default function HomePage() {
                                 photoURL={post.photoURL}
                                 userId={post.userId}
                                 insertAt={post.insertAt}
+                                handlePost={() => handleModalPost(post.photoURL, post.content, post.references, post.nickname, post.isAnonymous, post.userAvatar)}
                             />
                         ))}
+                        
+                    {openModalPost && (
+                      <ModalPost
+                      photoURL={selectedImage}
+                      content={selectedText}
+                      references={selectedReference}
+                      nickname={saveNickname}
+                      isAnonymous={saveIsAnonymous}
+                      userAvatar={saveAvatar}
+                      handlePostClose={ handleModalPostClose} 
+                      />
+                    )}
                         {loading && <Loading />}
                     </main>
                     <div className="mt-10"></div>
+                    <div className="flex flex-col justify-center items-center">
+                      <Button 
+                        className="animate-bounce"
+                        color="primary"
+                        variant="flat"
+                        isIconOnly={true}
+                      >
+                      <CircleChevronDown   />
+                      </Button>
+                    </div>
                     <PublishButton />
                     <BottomBar className="appearance-in" />
                 </div>

@@ -86,19 +86,23 @@ export const RegisterPage = () => {
   ];
 
   interface UserDataRegister {
+    name: string
     nickname: string
     email: string
     password: string
     birthdaydata: string
-    campus: string
+    campus: string,
+    type: string
   }
 
   const [formData, setFormData] = useState({
+    name: "",
     nickname: "",
     email: "",
     password: "",
     birthdaydata: "",
     campus: "",
+    type: "Free"
   })
 
 
@@ -110,14 +114,21 @@ export const RegisterPage = () => {
   const toggleVisibility = () => setIsVisible(!isVisible);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    setClickedButton(false);
-    const { name, value } = e.target;
+  setClickedButton(false);
+  const { name, value } = e.target;
 
+  if (name === 'email' && value && value.includes('@')) {
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: `${value}estudante.if.edu.br`
+    }));
+  } else {
     setFormData((prevData: UserDataRegister) => ({
       ...prevData,
       [name]: value
     }));
-  };
+  }
+};
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     setClickedButton(true);
@@ -174,8 +185,20 @@ export const RegisterPage = () => {
               onSubmit={handleSubmit}>
               <div className="flex flex-row justify-center items-center">
                 <Input
-                  isClearable
-                  isRequired
+                  radius="lg"
+                  size="sm"
+                  type="text"
+                  label="Nome"
+                  placeholder="ex: nome completo"
+                  className="font-inter font-medium w-5/6"
+                  name="name"
+                  onChange={handleChange}
+                  value={formData.name}
+                />
+              </div>
+              
+              <div className="flex flex-row justify-center items-center">
+                <Input
                   radius="lg"
                   size="sm"
                   type="text"
@@ -191,13 +214,11 @@ export const RegisterPage = () => {
 
               <div className="flex flex-row justify-center items-center">
                 <Input
-                  isClearable
-                  isRequired
                   radius="lg"
                   size="sm"
                   type="email"
                   label="E-mail"
-                  placeholder="ex: nickname@email.com"
+                  placeholder="ex: name@estudante.if.edu.br"
                   className="font-inter font-medium w-5/6"
                   name="email"
                   onChange={handleChange}
@@ -207,7 +228,6 @@ export const RegisterPage = () => {
 
               <div className="flex flex-row justify-center items-center">
                 <Input
-                  isRequired
                   radius="lg"
                   size="sm"
                   label="Senha"
@@ -231,7 +251,6 @@ export const RegisterPage = () => {
 
               <div className="flex flex-row justify-center items-center ">
                 <Input
-                  isRequired
                   radius="lg"
                   size="sm"
                   type="date"
@@ -246,7 +265,6 @@ export const RegisterPage = () => {
               <div className="flex flex-row justify-center items-center ">
                 <div className="flex w-full justify-center items-center ">
                   <Select
-                    isRequired
                     radius="lg"
                     size="sm"
                     label="Instituto"
