@@ -47,6 +47,7 @@ interface User {
   campus: string;
   className?: string;
   avatar: string;
+  curso: string
 }
 
 interface userData {
@@ -118,7 +119,7 @@ export const BaseUserShow = (props: userData) => {
   const [errorImage, setErrorImage] = useState("");
 
   const handleImageChange = async (event: React.BaseSyntheticEvent) => {
-    const imageFile = event.target.files[0];    
+    const imageFile = event.target.files[0];
     if (isValidImage(imageFile)) {
       setErrorImage('')
       const formData = new FormData();
@@ -148,6 +149,7 @@ export const BaseUserShow = (props: userData) => {
   const [nickname, setNickname] = useState(props.user?.nickname || "");
   const [campus, setCampus] = useState(props.user?.campus || "");
   const [email, setEmail] = useState(props.user?.email || "");
+  const [curso, setCurso] = useState(props.user?.curso)
   const [password, setPassword] = useState("");
   const [newPassword, setnewPassword] = useState("");
 
@@ -155,6 +157,7 @@ export const BaseUserShow = (props: userData) => {
     setNickname(props.user.nickname)
     setCampus(props.user.campus)
     setEmail(props.user.email)
+    setCurso(props.user.curso)
   }, [props.user])
 
   function handleSelectedData(data: string) {
@@ -170,19 +173,19 @@ export const BaseUserShow = (props: userData) => {
       const formData = new FormData
 
       formData.append('nickname', nickname)
+      formData.append('curso', curso)
       formData.append('campus', campus)
       formData.append('email', email)
       formData.append('password', password)
       formData.append('novasenha', newPassword)
 
       if (selectedData == 'info') {
-
         try {
 
-          const response = await axios.post(`http://localhost:4040/profile/changeNameCampus/${localStorage.getItem('token')}`, formData);
+          const response = await axios.post(`http://localhost:4040/profile/changeNameCampusCurso/${localStorage.getItem('token')}`, formData);
 
           if (response.data.updated == true) {
-            setdataSuccessMessage('Nome alterado com sucesso')
+            setdataSuccessMessage('Dados atualizados com Sucesso')
           } else {
             setdataErrorMessage(response.data.message)
           }
@@ -398,6 +401,18 @@ export const BaseUserShow = (props: userData) => {
                   className="font-inter font-medium w-full"
                   value={nickname}
                   onChange={(e: React.BaseSyntheticEvent) => { setNickname(e.target.value) }}
+                ></Input>
+              </div>
+
+              <div className="flex flex-row items-center w-full">
+                <Input
+                  isClearable
+                  radius="lg"
+                  label='Curso'
+                  placeholder="ex: administração"
+                  className="font-inter font-medium w-full"
+                  value={curso}
+                  onChange={(e: React.BaseSyntheticEvent) => { setCurso(e.target.value) }}
                 ></Input>
               </div>
 
