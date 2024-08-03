@@ -24,7 +24,7 @@ export function getNewPosts(skip: number, limit: number, userId: string) {
             }
 
             try {
-                const response = await axios.get(`https://crushapi.vercel.app/posts/get/${userId}/${skip}/${limit}`);
+                const response = await axios.get(`https://crush-api.vercel.app/posts/get/${userId}/${skip}/${limit}`);
                 setNewPosts(response.data.posts);
             } catch (error) {
                 console.log("Erro ao buscar postagens", error);

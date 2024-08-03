@@ -38,7 +38,7 @@ export function getUserDataById(id: string) {
                 return;
             }
 
-            const response = await axios.get(`https://crushapi.vercel.app/user/id/${id}`);
+            const response = await axios.get(`https://crush-api.vercel.app/user/id/${id}`);
 
             setUserData(response.data.userFinded);
         }

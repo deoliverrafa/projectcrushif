@@ -125,7 +125,7 @@ const PublishPage = () => {
     }
 
     try {
-      const response = await fetch(`https://crushapi.vercel.app/post/publish/${localStorage.getItem('token')}`, {
+      const response = await fetch(`https://crush-api.vercel.app/post/publish/${localStorage.getItem('token')}`, {
         method: 'POST',
         body: formData,
       });
