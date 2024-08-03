@@ -38,7 +38,7 @@ export function getUserData() {
                 return;
             }
 
-            const response = await axios.get(`http://localhost:4040/user/token/${token}`);
+            const response = await axios.get(`https://crushapi.vercel.app/user/token/${token}`);
 
             setUserData(response.data.userFinded);
         }
