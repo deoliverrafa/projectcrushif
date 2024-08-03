@@ -27,18 +27,18 @@ import { getUserData } from "./../../utils/getUserData";
 const SettingsPage = () => {
   // FUNCTION - IMPORT //
   const userData = getUserData();
-  
+
   // FUNCTION - HANDLE //
   function logOutHandle() {
     localStorage.setItem('token', "null");
   }
-  
+
   return (
     <>
       <NavBarReturn title="Configurações" />
-      
+
       <main className="flex flex-col justify-center items-center h-screen w-full">
-        <Card 
+        <Card
           className="my-2 w-11/12 max-w-[768px]"
           radius="lg"
         >
@@ -53,8 +53,8 @@ const SettingsPage = () => {
             </div>
           </CardBody>
         </Card>
-        
-        <Card 
+
+        <Card
           className="my-2 w-11/12 max-w-[768px]"
           radius="lg"
         >
@@ -65,9 +65,9 @@ const SettingsPage = () => {
           <CardBody>
             <div className="flex flex-row items-center space-x-2">
               <div className="flex relative">
-                <div class="flex absolute  right-0 bottom-0 h-2 w-2 z-10">
-                  <span class="animate-ping bg-success rounded-full opacity-75 inline-flex absolute h-full w-full"></span>
-                  <span class="bg-success rounded-full inline-flex relative h-2 w-2"></span>
+                <div className="flex absolute  right-0 bottom-0 h-2 w-2 z-10">
+                  <span className="animate-ping bg-success rounded-full opacity-75 inline-flex absolute h-full w-full"></span>
+                  <span className="bg-success rounded-full inline-flex relative h-2 w-2"></span>
                 </div>
                 <Avatar
                   size="sm"
@@ -88,8 +88,9 @@ const SettingsPage = () => {
           </CardBody>
           <Divider />
           <CardFooter className="flex-col justify-start items-start space-y-2">
-            <Link>
-              <Button 
+            <Link
+              to={'/'}>
+              <Button
                 className="font-poppins font-bold uppercase tracking-widest"
                 color="danger"
                 variant="flat"
@@ -101,7 +102,7 @@ const SettingsPage = () => {
                 Deslogar
               </Button>
             </Link>
-            <Button 
+            <Button
               className="font-poppins font-bold uppercase tracking-widest"
               color="danger"
               variant="flat"
