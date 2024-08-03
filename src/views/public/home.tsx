@@ -70,7 +70,7 @@ export default function HomePage() {
 
         async function getUserData() {
             try {
-                const response = await axios.get(`https://crush-api.vercel.app/user/token/${token}`);
+                const response = await axios.get(`http://localhost:4040/user/token/${token}`);
                 setUserData(response.data.userFinded);
             } catch (error) {
                 if (axios.isAxiosError(error) && error.response?.data.validToken === false) {
@@ -87,7 +87,7 @@ export default function HomePage() {
             try {
                 setLoading(true);
                 const token = localStorage.getItem('token');
-                const response = await axios.get(`https://crush-api.vercel.app/post/get/${token}/${skip}/${limit}`);
+                const response = await axios.get(`http://localhost:4040/post/get/${token}/${skip}/${limit}`);
 
                 if (response.data.validToken === false) {
                     window.location.href = '/auth/login';

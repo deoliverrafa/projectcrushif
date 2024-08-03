@@ -75,7 +75,7 @@ export const CardPost = (props: CardProps) => {
     const fetchUserData = async () => {
       try {
 
-        const response = await axios.get(`https://crush-api.vercel.app/user/id/${props.userId}`);
+        const response = await axios.get(`http://localhost:4040/user/id/${props.userId}`);
 
         setUserData(response.data.userFinded);
       } catch (error) {

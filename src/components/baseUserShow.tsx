@@ -124,7 +124,7 @@ export const BaseUserShow = (props: userData) => {
       const formData = new FormData();
       formData.append("avatar", imageFile);
 
-      const response = await axios.post(`https://crush-api.vercel.app/profile/updatePhoto/${localStorage.getItem('userId')}`, formData);
+      const response = await axios.post(`http://localhost:4040/profile/updatePhoto/${localStorage.getItem('userId')}`, formData);
 
       if (response.data.updated) {
         const imageUrl = URL.createObjectURL(imageFile);
@@ -179,7 +179,7 @@ export const BaseUserShow = (props: userData) => {
 
         try {
 
-          const response = await axios.post(`https://crush-api.vercel.app/profile/changeNameCampus/${localStorage.getItem('token')}`, formData);
+          const response = await axios.post(`http://localhost:4040/profile/changeNameCampus/${localStorage.getItem('token')}`, formData);
 
           if (response.data.updated == true) {
             setdataSuccessMessage('Nome alterado com sucesso')
@@ -196,7 +196,7 @@ export const BaseUserShow = (props: userData) => {
 
         try {
 
-          const response = await axios.post(`https://crush-api.vercel.app/profile/changeEmail/${localStorage.getItem('token')}`, formData)
+          const response = await axios.post(`http://localhost:4040/profile/changeEmail/${localStorage.getItem('token')}`, formData)
 
           if (response.data.updated == true) {
             setdataSuccessMessage('Email alterado com sucesso')
@@ -211,7 +211,7 @@ export const BaseUserShow = (props: userData) => {
       if (selectedData == 'password') {
 
         try {
-          const response = await axios.post(`https://crush-api.vercel.app/profile/changePassword/${localStorage.getItem('token')}`, formData)
+          const response = await axios.post(`http://localhost:4040/profile/changePassword/${localStorage.getItem('token')}`, formData)
 
           if (response.data.updated == true) {
             setdataSuccessMessage('Senha alterado com sucesso')

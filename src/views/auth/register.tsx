@@ -86,49 +86,64 @@ export const RegisterPage = () => {
   ];
 
   interface UserDataRegister {
-    name: string
     nickname: string
     email: string
     password: string
     birthdaydata: string
-    campus: string,
+    campus: string
+    userName: string
     type: string
   }
 
   const [formData, setFormData] = useState({
-    name: "",
     nickname: "",
     email: "",
     password: "",
     birthdaydata: "",
     campus: "",
+    userName: "",
     type: "Free"
   })
 
+  console.log(formData);
 
   const [messageError, setMessageError] = useState(String);
   const [clickedButton, setClickedButton] = useState(Boolean);
+  const [emailCompleted, setEmailCompleted] = useState(false);
 
   const [isVisible, setIsVisible] = useState(false);
 
   const toggleVisibility = () => setIsVisible(!isVisible);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-  setClickedButton(false);
-  const { name, value } = e.target;
+    setClickedButton(false);
+    const { name, value } = e.target;
 
-  if (name === 'email' && value && value.includes('@')) {
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      [name]: `${value}estudante.if.edu.br`
-    }));
-  } else {
-    setFormData((prevData: UserDataRegister) => ({
-      ...prevData,
-      [name]: value
-    }));
-  }
-};
+    if (value.length === 0) {
+      setEmailCompleted(false)
+    }
+
+    if (!emailCompleted) {
+      if (name == 'email' && value && value.includes('@')) {
+        setFormData((prevFormData) => ({
+          ...prevFormData,
+          [name]: `${value}estudante.if.edu.br`
+        }));
+        setEmailCompleted(true);
+      } else {
+        setFormData((prevData: UserDataRegister) => ({
+          ...prevData,
+          [name]: value
+        }));
+        setEmailCompleted(false)
+      }
+    } else {
+      setFormData((prevData: UserDataRegister) => ({
+        ...prevData,
+        [name]: value
+      }));
+    }
+  };
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     setClickedButton(true);
@@ -137,18 +152,16 @@ export const RegisterPage = () => {
     e.preventDefault()
 
     try {
-      const response = await axios.post("https://crush-api.vercel.app/auth/register", formData)
+      const response = await axios.post("http://localhost:4040/auth/register", formData)
 
       if (response.data.isRegistered) {
         window.location.href = "/"
       }
 
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        const messageError = error;
-
-        setMessageError(messageError.response?.data.message ? messageError.response.data.message : "Verifique sua conexão")
-      }
+    } catch (error: any) {
+      const messageError = error.response.data.message;
+      
+      setMessageError(messageError)
     } finally {
       setClickedButton(false)
     }
@@ -191,12 +204,12 @@ export const RegisterPage = () => {
                   label="Nome"
                   placeholder="ex: nome completo"
                   className="font-inter font-medium w-5/6"
-                  name="name"
+                  name="userName"
                   onChange={handleChange}
-                  value={formData.name}
+                  value={formData.userName}
                 />
               </div>
-              
+
               <div className="flex flex-row justify-center items-center">
                 <Input
                   radius="lg"
@@ -222,7 +235,7 @@ export const RegisterPage = () => {
                   className="font-inter font-medium w-5/6"
                   name="email"
                   onChange={handleChange}
-                  errorMessage={messageError ? (messageError == "E-mail já está em uso." ? messageError : null) : null}
+                  errorMessage={messageError ? (messageError == "Email já está em uso" ? messageError : null) : null}
                   value={formData.email} />
               </div>
 

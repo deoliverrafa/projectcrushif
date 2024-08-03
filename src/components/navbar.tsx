@@ -51,7 +51,7 @@ interface userData {
 
 // COMPONENT - NAVBAR //
 export const NavBar = (props: userData) => {
-  const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+  // const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   
   return (
     <Navbar
@@ -61,7 +61,7 @@ export const NavBar = (props: userData) => {
     >
       <NavbarContent justify="start">
         <NavbarMenuToggle
-          aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+          // aria-label={isMenuOpen ? "Close menu" : "Open menu"}
           className="flex md:hidden"
         />
         <Link href="/">

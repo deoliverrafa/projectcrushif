@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 
 // IMPORT - COMPONENTS //
 import { NavBarReturn } from "../../components/navbar";
-import { BaseUserShow } from "../../components/baseUserShow";
 import { Loading } from './../../components/loading.tsx';
 import {
   Card,
@@ -30,18 +29,8 @@ import {
 // IMPORT - SCRIPTS //
 import { getUserData } from "../../utils/getUserData";
 
-// CREATE - INTERFACE //
-interface User {
-  _id: string
-  nickname: string
-  email: string
-  campus: string
-  avatar: string
-  birthdaydata: string
-}
-
 const ProfilePage = () => {
-  const userData: User | null = getUserData();
+  const userData = getUserData();
   const [age, setAge] = React.useState<number | null>(null);
   const [selected, setSelected] = React.useState('text');
   
@@ -78,9 +67,9 @@ const ProfilePage = () => {
             {/* PARTE DE CIMA, AVATAR, POSTS, SEGUIDORES E SEGUINDO */}
             <CardHeader className="items-center space-x-4">
               <div className="flex relative">
-              <div class="flex absolute  right-0.5 bottom-0.5 h-3 w-3 z-10">
-                <span class="animate-ping bg-success rounded-full opacity-75 inline-flex absolute h-full w-full"></span>
-                <span class="bg-success rounded-full inline-flex relative h-3 w-3"></span>
+              <div className="flex absolute  right-0.5 bottom-0.5 h-3 w-3 z-10">
+                <span className="animate-ping bg-success rounded-full opacity-75 inline-flex absolute h-full w-full"></span>
+                <span className="bg-success rounded-full inline-flex relative h-3 w-3"></span>
               </div>
               <Avatar
                 size="lg"
@@ -105,7 +94,7 @@ const ProfilePage = () => {
               </div>
             </CardHeader>
             <CardBody className="pt-0 space-y-1.5">
-              <p className="font-poppins font-medium uppercase tracking-wider text-tiny">{userData.name}</p>
+              <p className="font-poppins font-medium uppercase tracking-wider text-tiny">{userData.userName}</p>
               <Chip 
                 color="default"
                 variant="flat"

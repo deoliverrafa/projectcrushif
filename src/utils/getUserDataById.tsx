@@ -4,9 +4,14 @@ import { useEffect, useState } from "react";
 interface User {
     _id: string
     nickname: string
+    userName: string
     email: string
     campus: string
     avatar: string
+    curso: string
+    birthdaydata: string
+    Nfollowing: number
+    Nfollowers: number
 }
 
 export function getUserDataById(id: string) {
@@ -17,6 +22,11 @@ export function getUserDataById(id: string) {
         campus: "",
         email: "",
         nickname: "",
+        userName: "",
+        curso: '',
+        birthdaydata: "",
+        Nfollowers: 0,
+        Nfollowing: 0,
     });
 
     useEffect(() => {
@@ -28,7 +38,7 @@ export function getUserDataById(id: string) {
                 return;
             }
 
-            const response = await axios.get(`https://crush-api.vercel.app/user/id/${id}`);
+            const response = await axios.get(`http://localhost:4040/user/id/${id}`);
 
             setUserData(response.data.userFinded);
         }
