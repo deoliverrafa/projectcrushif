@@ -36,6 +36,7 @@ interface CardProps {
     userAvatar: string;
     insertAt: string;
     userId: string;
+    type: string;
 }
 
 interface userData {
@@ -171,6 +172,7 @@ export default function HomePage() {
                                 photoURL={post.photoURL}
                                 userId={post.userId}
                                 insertAt={post.insertAt}
+                                id={post.userId}
                                 handlePost={() => handleModalPost(post.photoURL, post.content, post.references, post.nickname, post.isAnonymous, post.userAvatar)}
                             />
                         ))}

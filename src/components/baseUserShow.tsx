@@ -391,7 +391,7 @@ export const BaseUserShow = (props: userData) => {
           action="updateData"
           className="flex flex-col relative gap-3">
           {selectedData == 'info' ?
-            <div className="flex flex-row justify-between items-center gap-2">
+            <div className="flex flex-col items-center space-y-2">
               <div className="flex flex-row items-center w-full">
                 <Input
                   isClearable
@@ -403,8 +403,9 @@ export const BaseUserShow = (props: userData) => {
                   onChange={(e: React.BaseSyntheticEvent) => { setNickname(e.target.value) }}
                 ></Input>
               </div>
-
-              <div className="flex flex-row items-center w-full">
+              
+              <div className="flex flex-row justify-between items-center space-x-2">
+                <div className="flex flex-row items-center w-full">
                 <Input
                   isClearable
                   radius="lg"
@@ -418,7 +419,6 @@ export const BaseUserShow = (props: userData) => {
 
               <div className="w-full flex flex-row justify-center items-center">
                 <Select
-                  isRequired
                   radius="lg"
                   label="Instituto"
                   className="font-inter font-medium w-5/6"
@@ -434,7 +434,7 @@ export const BaseUserShow = (props: userData) => {
                   ))}
                 </Select>
               </div>
-
+              </div>
             </div>
             :
             null

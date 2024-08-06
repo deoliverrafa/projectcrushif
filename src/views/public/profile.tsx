@@ -1,9 +1,10 @@
 // IMPORT - LIBRARYS //
-import * as React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Link, useParams } from 'react-router-dom';
 
 // IMPORT - COMPONENTS //
 import { NavBarReturn } from "../../components/navbar";
+import { BaseUserShow } from "../../components/baseUserShow";
 import { Loading } from './../../components/loading.tsx';
 import {
   Card,
@@ -23,21 +24,36 @@ import {
   PenTool,
   Image,
   Film,
-  SearchX
+  SearchX,
+  BadgeCheck
 } from "lucide-react";
 
 // IMPORT - SCRIPTS //
-import { getUserData } from "../../utils/getUserData";
+import { getUserDataById } from './../../utils/getUserDataById.tsx';
+
+interface User {
+  _id: string
+  nickname: string
+  email: string
+  campus: string
+  avatar: string
+  birthdaydata: string
+  Nfollowers: number
+  Nfollowing: number
+  curso: string
+  type: string
+}
 
 const ProfilePage = () => {
-  const userData = getUserData();
-  const [age, setAge] = React.useState<number | null>(null);
-  const [selected, setSelected] = React.useState('text');
-  
+  const [userData, setUserData] = useState<User | null>(null);
+  const [age, setAge] = useState<number | null>(null);
+  const [selected, setSelected] = useState('text');
+  const { id } = useParams();
+
   const handleSelect = (item: string) => {
     setSelected(item);
   };
-  
+
   const calculateAge = (birthday: string) => {
     const today = new Date();
     const birthDate = new Date(birthday);
@@ -45,39 +61,44 @@ const ProfilePage = () => {
     const monthDifference = today.getMonth() - birthDate.getMonth();
 
     if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthDate.getDate())) {
-        age--;
-      }
-
-      return age;
-  };
-  
-  React.useEffect(() => {
-    if (userData && userData.birthdaydata) {
-      const calculatedAge = calculateAge(userData.birthdaydata);
-      setAge(calculatedAge);
+      age--;
     }
-  }, [userData]);
-  
+
+    return age;
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await getUserDataById(id);
+      setUserData(data);
+      if (data && data.birthdaydata) {
+        const calculatedAge = calculateAge(data.birthdaydata);
+        setAge(calculatedAge);
+      }
+    };
+
+    fetchData();
+  }, [id]);
+
   return (
     <div className="w-full h-svh flex flex-col">
       <NavBarReturn title="Perfil" />
       {userData ? (
         <main className="flex flex-col justify-center items-center select-none h-full w-full">
           <Card className="w-11/12 max-w-[768px]">
-            {/* PARTE DE CIMA, AVATAR, POSTS, SEGUIDORES E SEGUINDO */}
             <CardHeader className="items-center space-x-4">
               <div className="flex relative">
-              <div className="flex absolute  right-0.5 bottom-0.5 h-3 w-3 z-10">
-                <span className="animate-ping bg-success rounded-full opacity-75 inline-flex absolute h-full w-full"></span>
-                <span className="bg-success rounded-full inline-flex relative h-3 w-3"></span>
+                <div className="flex absolute right-0.5 bottom-0.5 h-3 w-3 z-10">
+                  <span className="animate-ping bg-success rounded-full opacity-75 inline-flex absolute h-full w-full"></span>
+                  <span className="bg-success rounded-full inline-flex relative h-3 w-3"></span>
+                </div>
+                <Avatar
+                  size="lg"
+                  radius="full"
+                  name={userData.nickname}
+                  src={userData.avatar}
+                />
               </div>
-              <Avatar
-                size="lg"
-                radius="full"
-                name={userData.nickname}
-                src={userData.avatar}
-              />
-            </div>
               <div className="flex flex-row justify-around items-center space-x-2 w-full">
                 <div className="flex flex-col justify-center items-center cursor-pointer space-y-1">
                   <p className="text-default font-inter font-bold text-tiny">0</p>
@@ -94,18 +115,19 @@ const ProfilePage = () => {
               </div>
             </CardHeader>
             <CardBody className="pt-0 space-y-1.5">
-              <p className="font-poppins font-medium uppercase tracking-wider text-tiny">{userData.userName}</p>
-              <Chip 
+              <p className="font-poppins font-medium uppercase tracking-wider text-tiny">{userData.name ? userData.name : 'Nome indisponível'}</p>
+              <Chip
                 color="default"
                 variant="flat"
                 size="sm"
                 startContent={<AtSign className="size-3"/>}
+                endContent={<BadgeCheck className={`${userData.type === 'Plus' ? 'text-info' : userData.type === 'Admin' ? 'text-danger' : 'text-success'} size-3`} />}
               >
-                {userData.nickname}
+                {userData.nickname ? userData.nickname : 'indisponível'}
               </Chip>
-              <p className="font-inter font-medium tracking-wider text-tiny">Idade:  {age !== null ? age : 'indisponível'} anos</p>
-              <p className="font-inter font-medium tracking-wider text-tiny">Curso: {userData.curso !== null ? userData.curso : 'indisponível'}</p>
-              <p className="font-inter font-medium tracking-wider text-tiny">Campus: {userData.campus !== null ? userData.campus : 'indisponível'}</p>
+              <p className="font-inter font-medium tracking-wider text-tiny">{age ? `Idade: ${age} anos` : 'Idade: indisponível'}</p>
+              <p className="font-inter font-medium tracking-wider text-tiny">{userData.curso ? `Curso: ${userData.curso}` : 'Curso: indisponível'}</p>
+              <p className="font-inter font-medium tracking-wider text-tiny">{userData.campus ? `Campus: ${userData.campus}` : 'Campus: indisponível'}</p>
               <div className="flex flex-row justify-between items-center py-1 space-x-1">
                 <Link to="/profile/edit">
                   <Button 
@@ -156,7 +178,6 @@ const ProfilePage = () => {
                   <Film />
                 </Button>
               </div>
-              {/* CARD PRA SER RENDERIZADO QUANDO O USUARIO N TIVER POSTAGEM */}
               <Card className="mt-6">
                 <CardBody className="flex flex-col justify-center items-center space-y-2 w-full">
                   <SearchX className="text-default size-14" />

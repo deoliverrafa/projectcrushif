@@ -18,6 +18,9 @@ import {
   BadgeCheck
 } from 'lucide-react';
 
+// IMPORT - SCRIPTS //
+import { getUserData } from "./../utils/getUserData";
+
 interface profile {
   name: string,
   email: string,
@@ -26,6 +29,8 @@ interface profile {
 
 // COMPONENT - PROFILE WITH DROPDOWN //
 export const Profile = ({ name, email, avatar }: profile) => {
+  const userData: User | null = getUserData();
+  
   // FUNCTION - HANDLE //
   function logOutHandle() {
     localStorage.setItem('token', "null");
@@ -43,6 +48,7 @@ export const Profile = ({ name, email, avatar }: profile) => {
             <Avatar
               className="h-6 w-6"
               src={avatar}
+              name={name}
             />
           }
           endContent={<ChevronDown />}
@@ -51,7 +57,7 @@ export const Profile = ({ name, email, avatar }: profile) => {
       </DropdownTrigger>
       <DropdownMenu>
         <DropdownItem
-          href="/profile"
+          href={`/profile/${userData._id}`}
           showDivider={true}
         >
           <div className="flex flex-row items-center space-x-2">

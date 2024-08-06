@@ -49,7 +49,7 @@ const App = () => {
                 <Route path='/support' element={<SupportPage />} />
                 <Route path='/notifications' element={<NotificationsPage />} />
                 <Route path='/publish' element={<PublishPage />} />
-                <Route path='/profile' element={<ProfilePage />} />
+                <Route path='/profile/:id' element={<ProfilePage />} />
                 <Route path='/profile/edit' element={<EditProfilePage />} />
                 <Route path='/auth/login' element={<LoginPage />} />
                 <Route path='/auth/register' element={<RegisterPage />} />

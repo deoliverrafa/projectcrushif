@@ -59,6 +59,7 @@ interface CardProps {
   photoURL?: string;
   userAvatar?: string
   insertAt?: string;
+  id?: string;
 }
 
 interface UserData {
@@ -103,7 +104,7 @@ export const CardPost = (props: CardProps) => {
       className={`flex flex-col w-11/12 max-w-[768px] mt-5 ${props.className}`}
     >
       <CardHeader className="justify-between items-center">
-        <Link to="/profile" className="flex space-x-2">
+        <Link to={`/profile/${props.id}`} className="flex space-x-2">
           <div className="flex relative">
             <div className="flex absolute  right-0 bottom-0 h-2 w-2 z-10">
               <span className="animate-ping bg-success rounded-full opacity-75 inline-flex absolute h-full w-full"></span>
@@ -182,7 +183,7 @@ export const CardPost = (props: CardProps) => {
               variant="flat"
               radius="full"
               size="sm"
-              startContent={<Heart />}
+              startContent={<Heart className="fill-primary" />}
             >
               <p className="font-poppins font-semibold">Curtir</p>
             </Button>
@@ -236,6 +237,8 @@ export const ModalPost = (props: CardProps) => {
             >
               <X />
             </Button>
+            
+            <Divider className="w-16"/>
 
             <Dropdown>
               <DropdownTrigger>
