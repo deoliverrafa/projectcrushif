@@ -7,6 +7,9 @@ export default {
     './index.html',
     "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}"
   ],
+  optimization: {
+    minimize: true,
+  },
   theme: {
     extend: {
       fontFamily: {

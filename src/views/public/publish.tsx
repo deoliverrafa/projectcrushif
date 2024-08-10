@@ -165,7 +165,7 @@ const PublishPage = () => {
               </Switch>
 
               <div className="flex flex-col justify-center items-center my-1 w-full">
-                <h1 className="font-inter text-default text-xs tracking-tight my-0.5">(Acompanhe seu post)</h1>
+                <h1 className="font-inter text-default text-xs tracking-wide my-0.5">(Acompanhe seu post)</h1>
                 <CardPost
                   className="my-0.5"
                   campus={cardData.campus}
@@ -181,7 +181,7 @@ const PublishPage = () => {
                 />
                 {isAnonymous && (
                   <div>
-                    <h1 className="font-inter text-default text-xs tracking-tight my-0.5">(Seu nome não aparecerá no seu post)</h1>
+                    <h1 className="font-inter text-default text-xs tracking-wide my-0.5">(Seu nome não aparecerá no seu post)</h1>
                   </div>
                 )}
               </div>

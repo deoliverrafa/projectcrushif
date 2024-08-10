@@ -25,7 +25,7 @@ import {
 export const Drawer = () => {
   return (
     <NavbarMenu
-      className="pb-16"
+      className="pb-32"
     >
       <NavLink to="/">
         {({ isActive }) => isActive ? (
@@ -311,34 +311,6 @@ export const Drawer = () => {
               startContent={<Settings />}
             >
               Configurações
-            </Button>
-          </NavbarMenuItem>
-        )}
-      </NavLink>
-      <NavLink to="/support">
-        {({ isActive }) => isActive ? (
-          <NavbarMenuItem>
-            <Button
-              className="font-Poppins font-semibold uppercase tracking-widest"
-              color="primary"
-              variant="flat"
-              radius="full"
-              size="lg"
-              startContent={<BadgeHelp />}
-            >
-              Suporte
-            </Button>
-          </NavbarMenuItem>
-        ) : (
-          <NavbarMenuItem>
-            <Button
-              className="font-Poppins font-semibold uppercase tracking-widest"
-              variant="light"
-              radius="full"
-              size="lg"
-              startContent={<BadgeHelp />}
-            >
-              Suporte
             </Button>
           </NavbarMenuItem>
         )}

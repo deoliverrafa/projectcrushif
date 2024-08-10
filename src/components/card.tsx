@@ -76,7 +76,7 @@ export const CardPost = (props: CardProps) => {
     const fetchUserData = async () => {
       try {
 
-        const response = await axios.get(`https://crush-api.vercel.app/user/id/${props.userId}`);
+        const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_USER_ID}${props.userId}`);
 
         setUserData(response.data.userFinded);
       } catch (error) {
@@ -106,7 +106,7 @@ export const CardPost = (props: CardProps) => {
       <CardHeader className="justify-between items-center">
         <Link to={`/profile/${props.id}`} className="flex space-x-2">
           <div className="flex relative">
-            <div className="flex absolute  right-0 bottom-0 h-2 w-2 z-10">
+            <div className="flex absolute right-0 bottom-0 h-2 w-2 z-10">
               <span className="animate-ping bg-success rounded-full opacity-75 inline-flex absolute h-full w-full"></span>
               <span className="bg-success rounded-full inline-flex relative h-2 w-2"></span>
             </div>
@@ -126,7 +126,7 @@ export const CardPost = (props: CardProps) => {
               <BadgeCheck className="text-success size-3" />
             </div>
             {formattedData && (
-              <h5 className="font-inter text-xs tracking-tight text-default">há {formattedData} atrás.</h5>
+              <h5 className="font-poppins text-tiny tracking-tight text-default">há {formattedData} atrás.</h5>
             )}
           </div>
         </Link>
@@ -136,6 +136,7 @@ export const CardPost = (props: CardProps) => {
           className={`${props.hiddenProps === true ? 'hidden' : ''} font-poppins tracking-widest font-bold uppercase`}
           color="primary"
           variant="flat"
+          startContent={<UserRoundPlus className="size-4" />}
         >
           Seguir
         </Button>
@@ -162,16 +163,16 @@ export const CardPost = (props: CardProps) => {
           </div>
           {props.references !== '' && !props.isAnonymous && (
             <div className="flex flex-row items-center my-0.5 space-x-1 w-full">
-              <p className="text-primary font-inter tracking-tight text-xs">Marcações:</p>
-              <a key={props._id} className="font-inter text-primary text-xs tracking-tight break-words" id={props._id}>
+              <p className="text-primary font-inter uppercase tracking-tight text-tiny">Marcações:</p>
+              <a key={props._id} className="font-inter text-primary text-tiny tracking-wide break-words" id={props._id}>
                 {props.references}
               </a>
             </div>
           )}
         </div>
         <div className={`${props.hiddenProps === true ? 'hidden' : ''} flex flex-row justify-between items-center mt-0.5 w-full`}>
-          <p className="text-default font-inter tracking-tight text-xs">Ver as <span className="font-semibold">{0}</span> curtidas.</p>
-          <p className="text-default font-inter tracking-tight text-xs">Ver os <span className="font-semibold">{0}</span> comentários.</p>
+          <p className="text-default font-inter tracking-wider text-tiny">ver as <span className="text-foreground font-medium">{0}</span> curtidas.</p>
+          <p className="text-default font-inter tracking-wider text-tiny">ver os <span className="text-foreground font-medium">{0}</span> comentários.</p>
         </div>
       </CardBody>
       <CardFooter className="flex-col justify-start items-start">
@@ -326,14 +327,14 @@ export const ModalPost = (props: CardProps) => {
               <h4 className="font-inter text-xs leading-none w-full h-full items-center"><span className="font-bold">{!props.isAnonymous ? props.nickname : 'Anônimo'}</span>: {props.content}</h4>
             </div>
             <div className="flex flex-row items-center my-0.5 space-x-1 w-full">
-              <p className="text-primary font-inter tracking-tight text-xs">{props.references && "Marcações:"}</p>
+              <p className="text-primary font-inter uppercase tracking-tight text-tiny">{props.references && "Marcações:"}</p>
               <a className="font-inter text-primary text-xs tracking-tight break-words">
                 {props.references}
               </a>
             </div>
             <div className="flex flex-row justify-between items-center mt-0.5 w-full">
-              <p className="text-default font-inter tracking-tight text-xs">Ver as <span className="font-semibold">{0}</span> curtidas.</p>
-              <p className="text-default font-inter tracking-tight text-xs">Ver os <span className="font-semibold">{0}</span> comentários.</p>
+              <p className="text-default font-inter tracking-wider text-tiny">ver as <span className="text-foreground font-medium">{0}</span> curtidas.</p>
+              <p className="text-default font-inter tracking-wider text-tiny">ver os <span className="text-foreground font-medium">{0}</span> comentários.</p>
             </div>
           </CardFooter>
         </Card>

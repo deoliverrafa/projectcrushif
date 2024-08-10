@@ -84,6 +84,63 @@ export const RegisterPage = () => {
     // Tocantins
     "IFTO"
   ];
+  
+  const emailsEstudantisPorEstado = [
+    // Acre
+    "@estudante.ifac.gov.br",
+    // Alagoas
+    "@estudante.ifal.gov.br",
+    // Amapá
+    "@estudante.ifap.gov.br",
+    // Amazonas
+    "@estudante.ifam.gov.br",
+    // Bahia
+    "@estudante.ifba.gov.br",
+    // Ceará
+    "@estudante.ifce.gov.br",
+    // Distrito Federal
+    "@estudante.ifb.gov.br",
+    // Espírito Santo
+    "@estudante.ifes.gov.br",
+    // Goiás
+    "@estudante.ifg.gov.br",
+    // Maranhão
+    "@estudante.ifma.gov.br",
+    // Mato Grosso
+    "@estudante.ifmt.gov.br",
+    // Mato Grosso do Sul
+    "@estudante.ifms.gov.br",
+    // Minas Gerais
+    "@estudante.ifmg.gov.br",
+    // Pará
+    "@estudante.ifpa.gov.br",
+    // Paraíba
+    "@estudante.ifpb.gov.br",
+    // Paraná
+    "@estudante.ifpr.gov.br",
+    // Pernambuco
+    "@estudante.ifpe.gov.br",
+    // Piauí
+    "@estudante.ifpi.gov.br",
+    // Rio de Janeiro
+    "@estudante.ifrj.gov.br",
+    // Rio Grande do Norte
+    "@estudante.ifrn.gov.br",
+    // Rio Grande do Sul
+    "@estudante.ifrs.gov.br",
+    // Rondônia
+    "@estudante.ifro.gov.br",
+    // Roraima
+    "@estudante.ifrr.gov.br",
+    // Santa Catarina
+    "@estudante.ifsc.gov.br",
+    // São Paulo
+    "@estudante.ifsp.gov.br",
+    // Sergipe
+    "@estudante.ifs.gov.br",
+    // Tocantins
+    "@estudante.ifto.gov.br"
+  ];
 
   interface UserDataRegister {
     nickname: string
@@ -104,8 +161,6 @@ export const RegisterPage = () => {
     userName: "",
     type: "Free"
   })
-
-  console.log(formData);
 
   const [messageError, setMessageError] = useState(String);
   const [clickedButton, setClickedButton] = useState(Boolean);
@@ -225,18 +280,42 @@ export const RegisterPage = () => {
                 />
               </div>
 
-              <div className="flex flex-row justify-center items-center">
-                <Input
-                  radius="lg"
-                  size="sm"
-                  type="email"
-                  label="E-mail"
-                  placeholder="ex: name@estudante.if.edu.br"
-                  className="font-inter font-medium w-5/6"
-                  name="email"
-                  onChange={handleChange}
-                  errorMessage={messageError ? (messageError == "Email já está em uso" ? messageError : null) : null}
-                  value={formData.email} />
+              <div className="flex flex-col justify-center items-center space-y-1">
+                <div className="flex flex-row space-x-1 w-5/6">
+                  <Input
+                    radius="lg"
+                    size="sm"
+                    type="email"
+                    label="E-mail"
+                    placeholder="ex: nome"
+                    className="font-inter font-medium w-32"
+                    name="email"
+                    onChange={handleChange}
+                    errorMessage={messageError ? (messageError == "Email já está em uso" ? messageError : null) : null}
+                    value={formData.email} 
+                  />
+                  <Select
+                    radius="lg"
+                    size="sm"
+                    label="Extensão"
+                    placeholder="@estudante.if.gov.br"
+                    className="text-default font-inter font-medium w-full"
+                    name="campus"
+                    onChange={handleChange}
+                    errorMessage={messageError ? (messageError == "Preencha todos os campos." ? messageError : null) : messageError}
+                    value={formData.campus}>
+                   {emailsEstudantisPorEstado.map((email) => (
+                      <SelectItem
+                        key={email} value={email}>
+                        {email}
+                      </SelectItem>
+                    ))}
+                  </Select>
+                </div>
+                 
+                <p className="text-default font-inter font-medium tracking-wide text-center text-[0.5rem]">
+                  (Informe o nome do seu e-mail institucional e selecione a extensão)
+                </p>
               </div>
 
               <div className="flex flex-row justify-center items-center">
@@ -281,8 +360,9 @@ export const RegisterPage = () => {
                     radius="lg"
                     size="sm"
                     label="Instituto"
-                    className="font-inter font-medium w-5/6"
+                    className="text-default font-inter font-medium w-5/6"
                     name="campus"
+                    placeholder="IF"
                     onChange={handleChange}
                     errorMessage={messageError ? (messageError == "Preencha todos os campos." ? messageError : null) : messageError}
                     value={formData.campus}>

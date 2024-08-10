@@ -125,7 +125,7 @@ export const BaseUserShow = (props: userData) => {
       const formData = new FormData();
       formData.append("avatar", imageFile);
 
-      const response = await axios.post(`https://crush-api.vercel.app/profile/updatePhoto/${localStorage.getItem('userId')}`, formData);
+      const response = await axios.post(`${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_UPDATE_PROFILE_PHOTO}${localStorage.getItem('userId')}`, formData);
 
       if (response.data.updated) {
         const imageUrl = URL.createObjectURL(imageFile);
@@ -182,7 +182,7 @@ export const BaseUserShow = (props: userData) => {
       if (selectedData == 'info') {
         try {
 
-          const response = await axios.post(`https://crush-api.vercel.app/profile/changeNameCampusCurso/${localStorage.getItem('token')}`, formData);
+          const response = await axios.post(`${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_CHANGE_NAME_CAMPUS_CURSO}${localStorage.getItem('token')}`, formData);
 
           if (response.data.updated == true) {
             setdataSuccessMessage('Dados atualizados com Sucesso')
@@ -199,7 +199,7 @@ export const BaseUserShow = (props: userData) => {
 
         try {
 
-          const response = await axios.post(`https://crush-api.vercel.app/profile/changeEmail/${localStorage.getItem('token')}`, formData)
+          const response = await axios.post(`${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_CHANGE_EMAIL}${localStorage.getItem('token')}`, formData)
 
           if (response.data.updated == true) {
             setdataSuccessMessage('Email alterado com sucesso')
@@ -214,7 +214,7 @@ export const BaseUserShow = (props: userData) => {
       if (selectedData == 'password') {
 
         try {
-          const response = await axios.post(`https://crush-api.vercel.app/profile/changePassword/${localStorage.getItem('token')}`, formData)
+          const response = await axios.post(`${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_CHANGE_PASSWORD}${localStorage.getItem('token')}`, formData)
 
           if (response.data.updated == true) {
             setdataSuccessMessage('Senha alterado com sucesso')
@@ -404,7 +404,7 @@ export const BaseUserShow = (props: userData) => {
                 ></Input>
               </div>
               
-              <div className="flex flex-row justify-between items-center space-x-2">
+              <div className="flex flex-row justify-between items-center space-x-1">
                 <div className="flex flex-row items-center w-full">
                 <Input
                   isClearable

@@ -38,7 +38,7 @@ export function getUserData() {
                 return;
             }
 
-            const response = await axios.get(`https://crush-api.vercel.app/user/token/${token}`);
+            const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_USER_TOKEN}${token}`);
 
             setUserData(response.data.userFinded);
         }
