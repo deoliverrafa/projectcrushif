@@ -1,0 +1,48 @@
+{
+"name": "Crush IF",
+"short_name": "Crush IF",
+"start_url": "/",
+"display": "standalone",
+"description": "Bem-vindo à CrushIF, a plataforma ideal para estudantes dos Institutos Federais! Conecte-se com colegas, compartilhe conhecimentos e participe de uma comunidade dinâmica e colaborativa. Aqui, você encontra um espaço seguro e interativo para trocar experiências, discutir projetos e se manter atualizado sobre tudo o que acontece no ambiente acadêmico. Junte-se a nós e potencialize sua jornada estudantil!",
+"lang": "pt-BR",
+"dir": "auto",
+"theme_color": "#db2777",
+"background_color": "#000000",
+"orientation": "any",
+"icons": [
+    {
+        "src": "./images/logo/logo512.png",
+        "sizes": "512x512",
+        "type": "image/png",
+        "purpose": "maskable"
+    },
+    {
+        "src": "./images/logo/logo192.png",
+        "sizes": "192x192",
+        "type": "image/png",
+        "purpose": "any"
+    }
+],
+"screenshots": [
+    {
+        "src": "./images/logo/logo.png",
+        "sizes": "2880x1800",
+        "type": "image/png",
+        "description": "A screenshot of the home page"
+    }
+],
+"related_applications": [
+    {
+        "platform":"windows",
+        "url": " The URL to your app in that app store"
+    }
+],
+"prefer_related_applications": false,
+"shortcuts": [
+    {
+        "name":"The name you would like to be displayed for your shortcut",
+        "url":"The url you would like to open when the user chooses this shortcut. This must be a URL local to your PWA. For example: If my start_url is /, this URL must be something like /shortcut",
+        "description":"A description of the functionality of this shortcut"
+    }
+]
+}

@@ -125,7 +125,7 @@ const PublishPage = () => {
     }
 
     try {
-      const response = await fetch(`https://crush-api.vercel.app/post/publish/${localStorage.getItem('token')}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_POST_PUBLISH}${localStorage.getItem('token')}`, {
         method: 'POST',
         body: formData,
       });

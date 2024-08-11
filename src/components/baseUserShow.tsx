@@ -288,7 +288,7 @@ export const BaseUserShow = (props: userData) => {
         <div>
           <Dropdown>
             <DropdownTrigger>
-              <AlignRight />
+              <AlignRight className="cursor-pointer" />
             </DropdownTrigger>
 
             <DropdownMenu>
@@ -404,7 +404,7 @@ export const BaseUserShow = (props: userData) => {
                 ></Input>
               </div>
               
-              <div className="flex flex-row justify-between items-center space-x-1">
+              <div className="flex flex-row justify-between items-center space-x-1 w-full">
                 <div className="flex flex-row items-center w-full">
                 <Input
                   isClearable
@@ -421,7 +421,7 @@ export const BaseUserShow = (props: userData) => {
                 <Select
                   radius="lg"
                   label="Instituto"
-                  className="font-inter font-medium w-5/6"
+                  className="font-inter font-medium w-full"
                   name="campus"
                   selectedKeys={[campus]}
                   onChange={(e: React.BaseSyntheticEvent) => { setCampus(e.target.value) }}

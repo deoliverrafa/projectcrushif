@@ -1,5 +1,5 @@
 // IMPORT - LIBRARYS //
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 
 // IMPORT - COMPONENTS //
@@ -17,7 +17,6 @@ import {
 
 // IMPORT - ICONS //
 import {
-  AtSign,
   PencilRuler,
   Share2,
   PenTool,

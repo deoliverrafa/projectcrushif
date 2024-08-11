@@ -142,7 +142,7 @@ export const CardPost = (props: CardProps) => {
         </Button>
       </CardHeader>
       <CardBody className="pb-0">
-        <div className="flex flex-col" onClick={props.handlePost}>
+        <div className="cursor-pointer flex flex-col" onClick={props.handlePost}>
           {props.photoURL && (
             <div className="flex justify-center items-center">
               <Image
@@ -243,7 +243,7 @@ export const ModalPost = (props: CardProps) => {
 
             <Dropdown>
               <DropdownTrigger>
-                <AlignRight />
+                <AlignRight className="cursor-pointer" />
               </DropdownTrigger>
 
               <DropdownMenu>
@@ -332,7 +332,7 @@ export const ModalPost = (props: CardProps) => {
                 {props.references}
               </a>
             </div>
-            <div className="flex flex-row justify-between items-center mt-0.5 w-full">
+            <div className="flex flex-row justify-between items-center mt-0.5 pb-4 w-full">
               <p className="text-default font-inter tracking-wider text-tiny">ver as <span className="text-foreground font-medium">{0}</span> curtidas.</p>
               <p className="text-default font-inter tracking-wider text-tiny">ver os <span className="text-foreground font-medium">{0}</span> comentários.</p>
             </div>
