@@ -1,4 +1,5 @@
 // IMPORT - LIBRARYS //
+import { Button } from './../../components/ui/button.jsx';
 
 // IMPORT - COMPONENTS //
 import { NavBar } from './../../components/navbar.tsx';
@@ -7,7 +8,7 @@ import {
   Navbar,
   NavbarContent,
   Input,
-  Button,
+  
   Avatar,
   Card
 } from '@nextui-org/react';
@@ -53,6 +54,7 @@ const SearchPage = () => {
           className="flex flex-row justify-around items-center my-2 py-3 px-1.5 w-11/12 max-w-[768px]"
           radius="lg"
         >
+          <Button>teste</Button>
           <div className="flex space-x-2">
             <div className="flex relative">
               <div className="flex absolute  right-0 bottom-0 h-2 w-2 z-10">

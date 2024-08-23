@@ -1,24 +1,21 @@
-// IMPORT - LIBRARYS //
 import * as React from 'react';
 
-// IMPORT - COMPONENTS //
+import {
+  Card,
+} from './ui/card';
 import { 
   CircularProgress,
-  Card,
   Modal,
   ModalContent
 } from '@nextui-org/react';
 
-// COMPONENT - LOADING //
 export const Loading = () => {
-  // FUNCTION - LIBRARYS//
   const [value, setValue] = React.useState(0);
-  
-  // FUNCTION - USE EFFECT //
+
   React.useEffect(() => {
     const interval = setInterval(() => {
       setValue((v) => (v >= 100 ? 0 : v + 10));
-    }, 500);
+    }, 100);
 
     return () => clearInterval(interval);
   }, []);
@@ -32,16 +29,14 @@ export const Loading = () => {
     >
       <ModalContent>
         <Card 
-          className="p-4 w-fit" 
-          radius="lg"
+          className="flex flex-row items-center p-2 space-x-2"
         >
           <CircularProgress 
-            className="font-inter font-medium"
             color="primary" 
-            label="Carregando..."
             value={value}
-            showValueLabel={true}
+            showValueLabel={false}
           />
+          <p className="font-inter font-medium">Carregando...</p>
         </Card>
       </ModalContent>
     </Modal>

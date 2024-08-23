@@ -58,6 +58,7 @@ export const NavBar = (props: userData) => {
       position="static"
       shouldHideOnScroll
       isBordered={true}
+      isBlurred={false}
     >
       <NavbarContent justify="start">
         <NavbarMenuToggle
