@@ -1,9 +1,6 @@
-// IMPORT - LIBRARYS //
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-// IMPORT - COMPONENTS //
-import { Alert } from "flowbite-react";
 import {
   Avatar,
   Button,
@@ -22,7 +19,6 @@ import {
   SelectItem
 } from "@nextui-org/react";
 
-// IMPORT - ICONS //
 import {
   ImageUp,
   AlignRight,
@@ -36,10 +32,8 @@ import {
   EyeIcon
 } from './../icons/icons.tsx';
 
-// IMPORT - SCRIPTS //
 import { isValidImage } from "../controllers/avatarUpdate";
 
-// CREATE - INTERFACE //
 interface User {
   _id: string;
   nickname: string;
@@ -113,7 +107,6 @@ const institutosFederaisPorEstado = [
   "IFTO"
 ];
 
-// COMPONENT - EDIT PROFILE //
 export const BaseUserShow = (props: userData) => {
 
   const [errorImage, setErrorImage] = useState("");
@@ -138,14 +131,12 @@ export const BaseUserShow = (props: userData) => {
     }
   };
 
-  // User changeData Logic
   const [errorMessage, setdataErrorMessage] = useState<String>();
   const [successMessage, setdataSuccessMessage] = useState<String>();
   const [selectedData, setSelectedData] = useState<String>('info');
   const [isVisible, setIsVisible] = useState(false);
   const toggleVisibility = () => setIsVisible(!isVisible);
 
-  // Estados de dados
   const [nickname, setNickname] = useState(props.user?.nickname || "");
   const [campus, setCampus] = useState(props.user?.campus || "");
   const [email, setEmail] = useState(props.user?.email || "");
@@ -277,7 +268,7 @@ export const BaseUserShow = (props: userData) => {
 
             <div className="mt-3">
               {errorImage && (
-                <div className="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-black dark:text-red-400" role="alert">
+                <div className="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-black dark:text-red-400" role="">
                   <span className="font-medium">Atenção!</span> {errorImage}
                 </div>
               )}
@@ -516,16 +507,12 @@ export const BaseUserShow = (props: userData) => {
 
             {
               successMessage ? (
-                <Alert color="success">
-                  <span className="font-medium">Tudo Certo!</span> {successMessage}
-                </Alert>
+                <p>Tudo certo!</p>
               ) : errorMessage ? (
-                <Alert className="text-danger font-inter uppercase">
-                  <span className="font-semibold">Error: </span> {errorMessage}
-                </Alert>
+                <p>Error: {errorMessage}</p>
               ) : null
             }
-
+            
           </CardFooter>
         </form>
       </CardBody >

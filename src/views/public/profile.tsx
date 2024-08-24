@@ -4,7 +4,7 @@ import { Link, useParams } from "react-router-dom";
 
 // IMPORT - COMPONENTS //
 import { NavBarReturn } from "../../components/navbar";
-import { Loading } from "./../../components/loading.tsx";
+import { Loading } from "./../../components/loading.component.tsx";
 import {
   Card,
   CardHeader,

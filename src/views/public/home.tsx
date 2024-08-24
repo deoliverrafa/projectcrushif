@@ -6,7 +6,7 @@ import { debounce } from 'lodash';
 // IMPORT - COMPONENTS //
 import { NavBar, MenuBar } from "../../components/navbar";
 import { BottomBar } from "../../components/bottombar";
-import { Loading } from "./../../components/loading.tsx";
+import { Loading } from "./../../components/loading.component.tsx";
 import { ToastCookies } from './../../components/cookies.tsx';
 import { PublishButton } from './../../components/floatingButton.tsx';
 import {

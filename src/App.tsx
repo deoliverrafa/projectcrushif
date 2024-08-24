@@ -1,22 +1,16 @@
-// IMPORT - LIBRARYS // 
 import * as React from 'react';
 import { NextUIProvider } from "@nextui-org/react";
+import { ThemeProvider as NextThemesProvider } from "next-themes";
 import {
   BrowserRouter as Router,
   Routes,
   Route
 } from 'react-router-dom';
-import {
-  ThemeProvider as NextThemesProvider
-} from "next-themes";
 
-// IMPORT - COMPONENTS //
-import { Loading } from './components/loading.tsx';
+import { Loading } from './components/loading.component.tsx';
 
-// IMPORT - STYLES //
 import './styles/main.css'
-
-// IMPORT - ROUTES //
+  
 const HomePage = React.lazy(() => import('./views/public/home.tsx'));
 const SearchPage = React.lazy(() => import('./views/public/search.tsx'));
 const EventsPage = React.lazy(() => import('./views/public/events.tsx'));
@@ -28,11 +22,9 @@ const PublishPage = React.lazy(() => import('./views/public/publish.tsx'));
 const ProfilePage = React.lazy(() => import('./views/public/profile.tsx'));
 const EditProfilePage = React.lazy(() => import('./views/public/editProfile.tsx'));
 
-// AUTH - ROUTES //
-const LoginPage = React.lazy(() => import('./views/auth/login.tsx'));
-const RegisterPage = React.lazy(() => import('./views/auth/register.tsx'));
+const LoginPage = React.lazy(() => import('./views/auth/login.page.tsx'));
+const RegisterPage = React.lazy(() => import('./views/auth/register.page.tsx'));
 
-// COMPONENT - APP //
 const App = () => {
   return (
     <>

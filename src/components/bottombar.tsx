@@ -2,7 +2,7 @@ import { NavLink } from 'react-router-dom';
 
 import {
   Button
-} from '@/components/ui/button';
+} from './../components/ui/button';
 import { 
   Navbar,
 } from '@nextui-org/react';
@@ -28,7 +28,7 @@ export const BottomBar = (props: bottomProps) => {
       <NavLink to="/">
         {({ isActive }) => isActive ? (
           <Button>
-            <Home className="fill-pink-500 mr-2 size-4"/>
+            <Home className="mr-2 size-4"/>
             <p className="font-poppins font-semibold">Inicio</p>
           </Button>
         ) : (

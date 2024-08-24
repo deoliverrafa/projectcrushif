@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 // IMPORT - COMPONENTS //
 import { NavBarReturn } from './../../components/navbar.tsx';
-import { ThemeSwitcher } from './../../components/themeSwitcher.tsx';
+import { ThemeSwitcher } from '../../components/themeSwitcher.component.tsx';
 import {
   Avatar,
   Button,

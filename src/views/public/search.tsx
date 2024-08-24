@@ -40,9 +40,6 @@ const SearchPage = () => {
           name="search" 
         />
         <Button 
-          color="primary"
-          variant="flat"
-          isIconOnly={true}
         >
           <Search />
         </Button>
@@ -81,12 +78,6 @@ const SearchPage = () => {
             </div>
           </div>
           <Button
-            radius="full"
-            size="sm"
-            className='font-poppins tracking-widest font-bold uppercase'
-            color="primary"
-            variant="flat"
-            startContent={<UserRoundPlus className="size-4" />}
           >
             Seguir
           </Button>
