@@ -1,10 +1,6 @@
-// IMPORT - LIBRARYS //
-import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+/* import { useEffect, useState } from "react";
 
-// IMPORT - COMPONENTS //
-import { NavBarReturn } from "../../components/navbar";
-import { Loading } from "./../../components/loading.component.tsx";
+
 import {
   Card,
   CardHeader,
@@ -15,7 +11,6 @@ import {
   Button,
 } from "@nextui-org/react";
 
-// IMPORT - ICONS //
 import {
   PencilRuler,
   Share2,
@@ -25,77 +20,16 @@ import {
   SearchX,
   BadgeCheck,
   UserRoundPlus
-} from "lucide-react";
+} from "lucide-react"; */
 
-// IMPORT - SCRIPTS //
-import { getUserData } from "./../../utils/getUserData";
-import { getUserDataById } from "./../../utils/getUserDataById";
-import { handleShare } from './../../controllers/shareProfile.ts';
-
-interface User {
-  _id: string;
-  nickname: string;
-  email: string;
-  campus: string;
-  avatar: string;
-  birthdaydata: string;
-  Nfollowers: number;
-  Nfollowing: number;
-  curso: string;
-  type: string;
-}
+import { NavBarReturn } from "../../layout/navbar.layout.tsx";
+import { ProfileLayout } from "../../layout/profile.layout";
 
 const ProfilePage = () => {
-  const currentUser = getUserData();
-  const [viewingUser, setViewingUser] = useState<User | null>(null);
-  const [age, setAge] = useState<number | null>(null);
-  const [selected, setSelected] = useState("text");
-  const { id } = useParams();
 
-  const handleSelect = (item: string) => {
-    setSelected(item);
-  };
-
-  const calculateAge = (birthday: string) => {
-    const today = new Date();
-    const birthDate = new Date(birthday);
-    let age = today.getFullYear() - birthDate.getFullYear();
-    const monthDifference = today.getMonth() - birthDate.getMonth();
-
-    if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthDate.getDate())) {
-      age--;
-    }
-
-    return age;
-  };
-
-  useEffect(() => {
-    const fetchViewingUserData = async () => {
-      try {
-        const data = await getUserDataById(id);
-        setViewingUser(data);
-        if (data && data.birthdaydata) {
-          const calculatedAge = calculateAge(data.birthdaydata);
-          setAge(calculatedAge);
-        }
-      } catch (error) {
-        console.error("Error fetching viewing user data:", error);
-      }
-    };
-
-    if (id) {
-      fetchViewingUserData();
-    }
-  }, [id]);
-
-  if (!currentUser || !viewingUser) {
-    return <Loading />;
-  }
-
-  const isOwnProfile = currentUser._id === viewingUser._id;
-
-  return (
-    <div className="w-full h-svh flex flex-col">
+  return <ProfileLayout />;
+  {
+    /* <div className="w-full h-svh flex flex-col">
       <NavBarReturn title="Perfil" />
       {viewingUser ? (
         <main className="flex flex-col justify-center items-center select-none h-full w-full">
@@ -224,8 +158,8 @@ const ProfilePage = () => {
       ) : (
         <Loading />
       )}
-    </div>
-  );
+    </div> */
+  }
 };
 
 export default ProfilePage;

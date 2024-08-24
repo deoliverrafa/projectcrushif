@@ -3,7 +3,7 @@ import { ChangeEvent, useEffect, useState } from "react";
 
 // IMPORT - COMPONENTS //
 import { CardPost } from "../../components/card";
-import { NavBarReturn } from "../../components/navbar";
+import { NavBarReturn } from "../../layout/navbar.layout";
 import {
   Button,
   Input,

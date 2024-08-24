@@ -1,9 +1,9 @@
 // IMPORT - LIBRARYS //
-import { Button } from './../../components/ui/button.jsx';
+import { Button } from '../../components/ui/button.js';
 
 // IMPORT - COMPONENTS //
-import { NavBar } from './../../components/navbar.tsx';
-import { BottomBar } from './../../components/bottombar.tsx';
+import { NavBar } from '../../layout/navbar.layout.tsx';
+import { BottomBar } from '../../layout/bottombar.layout.tsx';
 import {
   Navbar,
   NavbarContent,

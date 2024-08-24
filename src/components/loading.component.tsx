@@ -13,7 +13,9 @@ export const Loading = () => {
       <ModalContent>
         <Card className="flex flex-row justify-center items-center p-4 space-x-2 space-y-2">
           <div className="animate-spin rounded-full border-4 border-pink-600 border-t-gray-900 h-8 w-8" />
-          <p className="font-inter font-semibold text-tiny">Carregando...</p>
+          <p className="font-poppins font-semibold uppercase text-tiny">
+            Carregando...
+          </p>
         </Card>
       </ModalContent>
     </Modal>

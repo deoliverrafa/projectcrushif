@@ -2,7 +2,7 @@
 import { Link } from 'react-router-dom';
 
 // IMPORT - COMPONENTS //
-import { NavBarReturn } from './../../components/navbar.tsx';
+import { NavBarReturn } from '../../layout/navbar.layout.tsx';
 import { ThemeSwitcher } from '../../components/themeSwitcher.component.tsx';
 import {
   Avatar,
@@ -22,7 +22,7 @@ import {
 } from 'lucide-react';
 
 // IMPORT - SCRIPTS //
-import { getUserData } from "./../../utils/getUserData";
+import { getUserData } from "../../utils/getUserData.tsx";
 
 const SettingsPage = () => {
   // FUNCTION - IMPORT //
