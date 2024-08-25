@@ -1,7 +1,7 @@
 import * as React from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 
-import { Profile } from "../components/profile.tsx";
+import { Profile } from "../components/profile.component";
 import { Drawer } from "../components/drawer.tsx";
 import { Button } from "../components/ui/button.tsx";
 import {
@@ -15,17 +15,11 @@ import {
 } from "@nextui-org/react";
 
 import {
-  Home,
+  LayoutGrid,
   Search,
   HeartHandshake,
   CalendarDays,
   ArrowLeft,
-  CircleUserRound,
-  BellRing,
-  Heart,
-  Crown,
-  Settings,
-  BadgeHelp,
 } from "lucide-react";
 
 import logo from "../../public/images/logo/logo.png";
@@ -73,56 +67,76 @@ export const NavBar = (props: userData) => {
         <NavLink to="/">
           {({ isActive }) =>
             isActive ? (
-              <Button>
-                <Home className="size-4" />
-                <p className="font-Poppins font-semibold">Inicio</p>
-              </Button>
+              <div className="cursor-pointer flex flex-row items-center space-x-1">
+                <LayoutGrid className="text-pink-500 dark:text-pink-600 size-6" />
+                <p className="text-pink-500 dark:text-pink-600 font-poppins font-semibold text-sm">
+                  Inicio
+                </p>
+              </div>
             ) : (
-              <Button size="icon">
-                <Home className="size-4" />
-              </Button>
+              <div className="cursor-pointer flex flex-row justify-center items-center space-x-1">
+                <LayoutGrid className="text-slate-700 dark:text-slate-400 size-6" />
+                <p className="text-slate-700 dark:text-slate-400 font-poppins font-semibold text-sm">
+                  Inicio
+                </p>
+              </div>
             )
           }
         </NavLink>
         <NavLink to="/search">
           {({ isActive }) =>
             isActive ? (
-              <Button>
-                <Search className="size-4" />
-                <p className="font-poppins font-semibold">Pesquisar</p>
-              </Button>
+              <div className="cursor-pointer flex flex-row items-center space-x-1">
+                <Search className="text-pink-500 dark:text-pink-600 size-6" />
+                <p className="text-pink-500 dark:text-pink-600 font-poppins font-semibold text-sm">
+                  Pesquisar
+                </p>
+              </div>
             ) : (
-              <Button>
-                <Search className="size-4" />
-              </Button>
+              <div className="cursor-pointer flex flex-row justify-center items-center space-x-1">
+                <Search className="text-slate-700 dark:text-slate-400 size-6" />
+                <p className="text-slate-700 dark:text-slate-400 font-poppins font-semibold text-sm">
+                  Pesquisar
+                </p>
+              </div>
             )
           }
         </NavLink>
         <NavLink to="/match">
           {({ isActive }) =>
             isActive ? (
-              <Button>
-                <HeartHandshake className="size-4" />
-                <p className="font-poppins font-semibold">Crush</p>
-              </Button>
+              <div className="cursor-pointer flex flex-row items-center space-x-1">
+                <HeartHandshake className="text-pink-500 dark:text-pink-600 size-6" />
+                <p className="text-pink-500 dark:text-pink-600 font-poppins font-semibold text-sm">
+                  Crush
+                </p>
+              </div>
             ) : (
-              <Button>
-                <HeartHandshake />
-              </Button>
+              <div className="cursor-pointer flex flex-row justify-center items-center space-x-1">
+                <HeartHandshake className="text-slate-700 dark:text-slate-400 size-6" />
+                <p className="text-slate-700 dark:text-slate-400 font-poppins font-semibold text-sm">
+                  Crush
+                </p>
+              </div>
             )
           }
         </NavLink>
         <NavLink to="/events">
           {({ isActive }) =>
             isActive ? (
-              <Button>
-                <CalendarDays />
-                <p className="font-poppins font-semibold">Evêntos</p>
-              </Button>
+              <div className="cursor-pointer flex flex-row items-center space-x-1">
+                <CalendarDays className="text-pink-500 dark:text-pink-600 size-6" />
+                <p className="text-pink-500 dark:text-pink-600 font-poppins font-semibold text-sm">
+                  Evêntos
+                </p>
+              </div>
             ) : (
-              <Button>
-                <CalendarDays />
-              </Button>
+              <div className="cursor-pointer flex flex-row justify-center items-center space-x-1">
+                <CalendarDays className="text-slate-700 dark:text-slate-400 size-6" />
+                <p className="text-slate-700 dark:text-slate-400 font-poppins font-semibold text-sm">
+                  Evêntos
+                </p>
+              </div>
             )
           }
         </NavLink>
@@ -162,77 +176,6 @@ export const NavBarReturn: React.FC<NavBarReturnProps> = ({ title }) => {
           <p className="font-recursive font-semibold uppercase tracking-widest text-xl">
             {title}
           </p>
-        </NavbarItem>
-      </NavbarContent>
-    </Navbar>
-  );
-};
-
-export const MenuBar = () => {
-  return (
-    <Navbar
-      className="hidden md:flex"
-      position="static"
-      shouldHideOnScroll
-      isBordered={true}
-    >
-      <NavbarContent justify="start">
-        <NavbarItem>
-          <Link href="/profile">
-            <Button>
-              <CircleUserRound />
-              <p className="font-poppins font-semibold">Perfil</p>
-            </Button>
-          </Link>
-        </NavbarItem>
-        <NavbarItem>
-          <Link href="/notifications">
-            <Button>
-              <BellRing />
-              <p className="font-poppins font-semibold">Notificações</p>
-              <div className="flex relative h-3 w-3">
-                <span className="animate-ping bg-info rounded-full opacity-75 inline-flex absolute h-full w-full"></span>
-                <span className="bg-info rounded-full inline-flex relative h-3 w-3"></span>
-              </div>
-            </Button>
-          </Link>
-        </NavbarItem>
-      </NavbarContent>
-
-      <NavbarContent justify="center">
-        <NavbarItem>
-          <Link href="/liked">
-            <Button>
-              <Heart />
-              <p className="font-poppins font-semibold">Curtidos</p>
-            </Button>
-          </Link>
-        </NavbarItem>
-        <NavbarItem>
-          <Link href="/favorite">
-            <Button>
-              <Crown />
-              <p className="font-poppins font-semibold">Favoritos</p>
-            </Button>
-          </Link>
-        </NavbarItem>
-      </NavbarContent>
-      <NavbarContent justify="end">
-        <NavbarItem>
-          <Link href="/settings">
-            <Button>
-              <Settings />
-              <p className="font-poppins font-semibold">Configurações</p>
-            </Button>
-          </Link>
-        </NavbarItem>
-        <NavbarItem>
-          <Link href="/support">
-            <Button>
-              <BadgeHelp />
-              <p className="font-poppins font-semibold">Suporte</p>
-            </Button>
-          </Link>
         </NavbarItem>
       </NavbarContent>
     </Navbar>

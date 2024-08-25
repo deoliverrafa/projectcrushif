@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { debounce } from "lodash";
 
-import { NavBar, MenuBar } from "../../layout/navbar.layout.tsx";
+import { NavBar } from "../../layout/navbar.layout.tsx";
 import { BottomBar } from "../../layout/bottombar.layout.tsx";
 import { Loading } from "../../components/loading.component.tsx";
 import { ToastCookies } from "../../components/cookies.tsx";
@@ -174,7 +174,6 @@ export default function HomePage() {
             user={userData}
             avatarPath={userData.avatar || localAvatarPath}
           />
-          <MenuBar />
           {showCookies && <ToastCookies onClick={handleHideCookies} />}
           <main className="w-full h-full flex flex-col justify-center items-center">
             {posts.map((post) => (

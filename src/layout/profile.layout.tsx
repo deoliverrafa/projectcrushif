@@ -7,14 +7,12 @@ import {
   CardContent,
   CardHeader,
   CardFooter,
-  CardTitle,
   CardDescription,
 } from "../components/ui/card";
-import { Avatar, AvatarImage } from "../components/ui/avatar";
 import { Badge } from "../components/ui/badge";
 import { Button } from "../components/ui/button.tsx";
 
-import { Divider } from "@nextui-org/react";
+import { Divider, Avatar } from "@nextui-org/react";
 
 import { getUserData } from "../utils/getUserData.tsx";
 import { getUserDataById } from "../utils/getUserDataById.tsx";
@@ -23,9 +21,6 @@ import { handleShare } from "../controllers/shareProfile.ts";
 import {
   PencilRuler,
   Share2,
-  PenTool,
-  Image,
-  Film,
   SearchX,
   BadgeCheck,
   UserRoundPlus,
@@ -99,22 +94,13 @@ export const ProfileLayout = () => {
   return (
     <>
       <Card className="w-5/6 max-w-sm">
-        <CardHeader className="justify-center items-center">
-          <div className="flex relative">
-            <div className="flex absolute right-0 bottom-0 h-2 w-2 z-10">
-              <span className="animate-ping bg-success rounded-full opacity-75 inline-flex absolute h-full w-full"></span>
-              <span className="bg-success rounded-full inline-flex relative h-2 w-2"></span>
-            </div>
-
-            <Avatar>
-              <AvatarImage src={viewingUser.avatar} />
-            </Avatar>
-          </div>
+        <CardHeader className="justify-center items-center space-y-2">
+          <Avatar className="w-20 h-20 text-large" src={viewingUser.avatar} />
 
           <div className="flex flex-row items-center">
-            <CardTitle className="font-poppins font-light capitalize text-sm">
+            <Badge variant={"outline"} className="font-poppins font-light capitalize text-sm">
               {viewingUser.name ? viewingUser.name : "Nome indisponível"}
-            </CardTitle>
+            </Badge>
           </div>
 
           <div className="flex flex-row items-center space-x-1">
@@ -136,6 +122,14 @@ export const ProfileLayout = () => {
               />
             </Badge>
           </div>
+
+          <Badge variant={"outline"} className="relative space-x-1">
+            <div className="flex absolute left-0.5 mx-0.5 h-2 w-2 z-10">
+              <span className="animate-ping bg-green-500 dark:bg-green-600 rounded-full opacity-75 inline-flex absolute h-full w-full"></span>
+              <span className="bg-green-500 dark:bg-green-600 rounded-full inline-flex relative h-2 w-2"></span>
+            </div>
+            <CardDescription className="font-light">online</CardDescription>
+          </Badge>
         </CardHeader>
 
         <CardContent className="space-y-2">
@@ -192,43 +186,53 @@ export const ProfileLayout = () => {
 
           <Divider />
           <div className="flex flex-row justify-evenly items-center h-8">
-            <div className="flex flex-col justify-center items-center">
+            <div className="cursor-pointer flex flex-col justify-center items-center">
               <CardDescription>{viewingUser.Nfollowers}</CardDescription>
               <CardDescription>Seguidores</CardDescription>
             </div>
             <Divider orientation="vertical" />
-            <div className="flex flex-col justify-center items-center">
+            <div className="cursor-pointer flex flex-col justify-center items-center">
               <CardDescription>{viewingUser.Nfollowing}</CardDescription>
               <CardDescription>Seguindo</CardDescription>
             </div>
           </div>
           <Divider />
-          
+
           <div className="flex flex-row justify-around items-center">
-              <div 
-                variant="ghost" 
-                className={`flex flex-row items-center p-1 space-x-1 ${selected === 'text' ? 'border-b-1 border-slate-500 dark:border-slate-400' : ''}`}
-                onClick={() => handleSelect('text')}
-              >
-                    <CardDescription>Postagens</CardDescription>
-                    <Badge variant="outline">0</Badge>
-                </div>
-                
-                <div
-                  className={`flex flex-row items-center p-1 space-x-1 ${selected === 'image' ? 'border-b-1 border-slate-500 dark:border-slate-400' : ''}`}
-                  onClick={() => handleSelect('image')}
-                >
-                    <CardDescription>Imagens</CardDescription>
-                    <Badge variant="outline">0</Badge>
-                </div>
+            <div
+              className={`cursor-pointer flex flex-row items-center p-1 space-x-1 ${
+                selected === "text"
+                  ? "border-b-1 border-slate-500 dark:border-slate-400"
+                  : ""
+              }`}
+              onClick={() => handleSelect("text")}
+            >
+              <CardDescription>Postagens</CardDescription>
+              <Badge variant="outline">0</Badge>
             </div>
+
+            <div
+              className={`cursor-pointer flex flex-row items-center p-1 space-x-1 ${
+                selected === "image"
+                  ? "border-b-1 border-slate-500 dark:border-slate-400"
+                  : ""
+              }`}
+              onClick={() => handleSelect("image")}
+            >
+              <CardDescription>Imagens</CardDescription>
+              <Badge variant="outline">0</Badge>
+            </div>
+          </div>
         </CardContent>
 
-        <CardFooter>
-            <div className="flex flex-col justify-center items-center space-y-2">
-                <SearchX className="text-slate-500 dark:text-slate-400 size-14" />
-                <CardDescription className="text-default font-inter font-medium text-tiny text-center w-full">Usuário não possui nenhuma publicação de {selected === 'text' ? 'texto' : 'imagem'}.</CardDescription>
-            </div>
+        <CardFooter className="space-y-2">
+          <div className="flex flex-col justify-center items-center space-y-2 w-full">
+            <SearchX className="text-slate-500 dark:text-slate-400 size-14" />
+            <CardDescription className="text-default font-inter font-medium text-tiny text-center w-full">
+              Usuário não possui nenhuma publicação de{" "}
+              {selected === "text" ? "texto" : "imagem"}.
+            </CardDescription>
+          </div>
         </CardFooter>
       </Card>
     </>

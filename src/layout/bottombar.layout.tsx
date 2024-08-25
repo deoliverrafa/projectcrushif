@@ -18,16 +18,16 @@ export const BottomBar = (props: bottomProps) => {
       <NavLink to="/">
         {({ isActive }) =>
           isActive ? (
-            <div className="flex flex-col justify-center items-center">
+            <div className="cursor-pointer flex flex-col justify-center items-center space-y-1">
               <LayoutGrid className="text-pink-500 dark:text-pink-600 size-6" />
-              <p className="text-pink-500 dark:text-pink-600 font-semibold text-sm">
+              <p className="text-pink-500 dark:text-pink-600 font-poppins font-semibold text-sm">
                 Inicio
               </p>
             </div>
           ) : (
-            <div className="flex flex-col justify-center items-center">
+            <div className="cursor-pointer flex flex-col justify-center items-center space-y-1">
               <LayoutGrid className="text-slate-700 dark:text-slate-400 size-6" />
-              <p className="text-slate-700 dark:text-slate-400 font-semibold text-sm">
+              <p className="text-slate-700 dark:text-slate-400 font-poppins font-semibold text-sm">
                 Inicio
               </p>
             </div>
@@ -37,16 +37,16 @@ export const BottomBar = (props: bottomProps) => {
       <NavLink to="/search">
         {({ isActive }) =>
           isActive ? (
-            <div className="flex flex-col justify-center items-center">
+            <div className="cursor-pointer flex flex-col justify-center items-center space-y-1">
               <Search className="text-pink-500 dark:text-pink-600 size-6" />
-              <p className="text-pink-500 dark:text-pink-600 font-semibold text-sm">
+              <p className="text-pink-500 dark:text-pink-600 font-poppins font-semibold text-sm">
                 Procurar
               </p>
             </div>
           ) : (
-            <div className="flex flex-col justify-center items-center">
+            <div className="cursor-pointer flex flex-col justify-center items-center space-y-1">
               <Search className="text-slate-700 dark:text-slate-400 size-6" />
-              <p className="text-slate-700 dark:text-slate-400 font-semibold text-sm">
+              <p className="text-slate-700 dark:text-slate-400 font-poppins font-semibold text-sm">
                 Procurar
               </p>
             </div>
@@ -56,16 +56,16 @@ export const BottomBar = (props: bottomProps) => {
       <NavLink to="/match">
         {({ isActive }) =>
           isActive ? (
-            <div className="flex flex-col justify-center items-center">
+            <div className="cursor-pointer flex flex-col justify-center items-center space-y-1">
               <HeartHandshake className="text-pink-500 dark:text-pink-600 size-6" />
-              <p className="text-pink-500 dark:text-pink-600 font-semibold text-sm">
+              <p className="text-pink-500 dark:text-pink-600 font-poppins font-semibold text-sm">
                 Crush
               </p>
             </div>
           ) : (
-            <div className="flex flex-col justify-center items-center">
+            <div className="cursor-pointer flex flex-col justify-center items-center space-y-1">
               <HeartHandshake className="text-slate-700 dark:text-slate-400 size-6" />
-              <p className="text-slate-700 dark:text-slate-400 font-semibold text-sm">
+              <p className="text-slate-700 dark:text-slate-400 font-poppins font-semibold text-sm">
                 Crush
               </p>
             </div>
@@ -75,16 +75,16 @@ export const BottomBar = (props: bottomProps) => {
       <NavLink to="/events">
         {({ isActive }) =>
           isActive ? (
-            <div className="flex flex-col justify-center items-center">
+            <div className="cursor-pointer flex flex-col justify-center items-center space-y-1">
               <CalendarDays className="text-pink-500 dark:text-pink-600 size-6" />
-              <p className="text-pink-500 dark:text-pink-600 font-semibold text-sm">
+              <p className="text-pink-500 dark:text-pink-600 font-poppins font-semibold text-sm">
                 Evêntos
               </p>
             </div>
           ) : (
-            <div className="flex flex-col justify-center items-center">
+            <div className="cursor-pointer flex flex-col justify-center items-center space-y-1">
               <CalendarDays className="text-slate-700 dark:text-slate-400 size-6" />
-              <p className="text-slate-700 dark:text-slate-400 font-semibold text-sm">
+              <p className="text-slate-700 dark:text-slate-400 font-poppins font-semibold text-sm">
                 Evêntos
               </p>
             </div>
