@@ -162,7 +162,7 @@ export const ProfileLayout = () => {
                 to="/profile/edit"
               >
                 <Button
-                  variant={"outline"}
+                  variant={"default"}
                   className="font-poppins font-semibold uppercase w-full"
                 >
                   <PencilRuler className="mr-2 size-4" />
@@ -173,7 +173,7 @@ export const ProfileLayout = () => {
 
             {!isOwnProfile && (
               <Button
-                variant={"outline"}
+                variant={"default"}
                 className="font-poppins font-semibold uppercase w-full"
               >
                 <UserRoundPlus className="mr-2 size-4" />
@@ -182,7 +182,7 @@ export const ProfileLayout = () => {
             )}
 
             <Button
-              variant={"outline"}
+              variant={"default"}
               size="icon"
               onClick={() => handleShare(viewingUser.nickname, id)}
             >
@@ -203,11 +203,31 @@ export const ProfileLayout = () => {
             </div>
           </div>
           <Divider />
+          
+          <div className="flex flex-row justify-around items-center">
+              <div 
+                variant="ghost" 
+                className={`flex flex-row items-center p-1 space-x-1 ${selected === 'text' ? 'border-b-1 border-slate-500 dark:border-slate-400' : ''}`}
+                onClick={() => handleSelect('text')}
+              >
+                    <CardDescription>Postagens</CardDescription>
+                    <Badge variant="outline">0</Badge>
+                </div>
+                
+                <div
+                  className={`flex flex-row items-center p-1 space-x-1 ${selected === 'image' ? 'border-b-1 border-slate-500 dark:border-slate-400' : ''}`}
+                  onClick={() => handleSelect('image')}
+                >
+                    <CardDescription>Imagens</CardDescription>
+                    <Badge variant="outline">0</Badge>
+                </div>
+            </div>
         </CardContent>
 
         <CardFooter>
-            <div className="flex flex-row justify-around items-center">
-
+            <div className="flex flex-col justify-center items-center space-y-2">
+                <SearchX className="text-slate-500 dark:text-slate-400 size-14" />
+                <CardDescription className="text-default font-inter font-medium text-tiny text-center w-full">Usuário não possui nenhuma publicação de {selected === 'text' ? 'texto' : 'imagem'}.</CardDescription>
             </div>
         </CardFooter>
       </Card>
