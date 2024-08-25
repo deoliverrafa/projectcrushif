@@ -2,12 +2,12 @@ import * as React from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 
 import { Profile } from "../components/profile.component";
-import { Drawer } from "../components/drawer.tsx";
+
 import { Button } from "../components/ui/button.tsx";
+
 import {
   Navbar,
   NavbarBrand,
-  NavbarMenuToggle,
   NavbarContent,
   NavbarItem,
   Link,
@@ -49,10 +49,6 @@ export const NavBar = (props: userData) => {
       isBlurred={false}
     >
       <NavbarContent justify="start">
-        <NavbarMenuToggle
-          // aria-label={isMenuOpen ? "Close menu" : "Open menu"}
-          className="flex md:hidden"
-        />
         <Link href="/">
           <NavbarBrand>
             <Image className="h-10 w-12" alt="logo crush if" src={logo} />
@@ -149,8 +145,6 @@ export const NavBar = (props: userData) => {
           avatar={props.avatarPath ? props.avatarPath : ""}
         />
       </NavbarContent>
-
-      <Drawer />
     </Navbar>
   );
 };

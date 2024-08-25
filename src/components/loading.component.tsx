@@ -1,5 +1,5 @@
 import { Card } from "./ui/card";
-import { Modal, ModalContent } from "@nextui-org/react";
+import { Modal, ModalContent, Spinner } from "@nextui-org/react";
 
 export const Loading = () => {
   return (
@@ -12,7 +12,7 @@ export const Loading = () => {
     >
       <ModalContent>
         <Card className="flex flex-row justify-center items-center p-4 space-x-2 space-y-2">
-          <div className="animate-spin rounded-full border-4 border-pink-600 border-t-gray-900 h-8 w-8" />
+          <Spinner color="primary" size="lg" />
           <p className="font-poppins font-semibold uppercase text-tiny">
             Carregando...
           </p>

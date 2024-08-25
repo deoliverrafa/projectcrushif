@@ -109,7 +109,7 @@ export const Profile = ({ name, email, avatar }: profile) => {
         <Link to={""}>
           <DropdownMenuItem className="cursor-pointer font-poppins font-semibold">
             <Heart className="mr-2 size-4" />
-            Curtidos
+            Curtidas
           </DropdownMenuItem>
         </Link>
         <Link to={""}>
@@ -143,7 +143,7 @@ export const Profile = ({ name, email, avatar }: profile) => {
             onClick={logOutHandle}
           >
             <LogOut className="mr-2 size-4" />
-            Deslogar da conta
+            Deslogar
           </DropdownMenuItem>
         </Link>
       </DropdownMenuContent>
