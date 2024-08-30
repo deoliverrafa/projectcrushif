@@ -7,7 +7,7 @@ import { BottomBar } from "../../layout/bottombar.layout.tsx";
 import { Loading } from "../../components/loading.component.tsx";
 import { ToastCookies } from "../../components/cookies.tsx";
 import { PublishButton } from "../../components/floatingButton.tsx";
-import { CardPost, ModalPost } from "../../components/card.tsx";
+import { CardPost, ModalPost } from "../../components/post.component.tsx";
 import { Button } from "@nextui-org/react";
 
 import { CircleChevronDown } from "lucide-react";

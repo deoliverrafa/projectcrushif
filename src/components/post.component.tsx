@@ -1,20 +1,16 @@
-// IMPORT - LIBRARYS //
 import { useEffect, useState } from "react";
 import { Link } from 'react-router-dom';
 import axios from "axios";
 import { formatDistanceToNow, parseISO } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
-// IMPORT - COMPONENTS //
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "./ui/card";
+
 import {
   Avatar,
   Image,
   Modal,
   ModalContent,
-  Card,
-  CardHeader,
-  CardBody,
-  CardFooter,
   Button,
   Divider,
   Dropdown,
@@ -23,7 +19,6 @@ import {
   DropdownItem
 } from "@nextui-org/react";
 
-// IMPORT - ICONS //
 import {
   BadgeCheck,
   Heart,
@@ -39,10 +34,8 @@ import {
   CircleUserRound
 } from 'lucide-react';
 
-// IMPORT - SCRIPTS //
 // import { getUserData } from './../utils/getUserData.tsx';
 
-// CREATE - INTERFACES //
 interface CardProps {
   className?: string;
   hiddenProps?: boolean;
@@ -99,10 +92,7 @@ export const CardPost = (props: CardProps) => {
 
 
   return (
-    <Card
-      radius="lg"
-      className={`flex flex-col w-11/12 max-w-[768px] mt-5 ${props.className}`}
-    >
+    <Card>
       <CardHeader className="justify-between items-center">
         <Link to={`/profile/${props.id}`} className="flex space-x-2">
           <div className="flex relative">
@@ -141,7 +131,7 @@ export const CardPost = (props: CardProps) => {
           Seguir
         </Button>
       </CardHeader>
-      <CardBody className="pb-0">
+      <CardContent className="pb-0">
         <div className="cursor-pointer flex flex-col" onClick={props.handlePost}>
           {props.photoURL && (
             <div className="flex justify-center items-center">
@@ -174,7 +164,7 @@ export const CardPost = (props: CardProps) => {
           <p className="text-default font-inter tracking-wider text-tiny">ver as <span className="text-foreground font-medium">{0}</span> curtidas.</p>
           <p className="text-default font-inter tracking-wider text-tiny">ver os <span className="text-foreground font-medium">{0}</span> comentários.</p>
         </div>
-      </CardBody>
+      </CardContent>
       <CardFooter className="flex-col justify-start items-start">
         <Divider />
         {formattedData && (
@@ -227,7 +217,6 @@ export const ModalPost = (props: CardProps) => {
       <ModalContent>
         <Card
           className="sm:w-full md:min-w-[500px]"
-          radius="lg"
         >
           <CardHeader className="justify-between items-center">
             <Button
@@ -313,14 +302,14 @@ export const ModalPost = (props: CardProps) => {
           </CardHeader>
           <Divider />
           {props.photoURL && (
-            <CardBody className="pb-0">
+            <CardContent className="pb-0">
               <Image
                 className="object-contain max-h-[500px] w-[500px]"
                 radius="lg"
                 src={props.photoURL}
                 alt="Imagem Post"
               />
-            </CardBody>
+            </CardContent>
           )}
           <CardFooter className="flex-col justify-start items-start">
             <div className="flex flex-row items-center mb-0.5 w-full h-full">

@@ -1,12 +1,13 @@
 import { NavBarReturn } from "../../layout/navbar.layout";
 import { PublishLayout } from "../../layout/publish.layout";
+import { LogoLayout } from "../../layout/logo.layout";
 
 const PublishPage = () => {
   return (
     <>
       <NavBarReturn title="Publique" />
 
-      <main className="select-none flex flex-col justify-center items-center h-full w-full">
+      <main className="select-none">
         <PublishLayout />
       </main>
     </>

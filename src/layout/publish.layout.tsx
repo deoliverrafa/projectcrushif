@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { CardPost } from "../components/card";
+import { CardPost } from "../components/post.component";
 
 import {
   Card,
@@ -9,8 +9,9 @@ import {
 } from "../components/ui/card";
 import { Input } from "../components/ui/input";
 import { Button } from "../components/ui/button";
+import { Label } from "../components/ui/label";
 
-import { Switch, Divider } from "@nextui-org/react";
+import { Switch } from "@nextui-org/react";
 
 import { getUserData } from "../utils/getUserData";
 
@@ -146,32 +147,8 @@ export const PublishLayout = () => {
     }
   }
   return (
-    <Card className="flex flex-col w-11/12 max-w-[512px] mt-12">
-      <CardHeader className="flex-col">
-        <Switch
-          color="primary"
-          size="lg"
-          onClick={handleIsAnonymous}
-          thumbIcon={() =>
-            !isAnonymous ? (
-              <Earth className="text-primary size-5" />
-            ) : (
-              <Drama className="text-default-300 size-5" />
-            )
-          }
-        >
-          {!isAnonymous ? (
-            <p className="font-inter font-semibold">Público</p>
-          ) : (
-            <p className="font-inter font-semibold">Anônimo</p>
-          )}
-        </Switch>
-
-        <div className="flex flex-col justify-center items-center my-1 w-full">
-          <h1 className="font-inter text-default text-xs tracking-wide my-0.5">
-            (Acompanhe seu post)
-          </h1>
-          <CardPost
+    <div className="flex flex-row justify-between items-center space-x-2 h-screen w-full">
+    <CardPost
             className="my-0.5"
             campus={cardData.campus}
             content={cardData.content}
@@ -184,48 +161,79 @@ export const PublishLayout = () => {
             userId={userData?._id}
             hiddenProps={true}
           />
-          {isAnonymous && (
-            <div>
-              <h1 className="font-inter text-default text-xs tracking-wide my-0.5">
-                (Seu nome não aparecerá no seu post)
-              </h1>
-            </div>
-          )}
+    <Card className="w-5/6 max-w-sm">
+      <CardHeader className="flex flex-col justify-center items-center space-y-2">
+        <div className="flex flex-row justify-start items-start w-full">
+          <CardTitle className="font-poppins uppercase">
+            Nova Publicação
+          </CardTitle>
         </div>
       </CardHeader>
-      <Divider />
 
       <CardContent>
         <form onSubmit={handleSubmit} className="flex flex-col relative gap-5">
-          {/* Wrap inputs */}
-          <div className="flex flex-row justify-center items-center">
+          <div className="grid items-center gap-1.5 w-full max-w-sm">
+            <Label htmlFor="content">Descrição</Label>
             <Input
-              key="content"
               type="text"
+              key="content"
+              placeholder="ex: Descrição da publicação"
+              className="font-inter font-medium"
               name="content"
-              className="font-inyer font-medium w-full"
+              id="content"
               onChange={handleChangeData}
             />
           </div>
 
           {!isAnonymous && (
-            <div className="flex flex-row justify-center items-center">
+            <div className="grid items-center gap-1.5 w-full max-w-sm">
+              <Label htmlFor="references">Marcações</Label>
               <Input
-                key="references"
                 type="text"
+                key="references"
+                placeholder="ex: #Hashtag, #HashTag, #hashtag"
+                className="font-inter font-medium"
                 name="references"
-                className="font-Poppins font-medium w-full"
+                id="references"
                 onChange={handleChangeData}
               />
             </div>
           )}
 
+          <div className="grid items-center gap-1.5 w-full max-w-sm">
+            <Label htmlFor="inputFoto">Upload</Label>
+            <Input
+              type="file"
+              key="foto"
+              className="font-inter font-medium"
+              name="foto"
+              id="inputFoto"
+              onChange={handleFileChange}
+            />
+          </div>
+
+          <Switch
+            color="primary"
+            size="lg"
+            onClick={handleIsAnonymous}
+            thumbIcon={() =>
+              !isAnonymous ? (
+                <Earth className="text-primary size-5" />
+              ) : (
+                <Drama className="text-default-300 size-5" />
+              )
+            }
+          >
+            {!isAnonymous ? (
+              <CardDescription>Público</CardDescription>
+            ) : (
+              <CardDescription>Anônimo</CardDescription>
+            )}
+          </Switch>
+
           <div className="flex flex-row justify-center items-center">
             <label htmlFor="inputFoto" className="w-full h-fit cursor-pointer">
-              <Button
-                className="font-poppins font-bold uppercase tracking-widest"
-              
-              >
+              <Button className="font-poppins font-bold uppercase tracking-widest">
                 <CloudUpload />
                 Upload de imagem
               </Button>
@@ -262,5 +270,6 @@ export const PublishLayout = () => {
         </form>
       </CardContent>
     </Card>
+    </div>
   );
 };
