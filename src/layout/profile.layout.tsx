@@ -27,7 +27,7 @@ import {
 } from "lucide-react";
 
 interface User {
-  name: any;
+  userName: string;
   _id: string;
   nickname: string;
   email: string;
@@ -45,8 +45,10 @@ export const ProfileLayout = () => {
   const [viewingUser, setViewingUser] = React.useState<User | null>(null);
   const [age, setAge] = React.useState<number | null>(null);
   const [selected, setSelected] = React.useState("text");
-  const { id } = useParams();
+  const { id } = useParams<string>();
 
+  console.log(viewingUser);
+  
   const handleSelect = (item: string) => {
     setSelected(item);
   };
@@ -66,6 +68,8 @@ export const ProfileLayout = () => {
 
     return age;
   };
+
+  
 
   React.useEffect(() => {
     const fetchViewingUserData = async () => {
@@ -99,7 +103,7 @@ export const ProfileLayout = () => {
 
           <div className="flex flex-row items-center">
             <Badge variant={"outline"} className="font-poppins font-light capitalize text-sm">
-              {viewingUser.name ? viewingUser.name : "Nome indisponível"}
+              {viewingUser.userName ? viewingUser.userName : "Nome indisponível"}
             </Badge>
           </div>
 
@@ -178,7 +182,8 @@ export const ProfileLayout = () => {
             <Button
               variant={"default"}
               size="icon"
-              onClick={() => handleShare(viewingUser.nickname, id)}
+              // Usa sempre um valor padrão quando for assim, daí faz a manipulação se for um '' usuário inválido, ou sessão inativa
+              onClick={() => handleShare(viewingUser.nickname, id ? id : '')}
             >
               <Share2 className="size-4" />
             </Button>

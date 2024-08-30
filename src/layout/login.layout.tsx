@@ -143,7 +143,7 @@ export const LoginLayout = () => {
               </Button>
             </Link>
 
-            <p className="font-inter text-wrap text-center text-center text-tiny">
+            <p className="font-inter text-wrap text-center text-tiny">
               Ao entrar, você concorda com os Termos e e Política de Privacidade
               do{" "}
               <Link
@@ -315,7 +315,7 @@ export const LoginLayoutMobile = () => {
             </Button>
           </Link>
 
-          <p className="font-inter text-wrap text-center text-center text-tiny">
+          <p className="font-inter text-wrap text-center text-tiny">
             Ao entrar, você concorda com os Termos e e Política de Privacidade
             do{" "}
             <Link to="/auth/terms" className="text-pink-500 dark:text-pink-600 font-recursive font-semibold uppercase tracking-widest">

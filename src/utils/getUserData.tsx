@@ -11,6 +11,8 @@ interface User {
     birthdaydata: string
     Nfollowing: number
     Nfollowers: number
+    following: string[]
+    followers: string[]
     curso: string
 }
 
@@ -27,6 +29,8 @@ export function getUserData() {
         curso: '',
         Nfollowers: 0,
         Nfollowing: 0,
+        following: [],
+        followers: []
     });
 
     useEffect(() => {

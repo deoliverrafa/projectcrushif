@@ -163,7 +163,6 @@ const emailsEstudantisPorEstado = [
 export const RegisterLayout = () => {
   const [messageError, setMessageError] = React.useState(String);
   const [clickedButton, setClickedButton] = React.useState(Boolean);
-  const [emailCompleted, setEmailCompleted] = React.useState(false);
 
   const [formData, setFormData] = React.useState({
     nickname: "",
@@ -178,60 +177,63 @@ export const RegisterLayout = () => {
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
+    
     setClickedButton(false);
     const { name, value } = e.target;
-
-    if (value.length === 0) {
-      setEmailCompleted(false);
-    }
-
-    if (!emailCompleted) {
-      if (name == "email" && value && value.includes("@")) {
-        setFormData((prevFormData) => ({
-          ...prevFormData,
-          [name]: `${value}estudante.if.edu.br`,
-        }));
-        setEmailCompleted(true);
-      } else {
-        setFormData((prevData: UserDataRegister) => ({
-          ...prevData,
-          [name]: value,
-        }));
-        setEmailCompleted(false);
-      }
-    } else {
-      setFormData((prevData: UserDataRegister) => ({
+    console.log(name);
+    console.log(value);
+    
+     setFormData((prevData: UserDataRegister) => ({
         ...prevData,
         [name]: value,
       }));
     }
-  };
+    
+    // if (value.length === 0) {
+    //   setEmailCompleted(false);
+    // }
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    setClickedButton(true);
-    setMessageError("");
+    // if (!emailCompleted) {
+    //   if (name == "email" && value && value.includes("@")) {
+    //     setFormData((prevFormData) => ({
+    //       ...prevFormData,
+    //       [name]: `${value}estudante.if.edu.br`,
+    //     }));
+    //     setEmailCompleted(true);
+    //   } else {
+    //     setFormData((prevData: UserDataRegister) => ({
+    //       ...prevData,
+    //       [name]: value,
+    //     }));
+    //     setEmailCompleted(false);
+      // }
+     
+      const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        setClickedButton(true);
+        setMessageError("");
+    
+        e.preventDefault();
+    
+        try {
+          const response = await axios.post(
+            `${import.meta.env.VITE_API_BASE_URL}${
+              import.meta.env.VITE_REGISTER_ROUTE
+            }`,
+            formData
+          );
+    
+          if (response.data.isRegistered) {
+            window.location.href = "/";
+          }
+        } catch (error: any) {
+          const messageError = error.response.data.message;
+    
+          setMessageError(messageError);
+        } finally {
+          setClickedButton(false);
+        }
+      };
 
-    e.preventDefault();
-
-    try {
-      const response = await axios.post(
-        `${import.meta.env.VITE_API_BASE_URL}${
-          import.meta.env.VITE_REGISTER_ROUTE
-        }`,
-        formData
-      );
-
-      if (response.data.isRegistered) {
-        window.location.href = "/";
-      }
-    } catch (error: any) {
-      const messageError = error.response.data.message;
-
-      setMessageError(messageError);
-    } finally {
-      setClickedButton(false);
-    }
-  };
   return (
     <>
       <div className="hidden md:flex flex-col space-y-2">
@@ -257,7 +259,7 @@ export const RegisterLayout = () => {
                   <Label htmlFor="email">E-mail</Label>
                   <Input
                     type="text"
-                    placeholder="ex: nome"
+                    placeholder="ex: rafael"
                     className="font-inter font-medium"
                     id="email"
                     name="email"
@@ -273,7 +275,7 @@ export const RegisterLayout = () => {
                       <SelectValue placeholder="@estudante.if.gov.br" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectGroup onChange={handleChange}>
+                      <SelectGroup onChange={() => {handleChange}}>
                         {emailsEstudantisPorEstado.map((email) => (
                           <SelectItem key={email} value={email}>
                             {email}
@@ -300,7 +302,9 @@ export const RegisterLayout = () => {
                 </div>
 
                 <div className="grid items-center gap-1.5 w-full max-w-sm">
-                  <Label htmlFor="nickname">Usuário</Label>
+                  <Label htmlFor="nickname">
+                    Usuário
+                  </Label>
                   <Input
                     type="text"
                     placeholder="ex: nickname"
@@ -344,7 +348,7 @@ export const RegisterLayout = () => {
               </Button>
             </Link>
 
-            <p className="font-inter text-wrap text-center text-center text-tiny">
+            <p className="font-inter text-wrap text-center text-tiny">
               Ao entrar, você concorda com os Termos e e Política de Privacidade
               do{" "}
               <Link
@@ -382,7 +386,6 @@ export const RegisterLayout = () => {
 export const RegisterLayoutMobile = () => {
   const [messageError, setMessageError] = React.useState(String);
   const [clickedButton, setClickedButton] = React.useState(Boolean);
-  const [emailCompleted, setEmailCompleted] = React.useState(false);
 
   const [formData, setFormData] = React.useState({
     nickname: "",
@@ -400,31 +403,29 @@ export const RegisterLayoutMobile = () => {
     setClickedButton(false);
     const { name, value } = e.target;
 
-    if (value.length === 0) {
-      setEmailCompleted(false);
-    }
+    // if (value.length === 0) {
+    //   setEmailCompleted(false);
+    // }
 
-    if (!emailCompleted) {
-      if (name == "email" && value && value.includes("@")) {
-        setFormData((prevFormData) => ({
-          ...prevFormData,
-          [name]: `${value}estudante.if.edu.br`,
-        }));
-        setEmailCompleted(true);
-      } else {
-        setFormData((prevData: UserDataRegister) => ({
-          ...prevData,
-          [name]: value,
-        }));
-        setEmailCompleted(false);
-      }
-    } else {
-      setFormData((prevData: UserDataRegister) => ({
-        ...prevData,
-        [name]: value,
-      }));
+    // if (!emailCompleted) {
+    //   if (name == "email" && value && value.includes("@")) {
+    //     setFormData((prevFormData) => ({
+    //       ...prevFormData,
+    //       [name]: `${value}estudante.if.edu.br`,
+    //     }));
+    //     setEmailCompleted(true);
+    //   } else {
+    //     setFormData((prevData: UserDataRegister) => ({
+    //       ...prevData,
+    //       [name]: value,
+    //     }));
+    //     setEmailCompleted(false);
+    //   }
+    setFormData((prevData: UserDataRegister) => ({
+      ...prevData,
+      [name]: value,
+    }));
     }
-  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     setClickedButton(true);
@@ -506,7 +507,7 @@ export const RegisterLayoutMobile = () => {
                         <SelectValue placeholder="@estudante.if.gov.br" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectGroup onChange={handleChange}>
+                        <SelectGroup onChange={() => {handleChange}}>
                           {emailsEstudantisPorEstado.map((email) => (
                             <SelectItem key={email} value={email}>
                               {email}
@@ -590,7 +591,7 @@ export const RegisterLayoutMobile = () => {
             </Button>
           </Link>
 
-          <p className="font-inter text-wrap text-center text-center text-tiny">
+          <p className="font-inter text-wrap text-center text-tiny">
             Ao entrar, você concorda com os Termos e e Política de Privacidade
             do{" "}
             <Link

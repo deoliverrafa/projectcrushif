@@ -110,6 +110,7 @@ const institutosFederaisPorEstado = [
 export const BaseUserShow = (props: userData) => {
 
   const [errorImage, setErrorImage] = useState("");
+  const [responseImage, setResponseImage] = useState<string>();
 
   const handleImageChange = async (event: React.BaseSyntheticEvent) => {
     const imageFile = event.target.files[0];
@@ -117,12 +118,20 @@ export const BaseUserShow = (props: userData) => {
       setErrorImage('')
       const formData = new FormData();
       formData.append("avatar", imageFile);
+      formData.append("token", `${localStorage.getItem('token')}`)
 
-      const response = await axios.post(`${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_UPDATE_PROFILE_PHOTO}${localStorage.getItem('userId')}`, formData);
+      const response = await axios.post(`${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_UPDATE_PROFILE_PHOTO}`
+        ,
+        formData,
+        {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          }
+        }
+      );
 
       if (response.data.updated) {
-        const imageUrl = URL.createObjectURL(imageFile);
-        localStorage.setItem('avatar', imageUrl);
+        setResponseImage(response.data.avatarURL);
         window.dispatchEvent(new Event('storage'));
       }
 
@@ -245,7 +254,7 @@ export const BaseUserShow = (props: userData) => {
                   className="cursor-pointer"
                   color="primary"
                   name={nickname}
-                  src={props.user?.avatar} />
+                  src={responseImage ? responseImage : props.user.avatar} />
               </Badge>
             </label>
 
@@ -394,37 +403,37 @@ export const BaseUserShow = (props: userData) => {
                   onChange={(e: React.BaseSyntheticEvent) => { setNickname(e.target.value) }}
                 ></Input>
               </div>
-              
+
               <div className="flex flex-row justify-between items-center space-x-1 w-full">
                 <div className="flex flex-row items-center w-full">
-                <Input
-                  isClearable
-                  radius="lg"
-                  label='Curso'
-                  placeholder="ex: administração"
-                  className="font-inter font-medium w-full"
-                  value={curso}
-                  onChange={(e: React.BaseSyntheticEvent) => { setCurso(e.target.value) }}
-                ></Input>
-              </div>
+                  <Input
+                    isClearable
+                    radius="lg"
+                    label='Curso'
+                    placeholder="ex: administração"
+                    className="font-inter font-medium w-full"
+                    value={curso}
+                    onChange={(e: React.BaseSyntheticEvent) => { setCurso(e.target.value) }}
+                  ></Input>
+                </div>
 
-              <div className="w-full flex flex-row justify-center items-center">
-                <Select
-                  radius="lg"
-                  label="Instituto"
-                  className="font-inter font-medium w-full"
-                  name="campus"
-                  selectedKeys={[campus]}
-                  onChange={(e: React.BaseSyntheticEvent) => { setCampus(e.target.value) }}
-                  value={campus}>
-                  {institutosFederaisPorEstado.map((instituto) => (
-                    <SelectItem
-                      key={instituto} value={instituto}>
-                      {instituto}
-                    </SelectItem>
-                  ))}
-                </Select>
-              </div>
+                <div className="w-full flex flex-row justify-center items-center">
+                  <Select
+                    radius="lg"
+                    label="Instituto"
+                    className="font-inter font-medium w-full"
+                    name="campus"
+                    selectedKeys={[campus]}
+                    onChange={(e: React.BaseSyntheticEvent) => { setCampus(e.target.value) }}
+                    value={campus}>
+                    {institutosFederaisPorEstado.map((instituto) => (
+                      <SelectItem
+                        key={instituto} value={instituto}>
+                        {instituto}
+                      </SelectItem>
+                    ))}
+                  </Select>
+                </div>
               </div>
             </div>
             :
@@ -512,7 +521,7 @@ export const BaseUserShow = (props: userData) => {
                 <p>Error: {errorMessage}</p>
               ) : null
             }
-            
+
           </CardFooter>
         </form>
       </CardBody >
