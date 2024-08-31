@@ -1,12 +1,9 @@
-// IMPORT - LIBRARYS //
 import { Link } from 'react-router-dom';
 
-// IMPORT - COMPONENTS //
 import {
   Button
 } from '@nextui-org/react';
 
-// IMPORT - ICONS //
 import {
   Plus
 } from 'lucide-react';

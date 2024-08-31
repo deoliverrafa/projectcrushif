@@ -1,22 +1,22 @@
 import * as React from "react";
 import { Link, useParams } from "react-router-dom";
 
-import { Loading } from "../components/loading.component";
+import { Loading } from "../../components/loading.component.tsx";
 import {
   Card,
   CardContent,
   CardHeader,
   CardFooter,
   CardDescription,
-} from "../components/ui/card";
-import { Badge } from "../components/ui/badge";
-import { Button } from "../components/ui/button.tsx";
+} from "../../components/ui/card";
+import { Button } from "../../components/ui/button.tsx";
+import { Badge } from "../../components/ui/badge.tsx";
 
 import { Divider, Avatar } from "@nextui-org/react";
 
-import { getUserData } from "../utils/getUserData.tsx";
-import { getUserDataById } from "../utils/getUserDataById.tsx";
-import { handleShare } from "../controllers/shareProfile.ts";
+import { getUserData } from "../../utils/getUserData.tsx";
+import { getUserDataById } from "../../utils/getUserDataById.tsx";
+import { handleShare } from "../../controllers/shareProfile.ts";
 
 import {
   PencilRuler,
@@ -48,7 +48,7 @@ export const ProfileLayout = () => {
   const { id } = useParams<string>();
 
   console.log(viewingUser);
-  
+
   const handleSelect = (item: string) => {
     setSelected(item);
   };
@@ -68,8 +68,6 @@ export const ProfileLayout = () => {
 
     return age;
   };
-
-  
 
   React.useEffect(() => {
     const fetchViewingUserData = async () => {
@@ -102,38 +100,38 @@ export const ProfileLayout = () => {
           <Avatar className="w-20 h-20 text-large" src={viewingUser.avatar} />
 
           <div className="flex flex-row items-center">
-            <Badge variant={"outline"} className="font-poppins font-light capitalize text-sm">
-              {viewingUser.userName ? viewingUser.userName : "Nome indisponível"}
-            </Badge>
+            <p className="font-poppins font-light capitalize text-sm">
+              {viewingUser.userName
+                ? viewingUser.userName
+                : "Nome indisponível"}
+            </p>
           </div>
 
           <div className="flex flex-row items-center space-x-1">
-            <Badge variant={"outline"}>
+            <p>
               {viewingUser.nickname
                 ? `@${viewingUser.nickname}`
                 : "indisponível"}
-            </Badge>
+            </p>
 
-            <Badge variant={"outline"}>
-              <BadgeCheck
-                className={`${
-                  viewingUser.type === "Plus"
-                    ? "text-info"
-                    : viewingUser.type === "Admin"
-                    ? "text-danger"
-                    : "text-success"
-                } size-3`}
-              />
-            </Badge>
+            <BadgeCheck
+              className={`${
+                viewingUser.type === "Plus"
+                  ? "text-info"
+                  : viewingUser.type === "Admin"
+                  ? "text-danger"
+                  : "text-success"
+              } size-3`}
+            />
           </div>
 
-          <Badge variant={"outline"} className="relative space-x-1">
-            <div className="flex absolute left-0.5 mx-0.5 h-2 w-2 z-10">
+          <div className="flex flex-row items-center relative space-x-1">
+            <div className="flex absolute -left-2 mx-0.5 h-2 w-2 z-10">
               <span className="animate-ping bg-green-500 dark:bg-green-600 rounded-full opacity-75 inline-flex absolute h-full w-full"></span>
               <span className="bg-green-500 dark:bg-green-600 rounded-full inline-flex relative h-2 w-2"></span>
             </div>
             <CardDescription className="font-light">online</CardDescription>
-          </Badge>
+          </div>
         </CardHeader>
 
         <CardContent className="space-y-2">
@@ -183,7 +181,7 @@ export const ProfileLayout = () => {
               variant={"default"}
               size="icon"
               // Usa sempre um valor padrão quando for assim, daí faz a manipulação se for um '' usuário inválido, ou sessão inativa
-              onClick={() => handleShare(viewingUser.nickname, id ? id : '')}
+              onClick={() => handleShare(viewingUser.nickname, id ? id : "")}
             >
               <Share2 className="size-4" />
             </Button>

@@ -1,9 +1,7 @@
-// IMPORT - COMPONENTS //
-import { NavBarReturn } from "../../layout/navbar.layout";
-import { BaseUserShow } from "../../components/baseUserShow.tsx";
+import { NavBarReturn } from "../../layout/navbar.layout.tsx";
+import { BaseUserShow } from "../../components/user/baseUserShow.tsx";
 import { Loading } from '../../components/loading.component.tsx';
 
-// IMPORT - SCRIPTS //
 import { getUserData } from "../../utils/getUserData.tsx";
 
 const EditProfilePage = () => {

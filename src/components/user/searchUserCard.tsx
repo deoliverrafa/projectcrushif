@@ -1,5 +1,5 @@
 import { Avatar, Card } from "@nextui-org/react";
-import { Button } from "./ui/button.js";
+import { Button } from "../ui/button.js";
 import { BadgeCheck } from "lucide-react";
 import axios from "axios";
 import { useState } from "react";

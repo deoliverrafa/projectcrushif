@@ -1,16 +1,11 @@
-// IMPORT - LIBRARYS //
-
-// IMPORT - COMPONENTS //
 import { NavBar } from '../../layout/navbar.layout';
 import { BottomBar } from '../../layout/bottombar.layout';
 import { 
   Image
 } from '@nextui-org/react';
 
-// IMPORT - SCRIPTS //
 import { getUserData } from "../../utils/getUserData";
 
-// IMPORT - ICONS //
 import Error404 from './../../../public/images/error404.gif';
 
 const MatchPage = () => {

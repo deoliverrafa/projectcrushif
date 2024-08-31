@@ -1,5 +1,5 @@
 import { LogoLayout } from "../../layout/logo.layout.tsx";
-import { LoginLayout, LoginLayoutMobile } from "../../layout/login.layout.tsx";
+import { LoginLayout, LoginLayoutMobile } from "../../layout/auth/login.layout.tsx";
 
 const LoginPage = () => {
   return (

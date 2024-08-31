@@ -7,9 +7,8 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-} from "./ui/dropdown-menu";
-import { Button } from "./ui/button";
-import { Badge } from "./ui/badge";
+} from "../ui/dropdown-menu";
+import { Button } from "../ui/button";
 
 import { Avatar } from "@nextui-org/react";
 
@@ -24,10 +23,10 @@ import {
   BadgeHelp,
   BellRing,
   Heart,
-  Crown
+  Crown,
 } from "lucide-react";
 
-import { getUserData } from "./../utils/getUserData";
+import { getUserData } from "../../utils/getUserData";
 
 interface profile {
   name: string;
@@ -66,15 +65,15 @@ export const Profile = ({ name, email, avatar }: profile) => {
               </div>
               <div className="flex flex-col">
                 <div className="flex flex-row items-center space-x-1">
-                  <Badge variant={"outline"}>
+                  <div>
                     <p className="font-semibold leading-none tracking-tight">
-                      @{name}
+                      {name}
                     </p>
-                  </Badge>
+                  </div>
 
-                  <Badge variant={"outline"}>
+                  <div>
                     <BadgeCheck className="text-success size-3" />
-                  </Badge>
+                  </div>
                 </div>
                 <p className="text-slate-500 dark:text-slate-400  text-tiny font-inter tracking-light">
                   {email}

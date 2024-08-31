@@ -1,10 +1,8 @@
-// IMPORT - LIBRARYS //
 import { useCallback, useState } from 'react';
-import SearchUserCard from '../../components/searchUserCard.tsx';
+import SearchUserCard from '../../components/user/searchUserCard.tsx';
 import { Button } from '../../components/ui/button.js';
 import { debounce } from 'lodash';
 
-// IMPORT - COMPONENTS //
 import { BottomBar } from '../../layout/bottombar.layout.tsx';
 import {
   Navbar,
@@ -12,14 +10,12 @@ import {
   Card
 } from '@nextui-org/react';
 
-// IMPORT - ICONS //
 import {
   Search
 } from 'lucide-react';
 import axios from 'axios';
 import { getUserData } from '../../utils/getUserData.tsx';
 
-// INTERFACES //
 interface User {
   nickname: string,
   avatar: string,
@@ -95,7 +91,7 @@ const SearchPage = () => {
         </form>
       </Navbar>
 
-      <main className="flex flex-col items-center h-screen w-full">
+      <main className="flex flex-col items-center h-full w-full">
 
 
         {/* CARD AO SER RENDERIZADO QUANDO PESQUISAR UM USUARIO */}

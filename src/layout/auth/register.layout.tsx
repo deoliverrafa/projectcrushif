@@ -9,12 +9,12 @@ import {
   CardHeader,
   CardTitle,
   CardDescription,
-} from "../components/ui/card";
-import { Input } from "../components/ui/input";
-import { Label } from "../components/ui/label";
-import { Loading } from "../components/loading.component";
-import { Alert, AlertTitle, AlertDescription } from "../components/ui/alert";
-import { Button } from "../components/ui/button";
+} from "../../components/ui/card";
+import { Input } from "../../components/ui/input";
+import { Label } from "../../components/ui/label";
+import { Loading } from "../../components/loading.component";
+import { Alert, AlertTitle, AlertDescription } from "../../components/ui/alert";
+import { Button } from "../../components/ui/button";
 import {
   Select,
   SelectTrigger,
@@ -22,7 +22,7 @@ import {
   SelectContent,
   SelectGroup,
   SelectItem,
-} from "../components/ui/select";
+} from "../../components/ui/select";
 import {
   Drawer,
   DrawerContent,
@@ -30,7 +30,7 @@ import {
   DrawerTitle,
   DrawerHeader,
   DrawerTrigger,
-} from "../components/ui/drawer";
+} from "../../components/ui/drawer";
 
 import { Divider } from "@nextui-org/react";
 

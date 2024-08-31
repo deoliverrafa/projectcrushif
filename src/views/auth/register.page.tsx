@@ -1,5 +1,5 @@
 import { LogoLayout } from "../../layout/logo.layout";
-import { RegisterLayout, RegisterLayoutMobile } from "../../layout/register.layout";
+import { RegisterLayout, RegisterLayoutMobile } from "../../layout/auth/register.layout";
 
 /* import { ThemeSwitcher } from "../../components/themeSwitcher.component.tsx";
 import { Loading } from './../../components/loading.component.tsx';
