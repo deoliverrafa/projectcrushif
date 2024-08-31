@@ -22,8 +22,8 @@ import {
   BadgeCheck,
   Heart,
   MessageCircleHeart,
-  Share2,
-  AlignRight,
+  Share,
+  Expand,
   UserRoundPlus,
 } from "lucide-react";
 
@@ -88,7 +88,7 @@ export const CardPost = (props: CardProps) => {
       <CardHeader className="flex flex-row justify-between items-center">
         <Link to={`/profile/${props.id}`} className="flex space-x-2">
           <div className="flex relative">
-            <div className="flex absolute right-0 bottom-1 h-2 w-2 z-10">
+            <div className="flex absolute right-0 bottom-0 h-2 w-2 z-10">
               <span className="animate-ping bg-success rounded-full opacity-75 inline-flex absolute h-full w-full"></span>
               <span className="bg-success rounded-full inline-flex relative h-2 w-2"></span>
             </div>
@@ -103,7 +103,7 @@ export const CardPost = (props: CardProps) => {
           <div className="flex flex-col gap-1 items-start justify-center">
             <div className="flex flex-row items-center space-x-1">
               <div>
-                <CardDescription className="font-inter text-xs font-bold leading-none">
+                <CardDescription className="text-tiny font-semibold leading-none">
                   {!props.isAnonymous ? userData?.nickname : "Anônimo"}
                 </CardDescription>
               </div>
@@ -112,57 +112,47 @@ export const CardPost = (props: CardProps) => {
               </div>
             </div>
             {formattedData && (
-              <CardDescription className="text-xs tracking-tight">
+              <CardDescription className="text-tiny tracking-light">
                 há {formattedData} atrás.
               </CardDescription>
             )}
           </div>
         </Link>
 
-        <Drawer>
-          <DrawerTrigger className="">
-            <Button variant={"outline"} size={"icon"}>
-              <AlignRight className="size-4" />
-            </Button>
-          </DrawerTrigger>
-          <DrawerPost
-            _id={props._id}
-            id={props.id}
-            nickname={!props.isAnonymous ? userData?.nickname : "Anônimo"}
-            userAvatar={!props.isAnonymous ? userData?.avatar : ""}
-            formattedData={formattedData}
-            isAnonymous={props.isAnonymous}
-            userName={undefined}
-          />
-        </Drawer>
+        <Button className="font-poppins font-semibold uppercase">
+          <UserRoundPlus className="size-4 mr-2" />
+          Seguir
+        </Button>
       </CardHeader>
 
       <CardContent className="py-2">
-        <div className="flex flex-row items-center h-full w-full">
-          <CardDescription>{props.content || ""}</CardDescription>
-        </div>
-
         <div className="flex flex-col">
           {props.photoURL && (
             <Image
-              className="object-cover my-3"
+              className="object-cover my-3 w-full"
               radius="lg"
               src={props.photoURL}
-              width={500}
-              height={281.25}
+              width={400}
+              height={300}
               alt="Imagem Post"
             />
           )}
 
-          {props.references !== "" && !props.isAnonymous && (
+          <div className="flex flex-row items-center h-full w-full">
+            <CardDescription className="font-semibold">
+              {!props.isAnonymous ? userData?.nickname : "anônimo"}:{" "}
+              {props.content || ""}
+            </CardDescription>
+          </div>
+          {props.references !== "" && (
             <div className="flex flex-row items-center my-0.5 space-x-1 w-full">
-              <a
+              <CardDescription
                 key={props._id}
-                className="text-pink-500 dark:text-pink-600 font-inter text-tiny tracking-wide break-words"
+                className="text-pink-500 dark:text-pink-600 font-semibold"
                 id={props._id}
               >
                 {props.references}
-              </a>
+              </CardDescription>
             </div>
           )}
         </div>
@@ -174,27 +164,36 @@ export const CardPost = (props: CardProps) => {
         {formattedData && (
           <div className="flex flex-row justify-between items-center pt-2 w-full">
             <div className="flex flex-row space-x-1">
-              <Button variant={"outline"} className="w-full">
+              <Button variant={"ghost"} className="w-full">
                 <Heart className="text-slate-500 dark:text-slate-400 size-4 mr-2" />
-                <CardDescription>0</CardDescription>
+                <CardDescription className="font-semibold">0</CardDescription>
               </Button>
-              <Button variant={"outline"} className="w-full">
+              <Button variant={"ghost"} className="w-full">
                 <MessageCircleHeart className="text-slate-500 dark:text-slate-400 size-4 mr-2" />
-                <CardDescription>0</CardDescription>
+                <CardDescription className="font-semibold">0</CardDescription>
               </Button>
-              <Button variant={"outline"} className="w-full">
-                <Share2 className="text-slate-500 dark:text-slate-400 size-4" />
+              <Button variant={"ghost"} className="w-full">
+                <Share className="text-slate-500 dark:text-slate-400 size-4" />
               </Button>
             </div>
 
             <div className="flex items-center">
-              <Button
-                className="font-poppins font-semibold uppercase"
-                variant="outline"
-              >
-                <UserRoundPlus className="size-4 mr-2" />
-                Seguir
-              </Button>
+              <Drawer>
+                <DrawerTrigger className="">
+                  <Button variant={"outline"} size={"icon"}>
+                    <Expand className="size-4" />
+                  </Button>
+                </DrawerTrigger>
+                <DrawerPost
+                  _id={props._id}
+                  id={props.id}
+                  nickname={!props.isAnonymous ? userData?.nickname : "Anônimo"}
+                  userAvatar={!props.isAnonymous ? userData?.avatar : ""}
+                  formattedData={formattedData}
+                  isAnonymous={props.isAnonymous}
+                  userName={undefined}
+                />
+              </Drawer>
             </div>
           </div>
         )}

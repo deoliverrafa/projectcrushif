@@ -91,7 +91,7 @@ const SearchPage = () => {
         </form>
       </Navbar>
 
-      <main className="flex flex-col items-center h-full w-full">
+      <main className="flex flex-col items-center h-svh w-full">
 
 
         {/* CARD AO SER RENDERIZADO QUANDO PESQUISAR UM USUARIO */}

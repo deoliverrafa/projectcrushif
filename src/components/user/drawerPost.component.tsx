@@ -6,7 +6,6 @@ import {
   DrawerHeader,
   DrawerTitle,
 } from "../ui/drawer";
-import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 
 import { Avatar } from "@nextui-org/react";
@@ -54,20 +53,17 @@ export const DrawerPost = (props: CardProps) => {
             <Avatar className="w-20 h-20 text-large" src={props.userAvatar} />
 
             <div className="flex flex-row items-center">
-              <Badge
-                variant={"outline"}
-                className="font-poppins font-light capitalize text-sm"
-              >
+              <div className="font-poppins font-light capitalize text-sm">
                 {props.userName ? props.userName : "Nome indisponível"}
-              </Badge>
+              </div>
             </div>
 
             <div className="flex flex-row items-center space-x-1">
-              <Badge variant={"outline"}>
+              <div>
                 {props.nickname ? `@${props.nickname}` : "indisponível"}
-              </Badge>
+              </div>
 
-              <Badge variant={"outline"}>
+              <div>
                 <BadgeCheck
                   className={`${
                     props.type === "Plus"
@@ -77,18 +73,18 @@ export const DrawerPost = (props: CardProps) => {
                       : "text-success"
                   } size-3`}
                 />
-              </Badge>
+              </div>
             </div>
 
-            <Badge variant={"outline"} className="relative space-x-1">
-              <div className="flex absolute left-0.5 mx-0.5 h-2 w-2 z-10">
+            <div className="flex flex-row items-center relative space-x-1">
+              <div className="flex absolute -left-2 mx-0.5 h-2 w-2 z-10">
                 <span className="animate-ping bg-green-500 dark:bg-green-600 rounded-full opacity-75 inline-flex absolute h-full w-full"></span>
                 <span className="bg-green-500 dark:bg-green-600 rounded-full inline-flex relative h-2 w-2"></span>
               </div>
               <DrawerDescription className="font-light">
                 online
               </DrawerDescription>
-            </Badge>
+            </div>
           </Link>
         </div>
 
@@ -100,7 +96,7 @@ export const DrawerPost = (props: CardProps) => {
             Interações com a publicação do @{props.nickname}.
           </DrawerDescription>
 
-          <div className="flex flex-col items-center my-2 space-y-2 w-full">
+          <div className="flex flex-col items-center px-4 my-2 space-y-2 w-full">
             <Button variant={"outline"} className="w-full">
               <UserRoundPlus className="size-4 mr-2" />
               Seguir
