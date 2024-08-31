@@ -13,6 +13,13 @@ import {
   CardFooter,
   CardHeader,
 } from "../ui/card";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "../ui/carousel";
 import { Drawer, DrawerTrigger } from "../ui/drawer";
 import { Button } from "../ui/button";
 
@@ -84,7 +91,7 @@ export const CardPost = (props: CardProps) => {
   }, [props.userId, props.insertAt]);
 
   return (
-    <Card className="my-2 w-5/6 max-w-sm">
+    <Card className="my-2 w-full md:w-6/12">
       <CardHeader className="flex flex-row justify-between items-center">
         <Link to={`/profile/${props.id}`} className="flex space-x-2">
           <div className="flex relative">
@@ -128,14 +135,20 @@ export const CardPost = (props: CardProps) => {
       <CardContent className="py-2">
         <div className="flex flex-col">
           {props.photoURL && (
-            <Image
-              className="object-cover my-3 w-full"
-              radius="lg"
-              src={props.photoURL}
-              width={400}
-              height={300}
-              alt="Imagem Post"
-            />
+            <Carousel className="flex flex-col items-center">
+              <CarouselContent>
+                <CarouselItem>
+                  <Image
+                    className="object-cover my-3 w-full"
+                    radius="lg"
+                    src={props.photoURL}
+                    alt="Imagem Post"
+                  />
+                </CarouselItem>
+              </CarouselContent>
+              <CarouselPrevious className="hidden" />
+              <CarouselNext className="hidden" />
+            </Carousel>
           )}
 
           <div className="flex flex-row items-center h-full w-full">
@@ -164,20 +177,20 @@ export const CardPost = (props: CardProps) => {
         {formattedData && (
           <div className="flex flex-row justify-between items-center pt-2 w-full">
             <div className="flex flex-row space-x-1">
-              <Button variant={"ghost"} className="w-full">
+              <Button variant={"outline"} className="w-full">
                 <Heart className="text-slate-500 dark:text-slate-400 size-4 mr-2" />
                 <CardDescription className="font-semibold">0</CardDescription>
               </Button>
-              <Button variant={"ghost"} className="w-full">
+              <Button variant={"outline"} className="w-full">
                 <MessageCircleHeart className="text-slate-500 dark:text-slate-400 size-4 mr-2" />
                 <CardDescription className="font-semibold">0</CardDescription>
               </Button>
-              <Button variant={"ghost"} className="w-full">
-                <Share className="text-slate-500 dark:text-slate-400 size-4" />
-              </Button>
             </div>
 
-            <div className="flex items-center">
+            <div className="flex flex-row space-x-1">
+              <Button variant={"outline"} size="icon">
+                <Share className="size-4" />
+              </Button>
               <Drawer>
                 <DrawerTrigger className="">
                   <Button variant={"outline"} size={"icon"}>
