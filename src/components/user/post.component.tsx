@@ -107,10 +107,10 @@ export const CardPost = (props: CardProps) => {
               src={!props.isAnonymous ? userData?.avatar : ""}
             />
           </div>
-          <div className="flex flex-col gap-1 items-start justify-center">
+          <div className="flex flex-col items-start justify-center space-y-1">
             <div className="flex flex-row items-center space-x-1">
               <div>
-                <CardDescription className="text-tiny font-semibold leading-none">
+                <CardDescription className="font-inter text-tiny font-bold leading-none">
                   {!props.isAnonymous ? userData?.nickname : "Anônimo"}
                 </CardDescription>
               </div>
@@ -119,7 +119,7 @@ export const CardPost = (props: CardProps) => {
               </div>
             </div>
             {formattedData && (
-              <CardDescription className="text-tiny tracking-light">
+              <CardDescription className="text-tiny font-medium tracking-tight">
                 há {formattedData} atrás.
               </CardDescription>
             )}

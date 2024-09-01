@@ -8,6 +8,7 @@ import {
   CardHeader,
   CardFooter,
   CardDescription,
+  CardTitle,
 } from "../../components/ui/card";
 import { Button } from "../../components/ui/button.tsx";
 import { Badge } from "../../components/ui/badge.tsx";
@@ -95,56 +96,79 @@ export const ProfileLayout = () => {
   const isOwnProfile = currentUser._id === viewingUser._id;
   return (
     <>
-      <Card className="w-5/6 max-w-sm">
-        <CardHeader className="justify-center items-center space-y-2">
-          <Avatar className="w-20 h-20 text-large" src={viewingUser.avatar} />
-
-          <div className="flex flex-row items-center">
-            <p className="font-poppins font-light capitalize text-sm">
-              {viewingUser.userName
-                ? viewingUser.userName
-                : "Nome indisponível"}
-            </p>
-          </div>
-
-          <div className="flex flex-row items-center space-x-1">
-            <p>
-              {viewingUser.nickname
-                ? `@${viewingUser.nickname}`
-                : "indisponível"}
-            </p>
-
-            <BadgeCheck
-              className={`${
-                viewingUser.type === "Plus"
-                  ? "text-info"
-                  : viewingUser.type === "Admin"
-                  ? "text-danger"
-                  : "text-success"
-              } size-3`}
+      <Card className="w-full md:w-6/12">
+        <CardHeader className="flex flex-row items-center space-x-4">
+          <div className="flex relative">
+            <div className="flex absolute right-0.5 bottom-0.5 h-3 w-3 z-10">
+              <span className="animate-ping bg-success rounded-full opacity-75 inline-flex absolute h-full w-full"></span>
+              <span className="bg-success rounded-full inline-flex relative h-3 w-3"></span>
+            </div>
+            <Avatar
+              size="lg"
+              name={viewingUser.nickname}
+              src={viewingUser.avatar}
             />
           </div>
 
-          <div className="flex flex-row items-center relative space-x-1">
-            <div className="flex absolute -left-2 mx-0.5 h-2 w-2 z-10">
-              <span className="animate-ping bg-green-500 dark:bg-green-600 rounded-full opacity-75 inline-flex absolute h-full w-full"></span>
-              <span className="bg-green-500 dark:bg-green-600 rounded-full inline-flex relative h-2 w-2"></span>
+          <div className="flex flex-col w-5/6">
+            <Divider />
+            <div className="flex flex-row justify-evenly items-center h-12">
+              <div className="cursor-pointer flex flex-col justify-center items-center">
+                <CardDescription className="font-inter font-bold">
+                  {viewingUser.Nfollowers}
+                </CardDescription>
+                <CardDescription className="font-inter font-bold">
+                  Seguidores
+                </CardDescription>
+              </div>
+              <Divider orientation="vertical" />
+              <div className="cursor-pointer flex flex-col justify-center items-center">
+                <CardDescription className="font-inter font-bold">
+                  {viewingUser.Nfollowing}
+                </CardDescription>
+                <CardDescription className="font-inter font-bold">
+                  Seguindo
+                </CardDescription>
+              </div>
             </div>
-            <CardDescription className="font-light">online</CardDescription>
+            <Divider />
           </div>
         </CardHeader>
 
         <CardContent className="space-y-2">
+          <CardTitle className="font-inter font-bold capitalize">
+            {viewingUser.userName ? viewingUser.userName : "Nome indisponível"}
+          </CardTitle>
+
+          <div className="flex flex-row items-center space-x-1">
+            <Badge variant={"outline"}>
+              {viewingUser.nickname
+                ? `@${viewingUser.nickname}`
+                : "indisponível"}
+            </Badge>
+
+            <Badge variant={"outline"}>
+              <BadgeCheck
+                className={`${
+                  viewingUser.type === "Plus"
+                    ? "text-info"
+                    : viewingUser.type === "Admin"
+                    ? "text-danger"
+                    : "text-success"
+                } size-3`}
+              />
+            </Badge>
+          </div>
           <div className="space-y-0.5">
-            <CardDescription className="font-inter font-light tracking-wider text-tiny">
+            <CardDescription className="font-inter font-semibold tracking-wider text-tiny">
               {age ? `Idade: ${age} anos` : "Idade: indisponível"}
             </CardDescription>
-            <CardDescription className="font-inter font-light tracking-wider text-tiny">
+            <CardDescription className="font-inter font-semibold tracking-wider text-tiny">
               {viewingUser.curso
                 ? `Curso: ${viewingUser.curso}`
                 : "Curso: indisponível"}
             </CardDescription>
-            <CardDescription className="font-inter font-light tracking-wider text-tiny">
+            <CardDescription className="font-inter font-semibold tracking-wider text-tiny">
               {viewingUser.campus
                 ? `Campus: ${viewingUser.campus}`
                 : "Campus: indisponível"}
@@ -187,20 +211,6 @@ export const ProfileLayout = () => {
             </Button>
           </div>
 
-          <Divider />
-          <div className="flex flex-row justify-evenly items-center h-8">
-            <div className="cursor-pointer flex flex-col justify-center items-center">
-              <CardDescription>{viewingUser.Nfollowers}</CardDescription>
-              <CardDescription>Seguidores</CardDescription>
-            </div>
-            <Divider orientation="vertical" />
-            <div className="cursor-pointer flex flex-col justify-center items-center">
-              <CardDescription>{viewingUser.Nfollowing}</CardDescription>
-              <CardDescription>Seguindo</CardDescription>
-            </div>
-          </div>
-          <Divider />
-
           <div className="flex flex-row justify-around items-center">
             <div
               className={`cursor-pointer flex flex-row items-center p-1 space-x-1 ${
@@ -210,7 +220,9 @@ export const ProfileLayout = () => {
               }`}
               onClick={() => handleSelect("text")}
             >
-              <CardDescription>Postagens</CardDescription>
+              <CardDescription className="font-inter font-bold">
+                Postagens
+              </CardDescription>
               <Badge variant="outline">0</Badge>
             </div>
 
@@ -222,7 +234,9 @@ export const ProfileLayout = () => {
               }`}
               onClick={() => handleSelect("image")}
             >
-              <CardDescription>Imagens</CardDescription>
+              <CardDescription className="font-inter font-bold">
+                Imagens
+              </CardDescription>
               <Badge variant="outline">0</Badge>
             </div>
           </div>

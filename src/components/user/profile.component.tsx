@@ -66,7 +66,7 @@ export const Profile = ({ name, email, avatar }: profile) => {
               <div className="flex flex-col">
                 <div className="flex flex-row items-center space-x-1">
                   <div>
-                    <p className="font-semibold leading-none tracking-tight">
+                    <p className="text-tiny font-bold leading-none">
                       {name}
                     </p>
                   </div>
@@ -75,7 +75,7 @@ export const Profile = ({ name, email, avatar }: profile) => {
                     <BadgeCheck className="text-success size-3" />
                   </div>
                 </div>
-                <p className="text-slate-500 dark:text-slate-400  text-tiny font-inter tracking-light">
+                <p className="text-slate-500 dark:text-slate-400 text-tiny font-medium tracking-tight">
                   {email}
                 </p>
               </div>
