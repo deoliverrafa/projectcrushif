@@ -15,7 +15,7 @@ import { Avatar } from "@nextui-org/react";
 import {
   ChevronDown,
   PencilRuler,
-  Share2,
+  Share,
   Zap,
   LogOut,
   BadgeCheck,
@@ -66,16 +66,16 @@ export const Profile = ({ name, email, avatar }: profile) => {
               <div className="flex flex-col">
                 <div className="flex flex-row items-center space-x-1">
                   <div>
-                    <p className="text-tiny font-bold leading-none">
+                    <p className="text-slate-950 dark:text-slate-50 font-inter font-bold ">
                       {name}
                     </p>
                   </div>
 
                   <div>
-                    <BadgeCheck className="text-success size-3" />
+                    <BadgeCheck className="text-gree-500 dark:text-green-600 size-3.5" />
                   </div>
                 </div>
-                <p className="text-slate-500 dark:text-slate-400 text-tiny font-medium tracking-tight">
+                <p className="text-slate-500 dark:text-slate-400 font-inter text-tiny font-semibold tracking-light">
                   {email}
                 </p>
               </div>
@@ -91,7 +91,7 @@ export const Profile = ({ name, email, avatar }: profile) => {
         </Link>
         <Link to={"/profile/edit"}>
           <DropdownMenuItem className="cursor-pointer font-poppins font-semibold">
-            <Share2 className="mr-2 size-4" />
+            <Share className="mr-2 size-4" />
             Compartilhar
           </DropdownMenuItem>
         </Link>

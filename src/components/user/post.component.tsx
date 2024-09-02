@@ -1,10 +1,8 @@
-import { useEffect, useState } from "react";
+import * as React from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { formatDistanceToNow, parseISO } from "date-fns";
 import { ptBR } from "date-fns/locale";
-
-import { DrawerPost } from "../user/drawerPost.component";
 
 import {
   Card,
@@ -12,6 +10,7 @@ import {
   CardDescription,
   CardFooter,
   CardHeader,
+  CardTitle,
 } from "../ui/card";
 import {
   Carousel,
@@ -20,8 +19,8 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "../ui/carousel";
-import { Drawer, DrawerTrigger } from "../ui/drawer";
 import { Button } from "../ui/button";
+import { Input } from "../ui/input";
 
 import { Avatar, Image, Divider } from "@nextui-org/react";
 
@@ -30,11 +29,11 @@ import {
   Heart,
   MessageCircleHeart,
   Share,
-  Expand,
+  Crown,
   UserRoundPlus,
 } from "lucide-react";
 
-// import { getUserData } from './../utils/getUserData.tsx';
+import { getUserData } from '../../utils/getUserData.tsx';
 
 interface CardProps {
   className?: string;
@@ -59,10 +58,11 @@ interface UserData {
 }
 
 export const CardPost = (props: CardProps) => {
-  const [userData, setUserData] = useState<UserData>();
-  const [formattedData, setFormattedData] = useState("");
+  const [userData, setUserData] = React.useState<UserData>();
+  const dataUser = getUserData();
+  const [formattedData, setFormattedData] = React.useState("");
 
-  useEffect(() => {
+  React.useEffect(() => {
     const fetchUserData = async () => {
       try {
         const response = await axios.get(
@@ -110,80 +110,73 @@ export const CardPost = (props: CardProps) => {
           <div className="flex flex-col items-start justify-center space-y-1">
             <div className="flex flex-row items-center space-x-1">
               <div>
-                <CardDescription className="font-inter text-tiny font-bold leading-none">
+                <CardTitle className="font-inter font-bold tracking-light">
                   {!props.isAnonymous ? userData?.nickname : "Anônimo"}
-                </CardDescription>
+                </CardTitle>
               </div>
               <div>
-                <BadgeCheck className="text-success size-3" />
+                <BadgeCheck className="text-green-500 dark:text-green-600 size-3.5" />
               </div>
             </div>
-            {formattedData && (
-              <CardDescription className="text-tiny font-medium tracking-tight">
-                há {formattedData} atrás.
-              </CardDescription>
-            )}
           </div>
         </Link>
 
-        <Button className="font-poppins font-semibold uppercase">
+        <Button variant={"default"} className="font-poppins font-semibold uppercase">
           <UserRoundPlus className="size-4 mr-2" />
           Seguir
         </Button>
       </CardHeader>
 
-      <CardContent className="py-2">
+      <CardContent>
         <div className="flex flex-col">
           {props.photoURL && (
-            <Carousel className="flex flex-col items-center">
+            <Carousel className="flex flex-col items-center my-2">
               <CarouselContent>
                 <CarouselItem>
                   <Image
-                    className="object-cover my-3 w-full"
+                    className="object-cover w-full"
                     radius="lg"
                     src={props.photoURL}
                     alt="Imagem Post"
                   />
                 </CarouselItem>
               </CarouselContent>
-              <CarouselPrevious className="hidden" />
-              <CarouselNext className="hidden" />
+              <CarouselPrevious className="left-4" />
+              <CarouselNext className=" right-4" />
             </Carousel>
           )}
 
           <div className="flex flex-row items-center h-full w-full">
-            <CardDescription className="font-semibold">
-              {!props.isAnonymous ? userData?.nickname : "anônimo"}:{" "}
-              {props.content || ""}
+            <CardDescription className="font-inter font-bold">
+              <span className="text-slate-950 dark:text-slate-50">
+                {!props.isAnonymous ? userData?.nickname : "anônimo"}:{" "}
+              </span>
+              {props.content || ""} {" "}
+              {props.references !== "" && (
+                <a
+                  key={props._id}
+                  className="text-pink-500 dark:text-pink-600 font-inter font-bold"
+                  id={props._id}
+                >
+                  {props.references || ""}
+                </a>
+              )}
             </CardDescription>
           </div>
-          {props.references !== "" && (
-            <div className="flex flex-row items-center my-0.5 space-x-1 w-full">
-              <CardDescription
-                key={props._id}
-                className="text-pink-500 dark:text-pink-600 font-semibold"
-                id={props._id}
-              >
-                {props.references}
-              </CardDescription>
-            </div>
-          )}
         </div>
       </CardContent>
 
       <Divider className="my-2" />
 
-      <CardFooter className="flex-col justify-start items-start">
+      <CardFooter className="flex-col justify-start items-start space-y-2">
         {formattedData && (
-          <div className="flex flex-row justify-between items-center pt-2 w-full">
+          <div className="flex flex-row justify-between items-center w-full">
             <div className="flex flex-row space-x-1">
-              <Button variant={"outline"} className="w-full">
-                <Heart className="text-slate-500 dark:text-slate-400 size-4 mr-2" />
-                <CardDescription className="font-semibold">0</CardDescription>
+              <Button variant={"outline"} size={"icon"}>
+                <Heart className="size-4" />
               </Button>
-              <Button variant={"outline"} className="w-full">
-                <MessageCircleHeart className="text-slate-500 dark:text-slate-400 size-4 mr-2" />
-                <CardDescription className="font-semibold">0</CardDescription>
+              <Button variant={"outline"} size={"icon"}>
+                <MessageCircleHeart className="size-4" />
               </Button>
             </div>
 
@@ -191,24 +184,62 @@ export const CardPost = (props: CardProps) => {
               <Button variant={"outline"} size="icon">
                 <Share className="size-4" />
               </Button>
-              <Drawer>
-                <DrawerTrigger className="">
-                  <Button variant={"outline"} size={"icon"}>
-                    <Expand className="size-4" />
-                  </Button>
-                </DrawerTrigger>
-                <DrawerPost
-                  _id={props._id}
-                  id={props.id}
-                  nickname={!props.isAnonymous ? userData?.nickname : "Anônimo"}
-                  userAvatar={!props.isAnonymous ? userData?.avatar : ""}
-                  formattedData={formattedData}
-                  isAnonymous={props.isAnonymous}
-                  userName={undefined}
-                />
-              </Drawer>
+
+              <Button variant={"outline"} size={"icon"}>
+                <Crown className="size-4" />
+              </Button>
             </div>
           </div>
+        )}
+
+        <div className="flex flex-row justify-between items-center w-full">
+          <div className="flex flex-row items-center space-x-1">
+            <Heart className="text-pink-500 fill-pink-500 dark:text-pink-600 dark:fill-pink-600 size-4" />
+            <CardDescription className="cursor-pointer font-inter text-tiny font-semibold tracking-light">
+              {0} curtidas
+            </CardDescription>
+          </div>
+
+          <div className="flex flex-row items-center space-x-1">
+            <CardDescription className="cursor-pointer font-inter text-tiny font-semibold tracking-light">
+              {0} coméntarios
+            </CardDescription>
+
+            <CardDescription className="cursor-pointer font-inter text-tiny font-semibold tracking-light">
+              •
+            </CardDescription>
+
+            <CardDescription className="cursor-pointer font-inter text-tiny font-semibold tracking-light">
+              {0} compartilhamentos
+            </CardDescription>
+          </div>
+        </div>
+
+        <div className="flex flex-row items-center space-x-2 w-full">
+          <div className="flex relative">
+            <div className="flex absolute right-0 bottom-0 h-2 w-2 z-10">
+              <span className="animate-ping bg-success rounded-full opacity-75 inline-flex absolute h-full w-full"></span>
+              <span className="bg-success rounded-full inline-flex relative h-2 w-2"></span>
+            </div>
+            <Avatar
+              className="font-inter uppercase"
+              size="sm"
+              name={dataUser.nickname}
+              src={dataUser.avatar}
+            />
+          </div>
+
+          <Input
+            className="font-inter font-bold"
+            type="text"
+            placeholder="Adicione um coméntario..."
+          />
+        </div>
+
+        {formattedData && (
+          <CardDescription className="font-inter text-tiny font-semibold tracking-light">
+            há {formattedData} atrás
+          </CardDescription>
         )}
       </CardFooter>
     </Card>

@@ -10,9 +10,9 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "bg-pink-500 text-slate-50 shadow hover:bg-pink-900/90 dark:bg-pink-600 dark:text-slate-50 dark:hover:bg-pink-900/90",
+          "border border-pink-500 bg-white text-pink-500 shadow-sm hover:bg-pink-100 hover:text-pink-900 dark:border-pink-600 dark:bg-slate-950 dark:text-pink-600 dark:hover:bg-pink-800 dark:hover:text-pink-50",
         destructive:
-          "bg-red-500 text-slate-50 shadow-sm hover:bg-red-500/90 dark:bg-red-900 dark:text-slate-50 dark:hover:bg-red-900/90",
+          "border border-red-500 bg-white text-red-500 shadow-sm hover:bg-red-100 hover:text-red-900 dark:border-red-600 dark:bg-slate-950 dark:text-red-600 dark:hover:bg-red-800 dark:hover:text-red-50",
         outline:
           "border border-slate-200 bg-white shadow-sm hover:bg-slate-100 hover:text-slate-900 dark:border-slate-800 dark:bg-slate-950 dark:hover:bg-slate-800 dark:hover:text-slate-50",
         secondary:
