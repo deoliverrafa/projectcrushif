@@ -35,6 +35,7 @@ interface userData {
   email: string;
   campus: string;
   avatar: string;
+  following: string[];
 }
 
 export default function HomePage() {
@@ -63,8 +64,7 @@ export default function HomePage() {
     async function getUserData() {
       try {
         const response = await axios.get(
-          `${import.meta.env.VITE_API_BASE_URL}${
-            import.meta.env.VITE_USER_TOKEN
+          `${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_USER_TOKEN
           }${token}`
         );
         setUserData(response.data.userFinded);
@@ -87,8 +87,7 @@ export default function HomePage() {
         setLoading(true);
         const token = localStorage.getItem("token");
         const response = await axios.get(
-          `${import.meta.env.VITE_API_BASE_URL}${
-            import.meta.env.VITE_POST_GET
+          `${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_POST_GET
           }${token}/${skip}/${limit}`
         );
 
@@ -116,7 +115,7 @@ export default function HomePage() {
     const handleScroll = debounce(() => {
       if (
         window.innerHeight + document.documentElement.scrollTop >=
-          document.documentElement.offsetHeight - 100 &&
+        document.documentElement.offsetHeight - 100 &&
         !loading &&
         !finishedPosts
       ) {
@@ -176,36 +175,43 @@ export default function HomePage() {
           />
           {showCookies && <ToastCookies onClick={handleHideCookies} />}
           <main className="w-full h-full flex flex-col justify-center items-center">
-            {posts.map((post) => (
-              <CardPost
-                key={post._id}
-                _id={post._id}
-                campus={post.campus}
-                content={post.content}
-                email={post.email}
-                isAnonymous={post.isAnonymous}
-                nickname={post.nickname}
-                references={post.references}
-                userAvatar={post.userAvatar}
-                photoURL={post.photoURL}
-                userId={post.userId}
-                insertAt={post.insertAt}
-                id={post.userId}
-                handlePost={() =>
-                  handleModalPost(
-                    post.photoURL,
-                    post.content,
-                    post.references,
-                    post.nickname,
-                    post.isAnonymous,
-                    post.userAvatar
-                  )
-                }
-              />
-            ))}
+            {posts.map((post) => {
+                        
+              const isFollowing = userData.following.some((followingId) => followingId === post.userId);
+
+              return (
+                <CardPost
+                  key={post._id}
+                  _id={post._id}
+                  campus={post.campus}
+                  content={post.content}
+                  email={post.email}
+                  isAnonymous={post.isAnonymous}
+                  nickname={post.nickname}
+                  references={post.references}
+                  userAvatar={post.userAvatar}
+                  photoURL={post.photoURL}
+                  userId={post.userId}
+                  insertAt={post.insertAt}
+                  id={post.userId}
+                  isFollowing={isFollowing} 
+                  handlePost={() =>
+                    handleModalPost(
+                      post.photoURL,
+                      post.content,
+                      post.references,
+                      post.nickname,
+                      post.isAnonymous,
+                      post.userAvatar
+                    )
+                  }
+                />
+              );
+            })}
 
             {openModalPost && (
               <ModalPost
+                isFollowing
                 photoURL={selectedImage}
                 content={selectedText}
                 references={selectedReference}

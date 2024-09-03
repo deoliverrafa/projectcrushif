@@ -60,6 +60,7 @@ interface CardProps {
   userAvatar?: string
   insertAt?: string;
   id?: string;
+  isFollowing: boolean
 }
 
 interface UserData {
@@ -98,6 +99,29 @@ export const CardPost = (props: CardProps) => {
   }, [props.userId, props.insertAt]);
 
 
+  const [formData] = useState({
+    userFollowId: props._id,
+    token: localStorage.getItem('token')
+  });
+
+  // Lógica para seguir usuário
+  const [followedUser, setFollowedUser] = useState(false)
+
+  const FollowUser = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    console.log("Entrei aqui");
+
+    axios.put(`${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_FOLLOW_USER}`,
+      formData
+    ).then((response) => {
+      console.log(response);
+
+      setFollowedUser(response.data.followed)
+    }).catch((error: any) => {
+      console.log(error);
+    })
+  }
+
   return (
     <Card
       radius="lg"
@@ -130,16 +154,19 @@ export const CardPost = (props: CardProps) => {
             )}
           </div>
         </Link>
-        <Button
-          radius="full"
-          size="sm"
-          className={`${props.hiddenProps === true ? 'hidden' : ''} font-poppins tracking-widest font-bold uppercase`}
-          color="primary"
-          variant="flat"
-          startContent={<UserRoundPlus className="size-4" />}
-        >
-          Seguir
-        </Button>
+        <form action="" method="put" onSubmit={FollowUser}>
+          <Button
+            type="submit"
+            radius="full"
+            size="sm"
+            className={`${props.hiddenProps === true ? 'hidden' : ''} font-poppins tracking-widest font-bold uppercase`}
+            color="primary"
+            variant="light"
+            startContent={<UserRoundPlus className="size-4" />}
+          >
+            {followedUser ? "Seguindo" : (props.isFollowing ? "Seguindo" : "Seguir")}
+          </Button>
+        </form>
       </CardHeader>
       <CardBody className="pb-0">
         <div className="cursor-pointer flex flex-col" onClick={props.handlePost}>
@@ -180,28 +207,28 @@ export const CardPost = (props: CardProps) => {
         {formattedData && (
           <div className="flex flex-row justify-between items-center py-2 w-full">
             <Button
-              color="primary"
-              variant="flat"
+              variant="light"
               radius="full"
               size="sm"
-              startContent={<Heart className="fill-primary" />}
+              color="primary"
+              startContent={<Heart />}
             >
               <p className="font-poppins font-semibold">Curtir</p>
             </Button>
             <Button
-              color="primary"
-              variant="flat"
+              variant="light"
               radius="full"
               size="sm"
+              color="primary"
               startContent={<MessageCircleHeart />}
             >
               <p className="font-poppins font-semibold">Comentar</p>
             </Button>
             <Button
-              color="primary"
-              variant="flat"
+              variant="light"
               radius="full"
               size="sm"
+              color="primary"
               startContent={<HandHeart />}
             >
               <p className="font-poppins font-semibold">Enviar</p>
@@ -238,8 +265,8 @@ export const ModalPost = (props: CardProps) => {
             >
               <X />
             </Button>
-            
-            <Divider className="w-16"/>
+
+            <Divider className="w-16" />
 
             <Dropdown>
               <DropdownTrigger>
@@ -275,7 +302,7 @@ export const ModalPost = (props: CardProps) => {
                   className="font-inter"
                   startContent={<UserRoundPlus className="size-4" />}
                 >
-                  <p className="font-inter font-medium">Seguir</p>
+                  <p className="font-inter font-medium">{props.isFollowing ? "Seguindo" : "Seguir"}</p>
                 </DropdownItem>
                 <DropdownItem
                   className="font-inter"

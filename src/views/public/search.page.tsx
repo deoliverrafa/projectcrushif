@@ -140,13 +140,10 @@ const SearchPage = () => {
 
         {queryResponse ? (
           queryResponse.map((user: User) => {
-            console.log("Id do card:",user._id);
 
             const isFollowing = userData.following.some((followingId) => {
-              console.log("Id do array:",followingId);
               return followingId === user._id
             });
-            console.log(isFollowing);
 
             return (<SearchUserCard avatar={user.avatar} nickname={user.nickname} type={user.type} _id={user._id} following={isFollowing} key={user._id} />)
           })

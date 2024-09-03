@@ -24,10 +24,11 @@ export default function SearchUserCard(props: SearchUserCard) {
 
     const FollowUser = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-
+        
         axios.put(`${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_FOLLOW_USER}`,
             formData
         ).then((response) => {
+            
             setFollowedUser(response.data.followed)
         }).catch((error: any) => {
             console.log(error);
