@@ -1,7 +1,5 @@
-// IMPORT - LIBRARYS //
 import { Link } from 'react-router-dom';
 
-// IMPORT - COMPONENTS //
 import { NavBarReturn } from '../../layout/navbar.layout.tsx';
 import { ThemeSwitcher } from '../../components/themeSwitcher.component.tsx';
 import {
@@ -14,21 +12,17 @@ import {
   Divider
 } from '@nextui-org/react';
 
-// IMPORT - ICONS //
 import {
   BadgeCheck,
   LogOut,
   Trash
 } from 'lucide-react';
 
-// IMPORT - SCRIPTS //
 import { getUserData } from "../../utils/getUserData.tsx";
 
 const SettingsPage = () => {
-  // FUNCTION - IMPORT //
   const userData = getUserData();
 
-  // FUNCTION - HANDLE //
   function logOutHandle() {
     localStorage.setItem('token', "null");
   }

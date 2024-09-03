@@ -7,16 +7,15 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-} from "./ui/dropdown-menu";
-import { Button } from "./ui/button";
-import { Badge } from "./ui/badge";
+} from "../ui/dropdown-menu";
+import { Button } from "../ui/button";
 
 import { Avatar } from "@nextui-org/react";
 
 import {
   ChevronDown,
   PencilRuler,
-  Share2,
+  Share,
   Zap,
   LogOut,
   BadgeCheck,
@@ -24,10 +23,10 @@ import {
   BadgeHelp,
   BellRing,
   Heart,
-  Crown
+  Crown,
 } from "lucide-react";
 
-import { getUserData } from "./../utils/getUserData";
+import { getUserData } from "../../utils/getUserData";
 
 interface profile {
   name: string;
@@ -66,17 +65,17 @@ export const Profile = ({ name, email, avatar }: profile) => {
               </div>
               <div className="flex flex-col">
                 <div className="flex flex-row items-center space-x-1">
-                  <Badge variant={"outline"}>
-                    <p className="font-semibold leading-none tracking-tight">
-                      @{name}
+                  <div>
+                    <p className="text-slate-950 dark:text-slate-50 font-inter font-bold ">
+                      {name}
                     </p>
-                  </Badge>
+                  </div>
 
-                  <Badge variant={"outline"}>
-                    <BadgeCheck className="text-success size-3" />
-                  </Badge>
+                  <div>
+                    <BadgeCheck className="text-gree-500 dark:text-green-600 size-3.5" />
+                  </div>
                 </div>
-                <p className="text-slate-500 dark:text-slate-400  text-tiny font-inter tracking-light">
+                <p className="text-slate-500 dark:text-slate-400 font-inter text-tiny font-semibold tracking-light">
                   {email}
                 </p>
               </div>
@@ -92,7 +91,7 @@ export const Profile = ({ name, email, avatar }: profile) => {
         </Link>
         <Link to={"/profile/edit"}>
           <DropdownMenuItem className="cursor-pointer font-poppins font-semibold">
-            <Share2 className="mr-2 size-4" />
+            <Share className="mr-2 size-4" />
             Compartilhar
           </DropdownMenuItem>
         </Link>

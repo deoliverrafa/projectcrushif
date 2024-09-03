@@ -1,7 +1,7 @@
 import * as React from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 
-import { Profile } from "../components/profile.component";
+import { Profile } from "../components/user/profile.component";
 
 import { Button } from "../components/ui/button.tsx";
 

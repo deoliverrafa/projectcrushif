@@ -2,7 +2,7 @@ import * as React from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 
-import { Loading } from "../components/loading.component.tsx";
+import { Loading } from "../../components/loading.component.tsx";
 import {
   Card,
   CardHeader,
@@ -10,16 +10,16 @@ import {
   CardFooter,
   CardTitle,
   CardDescription,
-} from "../components/ui/card.tsx";
-import { Input } from "../components/ui/input.tsx";
-import { Button } from "../components/ui/button.tsx";
-import { Label } from "../components/ui/label.tsx";
+} from "../../components/ui/card.tsx";
+import { Input } from "../../components/ui/input.tsx";
+import { Button } from "../../components/ui/button.tsx";
+import { Label } from "../../components/ui/label.tsx";
 import { Divider } from "@nextui-org/react";
 import {
   Alert,
   AlertTitle,
   AlertDescription,
-} from "../components/ui/alert.tsx";
+} from "../../components/ui/alert.tsx";
 import {
   Drawer,
   DrawerTrigger,
@@ -27,7 +27,7 @@ import {
   DrawerHeader,
   DrawerTitle,
   DrawerDescription,
-} from "../components/ui/drawer";
+} from "../../components/ui/drawer";
 
 import { Siren } from "lucide-react";
 
@@ -126,7 +126,7 @@ export const LoginLayout = () => {
               </div>
 
               <Button
-                className="font-poppins font-semibold uppercase "
+                className="font-poppins font-semibold uppercase"
                 onClick={() => setClickedButton(true)}
               >
                 Entrar
@@ -138,7 +138,7 @@ export const LoginLayout = () => {
 
           <CardFooter className="flex flex-col space-y-2">
             <Link to="/auth/register" className="w-full">
-              <Button className="font-poppins font-semibold uppercase  w-full" variant={"outline"}>
+              <Button className="font-poppins font-semibold uppercase w-full" variant={"outline"}>
                 Registre-se
               </Button>
             </Link>

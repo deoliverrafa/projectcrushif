@@ -11,15 +11,15 @@ const HomePage = React.lazy(() => import("./views/public/home.page.tsx"));
 const SearchPage = React.lazy(() => import("./views/public/search.page.tsx"));
 const EventsPage = React.lazy(() => import("./views/public/events.page.tsx"));
 const MatchPage = React.lazy(() => import("./views/public/match.page.tsx"));
-const SettingsPage = React.lazy(() => import("./views/public/settings.page.tsx"));
+const SettingsPage = React.lazy(() => import("./views/user/settings.page.tsx"));
 const SupportPage = React.lazy(() => import("./views/public/support.page.tsx"));
 const NotificationsPage = React.lazy(
-  () => import("./views/public/notifications.page.tsx")
+  () => import("./views/user/notifications.page.tsx")
 );
-const PublishPage = React.lazy(() => import("./views/public/publish.page.tsx"));
-const ProfilePage = React.lazy(() => import("./views/public/profile.page.tsx"));
+const PublishPage = React.lazy(() => import("./views/user/publish.page.tsx"));
+const ProfilePage = React.lazy(() => import("./views/user/profile.page.tsx"));
 const EditProfilePage = React.lazy(
-  () => import("./views/public/editProfile.page.tsx")
+  () => import("./views/user/editProfile.page.tsx")
 );
 
 const LoginPage = React.lazy(() => import("./views/auth/login.page.tsx"));
@@ -51,6 +51,7 @@ const App = () => {
               </Routes>
             </Router>
           </React.Suspense>
+          
         </NextThemesProvider>
       </NextUIProvider>
     </>

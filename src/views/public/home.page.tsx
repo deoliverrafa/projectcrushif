@@ -7,7 +7,7 @@ import { BottomBar } from "../../layout/bottombar.layout.tsx";
 import { Loading } from "../../components/loading.component.tsx";
 import { ToastCookies } from "../../components/cookies.tsx";
 import { PublishButton } from "../../components/floatingButton.tsx";
-import { CardPost, ModalPost } from "../../components/card.tsx";
+import { CardPost } from "../../components/user/post.component.tsx";
 import { Button } from "@nextui-org/react";
 
 import { CircleChevronDown } from "lucide-react";
@@ -127,44 +127,6 @@ export default function HomePage() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [loading, limit, finishedPosts]);
 
-  {
-    /* FUNCTION - MODAL POST */
-  }
-  const [openModalPost, setOpenModalPost] = useState(false);
-  const [selectedImage, setSelectedImage] = useState("");
-  const [selectedText, setSelectedText] = useState("");
-  const [selectedReference, setSelectedReference] = useState("");
-  const [saveNickname, setSaveNickName] = useState("");
-  const [saveIsAnonymous, setSaveIsAnonymous] = useState(false);
-  const [saveAvatar, setSaveAvatar] = useState("");
-
-  const handleModalPost = (
-    image: string,
-    text: string,
-    reference: string,
-    nickname: string,
-    anonymous: boolean,
-    avatar: string
-  ) => {
-    setSelectedImage(image);
-    setSelectedText(text);
-    setSelectedReference(reference);
-    setSaveNickName(nickname);
-    setSaveIsAnonymous(anonymous);
-    setSaveAvatar(avatar);
-    setOpenModalPost(true);
-  };
-
-  const handleModalPostClose = () => {
-    setSelectedImage("");
-    setSelectedText("");
-    setSelectedReference("");
-    setSaveNickName("");
-    setSaveIsAnonymous(false);
-    setSaveAvatar("");
-    setOpenModalPost(false);
-  };
-
   return (
     <>
       {userData ? (
@@ -175,54 +137,24 @@ export default function HomePage() {
           />
           {showCookies && <ToastCookies onClick={handleHideCookies} />}
           <main className="w-full h-full flex flex-col justify-center items-center">
-            {posts.map((post) => {
-                        
-              const isFollowing = userData.following.some((followingId) => followingId === post.userId);
-
-              return (
-                <CardPost
-                  key={post._id}
-                  _id={post._id}
-                  campus={post.campus}
-                  content={post.content}
-                  email={post.email}
-                  isAnonymous={post.isAnonymous}
-                  nickname={post.nickname}
-                  references={post.references}
-                  userAvatar={post.userAvatar}
-                  photoURL={post.photoURL}
-                  userId={post.userId}
-                  insertAt={post.insertAt}
-                  id={post.userId}
-                  isFollowing={isFollowing} 
-                  handlePost={() =>
-                    handleModalPost(
-                      post.photoURL,
-                      post.content,
-                      post.references,
-                      post.nickname,
-                      post.isAnonymous,
-                      post.userAvatar
-                    )
-                  }
-                />
-              );
-            })}
-
-            {openModalPost && (
-              <ModalPost
-                isFollowing
-                photoURL={selectedImage}
-                content={selectedText}
-                references={selectedReference}
-                nickname={saveNickname}
-                isAnonymous={saveIsAnonymous}
-                userAvatar={saveAvatar}
-                email={userData.email}
-                campus={userData.campus}
-                handlePostClose={() => handleModalPostClose()}
+            {posts.map((post) => (
+              <CardPost
+                key={post._id}
+                _id={post._id}
+                campus={post.campus}
+                content={post.content}
+                email={post.email}
+                isAnonymous={post.isAnonymous}
+                nickname={post.nickname}
+                references={post.references}
+                userAvatar={post.userAvatar}
+                photoURL={post.photoURL}
+                userId={post.userId}
+                insertAt={post.insertAt}
+                id={post.userId}
               />
-            )}
+            ))}
+
             {loading && <Loading />}
           </main>
           <div className="mt-10"></div>

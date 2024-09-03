@@ -1,16 +1,13 @@
-// IMPORT - LIBRARYS //
 import React from 'react';
 import {
   Card,
   Button
 } from '@nextui-org/react';
 
-// CREATE - INTERFACES //
 interface cookiesToastProps {
   onClick?: React.MouseEventHandler<HTMLButtonElement> | undefined
 }
 
-// COMPONENT - TOAST COOKIES //
 export const ToastCookies = (props: cookiesToastProps) => {
   return (
     <Card

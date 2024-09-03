@@ -1,5 +1,5 @@
 import { NavBarReturn } from "../../layout/navbar.layout";
-import { TermsLayout } from "../../layout/terms.layout";
+import { TermsLayout } from "../../layout/auth/terms.layout";
 
 const TermsPage = () => {
     return (

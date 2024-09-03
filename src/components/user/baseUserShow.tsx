@@ -30,9 +30,9 @@ import {
 import {
   EyeInvisibleIcon,
   EyeIcon
-} from './../icons/icons.tsx';
+} from '../../icons/icons.tsx';
 
-import { isValidImage } from "../controllers/avatarUpdate";
+import { isValidImage } from "../../controllers/avatarUpdate";
 
 interface User {
   _id: string;

@@ -1,13 +1,8 @@
-// IMPORT - LIBRARYS //
+import { NavBar } from '../../layout/navbar.layout.tsx';
+import { BottomBar } from '../../layout/bottombar.layout.tsx';
 
-// IMPORT - COMPONENTS //
-import { NavBar } from './../../layout/navbar.layout';
-import { BottomBar } from './../../layout/bottombar.layout';
-
-// IMPORT - SCRIPTS //
 import { getUserData } from "../../utils/getUserData.tsx";
 
-// IMPORT - ICONS //
 import {
   Error404Icon
 } from '../../icons/icons.tsx';
