@@ -51,6 +51,7 @@ const App = () => {
               </Routes>
             </Router>
           </React.Suspense>
+          
         </NextThemesProvider>
       </NextUIProvider>
     </>

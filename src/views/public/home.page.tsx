@@ -156,7 +156,6 @@ export default function HomePage() {
               />
             ))}
 
-            
             {loading && <Loading />}
           </main>
           <div className="mt-10"></div>

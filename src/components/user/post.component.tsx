@@ -33,7 +33,7 @@ import {
   UserRoundPlus,
 } from "lucide-react";
 
-import { getUserData } from '../../utils/getUserData.tsx';
+import { getUserData } from "../../utils/getUserData.tsx";
 
 interface CardProps {
   className?: string;
@@ -121,7 +121,10 @@ export const CardPost = (props: CardProps) => {
           </div>
         </Link>
 
-        <Button variant={"default"} className="font-poppins font-semibold uppercase">
+        <Button
+          variant={"default"}
+          className="font-poppins font-semibold uppercase"
+        >
           <UserRoundPlus className="size-4 mr-2" />
           Seguir
         </Button>
@@ -151,7 +154,7 @@ export const CardPost = (props: CardProps) => {
               <span className="text-slate-950 dark:text-slate-50">
                 {!props.isAnonymous ? userData?.nickname : "anônimo"}:{" "}
               </span>
-              {props.content || ""} {" "}
+              {props.content || ""}{" "}
               {props.references !== "" && (
                 <a
                   key={props._id}
@@ -194,24 +197,19 @@ export const CardPost = (props: CardProps) => {
 
         <div className="flex flex-row justify-between items-center w-full">
           <div className="flex flex-row items-center space-x-1">
-            <Heart className="text-pink-500 fill-pink-500 dark:text-pink-600 dark:fill-pink-600 size-4" />
-            <CardDescription className="cursor-pointer font-inter text-tiny font-semibold tracking-light">
+            <Heart className="text-pink-500 dark:text-pink-600 size-4" />
+            <CardDescription className="cursor-pointer font-inter text-tiny font-bold tracking-light">
               {0} curtidas
             </CardDescription>
           </div>
 
           <div className="flex flex-row items-center space-x-1">
-            <CardDescription className="cursor-pointer font-inter text-tiny font-semibold tracking-light">
-              {0} coméntarios
-            </CardDescription>
-
-            <CardDescription className="cursor-pointer font-inter text-tiny font-semibold tracking-light">
-              •
-            </CardDescription>
-
-            <CardDescription className="cursor-pointer font-inter text-tiny font-semibold tracking-light">
-              {0} compartilhamentos
-            </CardDescription>
+            <div className="flex flex-row items-center space-x-1">
+              <MessageCircleHeart className="text-yellow-500 dark:text-yellow-600 size-4" />
+              <CardDescription className="cursor-pointer font-inter text-tiny font-bold tracking-light">
+                {0} coméntarios
+              </CardDescription>
+            </div>
           </div>
         </div>
 
