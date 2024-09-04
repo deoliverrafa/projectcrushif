@@ -33,7 +33,7 @@ export const ToastInfo = (props: ToastProps) => {
 
   return (
     <Toast.Provider>
-      <Toast.Root className="bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl shadow flex flex-col w-full max-w-sm">
+      <Toast.Root className="bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl shadow flex flex-col w-full md:max-w-sm">
         <div className="flex flex-col p-4">
           <div className="flex flex-row justify-between items-center">
             <div className="flex flex-row items-center space-x-2">
@@ -44,7 +44,7 @@ export const ToastInfo = (props: ToastProps) => {
                 </div>
                 <Avatar size="sm" src={props.avatar} />
               </div>
-              <Toast.Title className="font-inter font-semibold leading-none tracking-tight text-lg">
+              <Toast.Title className="font-inter font-semibold leading-none tracking-tight">
                 {props.title}
               </Toast.Title>
             </div>
@@ -63,7 +63,7 @@ export const ToastInfo = (props: ToastProps) => {
         <Progress value={value} />
       </Toast.Root>
 
-      <Toast.Viewport className="fixed top-0 right-0 p-4 flex flex-col space-y-2 w-full max-w-xs z-50 outline-none" />
+      <Toast.Viewport className="fixed top-0 right-0 p-4 flex flex-col space-y-2 w-full md:max-w-xs z-50 outline-none" />
     </Toast.Provider>
   );
 };
