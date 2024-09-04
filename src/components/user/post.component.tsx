@@ -174,7 +174,7 @@ export const CardPost = (props: CardProps) => {
       <CardFooter className="flex-col justify-start items-start space-y-2">
         {formattedData && (
           <div className="flex flex-row justify-between items-center w-full">
-            <div className="flex flex-row space-x-1">
+            <div className="flex flex-row space-x-2">
               <Button variant={"outline"} size={"icon"}>
                 <Heart className="size-4" />
               </Button>
@@ -183,7 +183,7 @@ export const CardPost = (props: CardProps) => {
               </Button>
             </div>
 
-            <div className="flex flex-row space-x-1">
+            <div className="flex flex-row space-x-2">
               <Button variant={"outline"} size="icon">
                 <Share className="size-4" />
               </Button>

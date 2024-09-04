@@ -1,5 +1,5 @@
 import * as React from "react";
-import { NextUIProvider } from "@nextui-org/react";
+
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
@@ -29,31 +29,28 @@ const TermsPage = React.lazy(() => import("./views/auth/terms.page.tsx"));
 const App = () => {
   return (
     <>
-      <NextUIProvider className="">
-        <NextThemesProvider attribute="class" defaultTheme="dark">
-          <React.Suspense fallback={<Loading />}>
-            <Router>
-              <Routes>
-                <Route path="/" element={<HomePage />} />
-                <Route path="/search" element={<SearchPage />} />
-                <Route path="/events" element={<EventsPage />} />
-                <Route path="/match" element={<MatchPage />} />
-                <Route path="/settings" element={<SettingsPage />} />
-                <Route path="/support" element={<SupportPage />} />
-                <Route path="/notifications" element={<NotificationsPage />} />
-                <Route path="/publish" element={<PublishPage />} />
-                <Route path="/profile/:id" element={<ProfilePage />} />
-                <Route path="/profile/edit" element={<EditProfilePage />} />
+      <NextThemesProvider attribute="class" defaultTheme="dark">
+        <React.Suspense fallback={<Loading />}>
+          <Router>
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/search" element={<SearchPage />} />
+              <Route path="/events" element={<EventsPage />} />
+              <Route path="/match" element={<MatchPage />} />
+              <Route path="/settings" element={<SettingsPage />} />
+              <Route path="/support" element={<SupportPage />} />
+              <Route path="/notifications" element={<NotificationsPage />} />
+              <Route path="/publish" element={<PublishPage />} />
+              <Route path="/profile/:id" element={<ProfilePage />} />
+              <Route path="/profile/edit" element={<EditProfilePage />} />
 
-                <Route path="/auth/login" element={<LoginPage />} />
-                <Route path="/auth/register" element={<RegisterPage />} />
-                <Route path="/auth/terms" element={<TermsPage />} />
-              </Routes>
-            </Router>
-          </React.Suspense>
-          
-        </NextThemesProvider>
-      </NextUIProvider>
+              <Route path="/auth/login" element={<LoginPage />} />
+              <Route path="/auth/register" element={<RegisterPage />} />
+              <Route path="/auth/terms" element={<TermsPage />} />
+            </Routes>
+          </Router>
+        </React.Suspense>
+      </NextThemesProvider>
     </>
   );
 };

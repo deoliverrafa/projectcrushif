@@ -4,10 +4,13 @@ import { debounce } from "lodash";
 
 import { NavBar } from "../../layout/navbar.layout.tsx";
 import { BottomBar } from "../../layout/bottombar.layout.tsx";
+
+import { ToastInfo } from "../../components/toast.component.tsx";
 import { Loading } from "../../components/loading.component.tsx";
 import { ToastCookies } from "../../components/cookies.tsx";
 import { PublishButton } from "../../components/floatingButton.tsx";
 import { CardPost } from "../../components/user/post.component.tsx";
+
 import { Button } from "@nextui-org/react";
 
 import { CircleChevronDown } from "lucide-react";
@@ -138,6 +141,7 @@ export default function HomePage() {
           />
           {showCookies && <ToastCookies onClick={handleHideCookies} />}
           <main className="w-full h-full flex flex-col justify-center items-center">
+            <ToastInfo avatar={userData.avatar} title={"Bem vindo!"} description={`Bem vindo de volta ${userData.nickname}`} />
             {posts.map((post) => (
               <CardPost
                 key={post._id}
@@ -158,6 +162,7 @@ export default function HomePage() {
 
             {loading && <Loading />}
           </main>
+
           <div className="mt-10"></div>
           <div className="flex flex-col justify-center items-center">
             <Button
@@ -169,7 +174,9 @@ export default function HomePage() {
               <CircleChevronDown />
             </Button>
           </div>
+
           <PublishButton />
+
           <BottomBar className="appearance-in" />
         </div>
       ) : (
