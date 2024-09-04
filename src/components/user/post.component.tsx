@@ -195,9 +195,9 @@ export const CardPost = (props: CardProps) => {
             <div className="flex flex-row space-x-2">
               <Button variant={"outline"} size={"icon"} onClick={handleLike}>
                 {liked ? (
-                  <Heart className={`${showHeart ? "animate-ping" : ""} text-pink-500 dark:text-pink-600 fill-pink-500 dark:fill-pink-600  size-4`} />
+                  <Heart className="text-pink-500 dark:text-pink-600 fill-pink-500 dark:fill-pink-600  size-4" />
                 ) : (
-                  <Heart className={`${showHeart ? "animate-ping" : ""} size-4`} />
+                  <Heart className="size-4" />
                 )}
               </Button>
               <Button variant={"outline"} size={"icon"}>
