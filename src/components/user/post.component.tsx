@@ -62,6 +62,15 @@ export const CardPost = (props: CardProps) => {
   const dataUser = getUserData();
   const [formattedData, setFormattedData] = React.useState("");
 
+  const [liked, setLiked] = React.useState(false);
+  const [showHeart, setShowHeart] = React.useState(false);
+
+  const handleLike = () => {
+    setLiked(!liked);
+    setShowHeart(true);
+    setTimeout(() => setShowHeart(false), 500);
+  };
+
   React.useEffect(() => {
     const fetchUserData = async () => {
       try {
@@ -91,7 +100,10 @@ export const CardPost = (props: CardProps) => {
   }, [props.userId, props.insertAt]);
 
   return (
-    <Card className="my-2 w-full md:w-6/12">
+    <Card
+      className="select-none my-2 w-full md:w-6/12"
+      onDoubleClick={handleLike}
+    >
       <CardHeader className="flex flex-row justify-between items-center">
         <Link to={`/profile/${props.id}`} className="flex space-x-2">
           <div className="flex relative">
@@ -130,10 +142,10 @@ export const CardPost = (props: CardProps) => {
         </Button>
       </CardHeader>
 
-      <CardContent>
-        <div className="flex flex-col">
+      <CardContent className="relative">
+        <div className="flex flex-col items-center justify-center">
           {props.photoURL && (
-            <Carousel className="flex flex-col items-center my-2">
+            <Carousel className="flex flex-col items-center my-2 relative">
               <CarouselContent>
                 <CarouselItem>
                   <Image
@@ -145,8 +157,14 @@ export const CardPost = (props: CardProps) => {
                 </CarouselItem>
               </CarouselContent>
               <CarouselPrevious className="left-4" />
-              <CarouselNext className=" right-4" />
+              <CarouselNext className="right-4" />
             </Carousel>
+          )}
+
+          {showHeart && (
+            <div className="absolute inset-0 flex items-center justify-center">
+              <Heart className="animate-ping text-slate-500 dark:text-slate-400 fill-slate-500 dark:fill-slate-400 size-20" />
+            </div>
           )}
 
           <div className="flex flex-row items-center h-full w-full">
@@ -175,8 +193,12 @@ export const CardPost = (props: CardProps) => {
         {formattedData && (
           <div className="flex flex-row justify-between items-center w-full">
             <div className="flex flex-row space-x-2">
-              <Button variant={"outline"} size={"icon"}>
-                <Heart className="size-4" />
+              <Button variant={"outline"} size={"icon"} onClick={handleLike}>
+                {liked ? (
+                  <Heart className="text-pink-500 dark:text-pink-600 fill-pink-500 dark:fill-pink-600  size-4" />
+                ) : (
+                  <Heart className="size-4" />
+                )}
               </Button>
               <Button variant={"outline"} size={"icon"}>
                 <MessageCircleHeart className="size-4" />

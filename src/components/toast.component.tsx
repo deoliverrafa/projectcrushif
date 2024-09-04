@@ -44,7 +44,7 @@ export const ToastInfo = (props: ToastProps) => {
                 </div>
                 <Avatar size="sm" src={props.avatar} />
               </div>
-              <Toast.Title className="font-inter font-semibold leading-none tracking-tight">
+              <Toast.Title className="font-inter font-bold">
                 {props.title}
               </Toast.Title>
             </div>
@@ -55,7 +55,7 @@ export const ToastInfo = (props: ToastProps) => {
               </Button>
             </Toast.Action>
           </div>
-          <Toast.Description className="text-sm text-slate-500 dark:text-slate-400">
+          <Toast.Description className="text-slate-500 dark:text-slate-400 font-inter font-bold">
             {props.description}
           </Toast.Description>
         </div>

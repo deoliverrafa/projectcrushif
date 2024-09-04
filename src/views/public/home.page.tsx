@@ -51,6 +51,9 @@ export default function HomePage() {
   const [showCookies, setShowCookies] = useState(
     localStorage.getItem("showCookies") !== "hidden"
   );
+  const [showWelcome, setShowWelcome] = useState(
+    localStorage.getItem("showWelcome") !== "hidden"
+  );
 
   const handleHideCookies = () => {
     setShowCookies(false);
@@ -67,7 +70,8 @@ export default function HomePage() {
     async function getUserData() {
       try {
         const response = await axios.get(
-          `${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_USER_TOKEN
+          `${import.meta.env.VITE_API_BASE_URL}${
+            import.meta.env.VITE_USER_TOKEN
           }${token}`
         );
         setUserData(response.data.userFinded);
@@ -90,7 +94,8 @@ export default function HomePage() {
         setLoading(true);
         const token = localStorage.getItem("token");
         const response = await axios.get(
-          `${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_POST_GET
+          `${import.meta.env.VITE_API_BASE_URL}${
+            import.meta.env.VITE_POST_GET
           }${token}/${skip}/${limit}`
         );
 
@@ -118,7 +123,7 @@ export default function HomePage() {
     const handleScroll = debounce(() => {
       if (
         window.innerHeight + document.documentElement.scrollTop >=
-        document.documentElement.offsetHeight - 100 &&
+          document.documentElement.offsetHeight - 100 &&
         !loading &&
         !finishedPosts
       ) {
@@ -130,6 +135,14 @@ export default function HomePage() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [loading, limit, finishedPosts]);
 
+  useEffect(() => {
+    setTimeout(() => {
+      setShowWelcome(false);
+      localStorage.setItem("showWelcome", "hidden");
+    }, 5000);
+  }, []);
+
+  console.log(sessionStorage.getItem("showWelcome"));
   return (
     <>
       {userData ? (
@@ -138,9 +151,18 @@ export default function HomePage() {
             user={userData}
             avatarPath={userData.avatar || localAvatarPath}
           />
+
+          {showWelcome && (
+            <ToastInfo
+              avatar={userData.avatar}
+              title={"Bem vindo"}
+              description={`Bem vindo de volta ${userData.nickname}`}
+            />
+          )}
+
           {showCookies && <ToastCookies onClick={handleHideCookies} />}
+
           <main className="w-full h-full flex flex-col justify-center items-center">
-            <ToastInfo avatar={userData.avatar} title={"Bem vindo!"} description={`Bem vindo de volta ${userData.nickname}`} />
             {posts.map((post) => (
               <CardPost
                 key={post._id}
