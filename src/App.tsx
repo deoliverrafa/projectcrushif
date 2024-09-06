@@ -27,6 +27,17 @@ const RegisterPage = React.lazy(() => import("./views/auth/register.page.tsx"));
 const TermsPage = React.lazy(() => import("./views/auth/terms.page.tsx"));
 
 const App = () => {
+  React.useEffect(() => {
+    document.addEventListener("contextmenu", (e) => {
+      e.preventDefault();
+    });
+    return () => {
+      document.removeEventListener("contextmenu", (e) => {
+        e.preventDefault();
+      });
+    };
+  }, []);
+
   return (
     <>
       <NextThemesProvider attribute="class" defaultTheme="dark">

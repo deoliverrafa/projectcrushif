@@ -224,7 +224,11 @@ export const CardPost = (props: CardProps) => {
                 <Share className="size-4" />
               </Button>
 
-              <Button variant={"outline"} size={"icon"} onClick={handleFavorite}>
+              <Button
+                variant={"outline"}
+                size={"icon"}
+                onClick={handleFavorite}
+              >
                 {favorited ? (
                   <Crown className="text-yellow-500 dark:text-yellow-600 fill-yellow-500 dark:fill-yellow-600 size-4" />
                 ) : (

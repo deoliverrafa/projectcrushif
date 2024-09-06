@@ -22,7 +22,7 @@ import {
   ArrowLeft,
 } from "lucide-react";
 
-import logo from "../../public/images/logo/logo.png";
+import logoCrush from "../../public/images/logo/logo.png";
 
 interface User {
   _id: string;
@@ -51,11 +51,10 @@ export const NavBar = (props: userData) => {
       <NavbarContent justify="start">
         <Link href="/">
           <NavbarBrand>
-            <Image className="h-10 w-12" alt="logo crush if" src={logo} />
+            <Image className="h-10 w-10" alt="logo crush if" src={logoCrush} />
             <p className="text-pink-500 dark:text-pink-600 font-recursive font-semibold uppercase tracking-widest">
-              Crush
+              Crush<span className="text-green-500 dark:text-green-600 font-bold tracking-tighter">IF</span>
             </p>
-            <p className="font-mkzodsqu text-green-500 dark:text-green-600 uppercase tracking-tighter text-lg">IF</p>
           </NavbarBrand>
         </Link>
       </NavbarContent>
