@@ -51,7 +51,7 @@ export const NavBar = (props: userData) => {
       <NavbarContent justify="start">
         <Link href="/">
           <NavbarBrand>
-            <Image className="h-10 w-10" alt="logo crush if" src={logoCrush} />
+            <Image className="h-10 w-12 md:w-10" alt="logo crush if" src={logoCrush} />
             <p className="text-pink-500 dark:text-pink-600 font-recursive font-semibold uppercase tracking-widest">
               Crush<span className="text-green-500 dark:text-green-600 font-bold tracking-tighter">IF</span>
             </p>

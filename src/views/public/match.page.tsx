@@ -1,5 +1,6 @@
 import { NavBar } from '../../layout/navbar.layout';
 import { BottomBar } from '../../layout/bottombar.layout';
+
 import { 
   Image
 } from '@nextui-org/react';
@@ -21,7 +22,7 @@ const MatchPage = () => {
         <Image src={Error404} />
         <p className="font-Poppins text-default font-semibold text-wrap text-center text-xl">Ops... Conteúdo indísponivel no momento!</p>
       </main>
-      
+
       <BottomBar />
     </>
   );
