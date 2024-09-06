@@ -64,11 +64,19 @@ export const CardPost = (props: CardProps) => {
 
   const [liked, setLiked] = React.useState(false);
   const [showHeart, setShowHeart] = React.useState(false);
+  const [favorited, setFavorited] = React.useState(false);
+  const [showFavorited, setShowFavorited] = React.useState(false);
 
   const handleLike = () => {
     setLiked(!liked);
     setShowHeart(true);
     setTimeout(() => setShowHeart(false), 500);
+  };
+
+  const handleFavorite = () => {
+    setFavorited(!favorited);
+    setShowFavorited(true);
+    setTimeout(() => setShowFavorited(false), 500);
   };
 
   React.useEffect(() => {
@@ -167,6 +175,12 @@ export const CardPost = (props: CardProps) => {
             </div>
           )}
 
+          {showFavorited && (
+            <div className="absolute inset-0 flex items-center justify-center">
+              <Crown className="animate-ping text-slate-500 dark:text-slate-400 fill-slate-500 dark:fill-slate-400 size-20" />
+            </div>
+          )}
+
           <div className="flex flex-row items-center h-full w-full">
             <CardDescription className="font-inter font-bold">
               <span className="text-slate-950 dark:text-slate-50">
@@ -195,7 +209,7 @@ export const CardPost = (props: CardProps) => {
             <div className="flex flex-row space-x-2">
               <Button variant={"outline"} size={"icon"} onClick={handleLike}>
                 {liked ? (
-                  <Heart className="text-pink-500 dark:text-pink-600 fill-pink-500 dark:fill-pink-600  size-4" />
+                  <Heart className="text-pink-500 dark:text-pink-600 fill-pink-500 dark:fill-pink-600 size-4" />
                 ) : (
                   <Heart className="size-4" />
                 )}
@@ -210,8 +224,12 @@ export const CardPost = (props: CardProps) => {
                 <Share className="size-4" />
               </Button>
 
-              <Button variant={"outline"} size={"icon"}>
-                <Crown className="size-4" />
+              <Button variant={"outline"} size={"icon"} onClick={handleFavorite}>
+                {favorited ? (
+                  <Crown className="text-yellow-500 dark:text-yellow-600 fill-yellow-500 dark:fill-yellow-600 size-4" />
+                ) : (
+                  <Crown className="size-4" />
+                )}
               </Button>
             </div>
           </div>

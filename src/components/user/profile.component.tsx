@@ -14,8 +14,6 @@ import { Avatar } from "@nextui-org/react";
 
 import {
   ChevronDown,
-  PencilRuler,
-  Share,
   Zap,
   LogOut,
   BadgeCheck,
@@ -83,18 +81,6 @@ export const Profile = ({ name, email, avatar }: profile) => {
           </DropdownMenuItem>
         </Link>
         <DropdownMenuSeparator />
-        <Link to={"/profile/edit"}>
-          <DropdownMenuItem className="cursor-pointer font-poppins font-semibold">
-            <PencilRuler className="mr-2 size-4" />
-            Editar
-          </DropdownMenuItem>
-        </Link>
-        <Link to={"/profile/edit"}>
-          <DropdownMenuItem className="cursor-pointer font-poppins font-semibold">
-            <Share className="mr-2 size-4" />
-            Compartilhar
-          </DropdownMenuItem>
-        </Link>
         <Link to={"/notifications"}>
           <DropdownMenuItem className="cursor-pointer font-poppins font-semibold">
             <BellRing className="mr-2 size-4" />
