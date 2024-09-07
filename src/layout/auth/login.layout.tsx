@@ -296,7 +296,7 @@ export const LoginLayoutMobile = () => {
                 ) : null}
 
                 <Button
-                  className="font-poppins font-semibold uppercase "
+                  className="font-poppins font-semibold uppercase"
                   onClick={() => setClickedButton(true)}
                 >
                   Entrar

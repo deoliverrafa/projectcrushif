@@ -51,9 +51,6 @@ export default function HomePage() {
   const [showCookies, setShowCookies] = useState(
     localStorage.getItem("showCookies") !== "hidden"
   );
-  const [showWelcome, setShowWelcome] = useState(
-    localStorage.getItem("showWelcome") !== "hidden"
-  );
 
   const handleHideCookies = () => {
     setShowCookies(false);
@@ -135,13 +132,6 @@ export default function HomePage() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [loading, limit, finishedPosts]);
 
-  useEffect(() => {
-    setTimeout(() => {
-      setShowWelcome(false);
-      localStorage.setItem("showWelcome", "hidden");
-    }, 5000);
-  }, []);
-
   console.log(sessionStorage.getItem("showWelcome"));
   return (
     <>
@@ -152,13 +142,11 @@ export default function HomePage() {
             avatarPath={userData.avatar || localAvatarPath}
           />
 
-          {showWelcome && (
             <ToastInfo
               avatar={userData.avatar}
               title={"Bem vindo"}
               description={`Bem vindo de volta ${userData.nickname}`}
             />
-          )}
 
           {showCookies && <ToastCookies onClick={handleHideCookies} />}
 

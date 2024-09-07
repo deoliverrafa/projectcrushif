@@ -2,6 +2,8 @@ import * as React from "react";
 import { Link, useParams } from "react-router-dom";
 
 import { Loading } from "../../components/loading.component.tsx";
+import { ShareComponent } from "../../components/share.component.tsx";
+
 import {
   Card,
   CardContent,
@@ -49,7 +51,8 @@ export const ProfileLayout = () => {
   const [age, setAge] = React.useState<number | null>(null);
   const { id } = useParams<string>();
 
-  console.log(viewingUser);
+
+  const [shareIsOpen, setShareIsOpen] = React.useState(false);
 
   const calculateAge = (birthday: string) => {
     const today = new Date();
@@ -91,6 +94,7 @@ export const ProfileLayout = () => {
   }
 
   const isOwnProfile = currentUser._id === viewingUser._id;
+
   return (
     <>
       <Card className="w-full md:w-10/12">
@@ -210,8 +214,7 @@ export const ProfileLayout = () => {
             <Button
               variant={"outline"}
               size={"icon"}
-              // Usa sempre um valor padrão quando for assim, daí faz a manipulação se for um '' usuário inválido, ou sessão inativa
-              onClick={() => handleShare(viewingUser.nickname, id ? id : "")}
+              onClick={() => setShareIsOpen(true)}
             >
               <Share className="size-4" />
             </Button>
@@ -239,6 +242,10 @@ export const ProfileLayout = () => {
           </div>
         </CardFooter>
       </Card>
+
+      {shareIsOpen && (
+        <ShareComponent link={`https://crushif.vercel.app/profile/${viewingUser._id}`} onClose={() => setShareIsOpen(false)} />
+      )}
     </>
   );
 };
