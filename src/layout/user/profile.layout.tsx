@@ -19,7 +19,6 @@ import { Divider, Avatar } from "@nextui-org/react";
 
 import { getUserData } from "../../utils/getUserData.tsx";
 import { getUserDataById } from "../../utils/getUserDataById.tsx";
-import { handleShare } from "../../controllers/shareProfile.ts";
 
 import {
   PencilRuler,
