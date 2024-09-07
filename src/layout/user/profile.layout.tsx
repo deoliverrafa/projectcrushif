@@ -1,8 +1,9 @@
 import * as React from "react";
 import { Link, useParams } from "react-router-dom";
 
+import { NavBarReturn } from "../navbar.layout.tsx";
+
 import { Loading } from "../../components/loading.component.tsx";
-import { ShareComponent } from "../../components/share.component.tsx";
 
 import {
   Card,
@@ -20,15 +21,7 @@ import { Divider, Avatar } from "@nextui-org/react";
 import { getUserData } from "../../utils/getUserData.tsx";
 import { getUserDataById } from "../../utils/getUserDataById.tsx";
 
-import {
-  PencilRuler,
-  Share,
-  SearchX,
-  BadgeCheck,
-  UserRoundPlus,
-  Ban,
-  Siren,
-} from "lucide-react";
+import { PencilRuler, SearchX, BadgeCheck, UserRoundPlus } from "lucide-react";
 
 interface User {
   userName: string;
@@ -49,9 +42,6 @@ export const ProfileLayout = () => {
   const [viewingUser, setViewingUser] = React.useState<User | null>(null);
   const [age, setAge] = React.useState<number | null>(null);
   const { id } = useParams<string>();
-
-
-  const [shareIsOpen, setShareIsOpen] = React.useState(false);
 
   const calculateAge = (birthday: string) => {
     const today = new Date();
@@ -96,6 +86,15 @@ export const ProfileLayout = () => {
 
   return (
     <>
+      <NavBarReturn
+        title={"Perfil"}
+        profile={true}
+        id={viewingUser._id}
+        avatar={viewingUser.avatar}
+        name={viewingUser.nickname}
+        isOwnProfile={isOwnProfile}
+      />
+
       <Card className="w-full md:w-10/12">
         <CardHeader className="flex flex-row items-center space-x-4">
           <div className="flex relative">
@@ -149,25 +148,20 @@ export const ProfileLayout = () => {
             {viewingUser.userName ? viewingUser.userName : "Nome indisponível"}
           </CardTitle>
 
-          <div className="flex flex-row items-center space-x-1">
-            <Badge variant={"outline"}>
-              {viewingUser.nickname
-                ? `@${viewingUser.nickname}`
-                : "indisponível"}
-            </Badge>
+          <Badge variant={"secondary"}>
+            {viewingUser.nickname ? `@${viewingUser.nickname}` : "indisponível"}
 
-            <Badge variant={"outline"}>
-              <BadgeCheck
-                className={`${
-                  viewingUser.type === "Plus"
-                    ? "text-info"
-                    : viewingUser.type === "Admin"
-                    ? "text-danger"
-                    : "text-success"
-                } size-3`}
-              />
-            </Badge>
-          </div>
+            <BadgeCheck
+              className={`${
+                viewingUser.type === "Plus"
+                  ? "text-info"
+                  : viewingUser.type === "Admin"
+                  ? "text-danger"
+                  : "text-success"
+              } ml-1 size-3`}
+            />
+          </Badge>
+
           <div className="space-y-0.5">
             <CardDescription className="font-inter text-tiny font-semibold tracking-wider">
               {age ? `Idade: ${age} anos` : "Idade: indisponível"}
@@ -184,14 +178,14 @@ export const ProfileLayout = () => {
             </CardDescription>
           </div>
 
-          <div className="flex flex-row items-center space-x-1">
+          <div className="flex flex-row justify-center items-center space-x-1">
             {isOwnProfile && (
               <Link
                 className="flex justify-center items-center w-full"
                 to="/profile/edit"
               >
                 <Button
-                  variant={"outline"}
+                  variant={"secondary"}
                   className="font-poppins font-semibold uppercase w-full"
                 >
                   <PencilRuler className="mr-2 size-4" />
@@ -202,31 +196,11 @@ export const ProfileLayout = () => {
 
             {!isOwnProfile && (
               <Button
-                variant={"outline"}
+                variant={"secondary"}
                 className="font-poppins font-semibold uppercase w-full"
               >
                 <UserRoundPlus className="mr-2 size-4" />
                 Seguir
-              </Button>
-            )}
-
-            <Button
-              variant={"outline"}
-              size={"icon"}
-              onClick={() => setShareIsOpen(true)}
-            >
-              <Share className="size-4" />
-            </Button>
-
-            {!isOwnProfile && (
-              <Button variant={"destructive"} size={"icon"}>
-                <Siren className="size-4" />
-              </Button>
-            )}
-
-            {!isOwnProfile && (
-              <Button variant={"destructive"} size={"icon"}>
-                <Ban className="size-4" />
               </Button>
             )}
           </div>
@@ -241,10 +215,6 @@ export const ProfileLayout = () => {
           </div>
         </CardFooter>
       </Card>
-
-      {shareIsOpen && (
-        <ShareComponent link={`https://crushif.vercel.app/profile/${viewingUser._id}`} onClose={() => setShareIsOpen(false)} />
-      )}
     </>
   );
 };

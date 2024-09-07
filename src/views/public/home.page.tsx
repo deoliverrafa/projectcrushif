@@ -52,6 +52,16 @@ export default function HomePage() {
     localStorage.getItem("showCookies") !== "hidden"
   );
 
+  useEffect(() => {
+    if (!sessionStorage.getItem("ToastWelcome")) {
+      sessionStorage.setItem("ToastWelcome", "true");
+
+      setTimeout(() => {
+        sessionStorage.setItem("ToastWelcome", "false");
+      }, 5000);
+    }
+  }, []);
+
   const handleHideCookies = () => {
     setShowCookies(false);
     localStorage.setItem("showCookies", "hidden");
@@ -132,7 +142,6 @@ export default function HomePage() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [loading, limit, finishedPosts]);
 
-  console.log(sessionStorage.getItem("showWelcome"));
   return (
     <>
       {userData ? (
@@ -142,11 +151,13 @@ export default function HomePage() {
             avatarPath={userData.avatar || localAvatarPath}
           />
 
+          {sessionStorage.getItem("ToastWelcome") === "true" && (
             <ToastInfo
               avatar={userData.avatar}
               title={"Bem vindo"}
-              description={`Bem vindo de volta ${userData.nickname}`}
+              description={`Bem vindo de volta, ${userData.nickname}`}
             />
+          )}
 
           {showCookies && <ToastCookies onClick={handleHideCookies} />}
 

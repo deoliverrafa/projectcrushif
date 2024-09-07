@@ -48,9 +48,10 @@ export const Profile = ({ name, email, avatar }: profile) => {
         </Button>
       </DropdownMenuTrigger>
 
-      <DropdownMenuContent>
+      <DropdownMenuContent className="select-none">
         <DropdownMenuLabel>Conta</DropdownMenuLabel>
         <DropdownMenuSeparator />
+
         <Link to={`/profile/${userData._id}`}>
           <DropdownMenuItem className="cursor-pointer">
             <div className="flex flex-row items-center space-x-2">
@@ -80,6 +81,7 @@ export const Profile = ({ name, email, avatar }: profile) => {
             </div>
           </DropdownMenuItem>
         </Link>
+
         <DropdownMenuSeparator />
         <Link to={"/notifications"}>
           <DropdownMenuItem className="cursor-pointer font-poppins font-semibold">

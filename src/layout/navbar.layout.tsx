@@ -1,17 +1,25 @@
 import * as React from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 
 import { Profile } from "../components/user/profile.component";
+import { ShareComponent } from "../components/share.component.tsx";
 
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "../components/ui/dropdown-menu.tsx";
 import { Button } from "../components/ui/button.tsx";
 
 import {
   Navbar,
   NavbarBrand,
   NavbarContent,
-  NavbarItem,
-  Link,
   Image,
+  Avatar,
 } from "@nextui-org/react";
 
 import {
@@ -20,6 +28,11 @@ import {
   HeartHandshake,
   CalendarDays,
   ArrowLeft,
+  EllipsisVertical,
+  Siren,
+  Ban,
+  Share,
+  BadgeCheck,
 } from "lucide-react";
 
 import logoCrush from "../../public/images/logo/logo.png";
@@ -47,13 +60,18 @@ export const NavBar = (props: userData) => {
       shouldHideOnScroll
       isBordered={true}
       isBlurred={false}
+      className="select-none"
     >
       <NavbarContent justify="start">
-        <Link href="/">
+        <Link to="/">
           <NavbarBrand>
-            <Image className="h-10 w-12 md:w-10" alt="logo crush if" src={logoCrush} />
+            <Image
+              className="h-10 w-12 md:w-10"
+              alt="logo crush if"
+              src={logoCrush}
+            />
             <p className="text-pink-500 dark:text-pink-600 font-recursive font-semibold uppercase tracking-widest">
-              Crush<span className="text-green-500 dark:text-green-600 font-bold tracking-tighter">IF</span>
+              CrushIF
             </p>
           </NavbarBrand>
         </Link>
@@ -152,26 +170,118 @@ export const NavBar = (props: userData) => {
 interface NavBarReturnProps {
   title: string;
   [key: string]: any;
+  profile?: boolean;
+  id?: string;
+  avatar?: string;
+  name?: string;
+  isOwnProfile?: boolean;
 }
 
-export const NavBarReturn: React.FC<NavBarReturnProps> = ({ title }) => {
+export const NavBarReturn = (props: NavBarReturnProps) => {
   const navigate = useNavigate();
 
-  return (
-    <Navbar isBordered shouldHideOnScroll isBlurred={false} position={"static"}>
-      <NavbarContent justify="start">
-        <NavbarItem>
-          <Button size="icon" onClick={() => navigate(-1)}>
-            <ArrowLeft />
-          </Button>
-        </NavbarItem>
+  const [shareIsOpen, setShareIsOpen] = React.useState(false);
 
-        <NavbarItem>
-          <p className="font-recursive font-semibold uppercase tracking-widest text-xl">
-            {title}
-          </p>
-        </NavbarItem>
-      </NavbarContent>
-    </Navbar>
+  return (
+    <>
+      <Navbar
+        isBordered
+        shouldHideOnScroll
+        isBlurred={false}
+        position={"static"}
+        className="select-none"
+      >
+        <NavbarContent justify="start">
+          <Button
+            variant={"ghost"}
+            className="text-pink-500 dark:text-pink-600 font-poppins font-semibold uppercase"
+            onClick={() => navigate(-1)}
+          >
+            <ArrowLeft className="mr-2" />
+            {props.title}
+          </Button>
+        </NavbarContent>
+
+        {props.profile && (
+          <NavbarContent justify="end">
+            <DropdownMenu>
+              <DropdownMenuTrigger>
+                <EllipsisVertical className="cursor-pointer " />
+              </DropdownMenuTrigger>
+
+              <DropdownMenuContent>
+                <DropdownMenuLabel>Perfil</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+
+                <div>
+                  <Link to={`/profile/${props.id}`}>
+                    <DropdownMenuItem className="cursor-pointer">
+                      <div className="flex flex-row items-center space-x-2">
+                        <div className="flex relative">
+                          <div className="flex absolute right-0 bottom-0 h-2 w-2 z-10">
+                            <span className="animate-ping bg-success rounded-full opacity-75 inline-flex absolute h-full w-full"></span>
+                            <span className="bg-success rounded-full inline-flex relative h-2 w-2"></span>
+                          </div>
+                          <Avatar
+                            size="sm"
+                            name={props.name}
+                            src={props.avatar}
+                          />
+                        </div>
+                        <div className="flex flex-col">
+                          <div className="flex flex-row items-center space-x-1">
+                            <div>
+                              <p className="text-slate-950 dark:text-slate-50 font-inter font-bold ">
+                                {props.name}
+                              </p>
+                            </div>
+
+                            <div>
+                              <BadgeCheck className="text-gree-500 dark:text-green-600 size-3.5" />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </DropdownMenuItem>
+                  </Link>
+                </div>
+
+                <DropdownMenuSeparator />
+
+                <DropdownMenuItem
+                  className="cursor-pointer font-poppins font-semibold"
+                  onClick={() => setShareIsOpen(true)}
+                >
+                  <Share className="mr-2 size-4" />
+                  Compartilhar
+                </DropdownMenuItem>
+
+                {!props.isOwnProfile && (
+                  <>
+                    <DropdownMenuSeparator />
+
+                    <DropdownMenuItem className="cursor-pointer text-red-500 dark:text-red-600 font-poppins font-semibold">
+                      <Siren className="mr-2 size-4" />
+                      Reportar
+                    </DropdownMenuItem>
+                    <DropdownMenuItem className="cursor-pointer text-red-500 dark:text-red-600 font-poppins font-semibold">
+                      <Ban className="mr-2 size-4" />
+                      Bloquear
+                    </DropdownMenuItem>
+                  </>
+                )}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </NavbarContent>
+        )}
+      </Navbar>
+
+      {shareIsOpen && (
+        <ShareComponent
+          link={`https://crushif.vercel.app/profile/${props.id}`}
+          onClose={() => setShareIsOpen(false)}
+        />
+      )}
+    </>
   );
 };
