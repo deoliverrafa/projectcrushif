@@ -182,6 +182,14 @@ export const NavBarReturn = (props: NavBarReturnProps) => {
 
   const [shareIsOpen, setShareIsOpen] = React.useState(false);
 
+  const handleOpenShare = () => {
+    setShareIsOpen(true); 
+  };
+
+  const handleCloseShare = () => {
+    setShareIsOpen(false);
+  };
+
   return (
     <>
       <Navbar
@@ -250,7 +258,7 @@ export const NavBarReturn = (props: NavBarReturnProps) => {
 
                 <DropdownMenuItem
                   className="cursor-pointer font-poppins font-semibold"
-                  onClick={() => setShareIsOpen(true)}
+                  onClick={handleOpenShare}
                 >
                   <Share className="mr-2 size-4" />
                   Compartilhar
@@ -279,7 +287,7 @@ export const NavBarReturn = (props: NavBarReturnProps) => {
       {shareIsOpen && (
         <ShareComponent
           link={`https://crushif.vercel.app/profile/${props.id}`}
-          onClose={() => setShareIsOpen(false)}
+          onClose={handleCloseShare}
         />
       )}
     </>

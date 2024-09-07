@@ -93,6 +93,14 @@ export const CardPost = (props: CardProps) => {
     setTimeout(() => setShowFavorited(false), 500);
   };
 
+  const handleOpenShare = () => {
+    setShareIsOpen(true);
+  };
+
+  const handleCloseShare = () => {
+    setShareIsOpen(false);
+  };
+
   React.useEffect(() => {
     const fetchUserData = async () => {
       try {
@@ -241,7 +249,7 @@ export const CardPost = (props: CardProps) => {
 
                 <DropdownMenuItem
                   className="cursor-pointer font-poppins font-semibold"
-                  onClick={() => setShareIsOpen(true)}
+                  onClick={handleOpenShare}
                 >
                   <Share className="mr-2 size-4" />
                   Compartilhar
@@ -403,7 +411,7 @@ export const CardPost = (props: CardProps) => {
       {shareIsOpen && (
         <ShareComponent
           link={`https://crushif.vercel.app/post/${props._id}`}
-          onClose={() => setShareIsOpen(false)}
+          onClose={handleCloseShare}
         />
       )}
     </>
