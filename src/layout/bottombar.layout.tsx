@@ -19,7 +19,7 @@ export const BottomBar = (props: bottomProps) => {
         {({ isActive }) =>
           isActive ? (
             <div className="cursor-pointer flex flex-col justify-center items-center space-y-1">
-              <LayoutGrid className="text-pink-500 dark:text-pink-600 size-6" />
+              <LayoutGrid className="text-pink-500 dark:text-pink-600 fill-pink-500 dark:fill-pink-600 size-6" />
               <p className="text-pink-500 dark:text-pink-600 font-poppins font-semibold text-sm">
                 Inicio
               </p>
@@ -38,7 +38,7 @@ export const BottomBar = (props: bottomProps) => {
         {({ isActive }) =>
           isActive ? (
             <div className="cursor-pointer flex flex-col justify-center items-center space-y-1">
-              <Search className="text-pink-500 dark:text-pink-600 size-6" />
+              <Search className="text-pink-500 dark:text-pink-600 fill-pink-500 dark:fill-pink-600 size-6" />
               <p className="text-pink-500 dark:text-pink-600 font-poppins font-semibold text-sm">
                 Procurar
               </p>
@@ -57,7 +57,7 @@ export const BottomBar = (props: bottomProps) => {
         {({ isActive }) =>
           isActive ? (
             <div className="cursor-pointer flex flex-col justify-center items-center space-y-1">
-              <HeartHandshake className="text-pink-500 dark:text-pink-600 size-6" />
+              <HeartHandshake className="text-pink-500 dark:text-pink-600 fill-pink-500 dark:fill-pink-600 size-6" />
               <p className="text-pink-500 dark:text-pink-600 font-poppins font-semibold text-sm">
                 Crush
               </p>
@@ -76,7 +76,7 @@ export const BottomBar = (props: bottomProps) => {
         {({ isActive }) =>
           isActive ? (
             <div className="cursor-pointer flex flex-col justify-center items-center space-y-1">
-              <CalendarDays className="text-pink-500 dark:text-pink-600 size-6" />
+              <CalendarDays className="text-pink-500 dark:text-pink-600 fill-pink-500 dark:fill-pink-600 size-6" />
               <p className="text-pink-500 dark:text-pink-600 font-poppins font-semibold text-sm">
                 Evêntos
               </p>

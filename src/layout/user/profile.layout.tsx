@@ -4,6 +4,7 @@ import { Link, useParams } from "react-router-dom";
 import { NavBarReturn } from "../navbar.layout.tsx";
 
 import { Loading } from "../../components/loading.component.tsx";
+import { ShareComponent } from "../../components/share.component.tsx";
 
 import {
   Card,
@@ -21,7 +22,13 @@ import { Divider, Avatar } from "@nextui-org/react";
 import { getUserData } from "../../utils/getUserData.tsx";
 import { getUserDataById } from "../../utils/getUserDataById.tsx";
 
-import { PencilRuler, SearchX, BadgeCheck, UserRoundPlus } from "lucide-react";
+import {
+  PencilRuler,
+  SearchX,
+  BadgeCheck,
+  UserRoundPlus,
+  Share,
+} from "lucide-react";
 
 interface User {
   userName: string;
@@ -42,6 +49,16 @@ export const ProfileLayout = () => {
   const [viewingUser, setViewingUser] = React.useState<User | null>(null);
   const [age, setAge] = React.useState<number | null>(null);
   const { id } = useParams<string>();
+
+  const [shareIsOpen, setShareIsOpen] = React.useState(false);
+
+  const handleOpenShare = () => {
+    setShareIsOpen(true);
+  };
+
+  const handleCloseShare = () => {
+    setShareIsOpen(false);
+  };
 
   const calculateAge = (birthday: string) => {
     const today = new Date();
@@ -111,17 +128,8 @@ export const ProfileLayout = () => {
 
           <div className="flex flex-col w-5/6">
             <Divider />
-            <div className="flex flex-row justify-evenly items-center h-12">
-              <div className="cursor-pointer flex flex-col justify-center items-center">
-                <CardDescription className="font-inter font-bold text-tiny">
-                  {0}
-                </CardDescription>
-                <CardDescription className="font-inter font-bold tracking-widest text-tiny">
-                  Postagens
-                </CardDescription>
-              </div>
-              <Divider orientation="vertical" />
-              <div className="cursor-pointer flex flex-col justify-center items-center">
+            <div className="flex flex-row justify-evenly items-center h-14">
+              <div className="cursor-pointer flex flex-col justify-center items-center space-y-1">
                 <CardDescription className="font-inter font-bold text-tiny">
                   {viewingUser.Nfollowers}
                 </CardDescription>
@@ -130,7 +138,7 @@ export const ProfileLayout = () => {
                 </CardDescription>
               </div>
               <Divider orientation="vertical" />
-              <div className="cursor-pointer flex flex-col justify-center items-center">
+              <div className="cursor-pointer flex flex-col justify-center items-center space-y-1">
                 <CardDescription className="font-inter font-bold text-tiny">
                   {viewingUser.Nfollowing}
                 </CardDescription>
@@ -203,6 +211,14 @@ export const ProfileLayout = () => {
                 Seguir
               </Button>
             )}
+
+            <Button
+              variant={"secondary"}
+              size={"icon"}
+              onClick={handleOpenShare}
+            >
+              <Share className="size-4" />
+            </Button>
           </div>
         </CardContent>
 
@@ -215,6 +231,13 @@ export const ProfileLayout = () => {
           </div>
         </CardFooter>
       </Card>
+
+      {shareIsOpen && (
+        <ShareComponent
+          link={`https://crushif.vercel.app/profile/${viewingUser._id}`}
+          onClose={handleCloseShare}
+        />
+      )}
     </>
   );
 };

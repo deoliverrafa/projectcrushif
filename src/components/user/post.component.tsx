@@ -43,6 +43,8 @@ import {
   EllipsisVertical,
   Siren,
   Ban,
+  Pencil,
+  Trash2
 } from "lucide-react";
 
 import { getUserData } from "../../utils/getUserData.tsx";
@@ -266,6 +268,21 @@ export const CardPost = (props: CardProps) => {
                   )}
                   Favoritar
                 </DropdownMenuItem>
+
+                {props.id !== dataUser._id ? null : (
+                  <>
+                    <DropdownMenuSeparator />
+
+                    <DropdownMenuItem className="cursor-pointer text-red-500 dark:text-red-600 font-poppins font-semibold">
+                      <Pencil className="mr-2 size-4" />
+                      Editar
+                    </DropdownMenuItem>
+                    <DropdownMenuItem className="cursor-pointer text-red-500 dark:text-red-600 font-poppins font-semibold">
+                      <Trash2 className="mr-2 size-4" />
+                      Excluir
+                    </DropdownMenuItem>
+                  </>
+                )}
 
                 {props.id === dataUser._id ? null : (
                   <>

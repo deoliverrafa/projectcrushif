@@ -19,7 +19,6 @@ import {
   BadgeCheck,
   Settings,
   BadgeHelp,
-  BellRing,
   Heart,
   Crown,
 } from "lucide-react";
@@ -83,16 +82,6 @@ export const Profile = ({ name, email, avatar }: profile) => {
         </Link>
 
         <DropdownMenuSeparator />
-        <Link to={"/notifications"}>
-          <DropdownMenuItem className="cursor-pointer font-poppins font-semibold">
-            <BellRing className="mr-2 size-4" />
-            Notificações
-            <div className="flex relative ml-2 h-2 w-2">
-              <span className="animate-ping bg-blue-500 dark:bg-blue-600 rounded-full opacity-75 inline-flex absolute h-full w-full"></span>
-              <span className="bg-blue-500 dark:bg-blue-600 rounded-full inline-flex relative h-2 w-2"></span>
-            </div>
-          </DropdownMenuItem>
-        </Link>
         <Link to={""}>
           <DropdownMenuItem className="cursor-pointer font-poppins font-semibold">
             <Heart className="mr-2 size-4" />

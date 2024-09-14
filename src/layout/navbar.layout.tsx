@@ -33,6 +33,8 @@ import {
   Ban,
   Share,
   BadgeCheck,
+  Bell,
+  Pencil
 } from "lucide-react";
 
 import logoCrush from "../../public/images/logo/logo.png";
@@ -82,7 +84,7 @@ export const NavBar = (props: userData) => {
           {({ isActive }) =>
             isActive ? (
               <div className="cursor-pointer flex flex-row items-center space-x-1">
-                <LayoutGrid className="text-pink-500 dark:text-pink-600 size-6" />
+                <LayoutGrid className="text-pink-500 dark:text-pink-600 fill-pink-500 dark:fill-pink-600 size-6" />
                 <p className="text-pink-500 dark:text-pink-600 font-poppins font-semibold text-sm">
                   Inicio
                 </p>
@@ -101,7 +103,7 @@ export const NavBar = (props: userData) => {
           {({ isActive }) =>
             isActive ? (
               <div className="cursor-pointer flex flex-row items-center space-x-1">
-                <Search className="text-pink-500 dark:text-pink-600 size-6" />
+                <Search className="text-pink-500 dark:text-pink-600 fill-pink-500 dark:fill-pink-600 size-6" />
                 <p className="text-pink-500 dark:text-pink-600 font-poppins font-semibold text-sm">
                   Pesquisar
                 </p>
@@ -120,7 +122,7 @@ export const NavBar = (props: userData) => {
           {({ isActive }) =>
             isActive ? (
               <div className="cursor-pointer flex flex-row items-center space-x-1">
-                <HeartHandshake className="text-pink-500 dark:text-pink-600 size-6" />
+                <HeartHandshake className="text-pink-500 dark:text-pink-600 fill-pink-500 dark:fill-pink-600 size-6" />
                 <p className="text-pink-500 dark:text-pink-600 font-poppins font-semibold text-sm">
                   Crush
                 </p>
@@ -139,7 +141,7 @@ export const NavBar = (props: userData) => {
           {({ isActive }) =>
             isActive ? (
               <div className="cursor-pointer flex flex-row items-center space-x-1">
-                <CalendarDays className="text-pink-500 dark:text-pink-600 size-6" />
+                <CalendarDays className="text-pink-500 dark:text-pink-600 fill-pink-500 dark:fill-pink-600   size-6" />
                 <p className="text-pink-500 dark:text-pink-600 font-poppins font-semibold text-sm">
                   Evêntos
                 </p>
@@ -157,6 +159,20 @@ export const NavBar = (props: userData) => {
       </NavbarContent>
 
       <NavbarContent justify="end">
+        <NavLink to="/notifications">
+          {({ isActive }) =>
+            isActive ? (
+              <Button variant={"outline"} size={"icon"}>
+                <Bell className="text-pink-500 dark:text-pink-600 fill-pink-500 dark:fill-pink-600   size-6" />
+              </Button>
+            ) : (
+              <Button variant={"outline"} size={"icon"}>
+                <Bell className="text-slate-700 dark:text-slate-400 size-6" />
+              </Button>
+            )
+          }
+        </NavLink>
+
         <Profile
           name={props.user?.nickname ? props.user.nickname : ""}
           email={props.user?.email ? props.user.email : ""}
@@ -183,7 +199,7 @@ export const NavBarReturn = (props: NavBarReturnProps) => {
   const [shareIsOpen, setShareIsOpen] = React.useState(false);
 
   const handleOpenShare = () => {
-    setShareIsOpen(true); 
+    setShareIsOpen(true);
   };
 
   const handleCloseShare = () => {
@@ -263,6 +279,17 @@ export const NavBarReturn = (props: NavBarReturnProps) => {
                   <Share className="mr-2 size-4" />
                   Compartilhar
                 </DropdownMenuItem>
+
+                {props.isOwnProfile && (
+                  <>
+                    <DropdownMenuSeparator />
+
+                    <DropdownMenuItem className="cursor-pointer text-red-500 dark:text-red-600 font-poppins font-semibold">
+                      <Pencil className="mr-2 size-4" />
+                      Editar
+                    </DropdownMenuItem>
+                  </>
+                )}
 
                 {!props.isOwnProfile && (
                   <>
