@@ -1,14 +1,11 @@
 import * as React from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { HexaLink } from "./ui/router.js";
 
-import { Button } from "../ui/button.js";
-import {
-  Card,
-  CardDescription,
-} from "../ui/card.js";
+import { Button } from "./ui/button.js";
+import { Card, CardDescription, CardTitle } from "./ui/card.js";
 
-import { Avatar } from "@nextui-org/react";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar.js";
 
 import { BadgeCheck, UserRoundPlus, UserRoundCheck } from "lucide-react";
 
@@ -51,26 +48,26 @@ export default function SearchUserCard(props: SearchUserCard) {
     <>
       <Card className="my-2 w-full">
         <div className="flex flex-row justify-between items-center p-4">
-          <Link to={`/profile/${props._id}`} className="flex space-x-2 h-full">
+          <HexaLink
+            href={`/profile/${props._id}`}
+            className="flex space-x-2 h-full"
+          >
             <div className="flex relative">
-              <div className="flex absolute right-0 bottom-0.5 h-2 w-2 z-10">
+              <div className="flex absolute right-0 bottom-0 h-2.5 w-2.5 z-10">
                 <span className="animate-ping bg-success rounded-full opacity-75 inline-flex absolute h-full w-full"></span>
-                <span className="bg-success rounded-full inline-flex relative h-2 w-2"></span>
+                <span className="bg-success rounded-full inline-flex relative h-2.5 w-2.5"></span>
               </div>
-              <Avatar
-                as="button"
-                className="font-poppins uppercase"
-                size="sm"
-                name={props?.nickname}
-                src={props?.avatar}
-              />
+              <Avatar>
+                <AvatarFallback>{props?.nickname}</AvatarFallback>
+                <AvatarImage src={props?.avatar} />
+              </Avatar>
             </div>
             <div className="flex flex-col items-start justify-center space-y-1">
               <div className="flex flex-row items-center space-x-1">
                 <div>
-                  <CardDescription className="font-popins text-tiny font-bold">
+                  <CardTitle>
                     {props.nickname ? `${props.nickname}` : "indisponível"}
-                  </CardDescription>
+                  </CardTitle>
                 </div>
 
                 <div>
@@ -81,18 +78,18 @@ export default function SearchUserCard(props: SearchUserCard) {
                         : props.type === "Admin"
                         ? "text-danger"
                         : "text-success"
-                    } size-3`}
+                    } size-3.5`}
                   />
                 </div>
               </div>
 
-              <CardDescription className="font-inter font-light capitalize tracking-wider text-tiny">
+              <CardDescription className="capitalize tracking-light">
                 {props.userName ? props.userName : "Nome indisponível"}
               </CardDescription>
             </div>
-          </Link>
+          </HexaLink>
           <form action="" method="put" onSubmit={FollowUser}>
-            <Button className="font-poppins font-semibold uppercase">
+            <Button>
               {props.following ? (
                 <UserRoundCheck className="size-4 mr-2" />
               ) : followedUser ? (

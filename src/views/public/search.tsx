@@ -2,10 +2,11 @@ import { useCallback, useState } from "react";
 import { debounce } from "lodash";
 import axios from "axios";
 
-import SearchUserCard from "../components/user/searchUserCard.tsx";
-
-import { Input } from "../components/ui/input.tsx";
-import { Button } from "../components/ui/button.js";
+import SearchUserCard from "../../components/user-card.tsx";
+import { BottomBar } from "../../components/bottombar.tsx";
+import { NavBar } from "../../components/navbar.tsx";
+import { Input } from "../../components/ui/input.tsx";
+import { Button } from "../../components/ui/button.js";
 import {
   Card,
   CardContent,
@@ -13,11 +14,12 @@ import {
   CardHeader,
   CardTitle,
   CardDescription,
-} from "../components/ui/card.tsx";
-
-import { getUserData } from "../utils/getUserData.tsx";
+} from "../../components/ui/card.tsx";
 
 import { ScanSearch, Search } from "lucide-react";
+
+import { getUserData } from "../../utils/getUserData.tsx";
+
 
 interface User {
   nickname: string;
@@ -28,7 +30,7 @@ interface User {
   isFollowing: boolean;
 }
 
-export const SearchLayout = () => {
+const SearchLayout = () => {
   const userData = getUserData();
 
   const [formData, setFormData] = useState({
@@ -56,7 +58,7 @@ export const SearchLayout = () => {
         setQueryResponse(
           response.data.usersFinded.map((user: any) => ({
             ...user,
-            isFollowing: user.isFollowing || false, // Defina o valor padrão
+            isFollowing: user.isFollowing || false,
           }))
         );
       })
@@ -71,8 +73,6 @@ export const SearchLayout = () => {
   };
 
   const debounceFetchData = useCallback(debounce(fetchData, 500), [formData]);
-
-  console.log(userData.following);
 
   return (
     <form
@@ -143,3 +143,21 @@ export const SearchLayout = () => {
     </form>
   );
 };
+
+
+const SearchPage = () => {
+  const userData = getUserData();
+  return (
+    <>
+      <NavBar user={userData} avatarPath={userData.avatar} />
+
+      <main className="select-none flex flex-col items-center h-svh w-full">
+        <SearchLayout />
+      </main>
+
+      <BottomBar />
+    </>
+  );
+};
+
+export default SearchPage;

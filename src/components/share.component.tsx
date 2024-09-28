@@ -19,8 +19,6 @@ import {
   TooltipProvider,
 } from "./ui/tooltip";
 
-import { Modal, ModalContent } from "@nextui-org/react";
-
 import { X, Copy } from "lucide-react";
 
 interface ShareProps {
@@ -49,68 +47,56 @@ export const ShareComponent = (props: ShareProps) => {
   }, [copied]);
 
   return (
-    <Modal
-      className="w-fit"
-      placement="center"
-      backdrop="blur"
-      isOpen={true}
-      hideCloseButton
-    >
-      <ModalContent>
-        {copied && (
-          <ToastSuccess
-            title={"Copiado"}
-            description={"Link copiado com sucesso"}
-          />
-        )}
+    <>
+      {copied && (
+        <ToastSuccess
+          title={"Copiado"}
+          description={"Link copiado com sucesso"}
+        />
+      )}
 
-        <Card>
-          <CardHeader>
-            <div className="flex flex-row justify-between items-center">
-              <CardTitle>Compartilhar link</CardTitle>
+      <Card>
+        <CardHeader>
+          <div className="flex flex-row justify-between items-center">
+            <CardTitle>Compartilhar link</CardTitle>
 
-              <Button variant={"ghost"} size={"icon"} onClick={props.onClose}>
-                <X />
-              </Button>
-            </div>
-
-            <CardDescription>
-              Qualquer pessoa que tenha esse link poderá ver isso.
-            </CardDescription>
-          </CardHeader>
-
-          <CardContent className="flex flex-row justify-between items-center space-x-2">
-            <Input ref={inputRef} value={props.link} />
-
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger>
-                  <Button
-                    variant={"outline"}
-                    size={"icon"}
-                    onClick={handleCopy}
-                  >
-                    <Copy className="size-4" />
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>Copiar</p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-          </CardContent>
-
-          <CardFooter>
-            <Button
-              className="font-poppins font-semibold uppercase "
-              variant={"secondary"}
-              onClick={props.onClose}
-            >
-              Fechar
+            <Button variant={"ghost"} size={"icon"} onClick={props.onClose}>
+              <X />
             </Button>
-          </CardFooter>
-        </Card>
-      </ModalContent>
-    </Modal>
+          </div>
+
+          <CardDescription>
+            Qualquer pessoa que tenha esse link poderá ver isso.
+          </CardDescription>
+        </CardHeader>
+
+        <CardContent className="flex flex-row justify-between items-center space-x-2">
+          <Input ref={inputRef} value={props.link} />
+
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger>
+                <Button variant={"outline"} size={"icon"} onClick={handleCopy}>
+                  <Copy className="size-4" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Copiar</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        </CardContent>
+
+        <CardFooter>
+          <Button
+            className="font-poppins font-semibold uppercase "
+            variant={"secondary"}
+            onClick={props.onClose}
+          >
+            Fechar
+          </Button>
+        </CardFooter>
+      </Card>
+    </>
   );
 };

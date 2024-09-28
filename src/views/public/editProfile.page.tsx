@@ -1,6 +1,6 @@
-import { NavBarReturn } from "../../layout/navbar.layout.tsx";
-import { BaseUserShow } from "../../components/user/baseUserShow.tsx";
-import { Loading } from '../../components/loading.component.tsx';
+import { NavBarReturn } from "../../components/navbar.tsx";
+
+import LoadingPage from "./loading.tsx";
 
 import { getUserData } from "../../utils/getUserData.tsx";
 
@@ -12,10 +12,10 @@ const EditProfilePage = () => {
       <NavBarReturn title="Editar Perfil" />
       {userData ? (
         <main className="flex flex-col h-full w-full justify-center items-center">
-          <BaseUserShow user={userData} />
+          {/* <BaseUserShow user={userData} /> */}
         </main>
       ) : (
-        <Loading />
+        <LoadingPage />
       )}
     </div>
     );

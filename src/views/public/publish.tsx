@@ -1,5 +1,6 @@
 import * as React from "react";
 
+import { NavBarReturn } from "../../components/navbar";
 import {
   Card,
   CardContent,
@@ -15,22 +16,29 @@ import {
   DrawerTitle,
   DrawerHeader,
 } from "../../components/ui/drawer";
+
 import { Input } from "../../components/ui/input";
 import { Button } from "../../components/ui/button";
 import { Label } from "../../components/ui/label";
 import { Progress } from "../../components/ui/progress";
+import { Switch } from "../../components/ui/switch";
 
-import { Switch } from "@nextui-org/react";
+import logo from "../../../public/images/logo/logo.png";
+
+const LogoLayout = () => {
+  return (
+    <div className="flex flex-col justify-center items-center">
+      <img src={logo} className="h-32 md:h-[300px] w-32 md:w-[300px]" />
+      <h1 className="text-primary font-recursive font-semibold uppercase tracking-widest text-2xl md:text-5xl">
+        CrushIF
+      </h1>
+    </div>
+  );
+};
 
 import { getUserData } from "../../utils/getUserData";
 
-import {
-  Earth,
-  Drama,
-  SendHorizontal,
-  ArrowRight,
-  ArrowLeft,
-} from "lucide-react";
+import { SendHorizontal, ArrowRight, ArrowLeft } from "lucide-react";
 
 interface CardData {
   nickname: string;
@@ -43,7 +51,7 @@ interface CardData {
   userPhotoUrl?: string;
 }
 
-export const PublishLayout = () => {
+const PublishLayout = () => {
   const userData = getUserData();
 
   const [isAnonymous, setAnonymous] = React.useState<boolean>(false);
@@ -176,40 +184,40 @@ export const PublishLayout = () => {
       <Card className="hidden md:flex flex-col w-5/6 max-w-sm">
         <CardHeader>
           <div className={`${step === 1 ? null : "hidden"}`}>
-            <CardTitle className="font-recursive uppercase tracking-widest">
+            <CardTitle className="uppercase tracking-widest">
               Anônimo/Usuário
             </CardTitle>
-            <CardDescription>
+            <CardDescription className="tracking-wide">
               Selecione o tipo de publicação, se será uma publicação anônima, ou
               se será uma publicação feita pelo usuário.
             </CardDescription>
           </div>
 
           <div className={`${step === 2 ? null : "hidden"}`}>
-            <CardTitle className="font-recursive uppercase tracking-widest">
+            <CardTitle className="uppercase tracking-widest">
               Descrição
             </CardTitle>
-            <CardDescription>
+            <CardDescription className="tracking-wide">
               Introduza um texto para a publicação, faça uma breve descrição
               sobre sua publicação.
             </CardDescription>
           </div>
 
           <div className={`${step === 3 ? null : "hidden"}`}>
-            <CardTitle className="font-recursive uppercase tracking-widest">
+            <CardTitle className="uppercase tracking-widest">
               Marcações
             </CardTitle>
-            <CardDescription>
+            <CardDescription className="tracking-wide">
               Informe uma #hashtag ou um @usuário, marque alguem na publicação,
               ou puxe uma corrente na sua postagem.
             </CardDescription>
           </div>
 
           <div className={`${step === 4 ? null : "hidden"}`}>
-            <CardTitle className="font-recursive uppercase tracking-widest">
+            <CardTitle className="uppercase tracking-widest">
               Upload
             </CardTitle>
-            <CardDescription>
+            <CardDescription className="tracking-wide">
               Faça o upload de uma foto, escolha uma foto para ilustrar sua
               publicação, poste fotos de locais, pessoas, viagens...
             </CardDescription>
@@ -227,24 +235,14 @@ export const PublishLayout = () => {
               } flex flex-row items-center space-x-2`}
             >
               <Label htmlFor="type">Tipo:</Label>
-              <Switch
-                color="primary"
-                size="lg"
-                onClick={handleIsAnonymous}
-                thumbIcon={() =>
-                  !isAnonymous ? (
-                    <Earth className="text-primary size-5" />
-                  ) : (
-                    <Drama className="text-default-300 size-5" />
-                  )
-                }
-              >
+              <div className="flex items-center space-x-2">
+                <Switch id="type" onClick={handleIsAnonymous} />
                 {!isAnonymous ? (
                   <CardDescription>Público</CardDescription>
                 ) : (
                   <CardDescription>Anônimo</CardDescription>
                 )}
-              </Switch>
+              </div>
             </div>
 
             <div
@@ -257,7 +255,6 @@ export const PublishLayout = () => {
                 type="text"
                 key="content"
                 placeholder="ex: Descrição da publicação"
-                className="font-inter font-medium"
                 name="content"
                 id="content"
                 onChange={handleChangeData}
@@ -274,7 +271,6 @@ export const PublishLayout = () => {
                 type="text"
                 key="references"
                 placeholder="ex: #Hashtag, #HashTag, #hashtag"
-                className="font-inter font-medium"
                 name="references"
                 id="references"
                 onChange={handleChangeData}
@@ -290,7 +286,6 @@ export const PublishLayout = () => {
               <Input
                 type="file"
                 key="foto"
-                className="font-inter font-medium"
                 name="foto"
                 id="inputFoto"
                 onChange={handleFileChange}
@@ -301,7 +296,7 @@ export const PublishLayout = () => {
               <div className="my-3">
                 {errorMessage && (
                   <div
-                    className="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-black dark:text-red-400"
+                    className="p-4 mb-4 text-sm text-danger rounded-lg bg-red-50 dark:bg-black dark:text-red-400"
                     role="alert"
                   >
                     <span className="font-medium">Atenção!</span> {errorMessage}
@@ -334,10 +329,9 @@ export const PublishLayout = () => {
             >
               <Button
                 type="submit"
-                className="font-poppins font-semibold uppercase w-full"
-                variant={"outline"}
+                className="w-full"
               >
-                <SendHorizontal className="size-4 mr-2" />
+                <SendHorizontal className="mr-2 h-4 w-4" />
                 Enviar
               </Button>
             </div>
@@ -349,11 +343,11 @@ export const PublishLayout = () => {
             } flex flex-row justify-center items-center my-2`}
           >
             <Button
-              className="font-poppins font-semibold uppercase w-full"
+              className="w-full"
               variant={"outline"}
               onClick={handlePreviousStep}
             >
-              <ArrowLeft className="size-4 mr-2" />
+              <ArrowLeft className="mr-2 h-4 w-4" />
               Voltar
             </Button>
           </div>
@@ -364,11 +358,10 @@ export const PublishLayout = () => {
             } flex flex-row justify-center items-center my-2`}
           >
             <Button
-              className="font-poppins font-semibold uppercase w-full"
-              variant={"outline"}
+              className="w-full"
               onClick={handleNextStep}
             >
-              <ArrowRight className="size-4 mr-2" />
+              <ArrowRight className="mr-2 h-4 w-4" />
               Proximo
             </Button>
           </div>
@@ -377,10 +370,10 @@ export const PublishLayout = () => {
 
       <Card className="flex flex-col md:hidden w-5/6 max-w-sm">
         <CardHeader>
-          <CardTitle className="font-recursive uppercase tracking-widest">
+          <CardTitle className="tracking-widest">
             Publique
           </CardTitle>
-          <CardDescription>
+          <CardDescription className="tracking-wide">
             Faça uma publicação anônima ou feita pelo usuário.
           </CardDescription>
         </CardHeader>
@@ -388,46 +381,46 @@ export const PublishLayout = () => {
         <CardContent>
           <Drawer>
             <DrawerTrigger className="w-full" asChild>
-              <Button className="uppercase w-full">Publicar</Button>
+              <Button className="w-full">Publicar</Button>
             </DrawerTrigger>
 
             <DrawerContent>
               <DrawerHeader>
                 <div className={`${step === 1 ? null : "hidden"}`}>
-                  <DrawerTitle className="font-recursive uppercase tracking-widest">
+                  <DrawerTitle className="tracking-widest">
                     Anônimo/Usuário
                   </DrawerTitle>
-                  <DrawerDescription>
+                  <DrawerDescription className="tracking-wide">
                     Selecione o tipo de publicação, se será uma publicação
                     anônima, ou se será uma publicação feita pelo usuário.
                   </DrawerDescription>
                 </div>
 
                 <div className={`${step === 2 ? null : "hidden"}`}>
-                  <DrawerTitle className="font-recursive uppercase tracking-widest">
+                  <DrawerTitle className="tracking-widest">
                     Descrição
                   </DrawerTitle>
-                  <DrawerDescription>
+                  <DrawerDescription className="tracking-wide">
                     Introduza um texto para a publicação, faça uma breve
                     descrição sobre sua publicação.
                   </DrawerDescription>
                 </div>
 
                 <div className={`${step === 3 ? null : "hidden"}`}>
-                  <DrawerTitle className="font-recursive uppercase tracking-widest">
+                  <DrawerTitle className="tracking-widest">
                     Marcações
                   </DrawerTitle>
-                  <DrawerDescription>
+                  <DrawerDescription className="tracking-wide">
                     Informe uma #hashtag ou um @usuário, marque alguem na
                     publicação, ou puxe uma corrente na sua postagem.
                   </DrawerDescription>
                 </div>
 
                 <div className={`${step === 4 ? null : "hidden"}`}>
-                  <DrawerTitle className="font-recursive uppercase tracking-widest">
+                  <DrawerTitle className="tracking-widest">
                     Upload
                   </DrawerTitle>
-                  <DrawerDescription>
+                  <DrawerDescription className="tracking-wide">
                     Faça o upload de uma foto, escolha uma foto para ilustrar
                     sua publicação, poste fotos de locais, pessoas, viagens...
                   </DrawerDescription>
@@ -444,24 +437,14 @@ export const PublishLayout = () => {
                   } flex flex-row items-center m-2 space-x-2`}
                 >
                   <Label htmlFor="type">Tipo:</Label>
-                  <Switch
-                    color="primary"
-                    size="lg"
-                    onClick={handleIsAnonymous}
-                    thumbIcon={() =>
-                      !isAnonymous ? (
-                        <Earth className="text-primary size-5" />
-                      ) : (
-                        <Drama className="text-default-300 size-5" />
-                      )
-                    }
-                  >
+                  <div className="flex items-center space-x-2">
+                    <Switch id="type" onClick={handleIsAnonymous} />
                     {!isAnonymous ? (
                       <CardDescription>Público</CardDescription>
                     ) : (
                       <CardDescription>Anônimo</CardDescription>
                     )}
-                  </Switch>
+                  </div>
                 </div>
 
                 <div
@@ -474,7 +457,6 @@ export const PublishLayout = () => {
                     type="text"
                     key="content"
                     placeholder="ex: Descrição da publicação"
-                    className="font-inter font-medium"
                     name="content"
                     id="content"
                     onChange={handleChangeData}
@@ -491,7 +473,6 @@ export const PublishLayout = () => {
                     type="text"
                     key="references"
                     placeholder="ex: #Hashtag, #HashTag, #hashtag"
-                    className="font-inter font-medium"
                     name="references"
                     id="references"
                     onChange={handleChangeData}
@@ -503,7 +484,6 @@ export const PublishLayout = () => {
                   <Input
                     type="file"
                     key="foto"
-                    className="font-inter font-medium"
                     name="foto"
                     id="inputFoto"
                     onChange={handleFileChange}
@@ -534,10 +514,9 @@ export const PublishLayout = () => {
                 >
                   <Button
                     type="submit"
-                    className="font-poppins font-semibold uppercase w-full"
-                    variant={"outline"}
+                    className="w-full"
                   >
-                    <SendHorizontal className="size-4 mr-2" />
+                    <SendHorizontal className="mr-2 h-4 w-4" />
                     Enviar
                   </Button>
                 </div>
@@ -549,11 +528,11 @@ export const PublishLayout = () => {
                 } flex flex-row justify-center items-center m-2`}
               >
                 <Button
-                  className="font-poppins font-semibold uppercase w-full"
+                  className="w-full"
                   variant={"outline"}
                   onClick={handlePreviousStep}
                 >
-                  <ArrowLeft className="size-4 mr-2" />
+                  <ArrowLeft className="mr-2 h-4 w-4" />
                   Voltar
                 </Button>
               </div>
@@ -564,11 +543,10 @@ export const PublishLayout = () => {
                 } flex flex-row justify-center items-center m-2`}
               >
                 <Button
-                  className="font-poppins font-semibold uppercase w-full"
-                  variant={"outline"}
+                  className="w-full"
                   onClick={handleNextStep}
                 >
-                  <ArrowRight className="size-4 mr-2" />
+                  <ArrowRight className="mr-2 h-4 w-4" />
                   Proximo
                 </Button>
               </div>
@@ -579,3 +557,18 @@ export const PublishLayout = () => {
     </>
   );
 };
+
+const PublishPage = () => {
+  return (
+    <>
+      <NavBarReturn title="Publique" />
+
+      <main className="select-none flex flex-col md:flex-row justify-around items-center h-svh w-full">
+        <LogoLayout />
+        <PublishLayout />
+      </main>
+    </>
+  );
+};
+
+export default PublishPage;

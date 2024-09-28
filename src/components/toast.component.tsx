@@ -4,7 +4,7 @@ import * as Toast from "@radix-ui/react-toast";
 import { Button } from "./ui/button";
 import { Progress } from "./ui/progress";
 
-import { Avatar } from "@nextui-org/react";
+import { Avatar, AvatarImage } from "./ui/avatar";
 
 import { X, CircleCheck } from "lucide-react";
 
@@ -42,7 +42,9 @@ export const ToastInfo = (props: ToastProps) => {
                   <span className="animate-ping bg-success rounded-full opacity-75 inline-flex absolute h-full w-full"></span>
                   <span className="bg-success rounded-full inline-flex relative h-2 w-2"></span>
                 </div>
-                <Avatar size="sm" src={props.avatar} />
+                <Avatar>
+                  <AvatarImage src={props.avatar} />
+                </Avatar>
               </div>
               <Toast.Title className="font-inter font-bold">
                 {props.title}
@@ -86,34 +88,34 @@ export const ToastSuccess = (props: ToastProps) => {
   }, []);
 
   return (
-  <Toast.Provider>
-    <Toast.Root className="bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl shadow flex flex-col w-full md:max-w-sm">
-      <div className="flex flex-col p-4">
-        <div className="flex flex-row justify-between items-center">
-          <div className="flex flex-row items-center space-x-2">
-            <div className="flex">
-              <CircleCheck className="text-green-500 dark:text-green-600 size-5" />
+    <Toast.Provider>
+      <Toast.Root className="bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl shadow flex flex-col w-full md:max-w-sm">
+        <div className="flex flex-col p-4">
+          <div className="flex flex-row justify-between items-center">
+            <div className="flex flex-row items-center space-x-2">
+              <div className="flex">
+                <CircleCheck className="text-green-500 dark:text-green-600 size-5" />
+              </div>
+              <Toast.Title className="font-inter font-bold">
+                {props.title}
+              </Toast.Title>
             </div>
-            <Toast.Title className="font-inter font-bold">
-              {props.title}
-            </Toast.Title>
+
+            <Toast.Action className="" asChild altText="Undo action">
+              <Button variant={"outline"} size={"icon"}>
+                <X />
+              </Button>
+            </Toast.Action>
           </div>
-
-          <Toast.Action className="" asChild altText="Undo action">
-            <Button variant={"outline"} size={"icon"}>
-              <X />
-            </Button>
-          </Toast.Action>
+          <Toast.Description className="text-slate-500 dark:text-slate-400 font-inter font-bold">
+            {props.description}
+          </Toast.Description>
         </div>
-        <Toast.Description className="text-slate-500 dark:text-slate-400 font-inter font-bold">
-          {props.description}
-        </Toast.Description>
-      </div>
 
-      <Progress value={value} />
-    </Toast.Root>
+        <Progress value={value} />
+      </Toast.Root>
 
-    <Toast.Viewport className="fixed top-0 right-0 p-4 flex flex-col space-y-2 w-full md:max-w-xs z-50 outline-none" />
-  </Toast.Provider>
+      <Toast.Viewport className="fixed top-0 right-0 p-4 flex flex-col space-y-2 w-full md:max-w-xs z-50 outline-none" />
+    </Toast.Provider>
   );
 };

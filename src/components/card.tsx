@@ -19,7 +19,7 @@ import {
   Divider,
   Dropdown,
   DropdownTrigger,
-  DropdownMenu,
+  Dropdown,
   DropdownItem
 } from "@nextui-org/react";
 
@@ -273,7 +273,7 @@ export const ModalPost = (props: CardProps) => {
                 <AlignRight className="cursor-pointer" />
               </DropdownTrigger>
 
-              <DropdownMenu>
+              <Dropdown>
                 <DropdownItem
                   href="/profile"
                   showDivider={true}
@@ -335,7 +335,7 @@ export const ModalPost = (props: CardProps) => {
                 >
                   <p className="font-inter font-medium">Denúnciar</p>
                 </DropdownItem>
-              </DropdownMenu>
+              </Dropdown>
             </Dropdown>
           </CardHeader>
           <Divider />

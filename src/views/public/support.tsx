@@ -5,7 +5,7 @@ import { getUserData } from "../../utils/getUserData";
 
 import Error404 from './../../../public/images/error404.gif';
 
-const EventsPage = () => {
+const SupportPage = () => {
   const userData = getUserData();
   
   return (
@@ -24,4 +24,4 @@ const EventsPage = () => {
   );
 };
 
-export default EventsPage;
+export default SupportPage;

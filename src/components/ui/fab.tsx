@@ -1,11 +1,10 @@
 import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
-import { cva, type VariantProps } from "class-variance-authority";
+import { cva, VariantProps } from "class-variance-authority";
+import { cn } from "../../lib/utils";
 
-import { cn } from "./../../lib/utils";
-
-const buttonVariants = cva(
-  "relative inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50",
+const fabVariants = cva(
+  "fixed inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 h-10 w-10 z-10",
   {
     variants: {
       variant: {
@@ -21,37 +20,32 @@ const buttonVariants = cva(
           "bg-warning text-warning-foreground shadow-sm hover:bg-warning/90 font-poppins font-semibold uppercase tracking-wider",
         danger:
           "bg-danger text-danger-foreground shadow-sm hover:bg-danger/90 font-poppins font-semibold uppercase tracking-wider",
-        ghost:
-          "hover:bg-accent hover:text-accent-foreground font-poppins font-semibold uppercase tracking-wider",
-        link: "text-primary underline-offset-4 hover:underline font-poppins font-semibold uppercase tracking-wider",
       },
-      size: {
-        default: "h-9 px-4 py-2",
-        sm: "h-8 rounded-md px-3 text-xs",
-        lg: "h-10 rounded-md px-8",
-        icon: "h-9 w-9",
+      placeholder: {
+        topRight: "top-20 right-10",
+        topLeft: "top-20 left-10",
+        bottomRight: "bottom-20 right-10",
+        bottomLeft: "bottom-20 left-10",
       },
     },
     defaultVariants: {
       variant: "default",
-      size: "default",
+      placeholder: "bottomRight",
     },
   }
 );
 
-export interface ButtonProps
+interface FabProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof buttonVariants> {
+    VariantProps<typeof fabVariants> {
   asChild?: boolean;
 }
 
-const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild = false, ...props }, ref) => {
+const Fab = React.forwardRef<HTMLButtonElement, FabProps>(
+  ({ className, variant, placeholder, asChild = false, ...props }, ref) => {
     const Comp = asChild ? Slot : "button";
 
-    const handleRipple = (
-      event: React.MouseEvent<HTMLButtonElement, MouseEvent>
-    ) => {
+    const handleRipple = (event: React.MouseEvent<HTMLButtonElement>) => {
       const button = event.currentTarget;
       const circle = document.createElement("span");
 
@@ -95,11 +89,11 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     return (
       <Comp
         className={cn(
-          buttonVariants({ variant, size, className }),
+          fabVariants({ variant, placeholder, className }),
           "overflow-hidden"
         )}
         ref={ref}
-        onClick={(e) => {
+        onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
           handleRipple(e);
           if (props.onClick) props.onClick(e);
         }}
@@ -108,6 +102,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     );
   }
 );
-Button.displayName = "Button";
 
-export { Button, buttonVariants };
+Fab.displayName = "Fab";
+
+export { Fab, fabVariants };

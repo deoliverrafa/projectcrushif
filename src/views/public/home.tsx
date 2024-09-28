@@ -1,19 +1,16 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { debounce } from "lodash";
+import { HexaLink } from "../../components/ui/router.tsx";
 
-import { NavBar } from "../../layout/navbar.layout.tsx";
-import { BottomBar } from "../../layout/bottombar.layout.tsx";
+import LoadingPage from "./loading.tsx";
 
-import { ToastInfo } from "../../components/toast.component.tsx";
-import { Loading } from "../../components/loading.component.tsx";
-import { ToastCookies } from "../../components/cookies.tsx";
-import { PublishButton } from "../../components/floatingButton.tsx";
-import { CardPost } from "../../components/user/post.component.tsx";
+import { NavBar } from "../../components/navbar.tsx";
+import { BottomBar } from "../../components/bottombar.tsx";
+import { Fab } from "../../components/ui/fab.tsx";
+import { CardPost } from "../../components/post.tsx";
 
-import { Button } from "@nextui-org/react";
-
-import { CircleChevronDown } from "lucide-react";
+import { LoaderCircle, Plus } from "lucide-react";
 
 const localAvatarPath = localStorage.getItem("avatar") ?? "";
 
@@ -48,24 +45,6 @@ export default function HomePage() {
   const [skip, setSkip] = useState(0);
   const [limit] = useState(5);
   const [loading, setLoading] = useState(false);
-  const [showCookies, setShowCookies] = useState(
-    localStorage.getItem("showCookies") !== "hidden"
-  );
-
-  useEffect(() => {
-    if (!sessionStorage.getItem("ToastWelcome")) {
-      sessionStorage.setItem("ToastWelcome", "true");
-
-      setTimeout(() => {
-        sessionStorage.setItem("ToastWelcome", "false");
-      }, 5000);
-    }
-  }, []);
-
-  const handleHideCookies = () => {
-    setShowCookies(false);
-    localStorage.setItem("showCookies", "hidden");
-  };
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -151,16 +130,6 @@ export default function HomePage() {
             avatarPath={userData.avatar || localAvatarPath}
           />
 
-          {sessionStorage.getItem("ToastWelcome") === "true" && (
-            <ToastInfo
-              avatar={userData.avatar}
-              title={"Bem vindo"}
-              description={`Bem vindo de volta, ${userData.nickname}`}
-            />
-          )}
-
-          {showCookies && <ToastCookies onClick={handleHideCookies} />}
-
           <main className="w-full h-full flex flex-col justify-center items-center">
             {posts.map((post) => (
               <CardPost
@@ -180,30 +149,27 @@ export default function HomePage() {
               />
             ))}
 
-            {loading && <Loading />}
+            {loading && (
+              <div className="flex flex-row items-center">
+                <LoaderCircle className="animate-spin mr-2 h-5 w-5" />
+                <p>Carregando...</p>
+              </div>
+            )}
           </main>
 
           <div className="mt-10"></div>
-          <div className="flex flex-col justify-center items-center">
-            <Button
-              className="animate-bounce"
-              color="primary"
-              variant="flat"
-              isIconOnly={true}
-            >
-              <CircleChevronDown />
-            </Button>
-          </div>
 
-          <PublishButton />
+          <HexaLink href={"/publish"}>
+            <Fab>
+              <Plus />
+            </Fab>
+          </HexaLink>
 
-          <BottomBar className="appearance-in" />
+          <BottomBar />
         </div>
       ) : (
-        <Loading />
+        <LoadingPage />
       )}
-
-      {loading ? <Loading /> : null}
     </>
   );
 }

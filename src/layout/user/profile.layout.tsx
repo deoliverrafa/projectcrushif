@@ -1,9 +1,10 @@
 import * as React from "react";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import { HexaLink } from "../../components/ui/router.tsx";
 
-import { NavBarReturn } from "../navbar.layout.tsx";
+import { NavBarReturn } from "../../components/navbar.tsx";
 
-import { Loading } from "../../components/loading.component.tsx";
+import LoadingPage from "../../views/public/loading.tsx";
 import { ShareComponent } from "../../components/share.component.tsx";
 
 import {
@@ -16,8 +17,12 @@ import {
 } from "../../components/ui/card";
 import { Button } from "../../components/ui/button.tsx";
 import { Badge } from "../../components/ui/badge.tsx";
-
-import { Divider, Avatar } from "@nextui-org/react";
+import { Separator } from "../../components/ui/separator.tsx";
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "../../components/ui/avatar.tsx";
 
 import { getUserData } from "../../utils/getUserData.tsx";
 import { getUserDataById } from "../../utils/getUserDataById.tsx";
@@ -96,7 +101,7 @@ export const ProfileLayout = () => {
   }, [id]);
 
   if (!currentUser || !viewingUser) {
-    return <Loading />;
+    return <LoadingPage />;
   }
 
   const isOwnProfile = currentUser._id === viewingUser._id;
@@ -119,15 +124,14 @@ export const ProfileLayout = () => {
               <span className="animate-ping bg-success rounded-full opacity-75 inline-flex absolute h-full w-full"></span>
               <span className="bg-success rounded-full inline-flex relative h-3 w-3"></span>
             </div>
-            <Avatar
-              size="lg"
-              name={viewingUser.nickname}
-              src={viewingUser.avatar}
-            />
+            <Avatar>
+              <AvatarFallback>{viewingUser.nickname}</AvatarFallback>
+              <AvatarImage src={viewingUser.avatar} />
+            </Avatar>
           </div>
 
           <div className="flex flex-col w-5/6">
-            <Divider />
+            <Separator />
             <div className="flex flex-row justify-evenly items-center h-14">
               <div className="cursor-pointer flex flex-col justify-center items-center space-y-1">
                 <CardDescription className="font-inter font-bold text-tiny">
@@ -137,7 +141,7 @@ export const ProfileLayout = () => {
                   Seguidores
                 </CardDescription>
               </div>
-              <Divider orientation="vertical" />
+              <Separator orientation="vertical" />
               <div className="cursor-pointer flex flex-col justify-center items-center space-y-1">
                 <CardDescription className="font-inter font-bold text-tiny">
                   {viewingUser.Nfollowing}
@@ -147,7 +151,7 @@ export const ProfileLayout = () => {
                 </CardDescription>
               </div>
             </div>
-            <Divider />
+            <Separator />
           </div>
         </CardHeader>
 
@@ -188,9 +192,9 @@ export const ProfileLayout = () => {
 
           <div className="flex flex-row justify-center items-center space-x-1">
             {isOwnProfile && (
-              <Link
+              <HexaLink
                 className="flex justify-center items-center w-full"
-                to="/profile/edit"
+                href="/profile/edit"
               >
                 <Button
                   variant={"secondary"}
@@ -199,7 +203,7 @@ export const ProfileLayout = () => {
                   <PencilRuler className="mr-2 size-4" />
                   Editar
                 </Button>
-              </Link>
+              </HexaLink>
             )}
 
             {!isOwnProfile && (
