@@ -9,8 +9,8 @@ import LoadingPage from "./views/public/loading.tsx";
 
 const HomePage = React.lazy(() => import("./views/public/home.tsx"));
 const SearchPage = React.lazy(() => import("./views/public/search.tsx"));
-const EventsPage = React.lazy(() => import("./views/public/events.page.tsx"));
-const MatchPage = React.lazy(() => import("./views/public/match.page.tsx"));
+const EventsPage = React.lazy(() => import("./views/public/events.tsx"));
+const MatchPage = React.lazy(() => import("./views/public/match.tsx"));
 const SettingsPage = React.lazy(() => import("./views/public/settings.tsx"));
 const SupportPage = React.lazy(() => import("./views/public/support.tsx"));
 const NotificationsPage = React.lazy(
@@ -19,7 +19,7 @@ const NotificationsPage = React.lazy(
 const PublishPage = React.lazy(() => import("./views/public/publish.tsx"));
 const ProfilePage = React.lazy(() => import("./views/public/profile.tsx"));
 const EditProfilePage = React.lazy(
-  () => import("./views/public/editProfile.page.tsx")
+  () => import("./views/public/edit-profile.tsx")
 );
 
 const LoginPage = React.lazy(() => import("./views/auth/login.tsx"));
