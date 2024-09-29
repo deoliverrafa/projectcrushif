@@ -180,8 +180,6 @@ export const RegisterLayout = () => {
     
     setClickedButton(false);
     const { name, value } = e.target;
-    console.log(name);
-    console.log(value);
     
      setFormData((prevData: UserDataRegister) => ({
         ...prevData,

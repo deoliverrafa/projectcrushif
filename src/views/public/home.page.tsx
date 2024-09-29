@@ -70,8 +70,7 @@ export default function HomePage() {
     async function getUserData() {
       try {
         const response = await axios.get(
-          `${import.meta.env.VITE_API_BASE_URL}${
-            import.meta.env.VITE_USER_TOKEN
+          `${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_USER_TOKEN
           }${token}`
         );
         setUserData(response.data.userFinded);
@@ -94,8 +93,7 @@ export default function HomePage() {
         setLoading(true);
         const token = localStorage.getItem("token");
         const response = await axios.get(
-          `${import.meta.env.VITE_API_BASE_URL}${
-            import.meta.env.VITE_POST_GET
+          `${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_POST_GET
           }${token}/${skip}/${limit}`
         );
 
@@ -123,7 +121,7 @@ export default function HomePage() {
     const handleScroll = debounce(() => {
       if (
         window.innerHeight + document.documentElement.scrollTop >=
-          document.documentElement.offsetHeight - 100 &&
+        document.documentElement.offsetHeight - 100 &&
         !loading &&
         !finishedPosts
       ) {
@@ -142,7 +140,6 @@ export default function HomePage() {
     }, 5000);
   }, []);
 
-  console.log(sessionStorage.getItem("showWelcome"));
   return (
     <>
       {userData ? (
@@ -163,8 +160,11 @@ export default function HomePage() {
           {showCookies && <ToastCookies onClick={handleHideCookies} />}
 
           <main className="w-full h-full flex flex-col justify-center items-center">
-            {posts.map((post) => (
-              <CardPost
+            {posts.map((post) => {
+
+              const isFollowing = userData.following.some((followingId) => followingId === post.userId)
+
+              return <CardPost
                 key={post._id}
                 _id={post._id}
                 campus={post.campus}
@@ -178,8 +178,10 @@ export default function HomePage() {
                 userId={post.userId}
                 insertAt={post.insertAt}
                 id={post.userId}
+                isFollowing={isFollowing}
               />
-            ))}
+            })
+            }
 
             {loading && <Loading />}
           </main>

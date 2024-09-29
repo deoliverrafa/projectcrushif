@@ -49,6 +49,7 @@ interface CardProps {
   userAvatar?: string;
   insertAt?: string;
   id?: string;
+  isFollowing?: boolean;
 }
 
 interface UserData {
@@ -75,8 +76,7 @@ export const CardPost = (props: CardProps) => {
     const fetchUserData = async () => {
       try {
         const response = await axios.get(
-          `${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_USER_ID}${
-            props.userId
+          `${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_USER_ID}${props.userId
           }`
         );
 
@@ -98,6 +98,47 @@ export const CardPost = (props: CardProps) => {
       setFormattedData(formatDistanceToNow(parsedDate, { locale: ptBR }));
     }
   }, [props.userId, props.insertAt]);
+
+  // Lógica para seguir usuário
+
+  const [followFormData] = React.useState({
+    userFollowId: props.userId,
+    token: localStorage.getItem('token'),
+  });
+
+  const [unfollowFormData] = React.useState({
+    unfollowId: props.userId,
+    token: localStorage.getItem('token'),
+  });
+
+  const [isFollowing, setIsFollowing] = React.useState(props.isFollowing);
+
+  const followUser = () => {
+    if (!isFollowing) {
+      axios
+        .put(
+          `${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_FOLLOW_USER
+          }`,
+          followFormData
+        ).then(() => {
+          setIsFollowing(true)
+        })
+    } else {
+      axios
+        .put(
+          `${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_UNFOLLOW_USER
+          }`,
+          unfollowFormData
+        ).then(() => {
+          setIsFollowing(false)
+        })
+    }
+  }
+
+  const handleFollowSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    followUser();
+  }
 
   return (
     <Card
@@ -133,13 +174,17 @@ export const CardPost = (props: CardProps) => {
           </div>
         </Link>
 
-        <Button
-          variant={"default"}
-          className="font-poppins font-semibold uppercase"
-        >
-          <UserRoundPlus className="size-4 mr-2" />
-          Seguir
-        </Button>
+        <form
+          action=""
+          method="put"
+          onSubmit={handleFollowSubmit}>
+          <Button
+            variant={"default"}
+            className="font-poppins font-semibold uppercase">
+            <UserRoundPlus className="size-4 mr-2" />
+            {isFollowing ? "Seguindo" : "Seguir"}
+          </Button>
+        </form>
       </CardHeader>
 
       <CardContent className="relative">

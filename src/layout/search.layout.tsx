@@ -56,7 +56,7 @@ export const SearchLayout = () => {
         setQueryResponse(
           response.data.usersFinded.map((user: any) => ({
             ...user,
-            isFollowing: user.isFollowing || false, // Defina o valor padrão
+            isFollowing: user.isFollowing || false,
           }))
         );
       })
@@ -71,8 +71,6 @@ export const SearchLayout = () => {
   };
 
   const debounceFetchData = useCallback(debounce(fetchData, 500), [formData]);
-
-  console.log(userData.following);
 
   return (
     <form
@@ -110,13 +108,10 @@ export const SearchLayout = () => {
         <CardFooter>
           {queryResponse.length > 0 ? (
             queryResponse.map((user: User) => {
-              console.log("Id do card:", user._id);
-
+            
               const isFollowing = userData.following.some((followingId) => {
-                console.log("Id do array:", followingId);
                 return followingId === user._id;
               });
-              console.log(isFollowing);
 
               return (
                 <SearchUserCard

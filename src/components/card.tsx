@@ -109,12 +109,10 @@ export const CardPost = (props: CardProps) => {
 
   const FollowUser = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("Entrei aqui");
 
     axios.put(`${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_FOLLOW_USER}`,
       formData
     ).then((response) => {
-      console.log(response);
 
       setFollowedUser(response.data.followed)
     }).catch((error: any) => {
