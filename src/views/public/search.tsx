@@ -110,10 +110,13 @@ const SearchLayout = () => {
         <CardFooter>
           {queryResponse.length > 0 ? (
             queryResponse.map((user: User) => {
-            
+              console.log("Id do card:", user._id);
+
               const isFollowing = userData.following.some((followingId) => {
+                console.log("Id do array:", followingId);
                 return followingId === user._id;
               });
+              console.log(isFollowing);
 
               return (
                 <SearchUserCard

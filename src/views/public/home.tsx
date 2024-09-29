@@ -27,8 +27,6 @@ interface CardProps {
   insertAt: string;
   userId: string;
   type: string;
-  likeCount: number;
-  likedBy: String[]
 }
 
 interface userData {
@@ -58,7 +56,8 @@ export default function HomePage() {
     async function getUserData() {
       try {
         const response = await axios.get(
-          `${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_USER_TOKEN
+          `${import.meta.env.VITE_API_BASE_URL}${
+            import.meta.env.VITE_USER_TOKEN
           }${token}`
         );
         setUserData(response.data.userFinded);
@@ -81,7 +80,8 @@ export default function HomePage() {
         setLoading(true);
         const token = localStorage.getItem("token");
         const response = await axios.get(
-          `${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_POST_GET
+          `${import.meta.env.VITE_API_BASE_URL}${
+            import.meta.env.VITE_POST_GET
           }${token}/${skip}/${limit}`
         );
 
@@ -109,7 +109,7 @@ export default function HomePage() {
     const handleScroll = debounce(() => {
       if (
         window.innerHeight + document.documentElement.scrollTop >=
-        document.documentElement.offsetHeight - 100 &&
+          document.documentElement.offsetHeight - 100 &&
         !loading &&
         !finishedPosts
       ) {
@@ -131,9 +131,8 @@ export default function HomePage() {
           />
 
           <main className="w-full h-full flex flex-col justify-center items-center">
-            {posts.map((post) => {
-
-              return <CardPost
+            {posts.map((post) => (
+              <CardPost
                 key={post._id}
                 _id={post._id}
                 campus={post.campus}
@@ -146,11 +145,9 @@ export default function HomePage() {
                 photoURL={post.photoURL}
                 userId={post.userId}
                 insertAt={post.insertAt}
-                likeCount={post.likeCount}
-                likedBy={post.likedBy}
+                id={post.userId}
               />
-            })
-            }
+            ))}
 
             {loading && (
               <div className="flex flex-row items-center">

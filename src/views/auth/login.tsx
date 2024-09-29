@@ -76,7 +76,6 @@ const LoginLayout = () => {
 
       if (response.data.logged) {
         localStorage.setItem("token", response.data.token);
-        localStorage.setItem("userId", response.data.userId)
         window.location.href = "/";
       } else {
         setMessageError(response.data.message);

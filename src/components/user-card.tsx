@@ -31,7 +31,8 @@ export default function SearchUserCard(props: SearchUserCard) {
 
     axios
       .put(
-        `${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_FOLLOW_USER
+        `${import.meta.env.VITE_API_BASE_URL}${
+          import.meta.env.VITE_FOLLOW_USER
         }`,
         formData
       )
@@ -71,9 +72,10 @@ export default function SearchUserCard(props: SearchUserCard) {
 
                 <div>
                   <BadgeCheck
-                    className={`${props.type === "Plus"
-                      ? "text-info"
-                      : props.type === "Admin"
+                    className={`${
+                      props.type === "Plus"
+                        ? "text-info"
+                        : props.type === "Admin"
                         ? "text-danger"
                         : "text-success"
                     } size-3.5`}
@@ -99,8 +101,8 @@ export default function SearchUserCard(props: SearchUserCard) {
               {props.following
                 ? "Seguindo"
                 : followedUser
-                  ? "Seguindo"
-                  : "Seguir"}
+                ? "Seguindo"
+                : "Seguir"}
             </Button>
           </form>
         </div>
