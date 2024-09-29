@@ -27,6 +27,8 @@ interface CardProps {
   insertAt: string;
   userId: string;
   type: string;
+  likeCount: number
+  likedBy: String[]
 }
 
 interface userData {
@@ -145,7 +147,8 @@ export default function HomePage() {
                 photoURL={post.photoURL}
                 userId={post.userId}
                 insertAt={post.insertAt}
-                id={post.userId}
+                likeCount={post.likeCount}
+                likedBy={post.likedBy}
               />
             ))}
 

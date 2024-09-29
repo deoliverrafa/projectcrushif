@@ -10,6 +10,8 @@ interface Posts {
     content: string
     isAnonymous: string
     photoURL: string
+    likeCount: number
+    likedBy: String[]
 }
 
 export function getNewPosts(skip: number, limit: number, userId: string) {
