@@ -51,7 +51,7 @@ import { getUserData } from "../utils/getUserData.tsx";
 
 interface CardProps {
   className?: string;
-  userId?: string;
+  userId: string;
   _id?: string;
   nickname: string;
   email: string;
@@ -63,6 +63,8 @@ interface CardProps {
   userAvatar?: string;
   insertAt?: string;
   id?: string;
+  likeCount: number;
+  likedBy: String[]
 }
 
 interface UserData {
@@ -83,8 +85,26 @@ export const CardPost = (props: CardProps) => {
 
   const [shareIsOpen, setShareIsOpen] = React.useState(false);
 
+  React.useEffect(() => {
+    if (props.likedBy.includes(localStorage.getItem("userId") || '')) {
+      setLiked(true)
+    }
+  }, [])
+
   const handleLike = () => {
-    setLiked(!liked);
+    
+    const newLiked = !liked;
+
+    setLiked(newLiked);
+
+    console.log(newLiked);
+    
+    if (newLiked) {
+      axios.post(`${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_POST_LIKE}`, { token: localStorage.getItem('token'), postId: props._id });
+    } else {
+      axios.post(`${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_POST_UNLIKE}`, { token: localStorage.getItem('token'), postId: props._id });
+    }
+
     setShowHeart(true);
     setTimeout(() => setShowHeart(false), 500);
   };
@@ -107,8 +127,7 @@ export const CardPost = (props: CardProps) => {
     const fetchUserData = async () => {
       try {
         const response = await axios.get(
-          `${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_USER_ID}${
-            props.userId
+          `${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_USER_ID}${props.userId
           }`
         );
 
@@ -385,7 +404,7 @@ export const CardPost = (props: CardProps) => {
                 <div className="flex flex-row items-center space-x-1">
                   <Heart className="text-primary h-4 w-4" />
                   <CardDescription className="cursor-pointer tracking-light">
-                    {0} curtidas
+                    {props.likeCount} curtidas
                   </CardDescription>
                 </div>
 

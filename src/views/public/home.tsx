@@ -27,6 +27,8 @@ interface CardProps {
   insertAt: string;
   userId: string;
   type: string;
+  likeCount: number;
+  likedBy: String[]
 }
 
 interface userData {
@@ -119,16 +121,6 @@ export default function HomePage() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [loading, limit, finishedPosts]);
 
-<<<<<<< HEAD:src/views/public/home.page.tsx
-  useEffect(() => {
-    setTimeout(() => {
-      setShowWelcome(false);
-      localStorage.setItem("showWelcome", "hidden");
-    }, 5000);
-  }, []);
-
-=======
->>>>>>> ba17a86fa52364429f03593c02e42dded95dbf82:src/views/public/home.tsx
   return (
     <>
       {userData ? (
@@ -140,8 +132,6 @@ export default function HomePage() {
 
           <main className="w-full h-full flex flex-col justify-center items-center">
             {posts.map((post) => {
-
-              const isFollowing = userData.following.some((followingId) => followingId === post.userId)
 
               return <CardPost
                 key={post._id}
@@ -156,8 +146,8 @@ export default function HomePage() {
                 photoURL={post.photoURL}
                 userId={post.userId}
                 insertAt={post.insertAt}
-                id={post.userId}
-                isFollowing={isFollowing}
+                likeCount={post.likeCount}
+                likedBy={post.likedBy}
               />
             })
             }
