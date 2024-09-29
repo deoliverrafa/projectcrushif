@@ -1,7 +1,12 @@
 import * as React from "react";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import { HexaLink } from "../../components/ui/router.tsx";
 
-import { Loading } from "../../components/loading.component.tsx";
+import { NavBarReturn } from "../../components/navbar.tsx";
+
+import LoadingPage from "../../views/public/loading.tsx";
+import { ShareComponent } from "../../components/share.component.tsx";
+
 import {
   Card,
   CardContent,
@@ -12,21 +17,22 @@ import {
 } from "../../components/ui/card";
 import { Button } from "../../components/ui/button.tsx";
 import { Badge } from "../../components/ui/badge.tsx";
-
-import { Divider, Avatar } from "@nextui-org/react";
+import { Separator } from "../../components/ui/separator.tsx";
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "../../components/ui/avatar.tsx";
 
 import { getUserData } from "../../utils/getUserData.tsx";
 import { getUserDataById } from "../../utils/getUserDataById.tsx";
-import { handleShare } from "../../controllers/shareProfile.ts";
 
 import {
   PencilRuler,
-  Share,
   SearchX,
   BadgeCheck,
   UserRoundPlus,
-  Ban,
-  Siren,
+  Share,
 } from "lucide-react";
 
 interface User {
@@ -49,7 +55,15 @@ export const ProfileLayout = () => {
   const [age, setAge] = React.useState<number | null>(null);
   const { id } = useParams<string>();
 
-  console.log(viewingUser);
+  const [shareIsOpen, setShareIsOpen] = React.useState(false);
+
+  const handleOpenShare = () => {
+    setShareIsOpen(true);
+  };
+
+  const handleCloseShare = () => {
+    setShareIsOpen(false);
+  };
 
   const calculateAge = (birthday: string) => {
     const today = new Date();
@@ -87,12 +101,22 @@ export const ProfileLayout = () => {
   }, [id]);
 
   if (!currentUser || !viewingUser) {
-    return <Loading />;
+    return <LoadingPage />;
   }
 
   const isOwnProfile = currentUser._id === viewingUser._id;
+
   return (
     <>
+      <NavBarReturn
+        title={"Perfil"}
+        profile={true}
+        id={viewingUser._id}
+        avatar={viewingUser.avatar}
+        name={viewingUser.nickname}
+        isOwnProfile={isOwnProfile}
+      />
+
       <Card className="w-full md:w-10/12">
         <CardHeader className="flex flex-row items-center space-x-4">
           <div className="flex relative">
@@ -100,26 +124,16 @@ export const ProfileLayout = () => {
               <span className="animate-ping bg-success rounded-full opacity-75 inline-flex absolute h-full w-full"></span>
               <span className="bg-success rounded-full inline-flex relative h-3 w-3"></span>
             </div>
-            <Avatar
-              size="lg"
-              name={viewingUser.nickname}
-              src={viewingUser.avatar}
-            />
+            <Avatar>
+              <AvatarFallback>{viewingUser.nickname}</AvatarFallback>
+              <AvatarImage src={viewingUser.avatar} />
+            </Avatar>
           </div>
 
           <div className="flex flex-col w-5/6">
-            <Divider />
-            <div className="flex flex-row justify-evenly items-center h-12">
-              <div className="cursor-pointer flex flex-col justify-center items-center">
-                <CardDescription className="font-inter font-bold text-tiny">
-                  {0}
-                </CardDescription>
-                <CardDescription className="font-inter font-bold tracking-widest text-tiny">
-                  Postagens
-                </CardDescription>
-              </div>
-              <Divider orientation="vertical" />
-              <div className="cursor-pointer flex flex-col justify-center items-center">
+            <Separator />
+            <div className="flex flex-row justify-evenly items-center h-14">
+              <div className="cursor-pointer flex flex-col justify-center items-center space-y-1">
                 <CardDescription className="font-inter font-bold text-tiny">
                   {viewingUser.Nfollowers}
                 </CardDescription>
@@ -127,8 +141,8 @@ export const ProfileLayout = () => {
                   Seguidores
                 </CardDescription>
               </div>
-              <Divider orientation="vertical" />
-              <div className="cursor-pointer flex flex-col justify-center items-center">
+              <Separator orientation="vertical" />
+              <div className="cursor-pointer flex flex-col justify-center items-center space-y-1">
                 <CardDescription className="font-inter font-bold text-tiny">
                   {viewingUser.Nfollowing}
                 </CardDescription>
@@ -137,7 +151,7 @@ export const ProfileLayout = () => {
                 </CardDescription>
               </div>
             </div>
-            <Divider />
+            <Separator />
           </div>
         </CardHeader>
 
@@ -146,25 +160,20 @@ export const ProfileLayout = () => {
             {viewingUser.userName ? viewingUser.userName : "Nome indisponível"}
           </CardTitle>
 
-          <div className="flex flex-row items-center space-x-1">
-            <Badge variant={"outline"}>
-              {viewingUser.nickname
-                ? `@${viewingUser.nickname}`
-                : "indisponível"}
-            </Badge>
+          <Badge variant={"secondary"}>
+            {viewingUser.nickname ? `@${viewingUser.nickname}` : "indisponível"}
 
-            <Badge variant={"outline"}>
-              <BadgeCheck
-                className={`${
-                  viewingUser.type === "Plus"
-                    ? "text-info"
-                    : viewingUser.type === "Admin"
-                    ? "text-danger"
-                    : "text-success"
-                } size-3`}
-              />
-            </Badge>
-          </div>
+            <BadgeCheck
+              className={`${
+                viewingUser.type === "Plus"
+                  ? "text-info"
+                  : viewingUser.type === "Admin"
+                  ? "text-danger"
+                  : "text-success"
+              } ml-1 size-3`}
+            />
+          </Badge>
+
           <div className="space-y-0.5">
             <CardDescription className="font-inter text-tiny font-semibold tracking-wider">
               {age ? `Idade: ${age} anos` : "Idade: indisponível"}
@@ -181,25 +190,25 @@ export const ProfileLayout = () => {
             </CardDescription>
           </div>
 
-          <div className="flex flex-row items-center space-x-1">
+          <div className="flex flex-row justify-center items-center space-x-1">
             {isOwnProfile && (
-              <Link
+              <HexaLink
                 className="flex justify-center items-center w-full"
-                to="/profile/edit"
+                href="/profile/edit"
               >
                 <Button
-                  variant={"outline"}
+                  variant={"secondary"}
                   className="font-poppins font-semibold uppercase w-full"
                 >
                   <PencilRuler className="mr-2 size-4" />
                   Editar
                 </Button>
-              </Link>
+              </HexaLink>
             )}
 
             {!isOwnProfile && (
               <Button
-                variant={"outline"}
+                variant={"secondary"}
                 className="font-poppins font-semibold uppercase w-full"
               >
                 <UserRoundPlus className="mr-2 size-4" />
@@ -208,25 +217,12 @@ export const ProfileLayout = () => {
             )}
 
             <Button
-              variant={"outline"}
+              variant={"secondary"}
               size={"icon"}
-              // Usa sempre um valor padrão quando for assim, daí faz a manipulação se for um '' usuário inválido, ou sessão inativa
-              onClick={() => handleShare(viewingUser.nickname, id ? id : "")}
+              onClick={handleOpenShare}
             >
               <Share className="size-4" />
             </Button>
-
-            {!isOwnProfile && (
-              <Button variant={"destructive"} size={"icon"}>
-                <Siren className="size-4" />
-              </Button>
-            )}
-
-            {!isOwnProfile && (
-              <Button variant={"destructive"} size={"icon"}>
-                <Ban className="size-4" />
-              </Button>
-            )}
           </div>
         </CardContent>
 
@@ -239,6 +235,13 @@ export const ProfileLayout = () => {
           </div>
         </CardFooter>
       </Card>
+
+      {shareIsOpen && (
+        <ShareComponent
+          link={`https://crushif.vercel.app/profile/${viewingUser._id}`}
+          onClose={handleCloseShare}
+        />
+      )}
     </>
   );
 };

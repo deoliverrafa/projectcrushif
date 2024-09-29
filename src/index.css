@@ -1,0 +1,74 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 333 0% 90%;
+    --foreground: 333 0% 0%;
+    --card: 333 0% 95%;
+    --card-foreground: 333 0% 10%;
+    --popover: 333 0% 95%;
+    --popover-foreground: 333 95% 0%;
+    --primary: 333 71.4% 50.6%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 215 19.3% 34.5%;
+    --secondary-foreground: 0 0% 100%;
+    --success: 142 76.2% 36.3%;
+    --success-foreground: 0 0% 100%;
+    --warning: 41 96.1% 40.4%;
+    --warning-foreground: 0 0% 100%;
+    --danger: 0 72.2% 50.6%;
+    --danger-foreground: 0 0% 100%;
+    --muted: 295 10% 85%;
+    --muted-foreground: 333 0% 35%;
+    --accent: 295 10% 80%;
+    --accent-foreground: 333 0% 10%;
+    --destructive: 0 50% 30%;
+    --destructive-foreground: 333 0% 90%;
+    --border: 333 20% 18%;
+    --input: 333 20% 18%;
+    --ring: 333 71.4% 50.6%;
+    --radius: 1rem;
+  }
+
+  .dark {
+    --background: 335 0% 1%;
+    --foreground: 335 0% 90%;
+    --card: 335 0% 0%;
+    --card-foreground: 335 0% 90%;
+    --popover: 335 0% 0%;
+    --popover-foreground: 335 0% 90%;
+    --primary: 335 77.6% 42%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 215 25% 26.7%;
+    --secondary-foreground: 0 0% 100%;
+    --success: 142 71.8% 29.2%;
+    --success-foreground: 0 0% 100%;
+    --warning: 35 91.7% 32.9%;
+    --warning-foreground: 0 0% 100%;
+    --danger: 0 73.7% 41.8%;
+    --danger-foreground: 0 0% 100%;
+    --muted: 297 10% 15%;
+    --muted-foreground: 335 0% 60%;
+    --accent: 297 10% 15%;
+    --accent-foreground: 335 0% 90%;
+    --destructive: 0 50% 30%;
+    --destructive-foreground: 335 0% 90%;
+    --border: 335 20% 18%;
+    --input: 335 20% 18%;
+    --ring: 335 77.6% 42%;
+    --radius: 1rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
