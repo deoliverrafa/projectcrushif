@@ -4,7 +4,7 @@ import { LayoutGrid, Search, HeartHandshake, CalendarDays } from "lucide-react";
 
 export const BottomBar = () => {
   return (
-    <Bottombar className="flex md:hidden">
+    <Bottombar className="bg-card flex md:hidden">
       <BottombarItem href="/" activeClassName="text-primary">
         <LayoutGrid />
         Inicio

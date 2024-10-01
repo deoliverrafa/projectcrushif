@@ -2,7 +2,7 @@
   "homepage": "https://tarlos40.github.io/CrushIF",
   "name": "crushifto",
   "private": true,
-  "version": "1.0",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",

@@ -85,6 +85,13 @@ export const CardPost = (props: CardProps) => {
   const [likeCount, setLikeCount] = React.useState(props.likeCount);
 
   const [shareIsOpen, setShareIsOpen] = React.useState(false);
+  
+  const [showFullContent, setShowFullContent] = React.useState(false);
+  const MAX_CONTENT_LENGTH = 20;
+
+const toggleContent = () => {
+    setShowFullContent(!showFullContent);
+  };
 
   React.useEffect(() => {
     if (props.likedBy.includes(localStorage.getItem("userId") || "")) {
@@ -177,7 +184,7 @@ export const CardPost = (props: CardProps) => {
               <div className="flex flex-col items-start justify-center space-y-1">
                 <div className="flex flex-row items-center space-x-1">
                   <div>
-                    <CardTitle className="tracking-light">
+                    <CardTitle className="font-medium tracking-tight">
                       {!props.isAnonymous ? userData?.nickname : "Anônimo"}
                     </CardTitle>
                   </div>
@@ -207,7 +214,7 @@ export const CardPost = (props: CardProps) => {
               <div className="flex flex-col items-start justify-center space-y-1">
                 <div className="flex flex-row items-center space-x-1">
                   <div>
-                    <CardTitle className="tracking-light">
+                    <CardTitle className="font-medium tracking-tight">
                       {!props.isAnonymous ? userData?.nickname : "Anônimo"}
                     </CardTitle>
                   </div>
@@ -222,7 +229,10 @@ export const CardPost = (props: CardProps) => {
           {!props.isAnonymous && (
             <Dropdown>
               <DropdownTrigger>
-                <EllipsisVertical className="cursor-pointer" />
+                <Button variant={"outline"} size={"icon"}>
+                  <EllipsisVertical className="cursor-pointer" />
+                </Button>
+                
               </DropdownTrigger>
 
               <DropdownContent className="select-none">
@@ -250,7 +260,7 @@ export const CardPost = (props: CardProps) => {
                       <div className="flex flex-col">
                         <div className="flex flex-row items-center space-x-1">
                           <div>
-                            <p className="text-foreground font-semibold ">
+                            <p className="text-foreground font-medium ">
                               {!props.isAnonymous ? userData?.nickname : ""}
                             </p>
                           </div>
@@ -332,7 +342,7 @@ export const CardPost = (props: CardProps) => {
           )}
         </CardHeader>
 
-        <CardContent className="relative">
+        <CardContent className="relative pb-0">
           <div className="flex flex-col items-center justify-center">
             {props.photoURL && (
               <Carousel className="flex flex-col items-center my-2 relative">
@@ -363,23 +373,33 @@ export const CardPost = (props: CardProps) => {
             )}
 
             <div className="flex flex-row items-center h-full w-full">
-              <CardDescription className="text-foreground font-medium text-sm">
-                <span className="font-semibold">
+              <CardDescription className="text-foreground font-light tracking-tight text-sm">
+                <span className="font-medium">
                   {!props.isAnonymous ? userData?.nickname : "anônimo"}:{" "}
                 </span>
-                {props.content || ""}{" "}
-                {props.references !== "" && (
-                  <a
-                    key={props._id}
-                    className="text-primary"
-                    id={props._id}
+                {showFullContent
+                  ? props.content
+                  : `${props.content.substring(0, MAX_CONTENT_LENGTH)}`}
+                {props.content.length > MAX_CONTENT_LENGTH && (
+                  <span
+                    className="text-primary cursor-pointer"
+                    onClick={toggleContent}
                   >
-                    {props.references || ""}
+                    {showFullContent ? " ...ver menos" : " ...ver mais"}
+                  </span>
+                )}
+                {props.references && (
+                  <a key={props._id} className="text-primary" id={props._id}>
+                    {props.references}
                   </a>
                 )}
               </CardDescription>
             </div>
           </div>
+          
+          <CardDescription className="cursor-pointer font-light tracking-tight text-sm">
+            ver todas as {likeCount} curtidas
+          </CardDescription>
         </CardContent>
 
         <Separator className="my-2" />
@@ -400,22 +420,11 @@ export const CardPost = (props: CardProps) => {
                 </Button>
               </div>
 
-              <div className="flex flex-row space-x-2">
-                <div className="flex flex-row items-center space-x-1">
-                  <Heart className="text-primary h-4 w-4" />
-                  <CardDescription className="cursor-pointer tracking-light">
-                    {likeCount} curtidas
-                  </CardDescription>
-                </div>
-
-                <div>
-                  <CardDescription>•</CardDescription>
-                </div>
-
+              <div className="flex flex-row">
                 <div className="flex flex-row items-center space-x-1">
                   <div className="flex flex-row items-center space-x-1">
                     <MessageCircleHeart className="text-primary h-4 w-4" />
-                    <CardDescription className="cursor-pointer tracking-light">
+                    <CardDescription className="cursor-pointer font-light tracking-tight text-sm">
                       {0} coméntarios
                     </CardDescription>
                   </div>
@@ -444,7 +453,7 @@ export const CardPost = (props: CardProps) => {
           </div>
 
           {formattedData && (
-            <CardDescription className="tracking-light">
+            <CardDescription className="text-sm font-light tracking-tight">
               há {formattedData} atrás
             </CardDescription>
           )}
