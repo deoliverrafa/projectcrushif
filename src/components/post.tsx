@@ -87,7 +87,6 @@ export const CardPost = (props: CardProps) => {
   const [shareIsOpen, setShareIsOpen] = React.useState(false);
   
   const [showFullContent, setShowFullContent] = React.useState(false);
-  const MAX_CONTENT_LENGTH = 20;
 
 const toggleContent = () => {
     setShowFullContent(!showFullContent);
@@ -379,23 +378,24 @@ const toggleContent = () => {
                 </span>
                 {showFullContent
                   ? props.content
-                  : `${props.content.substring(0, MAX_CONTENT_LENGTH)}`}
-                {props.content.length > MAX_CONTENT_LENGTH && (
+                  : `${props.content.substring(0, 50)}`}
+                {props.content.length > 50 && (
                   <span
-                    className="text-primary cursor-pointer"
+                    className="text-muted-foreground cursor-pointer"
                     onClick={toggleContent}
                   >
-                    {showFullContent ? " ...ver menos" : " ...ver mais"}
+                    {showFullContent ? " ... ver menos" : " ... ver mais"}
                   </span>
-                )}
-                {props.references && (
-                  <a key={props._id} className="text-primary" id={props._id}>
-                    {props.references}
-                  </a>
                 )}
               </CardDescription>
             </div>
           </div>
+          
+          {props.references && (
+            <a key={props._id} className="font-poppins tracking-tight font-light text-primary text-sm" id={props._id}>
+              {props.references}
+            </a>
+          )}
           
           <CardDescription className="cursor-pointer font-light tracking-tight text-sm">
             ver todas as {likeCount} curtidas

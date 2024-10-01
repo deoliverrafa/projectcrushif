@@ -56,9 +56,6 @@ const AvatarFallback = React.forwardRef<HTMLSpanElement, AvatarFallbackProps>(
         "--success",
         "--warning",
         "--danger",
-        "--muted",
-        "--accent",
-        "--destructive",
       ];
 
       const randomColorVar =
