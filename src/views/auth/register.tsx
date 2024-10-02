@@ -1,6 +1,6 @@
 import * as React from "react";
 import axios from "axios";
-import { HexaLink } from "../../components/ui/router";
+import { Link } from "react-router-dom";
 
 import {
   Card,
@@ -187,21 +187,21 @@ export const RegisterLayout = () => {
           <Separator className="mb-5" />
 
           <CardFooter className="flex flex-col space-y-2">
-            <HexaLink href="/auth/login" className="w-full">
+            <Link to="/auth/login" className="w-full">
               <Button className="w-full" variant={"outline"}>
                 Entrar
               </Button>
-            </HexaLink>
+            </Link>
 
             <p className="font-poppins text-wrap text-center text-sm">
               Ao entrar, você concorda com os Termos e e Política de Privacidade
               do{" "}
-              <HexaLink
-                href="/auth/terms"
+              <Link
+                to="/auth/terms"
                 className="text-primary font-recursive font-semibold uppercase tracking-widest"
               >
                 Crush
-              </HexaLink>
+              </Link>
               .
             </p>
           </CardFooter>
@@ -332,21 +332,21 @@ export const RegisterLayout = () => {
           <Separator className="mb-5" />
 
           <CardFooter className="flex flex-col space-y-2">
-            <HexaLink href="/auth/login" className="w-full">
+            <Link to="/auth/login" className="w-full">
               <Button className="w-full" variant={"outline"}>
                 Entrar
               </Button>
-            </HexaLink>
+            </Link>
 
             <p className="font-poppins text-wrap text-center text-sm">
               Ao entrar, você concorda com os Termos e e Política de Privacidade
               do{" "}
-              <HexaLink
-                href="/auth/terms"
+              <Link
+                to="/auth/terms"
                 className="text-primary font-recursive font-semibold uppercase tracking-widest"
               >
                 Crush
-              </HexaLink>
+              </Link>
               .
             </p>
           </CardFooter>
