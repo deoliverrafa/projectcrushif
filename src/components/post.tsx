@@ -1,5 +1,6 @@
 import * as React from "react";
-import { HexaLink } from "../components/ui/router.tsx";
+import { Link } from "react-router-dom";
+
 import axios from "axios";
 import { formatDistanceToNow, parseISO } from "date-fns";
 import { ptBR } from "date-fns/locale";
@@ -63,8 +64,8 @@ interface CardProps {
   userAvatar?: string;
   insertAt?: string;
   id?: string;
-  likeCount: number
-  likedBy: String[]
+  likeCount: number;
+  likedBy: String[];
 }
 
 interface UserData {
@@ -85,18 +86,18 @@ export const CardPost = (props: CardProps) => {
   const [likeCount, setLikeCount] = React.useState(props.likeCount);
 
   const [shareIsOpen, setShareIsOpen] = React.useState(false);
-  
+
   const [showFullContent, setShowFullContent] = React.useState(false);
 
-const toggleContent = () => {
+  const toggleContent = () => {
     setShowFullContent(!showFullContent);
   };
 
   React.useEffect(() => {
     if (props.likedBy.includes(localStorage.getItem("userId") || "")) {
-      setLiked(true)
+      setLiked(true);
     }
-  }, [])
+  }, []);
 
   const handleLike = () => {
     const newLiked = !liked;
@@ -104,10 +105,18 @@ const toggleContent = () => {
     setLiked(newLiked);
 
     if (newLiked) {
-      axios.post(`${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_POST_LIKE}`, { token: localStorage.getItem('token'), postId: props._id })
+      axios.post(
+        `${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_POST_LIKE}`,
+        { token: localStorage.getItem("token"), postId: props._id }
+      );
       setLikeCount(likeCount + 1);
     } else {
-      axios.post(`${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_POST_UNLIKE}`, { token: localStorage.getItem('token'), postId: props._id })
+      axios.post(
+        `${import.meta.env.VITE_API_BASE_URL}${
+          import.meta.env.VITE_POST_UNLIKE
+        }`,
+        { token: localStorage.getItem("token"), postId: props._id }
+      );
       setLikeCount(likeCount - 1);
     }
 
@@ -133,7 +142,8 @@ const toggleContent = () => {
     const fetchUserData = async () => {
       try {
         const response = await axios.get(
-          `${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_USER_ID}${props.userId
+          `${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_USER_ID}${
+            props.userId
           }`
         );
 
@@ -164,7 +174,7 @@ const toggleContent = () => {
       >
         <CardHeader className="flex flex-row justify-between items-center">
           {!props.isAnonymous ? (
-            <HexaLink href={`/profile/${props.id}`} className="flex space-x-2">
+            <Link to={`/profile/${props.id}`} className="flex space-x-2">
               <div className="flex relative">
                 <div className="flex absolute right-0 bottom-0 h-2.5 w-2.5 z-10">
                   <span className="animate-ping bg-success rounded-full opacity-75 inline-flex absolute h-full w-full"></span>
@@ -192,7 +202,7 @@ const toggleContent = () => {
                   </div>
                 </div>
               </div>
-            </HexaLink>
+            </Link>
           ) : (
             <div className="flex space-x-2">
               <div className="flex relative">
@@ -231,14 +241,13 @@ const toggleContent = () => {
                 <Button variant={"outline"} size={"icon"}>
                   <EllipsisVertical className="cursor-pointer" />
                 </Button>
-                
               </DropdownTrigger>
 
               <DropdownContent className="select-none">
                 <DropdownLabel>Perfil</DropdownLabel>
                 <DropdownSeparator />
 
-                <HexaLink href={`/profile/${props.id}`}>
+                <Link to={`/profile/${props.id}`}>
                   <DropdownItem className="cursor-pointer">
                     <div className="flex flex-row items-center space-x-2">
                       <div className="flex relative">
@@ -248,7 +257,9 @@ const toggleContent = () => {
                         </div>
                         <Avatar>
                           <AvatarFallback>
-                            {!props.isAnonymous ? userData?.nickname : "Anônimo"}
+                            {!props.isAnonymous
+                              ? userData?.nickname
+                              : "Anônimo"}
                           </AvatarFallback>
 
                           <AvatarImage
@@ -271,14 +282,11 @@ const toggleContent = () => {
                       </div>
                     </div>
                   </DropdownItem>
-                </HexaLink>
+                </Link>
 
                 <DropdownSeparator />
 
-                <DropdownItem
-                  className="cursor-pointer"
-                  onClick={handleLike}
-                >
+                <DropdownItem className="cursor-pointer" onClick={handleLike}>
                   {liked ? (
                     <Heart className="text-primary fill-primary size-4 mr-2" />
                   ) : (
@@ -376,27 +384,38 @@ const toggleContent = () => {
                 <span className="font-medium">
                   {!props.isAnonymous ? userData?.nickname : "anônimo"}:{" "}
                 </span>
-                {showFullContent
-                  ? props.content
-                  : `${props.content.substring(0, 50)}`}
-                {props.content.length > 50 && (
+                {showFullContent ? (
+                  <>
+                    {props.content}
+                    {props.references && (
+                      <div>
+                        <a
+                          key={props._id}
+                          className="cursor-pointer font-poppins tracking-tight font-light text-primary text-sm"
+                          id={props._id}
+                        >
+                          {props.references}
+                        </a>
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  `${props.content.substring(0, 50)}${
+                    props.references ? "" : ""
+                  }`
+                )}
+                {(props.content.length > 50 || props.references) && (
                   <span
-                    className="text-muted-foreground cursor-pointer"
+                    className="text-muted-foreground tracking-thight font-light cursor-pointer"
                     onClick={toggleContent}
                   >
-                    {showFullContent ? " ... ver menos" : " ... ver mais"}
+                    {showFullContent ? " ...ver menos" : " ...ver mais"}
                   </span>
                 )}
               </CardDescription>
             </div>
           </div>
-          
-          {props.references && (
-            <a key={props._id} className="font-poppins tracking-tight font-light text-primary text-sm" id={props._id}>
-              {props.references}
-            </a>
-          )}
-          
+
           <CardDescription className="cursor-pointer font-light tracking-tight text-sm">
             ver todas as {likeCount} curtidas
           </CardDescription>
@@ -424,7 +443,7 @@ const toggleContent = () => {
                 <div className="flex flex-row items-center space-x-1">
                   <div className="flex flex-row items-center space-x-1">
                     <MessageCircleHeart className="text-primary h-4 w-4" />
-                    <CardDescription className="cursor-pointer font-light tracking-tight text-sm">
+                    <CardDescription className="font-light tracking-tight text-sm">
                       {0} coméntarios
                     </CardDescription>
                   </div>
@@ -446,10 +465,7 @@ const toggleContent = () => {
               </Avatar>
             </div>
 
-            <Input
-              type="text"
-              placeholder="Adicione um coméntario..."
-            />
+            <Input type="text" placeholder="Adicione um coméntario..." />
           </div>
 
           {formattedData && (

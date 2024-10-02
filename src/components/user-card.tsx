@@ -1,9 +1,9 @@
 import * as React from "react";
 import axios from "axios";
-import { HexaLink } from "./ui/router.js";
+import { Link } from "react-router-dom";
 
 import { Button } from "./ui/button.js";
-import { Card, CardDescription, CardTitle } from "./ui/card.js";
+import { Card, CardTitle } from "./ui/card.js";
 
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar.js";
 
@@ -48,10 +48,7 @@ export default function SearchUserCard(props: SearchUserCard) {
     <>
       <Card className="my-2 w-full">
         <div className="flex flex-row justify-between items-center p-4">
-          <HexaLink
-            href={`/profile/${props._id}`}
-            className="flex space-x-2 h-full"
-          >
+          <Link to={`/profile/${props._id}`} className="flex space-x-2 h-full">
             <div className="flex relative">
               <div className="flex absolute right-0 bottom-0 h-2.5 w-2.5 z-10">
                 <span className="animate-ping bg-success rounded-full opacity-75 inline-flex absolute h-full w-full"></span>
@@ -65,7 +62,7 @@ export default function SearchUserCard(props: SearchUserCard) {
             <div className="flex flex-col items-start justify-center space-y-1">
               <div className="flex flex-row items-center space-x-1">
                 <div>
-                  <CardTitle>
+                  <CardTitle className="font-medium tracking-tight">
                     {props.nickname ? `${props.nickname}` : "indisponível"}
                   </CardTitle>
                 </div>
@@ -82,12 +79,8 @@ export default function SearchUserCard(props: SearchUserCard) {
                   />
                 </div>
               </div>
-
-              <CardDescription className="capitalize tracking-light">
-                {props.userName ? props.userName : "Nome indisponível"}
-              </CardDescription>
             </div>
-          </HexaLink>
+          </Link>
           <form action="" method="put" onSubmit={FollowUser}>
             <Button>
               {props.following ? (
