@@ -51,6 +51,7 @@ interface User {
 
 export const ProfileLayout = () => {
   const currentUser = getUserData();
+  
   const [viewingUser, setViewingUser] = React.useState<User | null>(null);
   const [age, setAge] = React.useState<number | null>(null);
   const { id } = useParams<string>();

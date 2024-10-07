@@ -20,7 +20,6 @@ import { ScanSearch, Search } from "lucide-react";
 
 import { getUserData } from "../../utils/getUserData.tsx";
 
-
 interface User {
   nickname: string;
   userName: string;
@@ -40,19 +39,12 @@ const SearchLayout = () => {
 
   const [queryResponse, setQueryResponse] = useState([]);
 
-  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = e.target;
-    setFormData({ nickname: value, token: localStorage.getItem("token") });
-  };
-
-  const fetchData = useCallback(() => {
+  const fetchData = useCallback((nickname: string) => {
+    console.log("Fiz fetch api com nickname: ", nickname);
     axios
       .post(
-        `${import.meta.env.VITE_API_BASE_URL}${
-          import.meta.env.VITE_SEARCH_PAGE_USER
-        }
-      `,
-        formData
+        `${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_SEARCH_PAGE_USER}`,
+        { nickname, token: formData.token }
       )
       .then((response: any) => {
         setQueryResponse(
@@ -65,14 +57,28 @@ const SearchLayout = () => {
       .catch((error: any) => {
         console.log(error.message);
       });
-  }, [formData]);
+  }, [formData.token]);
+
+  const debounceFetchData = useCallback(debounce(fetchData, 1000), [fetchData]);
+
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      nickname: value,
+    }));
+
+    if (value.trim() === "") {
+      setQueryResponse([]);
+    } else {
+      debounceFetchData(value);
+    }
+  };
 
   const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    debounceFetchData();
+    debounceFetchData(formData.nickname);
   };
-
-  const debounceFetchData = useCallback(debounce(fetchData, 500), [formData]);
 
   return (
     <form
@@ -110,10 +116,7 @@ const SearchLayout = () => {
         <CardFooter>
           {queryResponse.length > 0 ? (
             queryResponse.map((user: User) => {
-              console.log("Id do card:", user._id);
-
               const isFollowing = userData.following.some((followingId) => {
-                console.log("Id do array:", followingId);
                 return followingId === user._id;
               });
               console.log(isFollowing);
@@ -143,7 +146,6 @@ const SearchLayout = () => {
     </form>
   );
 };
-
 
 const SearchPage = () => {
   const userData = getUserData();

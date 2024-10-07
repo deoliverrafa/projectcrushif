@@ -158,7 +158,7 @@ export const CardPost = (props: CardProps) => {
       >
         <CardHeader className="flex flex-row justify-between items-center">
           {!props.isAnonymous ? (
-            <HexaLink href={`/profile/${props.id}`} className="flex space-x-2">
+            <HexaLink href={`/profile/${props.userId}`} className="flex space-x-2">
               <div className="flex relative">
                 <div className="flex absolute right-0 bottom-0 h-2.5 w-2.5 z-10">
                   <span className="animate-ping bg-success rounded-full opacity-75 inline-flex absolute h-full w-full"></span>
