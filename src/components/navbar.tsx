@@ -1,13 +1,7 @@
 import * as React from "react";
-import { HexaLink, HexaReturn } from "../components/ui/router.tsx";
+import { cn } from "../lib/utils.ts";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 
-import {
-  Navbar,
-  NavbarBrand,
-  NavbarContent,
-  NavbarItem,
-} from "./ui/navbar.tsx";
-import { ShareComponent } from "./share.component.tsx";
 import {
   Dropdown,
   DropdownContent,
@@ -25,13 +19,8 @@ import {
   HeartHandshake,
   CalendarDays,
   ArrowLeft,
-  EllipsisVertical,
-  Siren,
-  Ban,
-  Share,
   BadgeCheck,
   Bell,
-  Pencil,
   ChevronDown,
   Zap,
   LogOut,
@@ -65,6 +54,10 @@ interface userData {
   avatarPath?: string;
 }
 
+interface NavbarProps extends React.HTMLAttributes<HTMLElement> {
+  className?: string;
+}
+
 const Profile = ({ name, email, avatar }: profile) => {
   const userData = getUserData();
 
@@ -88,7 +81,7 @@ const Profile = ({ name, email, avatar }: profile) => {
         <DropdownLabel>Conta</DropdownLabel>
         <DropdownSeparator />
 
-        <HexaLink href={`/profile/${userData._id}`}>
+        <Link to={`/profile/${userData._id}`}>
           <DropdownItem className="cursor-pointer">
             <div className="flex flex-row items-center space-x-2">
               <div className="flex relative">
@@ -117,42 +110,42 @@ const Profile = ({ name, email, avatar }: profile) => {
               </div>
             </div>
           </DropdownItem>
-        </HexaLink>
+        </Link>
 
         <DropdownSeparator />
 
-        <HexaLink href={""}>
+        <Link to={""}>
           <DropdownItem className="cursor-pointer font-poppins font-semibold">
             <Heart className="mr-2 size-4" />
             Curtidas
           </DropdownItem>
-        </HexaLink>
-        <HexaLink href={""}>
+        </Link>
+        <Link to={""}>
           <DropdownItem className="cursor-pointer font-poppins font-semibold">
             <Crown className="mr-2 size-4" />
             Favoritos
           </DropdownItem>
-        </HexaLink>
-        <HexaLink href={""}>
+        </Link>
+        <Link to={""}>
           <DropdownItem className="cursor-pointer font-poppins font-semibold">
             <Zap className="mr-2 size-4" />
             Upgrade
           </DropdownItem>
-        </HexaLink>
-        <HexaLink href={"/settings"}>
+        </Link>
+        <Link to={"/settings"}>
           <DropdownItem className="cursor-pointer font-poppins font-semibold">
             <Settings className="mr-2 size-4" />
             Configurações
           </DropdownItem>
-        </HexaLink>
-        <HexaLink href={"/support"}>
+        </Link>
+        <Link to={"/support"}>
           <DropdownItem className="cursor-pointer font-poppins font-semibold">
             <BadgeHelp className="mr-2 size-4" />
             Suporte
           </DropdownItem>
-        </HexaLink>
+        </Link>
         <DropdownSeparator />
-        <HexaLink href={"/auth/login"}>
+        <Link to={"/auth/login"}>
           <DropdownItem
             className="cursor-pointer text-danger font-poppins font-semibold"
             onClick={logOutHandle}
@@ -160,11 +153,182 @@ const Profile = ({ name, email, avatar }: profile) => {
             <LogOut className="mr-2 size-4" />
             Deslogar
           </DropdownItem>
-        </HexaLink>
+        </Link>
       </DropdownContent>
     </Dropdown>
   );
 };
+
+const Navbar: React.FC<NavbarProps> = ({ className, children, ...props }) => {
+  const [isVisible, setIsVisible] = React.useState(true);
+  const [lastScrollY, setLastScrollY] = React.useState(0);
+
+  const handleScroll = () => {
+    if (window.scrollY > lastScrollY) {
+      setIsVisible(false);
+    } else {
+      setIsVisible(true);
+    }
+    setLastScrollY(window.scrollY);
+  };
+
+  React.useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [lastScrollY]);
+
+  return (
+    <nav
+      className={cn(
+        "transition-transform duration-300 select-none bg-card border-b border-input shadow-[0_2px_4px_rgba(0,0,0,0.1)] flex flex-row justify-between items-center shadow-[0_-2px_4px_rgba(0,0,0,0.1)] sticky top-0 inset-x-0 translate-y-0 md:translate-y-0/2 px-4 md:px-2 py-2 md:py-1 w-full z-20",
+        isVisible ? "translate-y-0" : "-translate-y-full",
+        className
+      )}
+      {...props}
+    >
+      {children}
+    </nav>
+  );
+};
+Navbar.displayName = "Navbar";
+
+interface NavbarContentProps extends React.HTMLAttributes<HTMLDivElement> {
+  className?: string;
+}
+
+const NavbarContent: React.FC<NavbarContentProps> = ({
+  className,
+  children,
+  ...props
+}) => {
+  return (
+    <div
+      className={cn(
+        "relative flex flex-row items-center py-2 md:py-1",
+        className
+      )}
+      {...props}
+    >
+      {children}
+    </div>
+  );
+};
+NavbarContent.displayName = "NavbarContent";
+
+interface NavbarItemProps
+  extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
+  href: string;
+  activeClassName?: string;
+  hoverClassName?: string;
+  className?: string;
+}
+
+const NavbarItem: React.FC<NavbarItemProps> = ({
+  href,
+  activeClassName,
+  hoverClassName,
+  className,
+  children,
+  ...props
+}) => {
+  const handleRipple = (
+    event: React.MouseEvent<HTMLAnchorElement, MouseEvent>
+  ) => {
+    const button = event.currentTarget;
+    const circle = document.createElement("span");
+
+    const diameter = Math.max(button.clientWidth, button.clientHeight);
+    const radius = diameter / 2;
+
+    circle.style.width = circle.style.height = `${diameter}px`;
+    circle.style.left = `${
+      event.clientX - button.getBoundingClientRect().left - radius
+    }px`;
+    circle.style.top = `${
+      event.clientY - button.getBoundingClientRect().top - radius
+    }px`;
+    circle.style.position = "absolute";
+    circle.style.backgroundColor = "rgba(255, 255, 255, 0.6)";
+    circle.style.borderRadius = "50%";
+    circle.style.transform = "scale(0)";
+    circle.style.pointerEvents = "none";
+    circle.style.opacity = "1";
+    circle.style.transition = "transform 600ms ease, opacity 600ms ease";
+
+    circle.classList.add("ripple");
+
+    const existingRipple = button.querySelector(".ripple");
+    if (existingRipple) {
+      existingRipple.remove();
+    }
+
+    button.appendChild(circle);
+
+    requestAnimationFrame(() => {
+      circle.style.transform = "scale(4)";
+      circle.style.opacity = "0";
+    });
+
+    circle.addEventListener("transitionend", () => {
+      circle.remove();
+    });
+  };
+
+  return (
+    <NavLink
+      className={({ isActive }) =>
+        cn(
+          "rounded-md font-semibold flex flex-row items-center relative gap-1 overflow-hidden px-4 md:px-2 py-2 md:py-1 text-md md:text-sm",
+          isActive ? "text-primary" : "text-muted-foreground",
+          "hover:text-primary/70",
+          className
+        )
+      }
+      to={href}
+      onClick={(e) => {
+        handleRipple(e);
+        if (props.onClick) props.onClick(e);
+      }}
+      {...props}
+    >
+      {children}
+    </NavLink>
+  );
+};
+NavbarItem.displayName = "NavbarItem";
+
+interface NavbarBrandProps
+  extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
+  href: string;
+  activeClassName?: string;
+  hoverClassName?: string;
+  className?: string;
+}
+
+const NavbarBrand: React.FC<NavbarBrandProps> = ({
+  href,
+  activeClassName,
+  hoverClassName,
+  className,
+  children,
+  ...props
+}) => {
+  return (
+    <Link
+      className={cn(
+        "font-semibold flex items-center gap-2 text-lg md:text-md",
+        className
+      )}
+      to={href}
+      {...props}
+    >
+      {children}
+    </Link>
+  );
+};
+NavbarBrand.displayName = "NavbarBrand";
 
 export const NavBar = (props: userData) => {
   return (
@@ -243,26 +407,10 @@ export const NavBar = (props: userData) => {
 
 interface NavBarReturnProps {
   title: string;
-  [key: string]: any;
-  profile?: boolean;
-  id?: string;
-  avatar?: string;
-  name?: string;
-  isOwnProfile?: boolean;
 }
 
 export const NavBarReturn = (props: NavBarReturnProps) => {
-  const navigate = HexaReturn();
-
-  const [shareIsOpen, setShareIsOpen] = React.useState(false);
-
-  const handleOpenShare = () => {
-    setShareIsOpen(true);
-  };
-
-  const handleCloseShare = () => {
-    setShareIsOpen(false);
-  };
+  const navigate = useNavigate();
 
   return (
     <>
@@ -277,97 +425,7 @@ export const NavBarReturn = (props: NavBarReturnProps) => {
             {props.title}
           </Button>
         </NavbarContent>
-
-        {props.profile && (
-          <NavbarContent>
-            <Dropdown>
-              <DropdownTrigger>
-                <EllipsisVertical className="cursor-pointer " />
-              </DropdownTrigger>
-
-              <DropdownContent>
-                <DropdownLabel>Perfil</DropdownLabel>
-                <DropdownSeparator />
-
-                <div>
-                  <HexaLink href={`/profile/${props.id}`}>
-                    <DropdownItem className="cursor-pointer">
-                      <div className="flex flex-row items-center space-x-2">
-                        <div className="flex relative">
-                          <div className="flex absolute right-0 bottom-0 h-2 w-2 z-10">
-                            <span className="animate-ping bg-success rounded-full opacity-75 inline-flex absolute h-full w-full"></span>
-                            <span className="bg-success rounded-full inline-flex relative h-2 w-2"></span>
-                          </div>
-                          <Avatar className="h-8 w-8">
-                            <AvatarImage src={props.avatar} />
-                            <AvatarFallback>{props.name}</AvatarFallback>
-                          </Avatar>
-                        </div>
-                        <div className="flex flex-col">
-                          <div className="flex flex-row items-center space-x-1">
-                            <div>
-                              <p className="text-slate-950 dark:text-slate-50 font-inter font-bold ">
-                                {props.name}
-                              </p>
-                            </div>
-
-                            <div>
-                              <BadgeCheck className="text-gree-500 dark:text-green-600 size-3.5" />
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </DropdownItem>
-                  </HexaLink>
-                </div>
-
-                <DropdownSeparator />
-
-                <DropdownItem
-                  className="cursor-pointer font-poppins font-semibold"
-                  onClick={handleOpenShare}
-                >
-                  <Share className="mr-2 size-4" />
-                  Compartilhar
-                </DropdownItem>
-
-                {props.isOwnProfile && (
-                  <>
-                    <DropdownSeparator />
-
-                    <DropdownItem className="cursor-pointer text-red-500 dark:text-red-600 font-poppins font-semibold">
-                      <Pencil className="mr-2 size-4" />
-                      Editar
-                    </DropdownItem>
-                  </>
-                )}
-
-                {!props.isOwnProfile && (
-                  <>
-                    <DropdownSeparator />
-
-                    <DropdownItem className="cursor-pointer text-red-500 dark:text-red-600 font-poppins font-semibold">
-                      <Siren className="mr-2 size-4" />
-                      Reportar
-                    </DropdownItem>
-                    <DropdownItem className="cursor-pointer text-red-500 dark:text-red-600 font-poppins font-semibold">
-                      <Ban className="mr-2 size-4" />
-                      Bloquear
-                    </DropdownItem>
-                  </>
-                )}
-              </DropdownContent>
-            </Dropdown>
-          </NavbarContent>
-        )}
       </Navbar>
-
-      {shareIsOpen && (
-        <ShareComponent
-          link={`https://crushif.vercel.app/profile/${props.id}`}
-          onClose={handleCloseShare}
-        />
-      )}
     </>
   );
 };

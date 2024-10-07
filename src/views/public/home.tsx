@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { debounce } from "lodash";
-import { HexaLink } from "../../components/ui/router.tsx";
+import { Link } from "react-router-dom";
 
 import LoadingPage from "./loading.tsx";
 
@@ -27,8 +27,8 @@ interface CardProps {
   insertAt: string;
   userId: string;
   type: string;
-  likeCount: number
-  likedBy: String[]
+  likeCount: number;
+  likedBy: String[];
 }
 
 interface userData {
@@ -137,6 +137,7 @@ export default function HomePage() {
               <CardPost
                 key={post._id}
                 _id={post._id}
+                id={post.userId}
                 campus={post.campus}
                 content={post.content}
                 email={post.email}
@@ -162,11 +163,11 @@ export default function HomePage() {
 
           <div className="mt-10"></div>
 
-          <HexaLink href={"/publish"}>
+          <Link to={"/publish"}>
             <Fab>
               <Plus />
             </Fab>
-          </HexaLink>
+          </Link>
 
           <BottomBar />
         </div>

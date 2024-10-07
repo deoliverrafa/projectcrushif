@@ -12,8 +12,8 @@ const LoadingPage = () => {
         </div>
 
         <div className="flex flex-col justify-center items-center">
-          <p>by Hexa inc.</p>
-          <p>v1.0.0</p>
+          <p className="font-semibold">by Hexa inc.</p>
+          <p className="font-semibold">v1.0.0</p>
         </div>
       </main>
     </>

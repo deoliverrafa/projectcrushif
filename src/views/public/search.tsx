@@ -89,7 +89,7 @@ const SearchLayout = () => {
     >
       <Card className="w-full md:w-6/12">
         <CardHeader>
-          <CardTitle className="text-pink-500 dark:text-pink-600 font-recursive font-semibold uppercase tracking-widest text-2xl md:text-5xl">
+          <CardTitle className="text-primary uppercase tracking-widest text-2xl md:text-5xl">
             Pesquisar
           </CardTitle>
         </CardHeader>
@@ -153,7 +153,7 @@ const SearchPage = () => {
     <>
       <NavBar user={userData} avatarPath={userData.avatar} />
 
-      <main className="select-none flex flex-col items-center h-svh w-full">
+      <main className="flex flex-col justify-center items-center h-screen w-full">
         <SearchLayout />
       </main>
 
