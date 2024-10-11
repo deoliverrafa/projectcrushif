@@ -5,8 +5,6 @@ import axios from "axios";
 import { formatDistanceToNow, parseISO } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
-import { ShareComponent } from "./share.component.tsx";
-
 import {
   Card,
   CardContent,
@@ -34,6 +32,15 @@ import {
 } from "./ui/dropdown.tsx";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar.tsx";
 import { Separator } from "./ui/separator.tsx";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "../components/ui/dialog.tsx";
+import { Label } from "../components/ui/label.tsx";
 
 import {
   BadgeCheck,
@@ -46,6 +53,8 @@ import {
   Ban,
   Pencil,
   Trash2,
+  Copy,
+  Check,
 } from "lucide-react";
 
 import { getUserData } from "../utils/getUserData.tsx";
@@ -84,8 +93,6 @@ export const CardPost = (props: CardProps) => {
   const [favorited, setFavorited] = React.useState(false);
   const [showFavorited, setShowFavorited] = React.useState(false);
   const [likeCount, setLikeCount] = React.useState(props.likeCount);
-
-  const [shareIsOpen, setShareIsOpen] = React.useState(false);
 
   const [showFullContent, setShowFullContent] = React.useState(false);
 
@@ -130,12 +137,19 @@ export const CardPost = (props: CardProps) => {
     setTimeout(() => setShowFavorited(false), 500);
   };
 
-  const handleOpenShare = () => {
-    setShareIsOpen(true);
-  };
+  const [open, setOpen] = React.useState(false);
+  const [copied, setCopied] = React.useState(false);
+  const inputRef = React.useRef<HTMLInputElement>(null);
 
-  const handleCloseShare = () => {
-    setShareIsOpen(false);
+  const handleCopy = async () => {
+    if (inputRef.current) {
+      try {
+        await navigator.clipboard.writeText(inputRef.current.value);
+        setCopied(true);
+      } catch (error) {
+        console.error("Erro ao copiar para área de transferência: ", error);
+      }
+    }
   };
 
   React.useEffect(() => {
@@ -297,14 +311,6 @@ export const CardPost = (props: CardProps) => {
 
                 <DropdownItem
                   className="cursor-pointer"
-                  onClick={handleOpenShare}
-                >
-                  <Share className="mr-2 size-4" />
-                  Compartilhar
-                </DropdownItem>
-
-                <DropdownItem
-                  className="cursor-pointer"
                   onClick={handleFavorite}
                 >
                   {favorited ? (
@@ -313,6 +319,14 @@ export const CardPost = (props: CardProps) => {
                     <Crown className="size-4 mr-2" />
                   )}
                   Favoritar
+                </DropdownItem>
+
+                <DropdownItem
+                  className="cursor-pointer"
+                  onClick={() => setOpen(true)}
+                >
+                  <Share className="mr-2 size-4" />
+                  Compartilhar
                 </DropdownItem>
 
                 {props.id !== dataUser._id ? null : (
@@ -476,12 +490,49 @@ export const CardPost = (props: CardProps) => {
         </CardFooter>
       </Card>
 
-      {shareIsOpen && (
-        <ShareComponent
-          link={`https://crushif.vercel.app/post/${props._id}`}
-          onClose={handleCloseShare}
-        />
-      )}
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Compartilhar link</DialogTitle>
+            <DialogDescription>
+              Qualquer pessoa com acesso ao link poderá acessar o conteúdo.
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="flex items-center space-x-2">
+            <div className="grid flex-1 gap-2">
+              <Label htmlFor="link" className="sr-only">
+                Link
+              </Label>
+              <Input
+                id="link"
+                ref={inputRef}
+                value={`https://crushif.vercel.app/post/${props._id}`}
+                readOnly
+              />
+            </div>
+
+            <Button
+              type="submit"
+              size="icon"
+              variant={"outline"}
+              onClick={handleCopy}
+            >
+              <span className="sr-only">Copiar</span>
+              <Copy className="h-4 w-4" />
+            </Button>
+          </div>
+
+          {copied && (
+            <DialogFooter className="sm:justify-start">
+              <DialogDescription className="text-success flex flex-row items-center gap-2">
+                <Check className="h-4 w-4" />
+                copiado com sucesso!
+              </DialogDescription>
+            </DialogFooter>
+          )}
+        </DialogContent>
+      </Dialog>
     </>
   );
 };

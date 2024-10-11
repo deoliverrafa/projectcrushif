@@ -6,7 +6,6 @@ import { NavBarReturn } from "../../components/navbar.tsx";
 
 import LoadingPage from "../../views/public/loading.tsx";
 
-import { ShareComponent } from "../../components/share.component.tsx";
 import {
   Card,
   CardContent,
@@ -23,6 +22,23 @@ import {
   AvatarImage,
 } from "../../components/ui/avatar.tsx";
 import { Separator } from "../../components/ui/separator.tsx";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "../../components/ui/dialog.tsx";
+import { Label } from "../../components/ui/label.tsx";
+import { Input } from "../../components/ui/input.tsx";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+  TooltipProvider,
+} from "../../components/ui/tooltip.tsx";
 
 import { getUserData } from "../../utils/getUserData.tsx";
 import { getUserDataById } from "../../utils/getUserDataById.tsx";
@@ -34,6 +50,8 @@ import {
   UserRoundPlus,
   Share,
   EllipsisVertical,
+  Copy,
+  Check,
 } from "lucide-react";
 
 interface User {
@@ -56,15 +74,27 @@ const ProfileLayout = () => {
   const [age, setAge] = React.useState<number | null>(null);
   const { id } = useParams<string>();
 
-  const [shareIsOpen, setShareIsOpen] = React.useState(false);
+  const inputRef = React.useRef<HTMLInputElement>(null);
 
-  const handleOpenShare = () => {
-    setShareIsOpen(true);
+  const [copied, setCopied] = React.useState(false);
+
+  const handleCopy = async () => {
+    if (inputRef.current) {
+      try {
+        await navigator.clipboard.writeText(inputRef.current.value);
+        setCopied(true);
+      } catch (error) {
+        console.error("Erro ao copiar para área de transferência: ", error);
+      }
+    }
   };
 
-  const handleCloseShare = () => {
-    setShareIsOpen(false);
-  };
+  React.useEffect(() => {
+    if (copied) {
+      const timer = setTimeout(() => setCopied(false), 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [copied]);
 
   const calculateAge = (birthday: string) => {
     const today = new Date();
@@ -121,16 +151,10 @@ const ProfileLayout = () => {
               variant={"outline"}
               className="cursor-pointer flex flex-col items-center"
             >
-              <p className="font-medium text-sm">0</p>
-              <p className="tracking-tight font-light text-sm truncate">Posts</p>
-            </Badge>
-
-            <Badge
-              variant={"outline"}
-              className="cursor-pointer flex flex-col items-center"
-            >
-              <p className="font-medium text-sm">{viewingUser.Nfollowers}</p>
-              <p className="tracking-tight font-light text-sm">Seguindo</p>
+              <p className="text-foreground font-medium text-sm">
+                {viewingUser.Nfollowers}
+              </p>
+              <p className="tracking-tight font-light text-sm">Seguidores</p>
             </Badge>
 
             <Badge
@@ -210,13 +234,74 @@ const ProfileLayout = () => {
               </Button>
             )}
 
-            <Button
-              variant={"secondary"}
-              size={"icon"}
-              onClick={handleOpenShare}
-            >
-              <Share className="size-4" />
-            </Button>
+            <Dialog>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger>
+                    <DialogTrigger asChild>
+                      <Button variant={"secondary"} size={"icon"}>
+                        <Share className="h-4 w-4" />
+                      </Button>
+                    </DialogTrigger>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Compartilhar</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+
+              <DialogContent className="sm:max-w-md">
+                <DialogHeader>
+                  <DialogTitle>Compartilhar link</DialogTitle>
+                  <DialogDescription>
+                    Qualquer pessoa com acesso ao link poderar acessar ao
+                    conteúdo.
+                  </DialogDescription>
+                </DialogHeader>
+
+                <div className="flex items-center space-x-2">
+                  <div className="grid flex-1 gap-2">
+                    <Label htmlFor="link" className="sr-only">
+                      Link
+                    </Label>
+                    <Input
+                      id="link"
+                      ref={inputRef}
+                      value={`https://crushif.vercel.app/profile/${viewingUser._id}`}
+                      readOnly
+                    />
+                  </div>
+
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger>
+                        <Button
+                          type="submit"
+                          size="icon"
+                          variant={"outline"}
+                          onClick={handleCopy}
+                        >
+                          <span className="sr-only">Copiar</span>
+                          <Copy className="h-4 w-4" />
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Copiar</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                </div>
+
+                {copied && (
+                  <DialogFooter className="sm:justify-start">
+                    <DialogDescription className="text-success flex flex-row items-center gap-2">
+                      <Check className="h-4 w-4" />
+                      copiado com sucesso!
+                    </DialogDescription>
+                  </DialogFooter>
+                )}
+              </DialogContent>
+            </Dialog>
           </div>
         </CardContent>
 
@@ -231,13 +316,6 @@ const ProfileLayout = () => {
           </div>
         </CardFooter>
       </Card>
-
-      {shareIsOpen && (
-        <ShareComponent
-          link={`https://crushif.vercel.app/profile/${viewingUser._id}`}
-          onClose={handleCloseShare}
-        />
-      )}
     </>
   );
 };

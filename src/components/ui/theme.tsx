@@ -14,17 +14,31 @@ import {
   DropdownItem,
 } from "../../components/ui/dropdown";
 
-import { Moon, Sun, Eclipse } from "lucide-react";
+import { Moon, Sun, Eclipse, SunMoon } from "lucide-react";
 
 interface ThemeProviderProps {
   children: ReactNode;
-  defaultTheme?: "light" | "dark" | "black" | "system";
+  defaultTheme?:
+    | "light"
+    | "dark"
+    | "black"
+    | "modern-light"
+    | "modern-dark"
+    | "system";
   storageKey?: string;
 }
 
 interface ThemeContextType {
-  theme: "light" | "dark" | "black" | "system";
-  setTheme: (theme: "light" | "dark" | "black" | "system") => void;
+  theme: "light" | "dark" | "black" | "modern-light" | "modern-dark" | "system";
+  setTheme: (
+    theme:
+      | "light"
+      | "dark"
+      | "black"
+      | "modern-light"
+      | "modern-dark"
+      | "system"
+  ) => void;
 }
 
 const initialState: ThemeContextType = {
@@ -40,16 +54,29 @@ export const HexaThemeProvider: React.FC<ThemeProviderProps> = ({
   storageKey = "vite-ui-theme",
   ...props
 }) => {
-  const [theme, setTheme] = useState<"light" | "dark" | "black" | "system">(
+  const [theme, setTheme] = useState<
+    "light" | "dark" | "black" | "modern-light" | "modern-dark" | "system"
+  >(
     () =>
-      (localStorage.getItem(storageKey) as "light" | "dark" | "black" | "system") ||
-      defaultTheme
+      (localStorage.getItem(storageKey) as
+        | "light"
+        | "dark"
+        | "black"
+        | "modern-light"
+        | "modern-dark"
+        | "system") || defaultTheme
   );
 
   useEffect(() => {
     const root = window.document.documentElement;
 
-    root.classList.remove("light", "dark", "black");
+    root.classList.remove(
+      "light",
+      "dark",
+      "black",
+      "modern-light",
+      "modern-dark"
+    );
 
     if (theme === "system") {
       const systemTheme = window.matchMedia("(prefers-color-scheme: dark)")
@@ -96,18 +123,69 @@ export const ThemeToggle: React.FC = () => {
       <DropdownTrigger asChild>
         <Button variant="outline" size="icon">
           <Sun
-            className={`h-[1.2rem] w-[1.2rem] transition-all ${
-              theme === "dark" || theme === "black" ? "hidden" : ""
+            className={`h-[1.2rem] w-[1.2rem] ${
+              theme === "dark" ||
+              theme === "black" ||
+              theme === "modern-light" ||
+              theme === "modern-dark" ||
+              theme === "system"
+                ? "hidden"
+                : ""
             }`}
           />
           <Moon
-            className={`h-[1.2rem] w-[1.2rem] transition-all ${
-              theme === "light" || theme === "black" ? "hidden" : ""
+            className={`h-[1.2rem] w-[1.2rem] ${
+              theme === "light" ||
+              theme === "black" ||
+              theme === "modern-light" ||
+              theme === "modern-dark" ||
+              theme === "system"
+                ? "hidden"
+                : ""
             }`}
           />
           <Eclipse
-            className={`h-[1.2rem] w-[1.2rem] transition-all ${
-              theme === "dark" || theme === "light" ? "hidden" : ""
+            className={`h-[1.2rem] w-[1.2rem] ${
+              theme === "dark" ||
+              theme === "light" ||
+              theme === "modern-light" ||
+              theme === "modern-dark" ||
+              theme === "system"
+                ? "hidden"
+                : ""
+            }`}
+          />
+          <SunMoon
+            className={`h-[1.2rem] w-[1.2rem] ${
+              theme === "dark" ||
+              theme === "light" ||
+              theme === "black" ||
+              theme === "modern-dark" ||
+              theme === "system"
+                ? "hidden"
+                : ""
+            }`}
+          />
+          <SunMoon
+            className={`h-[1.2rem] w-[1.2rem] ${
+              theme === "dark" ||
+              theme === "light" ||
+              theme === "modern-light" ||
+              theme === "black" ||
+              theme === "system"
+                ? "hidden"
+                : ""
+            }`}
+          />
+          <SunMoon
+            className={`h-[1.2rem] w-[1.2rem] ${
+              theme === "dark" ||
+              theme === "light" ||
+              theme === "modern-light" ||
+              theme === "black" ||
+              theme === "modern-dark"
+                ? "hidden"
+                : ""
             }`}
           />
           <span className="sr-only">Alterar Tema</span>
@@ -117,6 +195,12 @@ export const ThemeToggle: React.FC = () => {
         <DropdownItem onClick={() => setTheme("light")}>Claro</DropdownItem>
         <DropdownItem onClick={() => setTheme("dark")}>Escuro</DropdownItem>
         <DropdownItem onClick={() => setTheme("black")}>Preto</DropdownItem>
+        <DropdownItem onClick={() => setTheme("modern-light")}>
+          Moderno - Claro
+        </DropdownItem>
+        <DropdownItem onClick={() => setTheme("modern-dark")}>
+          Moderno - Escuro
+        </DropdownItem>
         <DropdownItem onClick={() => setTheme("system")}>Sistema</DropdownItem>
       </DropdownContent>
     </Dropdown>

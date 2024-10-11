@@ -6,18 +6,13 @@ import SearchUserCard from "../../components/user-card.tsx";
 import { BottomBar } from "../../components/bottombar.tsx";
 import { NavBar } from "../../components/navbar.tsx";
 import { Input } from "../../components/ui/input.tsx";
-import { Button } from "../../components/ui/button.js";
 import {
   Card,
   CardContent,
-  CardFooter,
   CardHeader,
   CardTitle,
-  CardDescription,
 } from "../../components/ui/card.tsx";
 import { ScrollArea } from "../../components/ui/scroll-area.tsx";
-
-import { ScanSearch, Search } from "lucide-react";
 
 import { getUserData } from "../../utils/getUserData.tsx";
 
@@ -40,25 +35,30 @@ const SearchLayout = () => {
 
   const [queryResponse, setQueryResponse] = useState([]);
 
-  const fetchData = useCallback((nickname: string) => {
-    console.log("Fiz fetch api com nickname: ", nickname);
-    axios
-      .post(
-        `${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_SEARCH_PAGE_USER}`,
-        { nickname, token: formData.token }
-      )
-      .then((response: any) => {
-        setQueryResponse(
-          response.data.usersFinded.map((user: any) => ({
-            ...user,
-            isFollowing: user.isFollowing || false,
-          }))
-        );
-      })
-      .catch((error: any) => {
-        console.log(error.message);
-      });
-  }, [formData.token]);
+  const fetchData = useCallback(
+    (nickname: string) => {
+      console.log("Fiz fetch api com nickname: ", nickname);
+      axios
+        .post(
+          `${import.meta.env.VITE_API_BASE_URL}${
+            import.meta.env.VITE_SEARCH_PAGE_USER
+          }`,
+          { nickname, token: formData.token }
+        )
+        .then((response: any) => {
+          setQueryResponse(
+            response.data.usersFinded.map((user: any) => ({
+              ...user,
+              isFollowing: user.isFollowing || false,
+            }))
+          );
+        })
+        .catch((error: any) => {
+          console.log(error.message);
+        });
+    },
+    [formData.token]
+  );
 
   const debounceFetchData = useCallback(debounce(fetchData, 1000), [fetchData]);
 
@@ -110,32 +110,31 @@ const SearchLayout = () => {
           </div>
         </CardContent>
 
-          <ScrollArea className="h-72 w-full rounded-md border">
-            <div className="p-4">
-          {queryResponse.length > 0 ? (
-            queryResponse.map((user: User) => {
-              const isFollowing = userData.following.some((followingId) => {
-                return followingId === user._id;
-              });
+        <ScrollArea className="h-72 w-full rounded-md border">
+          <div className="p-4">
+            {queryResponse.length > 0 ? (
+              queryResponse.map((user: User) => {
+                const isFollowing = userData.following.some((followingId) => {
+                  return followingId === user._id;
+                });
 
-              return (
-                <SearchUserCard
-                  avatar={user.avatar}
-                  nickname={user.nickname}
-                  userName={user.userName}
-                  type={user.type}
-                  _id={user._id}
-                  following={isFollowing}
-                  key={user._id}
-                />
-              );
-            })
-          ) : (
-<>
-</>
-          )}
-            </div>
-          </ScrollArea>
+                return (
+                  <SearchUserCard
+                    avatar={user.avatar}
+                    nickname={user.nickname}
+                    userName={user.userName}
+                    type={user.type}
+                    _id={user._id}
+                    following={isFollowing}
+                    key={user._id}
+                  />
+                );
+              })
+            ) : (
+              <></>
+            )}
+          </div>
+        </ScrollArea>
       </Card>
     </form>
   );
