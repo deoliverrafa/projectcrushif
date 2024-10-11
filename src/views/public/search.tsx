@@ -15,6 +15,7 @@ import {
   CardTitle,
   CardDescription,
 } from "../../components/ui/card.tsx";
+import { ScrollArea } from "../../components/ui/scroll-area.tsx";
 
 import { ScanSearch, Search } from "lucide-react";
 
@@ -106,20 +107,16 @@ const SearchLayout = () => {
                 onChange={handleSearch}
               />
             </div>
-
-            <Button variant={"default"} size="icon">
-              <Search className="size-4" />
-            </Button>
           </div>
         </CardContent>
 
-        <CardFooter>
+          <ScrollArea className="h-72 w-full rounded-md border">
+            <div className="p-4">
           {queryResponse.length > 0 ? (
             queryResponse.map((user: User) => {
               const isFollowing = userData.following.some((followingId) => {
                 return followingId === user._id;
               });
-              console.log(isFollowing);
 
               return (
                 <SearchUserCard
@@ -134,14 +131,11 @@ const SearchLayout = () => {
               );
             })
           ) : (
-            <div className="flex flex-col justify-center items-center space-y-2 w-full">
-              <ScanSearch className="text-slate-500 dark:text-slate-400 size-14" />
-              <CardDescription className="text-default font-inter font-medium text-tiny text-center w-full">
-                Procure por um usário válido.
-              </CardDescription>
-            </div>
+<>
+</>
           )}
-        </CardFooter>
+            </div>
+          </ScrollArea>
       </Card>
     </form>
   );

@@ -58,6 +58,34 @@
     --ring: 335 78% 42%;
     --radius: 1rem;
   }
+  
+  .black {
+  --background: 0 0% 3%;
+  --foreground: 0 0% 95%;
+  --card: 0 0% 0%;
+  --card-foreground: 215 18% 72%;
+  --popover: 0 0% 0%;
+  --popover-foreground: 215 18% 72%;
+  --primary: 335 78% 42%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 215 25% 27%;
+  --secondary-foreground: 0 0% 100%;
+  --success: 142 72% 29%;
+  --success-foreground: 0 0% 100%;
+  --warning: 35 92% 33%;
+  --warning-foreground: 0 0% 100%;
+  --danger: 0 74% 42%;
+  --danger-foreground: 0 0% 100%;
+  --muted: 0 0% 0%;
+  --muted-foreground: 215 18% 72%;
+  --accent: 0 0% 0%;
+  --accent-foreground: 215 18% 72%;
+  --border: 216 24% 17%;
+  --input: 216 24% 17%;
+  --ring: 335 78% 42%;
+  --radius: 1rem;
+}
+
 }
 
 @layer base {

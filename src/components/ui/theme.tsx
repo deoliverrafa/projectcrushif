@@ -14,17 +14,17 @@ import {
   DropdownItem,
 } from "../../components/ui/dropdown";
 
-import { Moon, Sun } from "lucide-react";
+import { Moon, Sun, Eclipse } from "lucide-react";
 
 interface ThemeProviderProps {
   children: ReactNode;
-  defaultTheme?: "light" | "dark" | "system";
+  defaultTheme?: "light" | "dark" | "black" | "system";
   storageKey?: string;
 }
 
 interface ThemeContextType {
-  theme: "light" | "dark" | "system";
-  setTheme: (theme: "light" | "dark" | "system") => void;
+  theme: "light" | "dark" | "black" | "system";
+  setTheme: (theme: "light" | "dark" | "black" | "system") => void;
 }
 
 const initialState: ThemeContextType = {
@@ -40,16 +40,16 @@ export const HexaThemeProvider: React.FC<ThemeProviderProps> = ({
   storageKey = "vite-ui-theme",
   ...props
 }) => {
-  const [theme, setTheme] = useState<"light" | "dark" | "system">(
+  const [theme, setTheme] = useState<"light" | "dark" | "black" | "system">(
     () =>
-      (localStorage.getItem(storageKey) as "light" | "dark" | "system") ||
+      (localStorage.getItem(storageKey) as "light" | "dark" | "black" | "system") ||
       defaultTheme
   );
 
   useEffect(() => {
     const root = window.document.documentElement;
 
-    root.classList.remove("light", "dark");
+    root.classList.remove("light", "dark", "black");
 
     if (theme === "system") {
       const systemTheme = window.matchMedia("(prefers-color-scheme: dark)")
@@ -89,20 +89,34 @@ export const useTheme = (): ThemeContextType => {
 };
 
 export const ThemeToggle: React.FC = () => {
-  const { setTheme } = useTheme();
+  const { setTheme, theme } = useTheme();
 
   return (
     <Dropdown>
       <DropdownTrigger asChild>
         <Button variant="outline" size="icon">
-          <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-          <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+          <Sun
+            className={`h-[1.2rem] w-[1.2rem] transition-all ${
+              theme === "dark" || theme === "black" ? "hidden" : ""
+            }`}
+          />
+          <Moon
+            className={`h-[1.2rem] w-[1.2rem] transition-all ${
+              theme === "light" || theme === "black" ? "hidden" : ""
+            }`}
+          />
+          <Eclipse
+            className={`h-[1.2rem] w-[1.2rem] transition-all ${
+              theme === "dark" || theme === "light" ? "hidden" : ""
+            }`}
+          />
           <span className="sr-only">Alterar Tema</span>
         </Button>
       </DropdownTrigger>
       <DropdownContent align="end">
         <DropdownItem onClick={() => setTheme("light")}>Claro</DropdownItem>
         <DropdownItem onClick={() => setTheme("dark")}>Escuro</DropdownItem>
+        <DropdownItem onClick={() => setTheme("black")}>Preto</DropdownItem>
         <DropdownItem onClick={() => setTheme("system")}>Sistema</DropdownItem>
       </DropdownContent>
     </Dropdown>
