@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { debounce } from "lodash";
 import axios from "axios";
 
@@ -33,11 +33,32 @@ const SearchLayout = () => {
     token: localStorage.getItem("token"),
   });
 
-  const [queryResponse, setQueryResponse] = useState([]);
+  const [queryResponse, setQueryResponse] = useState<User[]>([]);
+  const [suggestedUsers, setSuggestedUsers] = useState<User[]>([]);
+  const [noResults, setNoResults] = useState(false);
+
+  const fetchSuggestedUsers = useCallback(() => {
+    axios
+      .post(
+        `${import.meta.env.VITE_API_BASE_URL}${
+          import.meta.env.VITE_SEARCH_PAGE_USER
+        }`,
+        { nickname: "a", token: formData.token }
+      )
+      .then((response: any) => {
+        const users = response.data.usersFinded.map((user: any) => ({
+          ...user,
+          isFollowing: user.isFollowing || false,
+        }));
+        setSuggestedUsers(users);
+      })
+      .catch((error: any) => {
+        console.log("Erro ao buscar sugestões:", error.message);
+      });
+  }, [formData.token]);
 
   const fetchData = useCallback(
     (nickname: string) => {
-      console.log("Fiz fetch api com nickname: ", nickname);
       axios
         .post(
           `${import.meta.env.VITE_API_BASE_URL}${
@@ -46,12 +67,13 @@ const SearchLayout = () => {
           { nickname, token: formData.token }
         )
         .then((response: any) => {
-          setQueryResponse(
-            response.data.usersFinded.map((user: any) => ({
-              ...user,
-              isFollowing: user.isFollowing || false,
-            }))
-          );
+          const users = response.data.usersFinded.map((user: any) => ({
+            ...user,
+            isFollowing: user.isFollowing || false,
+          }));
+
+          setQueryResponse(users);
+          setNoResults(users.length === 0);
         })
         .catch((error: any) => {
           console.log(error.message);
@@ -71,6 +93,7 @@ const SearchLayout = () => {
 
     if (value.trim() === "") {
       setQueryResponse([]);
+      setNoResults(false);
     } else {
       debounceFetchData(value);
     }
@@ -80,6 +103,10 @@ const SearchLayout = () => {
     e.preventDefault();
     debounceFetchData(formData.nickname);
   };
+
+  useEffect(() => {
+    fetchSuggestedUsers();
+  }, [fetchSuggestedUsers]);
 
   return (
     <form
@@ -110,31 +137,55 @@ const SearchLayout = () => {
           </div>
         </CardContent>
 
-        <ScrollArea className="h-72 w-full rounded-md border">
-          <div className="p-4">
-            {queryResponse.length > 0 ? (
-              queryResponse.map((user: User) => {
-                const isFollowing = userData.following.some((followingId) => {
-                  return followingId === user._id;
-                });
+        {queryResponse.length > 0 || suggestedUsers.length > 0 ? (
+          <ScrollArea className="h-72 w-full rounded-md border">
+            <div className="p-4">
+              {queryResponse.length > 0 ? (
+                queryResponse.map((user: User) => {
+                  const isFollowing = userData.following.some(
+                    (followingId) => followingId === user._id
+                  );
 
-                return (
-                  <SearchUserCard
-                    avatar={user.avatar}
-                    nickname={user.nickname}
-                    userName={user.userName}
-                    type={user.type}
-                    _id={user._id}
-                    following={isFollowing}
-                    key={user._id}
-                  />
-                );
-              })
-            ) : (
-              <></>
-            )}
-          </div>
-        </ScrollArea>
+                  return (
+                    <>
+                      <p>Resultado:</p>
+                      <SearchUserCard
+                        avatar={user.avatar}
+                        nickname={user.nickname}
+                        userName={user.userName}
+                        type={user.type}
+                        _id={user._id}
+                        following={isFollowing}
+                        key={user._id}
+                      />
+                    </>
+                  );
+                })
+              ) : noResults ? (
+                <div className="flex flex-col justify-center items-center space-y-2 w-full">
+                  <p className="font-poppins text-muted-foreground text-center w-full">
+                    Nenhum usuário encontrado.
+                  </p>
+                </div>
+              ) : (
+                <>
+                  <p>Sugestões:</p>
+                  {suggestedUsers.map((user: User) => (
+                    <SearchUserCard
+                      avatar={user.avatar}
+                      nickname={user.nickname}
+                      userName={user.userName}
+                      type={user.type}
+                      _id={user._id}
+                      following={user.isFollowing}
+                      key={user._id}
+                    />
+                  ))}
+                </>
+              )}
+            </div>
+          </ScrollArea>
+        ) : null}
       </Card>
     </form>
   );

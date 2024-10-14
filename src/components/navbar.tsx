@@ -84,27 +84,23 @@ const Profile = ({ name, email, avatar }: profile) => {
         <Link to={`/profile/${userData._id}`}>
           <DropdownItem className="cursor-pointer">
             <div className="flex flex-row items-center space-x-2">
-              <div className="flex relative">
-                <div className="flex absolute right-0 bottom-0 h-2 w-2 z-10">
-                  <span className="animate-ping bg-success rounded-full opacity-75 inline-flex absolute h-full w-full"></span>
-                  <span className="bg-success rounded-full inline-flex relative h-2 w-2"></span>
-                </div>
-                <Avatar className="h-8 w-8">
-                  <AvatarImage src={avatar} />
-                  <AvatarFallback>{name}</AvatarFallback>
-                </Avatar>
-              </div>
-              <div className="flex flex-col">
+              <Avatar className="h-8 w-8">
+                <AvatarImage src={avatar} />
+                <AvatarFallback>{name}</AvatarFallback>
+              </Avatar>
+              <div className="flex flex-col items-start justify-center">
                 <div className="flex flex-row items-center space-x-1">
                   <div>
-                    <p className="font-poppins font-semibold">{name}</p>
+                    <p className="font-poppins font-medium tracking-tight text-[.8rem]">
+                      {name}
+                    </p>
                   </div>
 
                   <div>
-                    <BadgeCheck className="text-success size-3.5" />
+                    <BadgeCheck className="fill-success text-background size-3.5" />
                   </div>
                 </div>
-                <p className="font-poppins text-tiny font-light tracking-light">
+                <p className="font-poppins font-medium tracking-tight text-[.7rem]">
                   {email}
                 </p>
               </div>

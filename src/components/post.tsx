@@ -23,13 +23,13 @@ import {
 import { Button } from "./ui/button.tsx";
 import { Input } from "./ui/input.tsx";
 import {
-  Dropdown,
-  DropdownItem,
-  DropdownContent,
-  DropdownTrigger,
-  DropdownSeparator,
-  DropdownLabel,
-} from "./ui/dropdown.tsx";
+  Drawer,
+  DrawerContent,
+  DrawerTrigger,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+} from "./ui/drawer.tsx";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar.tsx";
 import { Separator } from "./ui/separator.tsx";
 import {
@@ -55,6 +55,9 @@ import {
   Trash2,
   Copy,
   Check,
+  CircleUser,
+  UserRoundCheck,
+  UserRoundPlus,
 } from "lucide-react";
 
 import { getUserData } from "../utils/getUserData.tsx";
@@ -75,6 +78,7 @@ interface CardProps {
   id?: string;
   likeCount: number;
   likedBy: String[];
+  following: boolean;
 }
 
 interface UserData {
@@ -87,6 +91,31 @@ export const CardPost = (props: CardProps) => {
   const [userData, setUserData] = React.useState<UserData>();
   const dataUser = getUserData();
   const [formattedData, setFormattedData] = React.useState("");
+
+  const [formData] = React.useState({
+    userFollowId: props._id,
+    token: localStorage.getItem("token"),
+  });
+
+  const [followedUser, setFollowedUser] = React.useState(false);
+
+  const FollowUser = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    axios
+      .put(
+        `${import.meta.env.VITE_API_BASE_URL}${
+          import.meta.env.VITE_FOLLOW_USER
+        }`,
+        formData
+      )
+      .then((response) => {
+        setFollowedUser(response.data.followed);
+      })
+      .catch((error: any) => {
+        console.log(error);
+      });
+  };
 
   const [liked, setLiked] = React.useState(false);
   const [showHeart, setShowHeart] = React.useState(false);
@@ -189,21 +218,13 @@ export const CardPost = (props: CardProps) => {
         <CardHeader className="flex flex-row justify-between items-center">
           {!props.isAnonymous ? (
             <Link to={`/profile/${props.id}`} className="flex space-x-2">
-              <div className="flex relative">
-                <div className="flex absolute right-0 bottom-0 h-2.5 w-2.5 z-10">
-                  <span className="animate-ping bg-success rounded-full opacity-75 inline-flex absolute h-full w-full"></span>
-                  <span className="bg-success rounded-full inline-flex relative h-2.5 w-2.5"></span>
-                </div>
-                <Avatar>
-                  <AvatarFallback>
-                    {!props.isAnonymous ? userData?.nickname : ""}
-                  </AvatarFallback>
+              <Avatar>
+                <AvatarFallback>
+                  {!props.isAnonymous ? userData?.nickname : ""}
+                </AvatarFallback>
 
-                  <AvatarImage
-                    src={!props.isAnonymous ? userData?.avatar : ""}
-                  />
-                </Avatar>
-              </div>
+                <AvatarImage src={!props.isAnonymous ? userData?.avatar : ""} />
+              </Avatar>
               <div className="flex flex-col items-start justify-center space-y-1">
                 <div className="flex flex-row items-center space-x-1">
                   <div>
@@ -212,28 +233,20 @@ export const CardPost = (props: CardProps) => {
                     </CardTitle>
                   </div>
                   <div>
-                    <BadgeCheck className="text-success size-3.5" />
+                    <BadgeCheck className="fill-success text-background size-3.5" />
                   </div>
                 </div>
               </div>
             </Link>
           ) : (
             <div className="flex space-x-2">
-              <div className="flex relative">
-                <div className="flex absolute right-0 bottom-0 h-2.5 w-2.5 z-10">
-                  <span className="animate-ping bg-success rounded-full opacity-75 inline-flex absolute h-full w-full"></span>
-                  <span className="bg-success rounded-full inline-flex relative h-2.5 w-2.5"></span>
-                </div>
-                <Avatar>
-                  <AvatarFallback>
-                    {!props.isAnonymous ? userData?.nickname : "Anônimo"}
-                  </AvatarFallback>
+              <Avatar>
+                <AvatarFallback>
+                  {!props.isAnonymous ? userData?.nickname : "Anônimo"}
+                </AvatarFallback>
 
-                  <AvatarImage
-                    src={!props.isAnonymous ? userData?.avatar : ""}
-                  />
-                </Avatar>
-              </div>
+                <AvatarImage src={!props.isAnonymous ? userData?.avatar : ""} />
+              </Avatar>
               <div className="flex flex-col items-start justify-center space-y-1">
                 <div className="flex flex-row items-center space-x-1">
                   <div>
@@ -250,116 +263,135 @@ export const CardPost = (props: CardProps) => {
           )}
 
           {!props.isAnonymous && (
-            <Dropdown>
-              <DropdownTrigger>
-                <Button variant={"outline"} size={"icon"}>
+            <Drawer>
+              <DrawerTrigger asChild>
+                <Button size={"icon"} variant={"outline"}>
                   <EllipsisVertical className="cursor-pointer" />
                 </Button>
-              </DropdownTrigger>
+              </DrawerTrigger>
 
-              <DropdownContent className="select-none">
-                <DropdownLabel>Perfil</DropdownLabel>
-                <DropdownSeparator />
-
-                <Link to={`/profile/${props.id}`}>
-                  <DropdownItem className="cursor-pointer">
-                    <div className="flex flex-row items-center space-x-2">
-                      <div className="flex relative">
-                        <div className="flex absolute right-0 bottom-0 h-2.5 w-2.5 z-10">
-                          <span className="animate-ping bg-success rounded-full opacity-75 inline-flex absolute h-full w-full"></span>
-                          <span className="bg-success rounded-full inline-flex relative h-2.5 w-2.5"></span>
-                        </div>
-                        <Avatar>
-                          <AvatarFallback>
-                            {!props.isAnonymous
-                              ? userData?.nickname
-                              : "Anônimo"}
-                          </AvatarFallback>
-
-                          <AvatarImage
-                            src={!props.isAnonymous ? userData?.avatar : ""}
-                          />
-                        </Avatar>
-                      </div>
-                      <div className="flex flex-col">
-                        <div className="flex flex-row items-center space-x-1">
-                          <div>
-                            <p className="text-foreground font-medium ">
-                              {!props.isAnonymous ? userData?.nickname : ""}
-                            </p>
-                          </div>
-
-                          <div>
-                            <BadgeCheck className="text-success size-3.5" />
-                          </div>
-                        </div>
-                      </div>
+              <DrawerContent>
+                <div className="mx-auto w-full max-w-sm">
+                  <DrawerHeader className="flex flex-row justify-around items-center">
+                    <div className="flex flex-col items-center space-y-1">
+                      <Button
+                        variant={"outline"}
+                        size={"icon"}
+                        onClick={handleLike}
+                      >
+                        {liked ? (
+                          <Heart className="text-primary fill-primary h-4 w-4" />
+                        ) : (
+                          <Heart className="h-4 w-4" />
+                        )}
+                      </Button>
+                      <DrawerDescription className="text-[.8rem]">
+                        Curtir
+                      </DrawerDescription>
                     </div>
-                  </DropdownItem>
-                </Link>
 
-                <DropdownSeparator />
+                    <div className="flex flex-col items-center space-y-1">
+                      <Button
+                        variant={"outline"}
+                        size={"icon"}
+                        onClick={handleFavorite}
+                      >
+                        {favorited ? (
+                          <Crown className="text-warning fill-warning h-4 w-4" />
+                        ) : (
+                          <Crown className="h-4 w-4" />
+                        )}
+                      </Button>
+                      <DrawerDescription className="text-[.8rem]">
+                        Favoritar
+                      </DrawerDescription>
+                    </div>
+                  </DrawerHeader>
+                </div>
 
-                <DropdownItem className="cursor-pointer" onClick={handleLike}>
-                  {liked ? (
-                    <Heart className="text-primary fill-primary size-4 mr-2" />
-                  ) : (
-                    <Heart className="size-4 mr-2" />
-                  )}
-                  Curtir
-                </DropdownItem>
+                <Separator />
 
-                <DropdownItem
-                  className="cursor-pointer"
-                  onClick={handleFavorite}
-                >
-                  {favorited ? (
-                    <Crown className="text-warning fill-warning size-4 mr-2" />
-                  ) : (
-                    <Crown className="size-4 mr-2" />
-                  )}
-                  Favoritar
-                </DropdownItem>
+                <div className="py-5 space-y-2 mx-auto w-full max-w-sm">
+                  <form action="" method="put" onSubmit={FollowUser}>
+                    <Button variant={"ghost"} className="justify-start w-full">
+                      {props.following ? (
+                        <UserRoundCheck className="h-4 w-4 mr-2" />
+                      ) : followedUser ? (
+                        <UserRoundCheck className="h-4 w-4 mr-2" />
+                      ) : (
+                        <UserRoundPlus className="h-4 w-4 mr-2" />
+                      )}
 
-                <DropdownItem
-                  className="cursor-pointer"
-                  onClick={() => setOpen(true)}
-                >
-                  <Share className="mr-2 size-4" />
-                  Compartilhar
-                </DropdownItem>
+                      {props.following
+                        ? "Seguindo"
+                        : followedUser
+                        ? "Seguindo"
+                        : "Seguir"}
+                    </Button>
+                  </form>
 
-                {props.id !== dataUser._id ? null : (
-                  <>
-                    <DropdownSeparator />
+                  <Button
+                    className="justify-start w-full"
+                    variant={"ghost"}
+                    onClick={() => setOpen(true)}
+                  >
+                    <Share className="mr-2 size-4" />
+                    Compartilhar
+                  </Button>
 
-                    <DropdownItem className="cursor-pointer text-danger">
-                      <Pencil className="mr-2 size-4" />
-                      Editar
-                    </DropdownItem>
-                    <DropdownItem className="cursor-pointer text-danger">
-                      <Trash2 className="mr-2 size-4" />
-                      Excluir
-                    </DropdownItem>
-                  </>
-                )}
+                  <Button className="justify-start w-full" variant={"ghost"}>
+                    <CircleUser className="mr-2 size-4" />
+                    Sobre
+                  </Button>
+                </div>
 
-                {props.id === dataUser._id ? null : (
-                  <>
-                    <DropdownSeparator />
+                <Separator />
 
-                    <DropdownItem className="cursor-pointer text-danger">
-                      <Siren className="mr-2 size-4" />
-                      Reportar
-                    </DropdownItem>
-                    <DropdownItem className="cursor-pointer text-danger">
-                      <Ban className="mr-2 size-4" />
-                      Bloquear
-                    </DropdownItem>
-                  </>
-                )}
-              </DropdownContent>
-            </Dropdown>
+                <DrawerFooter>
+                  <div className="space-y-2 mx-auto w-full max-w-sm">
+                    {props.id !== dataUser._id ? null : (
+                      <>
+                        <Button
+                          variant={"ghost"}
+                          className="text-danger justify-start w-full"
+                        >
+                          <Pencil className="mr-2 size-4" />
+                          Editar
+                        </Button>
+
+                        <Button
+                          variant={"ghost"}
+                          className="text-danger justify-start w-full"
+                        >
+                          <Trash2 className="mr-2 size-4" />
+                          Excluir
+                        </Button>
+                      </>
+                    )}
+
+                    {props.id === dataUser._id ? null : (
+                      <>
+                        <Button
+                          variant={"ghost"}
+                          className="text-danger justify-start w-full"
+                        >
+                          <Siren className="mr-2 size-4" />
+                          Reportar
+                        </Button>
+
+                        <Button
+                          variant={"ghost"}
+                          className="text-danger justify-start w-full"
+                        >
+                          <Ban className="mr-2 size-4" />
+                          Bloquear
+                        </Button>
+                      </>
+                    )}
+                  </div>
+                </DrawerFooter>
+              </DrawerContent>
+            </Drawer>
           )}
         </CardHeader>
 
@@ -467,17 +499,11 @@ export const CardPost = (props: CardProps) => {
           )}
 
           <div className="flex flex-row items-center space-x-2 w-full">
-            <div className="flex relative">
-              <div className="flex absolute right-0 bottom-0 h-2.5 w-2.5 z-10">
-                <span className="animate-ping bg-success rounded-full opacity-75 inline-flex absolute h-full w-full"></span>
-                <span className="bg-success rounded-full inline-flex relative h-2.5 w-2.5"></span>
-              </div>
-              <Avatar>
-                <AvatarFallback>{dataUser.nickname}</AvatarFallback>
+            <Avatar>
+              <AvatarFallback>{dataUser.nickname}</AvatarFallback>
 
-                <AvatarImage src={dataUser.avatar} />
-              </Avatar>
-            </div>
+              <AvatarImage src={dataUser.avatar} />
+            </Avatar>
 
             <Input type="text" placeholder="Adicione um coméntario..." />
           </div>

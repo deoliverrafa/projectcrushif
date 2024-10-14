@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 
 import { Button } from "./ui/button.js";
 import { Card, CardTitle } from "./ui/card.js";
-
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar.js";
 
 import { BadgeCheck, UserRoundPlus, UserRoundCheck } from "lucide-react";
@@ -49,46 +48,44 @@ export default function SearchUserCard(props: SearchUserCard) {
       <Card className="my-2 w-full">
         <div className="flex flex-row justify-between items-center p-4">
           <Link to={`/profile/${props._id}`} className="flex space-x-2 h-full">
-            <div className="flex relative">
-              <div className="flex absolute right-0 bottom-0 h-2.5 w-2.5 z-10">
-                <span className="animate-ping bg-success rounded-full opacity-75 inline-flex absolute h-full w-full"></span>
-                <span className="bg-success rounded-full inline-flex relative h-2.5 w-2.5"></span>
-              </div>
-              <Avatar>
-                <AvatarFallback>{props?.nickname}</AvatarFallback>
-                <AvatarImage src={props?.avatar} />
-              </Avatar>
-            </div>
-            <div className="flex flex-col items-start justify-center space-y-1">
+            <Avatar>
+              <AvatarFallback>{props?.nickname}</AvatarFallback>
+              <AvatarImage src={props?.avatar} />
+            </Avatar>
+            <div className="flex flex-col items-start justify-center">
               <div className="flex flex-row items-center space-x-1">
-                <div>
-                  <CardTitle className="font-medium tracking-tight">
-                    {props.nickname ? `${props.nickname}` : "indisponível"}
-                  </CardTitle>
-                </div>
+                <CardTitle className="font-medium tracking-tight text-[.8rem]">
+                  {props.nickname ? `${props.nickname}` : "indisponível"}
+                </CardTitle>
 
                 <div>
                   <BadgeCheck
                     className={`${
                       props.type === "Plus"
-                        ? "text-info"
+                        ? "fill-info"
                         : props.type === "Admin"
-                        ? "text-danger"
-                        : "text-success"
-                    } size-3.5`}
+                        ? "fill-danger"
+                        : props.type === "verified"
+                        ? "fill-success"
+                        : "hidden"
+                    } text-background size-3.5`}
                   />
                 </div>
               </div>
+
+              <CardTitle className="font-medium tracking-tight text-[.7rem]">
+                {props.userName ? `${props.userName}` : "indisponível"}
+              </CardTitle>
             </div>
           </Link>
           <form action="" method="put" onSubmit={FollowUser}>
             <Button>
               {props.following ? (
-                <UserRoundCheck className="size-4 mr-2" />
+                <UserRoundCheck className="h-4 w-4 mr-2" />
               ) : followedUser ? (
-                <UserRoundCheck className="size-4 mr-2" />
+                <UserRoundCheck className="h-4 w-4 mr-2" />
               ) : (
-                <UserRoundPlus className="size-4 mr-2" />
+                <UserRoundPlus className="h-4 w-4 mr-2" />
               )}
 
               {props.following

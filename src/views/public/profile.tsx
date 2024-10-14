@@ -52,6 +52,7 @@ import {
   EllipsisVertical,
   Copy,
   Check,
+  AtSign,
 } from "lucide-react";
 
 interface User {
@@ -174,34 +175,36 @@ const ProfileLayout = () => {
         <Separator className="mb-5" />
 
         <CardContent className="space-y-2">
-          <CardTitle className="tracking-tight font-light text-sm">
+          <CardTitle className="capitalie font-medium text-sm">
             {viewingUser.userName ? viewingUser.userName : "Nome indisponível"}
           </CardTitle>
 
-          <Badge variant={"secondary"}>
-            {viewingUser.nickname ? `@${viewingUser.nickname}` : "indisponível"}
-
+          <Badge variant={"outline"} className="font-light">
+            <AtSign className="h-3 w-3" />{" "}
+            {viewingUser.nickname ? `${viewingUser.nickname}` : "indisponível"}
             <BadgeCheck
               className={`${
                 viewingUser.type === "Plus"
-                  ? "text-info"
+                  ? "fill-info"
                   : viewingUser.type === "Admin"
-                  ? "text-danger"
-                  : "text-success"
-              } ml-1 size-3`}
+                  ? "fill-danger"
+                  : viewingUser.type === "verified"
+                  ? "fill-success"
+                  : "hidden"
+              } text-background ml-1 size-3.5`}
             />
           </Badge>
 
           <div className="space-y-0.5">
-            <CardDescription className="tracking-tight font-light text-sm">
+            <CardDescription className="uppercase tracking-tight font-medium text-[.8rem]">
               {age ? `Idade: ${age} anos` : "Idade: indisponível"}
             </CardDescription>
-            <CardDescription className="tracking-tight font-light text-sm">
+            <CardDescription className="uppercase tracking-tight font-medium text-[.8rem]">
               {viewingUser.curso
                 ? `Curso: ${viewingUser.curso}`
                 : "Curso: indisponível"}
             </CardDescription>
-            <CardDescription className="tracking-tight font-light text-sm">
+            <CardDescription className="uppercase tracking-tight font-medium text-[.8rem]">
               {viewingUser.campus
                 ? `Campus: ${viewingUser.campus}`
                 : "Campus: indisponível"}
@@ -214,10 +217,7 @@ const ProfileLayout = () => {
                 className="flex justify-center items-center w-full"
                 to="/profile/edit"
               >
-                <Button
-                  variant={"secondary"}
-                  className="font-poppins font-semibold uppercase w-full"
-                >
+                <Button className="w-full">
                   <PencilRuler className="mr-2 size-4" />
                   Editar
                 </Button>
@@ -225,10 +225,7 @@ const ProfileLayout = () => {
             )}
 
             {!isOwnProfile && (
-              <Button
-                variant={"secondary"}
-                className="font-poppins font-semibold uppercase w-full"
-              >
+              <Button className="w-full">
                 <UserRoundPlus className="mr-2 size-4" />
                 Seguir
               </Button>
@@ -239,7 +236,7 @@ const ProfileLayout = () => {
                 <Tooltip>
                   <TooltipTrigger>
                     <DialogTrigger asChild>
-                      <Button variant={"secondary"} size={"icon"}>
+                      <Button size={"icon"}>
                         <Share className="h-4 w-4" />
                       </Button>
                     </DialogTrigger>
@@ -309,8 +306,8 @@ const ProfileLayout = () => {
 
         <CardFooter className="space-y-2">
           <div className="flex flex-col justify-center items-center space-y-2 w-full">
-            <SearchX className="text-slate-500 dark:text-slate-400 size-14" />
-            <CardDescription className="font-inter font-bold text-center w-full">
+            <SearchX className="text-muted-foreground size-14" />
+            <CardDescription className="text-muted-foreground text-center w-full">
               Usuário não possui nenhuma publicação.
             </CardDescription>
           </div>
