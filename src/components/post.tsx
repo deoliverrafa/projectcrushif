@@ -57,7 +57,6 @@ import {
   Check,
   CircleUser,
   UserRoundCheck,
-  UserRoundPlus,
 } from "lucide-react";
 
 import { getUserData } from "../utils/getUserData.tsx";
@@ -78,7 +77,6 @@ interface CardProps {
   id?: string;
   likeCount: number;
   likedBy: String[];
-  following: boolean;
 }
 
 interface UserData {
@@ -91,31 +89,6 @@ export const CardPost = (props: CardProps) => {
   const [userData, setUserData] = React.useState<UserData>();
   const dataUser = getUserData();
   const [formattedData, setFormattedData] = React.useState("");
-
-  const [formData] = React.useState({
-    userFollowId: props._id,
-    token: localStorage.getItem("token"),
-  });
-
-  const [followedUser, setFollowedUser] = React.useState(false);
-
-  const FollowUser = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    axios
-      .put(
-        `${import.meta.env.VITE_API_BASE_URL}${
-          import.meta.env.VITE_FOLLOW_USER
-        }`,
-        formData
-      )
-      .then((response) => {
-        setFollowedUser(response.data.followed);
-      })
-      .catch((error: any) => {
-        console.log(error);
-      });
-  };
 
   const [liked, setLiked] = React.useState(false);
   const [showHeart, setShowHeart] = React.useState(false);
@@ -312,23 +285,10 @@ export const CardPost = (props: CardProps) => {
                 <Separator />
 
                 <div className="py-5 space-y-2 mx-auto w-full max-w-sm">
-                  <form action="" method="put" onSubmit={FollowUser}>
-                    <Button variant={"ghost"} className="justify-start w-full">
-                      {props.following ? (
-                        <UserRoundCheck className="h-4 w-4 mr-2" />
-                      ) : followedUser ? (
-                        <UserRoundCheck className="h-4 w-4 mr-2" />
-                      ) : (
-                        <UserRoundPlus className="h-4 w-4 mr-2" />
-                      )}
-
-                      {props.following
-                        ? "Seguindo"
-                        : followedUser
-                        ? "Seguindo"
-                        : "Seguir"}
-                    </Button>
-                  </form>
+                  <Button variant={"ghost"} className="justify-start w-full">
+                    <UserRoundCheck className="h-4 w-4 mr-2" />
+                    Seguir
+                  </Button>
 
                   <Button
                     className="justify-start w-full"
