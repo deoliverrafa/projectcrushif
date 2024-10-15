@@ -4,7 +4,7 @@ import { cva } from "class-variance-authority";
 import { cn } from "../../lib/utils";
 
 const labelVariants = cva(
-  "text-sm font-poppins font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+  "text-md md:text-sm font-poppins font-semibold md:font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
 );
 
 interface LabelProps extends React.ComponentPropsWithoutRef<typeof LabelPrimitive.Root> {

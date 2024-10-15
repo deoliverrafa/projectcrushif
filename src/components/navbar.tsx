@@ -178,7 +178,7 @@ const Navbar: React.FC<NavbarProps> = ({ className, children, ...props }) => {
   return (
     <nav
       className={cn(
-        "transition-transform duration-300 select-none bg-card border-b border-input shadow-[0_2px_4px_rgba(0,0,0,0.1)] flex flex-row justify-between items-center shadow-[0_-2px_4px_rgba(0,0,0,0.1)] sticky top-0 inset-x-0 translate-y-0 md:translate-y-0/2 px-4 md:px-2 py-2 md:py-1 w-full z-20",
+        "transition-transform duration-300 select-none bg-card border-b-2 md:border-b border-input shadow-[0_2px_4px_rgba(0,0,0,0.1)] flex flex-row justify-between items-center shadow-[0_-2px_4px_rgba(0,0,0,0.1)] sticky top-0 inset-x-0 translate-y-0 md:translate-y-0/2 px-4 md:px-2 py-2 md:py-1 w-full z-20",
         isVisible ? "translate-y-0" : "-translate-y-full",
         className
       )}
@@ -314,7 +314,7 @@ const NavbarBrand: React.FC<NavbarBrandProps> = ({
   return (
     <Link
       className={cn(
-        "font-semibold flex items-center gap-2 text-lg md:text-md",
+        "font-bold md:font-semibold flex items-center gap-2 text-lg md:text-md",
         className
       )}
       to={href}
@@ -387,7 +387,7 @@ export const NavBar = (props: userData) => {
           hoverClassName="text-primary/70"
         >
           <Button variant={"outline"} size={"icon"}>
-            <Bell className="h-5 w-5" />
+            <Bell className="h-6 w-6 md:h-5 md:w-5" />
           </Button>
         </NavbarItem>
 

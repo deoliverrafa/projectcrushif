@@ -322,7 +322,7 @@ const ProfilePage = () => {
     <>
       <NavBarReturn title={"Perfil"} />
 
-      <main className="flex flex-col justify-center items-center h-screen w-full">
+      <main className="flex flex-col justify-center items-center h-full w-full">
         <ProfileLayout />
       </main>
     </>

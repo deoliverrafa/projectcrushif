@@ -54,7 +54,7 @@ export default function SearchUserCard(props: SearchUserCard) {
             </Avatar>
             <div className="flex flex-col items-start justify-center">
               <div className="flex flex-row items-center space-x-1">
-                <CardTitle className="font-medium tracking-tight text-[.8rem]">
+                <CardTitle className="font-semibold md:font-medium text-md md:text-sm tracking-tight">
                   {props.nickname ? `${props.nickname}` : "indisponível"}
                 </CardTitle>
 
@@ -68,12 +68,12 @@ export default function SearchUserCard(props: SearchUserCard) {
                         : props.type === "verified"
                         ? "fill-success"
                         : "hidden"
-                    } text-background size-3.5`}
+                    } text-background h-5 w-5 md:h-4 md:w-4`}
                   />
                 </div>
               </div>
 
-              <CardTitle className="font-medium tracking-tight text-[.7rem]">
+              <CardTitle className="font-normal md:font-light text-sm md:text-xs tracking-tight">
                 {props.userName ? `${props.userName}` : "indisponível"}
               </CardTitle>
             </div>
@@ -81,11 +81,11 @@ export default function SearchUserCard(props: SearchUserCard) {
           <form action="" method="put" onSubmit={FollowUser}>
             <Button>
               {props.following ? (
-                <UserRoundCheck className="h-4 w-4 mr-2" />
+                <UserRoundCheck className="h-5 w-5 md:h-4 md:w-4 mr-2" />
               ) : followedUser ? (
-                <UserRoundCheck className="h-4 w-4 mr-2" />
+                <UserRoundCheck className="h-5 w-5 md:h-4 md:w-4 mr-2" />
               ) : (
-                <UserRoundPlus className="h-4 w-4 mr-2" />
+                <UserRoundPlus className="h-5 w-5 md:h-4 md:w-4 mr-2" />
               )}
 
               {props.following

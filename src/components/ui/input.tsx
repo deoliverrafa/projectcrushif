@@ -1,15 +1,16 @@
 import * as React from "react";
-
 import { cn } from "./../../lib/utils";
-
 import { EyeOff, Eye, X } from "lucide-react";
 
 export interface InputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {}
+
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
   ({ className, type = "text", value, onChange, ...props }, ref) => {
     const [inputType, setInputType] = React.useState(type);
     const [inputValue, setInputValue] = React.useState(value || "");
+    const [imagePreview, setImagePreview] = React.useState<string | null>(null);
+    const fileInputRef = React.useRef<HTMLInputElement | null>(null);
 
     React.useEffect(() => {
       setInputValue(value || "");
@@ -23,6 +24,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
 
     const clearInput = () => {
       setInputValue("");
+      setImagePreview(null);
       if (onChange) {
         onChange({
           target: { value: "" },
@@ -30,25 +32,93 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       }
     };
 
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      const file = e.target.files?.[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          setImagePreview(event.target?.result as string);
+        };
+        reader.readAsDataURL(file);
+      }
+      if (onChange) {
+        onChange(e);
+      }
+    };
+
+    const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+      e.preventDefault();
+      const file = e.dataTransfer.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          setImagePreview(event.target?.result as string);
+        };
+        reader.readAsDataURL(file);
+        if (onChange) {
+          onChange({
+            target: { files: [file] },
+          } as unknown as React.ChangeEvent<HTMLInputElement>);
+        }
+      }
+    };
+
+    const handleClick = () => {
+      fileInputRef.current?.click();
+    };
+
     return (
       <div className="relative w-full">
-        <input
-          type={inputType}
-          value={inputValue}
-          onChange={(e) => {
-            setInputValue(e.target.value);
-            if (onChange) {
-              onChange(e);
-            }
-          }}
-          className={cn(
-            "flex h-9 w-full rounded-md border border-input bg-transparent font-poppins font-medium px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50",
-            className
-          )}
-          ref={ref}
-          {...props}
-        />
-        {type === "password" ? (
+        {type === "file" ? (
+          <>
+            <div
+              className="flex justify-center items-center mb-4 h-48 w-full border-2 border-dashed border-gray-400 rounded-md cursor-pointer"
+              onClick={handleClick}
+              onDrop={handleDrop}
+              onDragOver={(e) => e.preventDefault()}
+            >
+              {imagePreview ? (
+                <img
+                  src={imagePreview}
+                  alt="Preview"
+                  className="w-full h-full object-cover rounded-md"
+                />
+              ) : (
+                <div className="text-muted-foreground">
+                  Arraste e solte a imagem aqui
+                </div>
+              )}
+            </div>
+            <input
+              type="file"
+              className="hidden" 
+              ref={fileInputRef}
+              onChange={handleFileChange}
+              {...props}
+            />
+          </>
+        ) : (
+          <>
+            <input
+              type={inputType}
+              value={inputValue}
+              onChange={(e) => {
+                setInputValue(e.target.value);
+                if (onChange) {
+                  onChange(e);
+                }
+              }}
+              className={cn(
+                "flex h-12 md:h-9 w-full rounded-md border-2 md:border border-input bg-transparent font-poppins font-semibold md:font-medium px-3 py-1 text-md md:text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50",
+                className
+              )}
+              ref={ref}
+              {...props}
+            />
+          </>
+        )}
+
+        {type === "password" && (
           <button
             type="button"
             onClick={togglePasswordVisibility}
@@ -60,16 +130,16 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
               <EyeOff className="h-5 w-5" />
             )}
           </button>
-        ) : (
-          inputValue && (
-            <button
-              type="button"
-              onClick={clearInput}
-              className="absolute inset-y-0 right-0 px-2 text-sm text-muted-foreground"
-            >
-              <X className="h-5 w-5" />
-            </button>
-          )
+        )}
+
+        {inputValue && type !== "file" && (
+          <button
+            type="button"
+            onClick={clearInput}
+            className="absolute inset-y-0 right-0 px-2 text-sm text-muted-foreground"
+          >
+            <X className="h-5 w-5" />
+          </button>
         )}
       </div>
     );

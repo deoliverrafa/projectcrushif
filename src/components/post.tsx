@@ -27,7 +27,6 @@ import {
   DrawerContent,
   DrawerTrigger,
   DrawerDescription,
-  DrawerFooter,
   DrawerHeader,
 } from "./ui/drawer.tsx";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar.tsx";
@@ -201,12 +200,12 @@ export const CardPost = (props: CardProps) => {
               <div className="flex flex-col items-start justify-center space-y-1">
                 <div className="flex flex-row items-center space-x-1">
                   <div>
-                    <CardTitle className="font-medium tracking-tight">
+                    <CardTitle className="font-semibold md:font-medium text-lg md:text-md tracking-tight">
                       {!props.isAnonymous ? userData?.nickname : "Anônimo"}
                     </CardTitle>
                   </div>
                   <div>
-                    <BadgeCheck className="fill-success text-background size-3.5" />
+                    <BadgeCheck className="fill-success text-background h-5 w-5 md:h-4 md:w-4" />
                   </div>
                 </div>
               </div>
@@ -223,12 +222,12 @@ export const CardPost = (props: CardProps) => {
               <div className="flex flex-col items-start justify-center space-y-1">
                 <div className="flex flex-row items-center space-x-1">
                   <div>
-                    <CardTitle className="font-medium tracking-tight">
+                    <CardTitle className="font-semibold md:font-medium text-lg md:text-md tracking-tight">
                       {!props.isAnonymous ? userData?.nickname : "Anônimo"}
                     </CardTitle>
                   </div>
                   <div>
-                    <BadgeCheck className="text-success size-3.5" />
+                    <BadgeCheck className="fill-success text-background h-5 w-5 md:h-4 md:w-4" />
                   </div>
                 </div>
               </div>
@@ -253,14 +252,12 @@ export const CardPost = (props: CardProps) => {
                         onClick={handleLike}
                       >
                         {liked ? (
-                          <Heart className="text-primary fill-primary h-4 w-4" />
+                          <Heart className="text-primary fill-primary h-5 md:h-4 w-5 md:w-4" />
                         ) : (
-                          <Heart className="h-4 w-4" />
+                          <Heart className="h-5 md:h-4 w-5 md:w-4" />
                         )}
                       </Button>
-                      <DrawerDescription className="text-[.8rem]">
-                        Curtir
-                      </DrawerDescription>
+                      <DrawerDescription>Curtir</DrawerDescription>
                     </div>
 
                     <div className="flex flex-col items-center space-y-1">
@@ -270,14 +267,12 @@ export const CardPost = (props: CardProps) => {
                         onClick={handleFavorite}
                       >
                         {favorited ? (
-                          <Crown className="text-warning fill-warning h-4 w-4" />
+                          <Crown className="text-warning fill-warning h-5 md:h-4 w-5 md:w-4" />
                         ) : (
-                          <Crown className="h-4 w-4" />
+                          <Crown className="h-5 md:h-4 w-5 md:w-4" />
                         )}
                       </Button>
-                      <DrawerDescription className="text-[.8rem]">
-                        Favoritar
-                      </DrawerDescription>
+                      <DrawerDescription>Favoritar</DrawerDescription>
                     </div>
                   </DrawerHeader>
                 </div>
@@ -286,7 +281,7 @@ export const CardPost = (props: CardProps) => {
 
                 <div className="py-5 space-y-2 mx-auto w-full max-w-sm">
                   <Button variant={"ghost"} className="justify-start w-full">
-                    <UserRoundCheck className="h-4 w-4 mr-2" />
+                    <UserRoundCheck className="h-5 md:h-4 w-5 md:w-4 mr-2" />
                     Seguir
                   </Button>
 
@@ -295,61 +290,59 @@ export const CardPost = (props: CardProps) => {
                     variant={"ghost"}
                     onClick={() => setOpen(true)}
                   >
-                    <Share className="mr-2 size-4" />
+                    <Share className="h-5 md:h-4 w-5 md:w-4 mr-2" />
                     Compartilhar
                   </Button>
 
                   <Button className="justify-start w-full" variant={"ghost"}>
-                    <CircleUser className="mr-2 size-4" />
+                    <CircleUser className="h-5 md:h-4 w-5 md:w-4 mr-2" />
                     Sobre
                   </Button>
                 </div>
 
                 <Separator />
 
-                <DrawerFooter>
-                  <div className="space-y-2 mx-auto w-full max-w-sm">
-                    {props.id !== dataUser._id ? null : (
-                      <>
-                        <Button
-                          variant={"ghost"}
-                          className="text-danger justify-start w-full"
-                        >
-                          <Pencil className="mr-2 size-4" />
-                          Editar
-                        </Button>
+                <div className="py-5 space-y-2 mx-auto w-full max-w-sm">
+                  {props.id !== dataUser._id ? null : (
+                    <>
+                      <Button
+                        variant={"ghost"}
+                        className="text-danger justify-start w-full"
+                      >
+                        <Pencil className="h-5 md:h-4 w-5 md:w-4 mr-2" />
+                        Editar
+                      </Button>
 
-                        <Button
-                          variant={"ghost"}
-                          className="text-danger justify-start w-full"
-                        >
-                          <Trash2 className="mr-2 size-4" />
-                          Excluir
-                        </Button>
-                      </>
-                    )}
+                      <Button
+                        variant={"ghost"}
+                        className="text-danger justify-start w-full"
+                      >
+                        <Trash2 className="h-5 md:h-4 w-5 md:w-4 mr-2" />
+                        Excluir
+                      </Button>
+                    </>
+                  )}
 
-                    {props.id === dataUser._id ? null : (
-                      <>
-                        <Button
-                          variant={"ghost"}
-                          className="text-danger justify-start w-full"
-                        >
-                          <Siren className="mr-2 size-4" />
-                          Reportar
-                        </Button>
+                  {props.id === dataUser._id ? null : (
+                    <>
+                      <Button
+                        variant={"ghost"}
+                        className="text-danger justify-start w-full"
+                      >
+                        <Siren className="h-5 md:h-4 w-5 md:w-4 mr-2" />
+                        Reportar
+                      </Button>
 
-                        <Button
-                          variant={"ghost"}
-                          className="text-danger justify-start w-full"
-                        >
-                          <Ban className="mr-2 size-4" />
-                          Bloquear
-                        </Button>
-                      </>
-                    )}
-                  </div>
-                </DrawerFooter>
+                      <Button
+                        variant={"ghost"}
+                        className="text-danger justify-start w-full"
+                      >
+                        <Ban className="h-5 md:h-4 w-5 md:w-4 mr-2" />
+                        Bloquear
+                      </Button>
+                    </>
+                  )}
+                </div>
               </DrawerContent>
             </Drawer>
           )}
@@ -386,8 +379,8 @@ export const CardPost = (props: CardProps) => {
             )}
 
             <div className="flex flex-row items-center h-full w-full">
-              <CardDescription className="text-foreground font-light tracking-tight text-sm">
-                <span className="font-medium">
+              <CardDescription className="text-foreground font-normal md:font-light tracking-tight text-md md:text-sm">
+                <span className="font-semibold md:font-medium">
                   {!props.isAnonymous ? userData?.nickname : "anônimo"}:{" "}
                 </span>
                 {showFullContent ? (
@@ -397,7 +390,7 @@ export const CardPost = (props: CardProps) => {
                       <div>
                         <a
                           key={props._id}
-                          className="cursor-pointer font-poppins tracking-tight font-light text-primary text-sm"
+                          className="cursor-pointer font-poppins tracking-tight font-normal md:font-light text-primary text-md md:text-sm"
                           id={props._id}
                         >
                           {props.references}
@@ -412,7 +405,7 @@ export const CardPost = (props: CardProps) => {
                 )}
                 {(props.content.length > 50 || props.references) && (
                   <span
-                    className="text-muted-foreground tracking-thight font-light cursor-pointer"
+                    className="text-muted-foreground tracking-thight font-normal md:font-light cursor-pointer"
                     onClick={toggleContent}
                   >
                     {showFullContent ? " ...ver menos" : " ...ver mais"}
@@ -422,7 +415,7 @@ export const CardPost = (props: CardProps) => {
             </div>
           </div>
 
-          <CardDescription className="cursor-pointer font-light tracking-tight text-sm">
+          <CardDescription className="cursor-pointer font-normal md:font-light tracking-tight text-md md:text-sm">
             ver todas as {likeCount} curtidas
           </CardDescription>
         </CardContent>
@@ -435,21 +428,21 @@ export const CardPost = (props: CardProps) => {
               <div className="flex flex-row space-x-2">
                 <Button variant={"outline"} size={"icon"} onClick={handleLike}>
                   {liked ? (
-                    <Heart className="text-primary fill-primary size-4" />
+                    <Heart className="text-primary fill-primary h-5 md:h-4 w-5 md:w-4" />
                   ) : (
-                    <Heart className="size-4" />
+                    <Heart className="h-5 md:h-4 w-5 md:w-4" />
                   )}
                 </Button>
                 <Button variant={"outline"} size={"icon"}>
-                  <MessageCircleHeart className="size-4" />
+                  <MessageCircleHeart className="h-5 md:h-4 w-5 md:w-4" />
                 </Button>
               </div>
 
               <div className="flex flex-row">
                 <div className="flex flex-row items-center space-x-1">
                   <div className="flex flex-row items-center space-x-1">
-                    <MessageCircleHeart className="text-primary h-4 w-4" />
-                    <CardDescription className="font-light tracking-tight text-sm">
+                    <MessageCircleHeart className="text-primary h-5 md:h-4 w-5 md:w-4" />
+                    <CardDescription className="font-normal md:font-light tracking-tight text-md md:text-sm">
                       {0} coméntarios
                     </CardDescription>
                   </div>
@@ -469,7 +462,7 @@ export const CardPost = (props: CardProps) => {
           </div>
 
           {formattedData && (
-            <CardDescription className="text-sm font-light tracking-tight">
+            <CardDescription className="text-md md:text-sm font-normal md:font-light tracking-tight">
               há {formattedData} atrás
             </CardDescription>
           )}

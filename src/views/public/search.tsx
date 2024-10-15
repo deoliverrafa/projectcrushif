@@ -136,9 +136,28 @@ const SearchLayout = () => {
             </div>
           </div>
         </CardContent>
+        {queryResponse.length > 0 && (
+          <p className="font-poppins font-medium md:font-normal tracking-wide text-md md:text-sm text-muted-foreground">
+            {queryResponse.length === 1 ? (
+              <div className="flex flex-row items-center pl-4 pb-2">
+                <p className="font-poppins tracking-widest font-medium md:font-normal tracking-wide text-md md:text-sm text-muted-foreground">
+                  Resultado:
+                </p>
+              </div>
+            ) : queryResponse.length > 1 ? (
+              <div className="flex flex-row items-center pl-4 pb-2">
+                <p className="font-poppins tracking-widest font-medium md:font-normal tracking-wide text-md md:text-sm text-muted-foreground">
+                  Resultados:
+                </p>
+              </div>
+            ) : (
+              ""
+            )}
+          </p>
+        )}
 
         {queryResponse.length > 0 || suggestedUsers.length > 0 ? (
-          <ScrollArea className="h-72 w-full rounded-md border">
+          <ScrollArea className="h-72 md:h-96 w-full rounded-md border">
             <div className="p-4">
               {queryResponse.length > 0 ? (
                 queryResponse.map((user: User) => {
@@ -148,7 +167,6 @@ const SearchLayout = () => {
 
                   return (
                     <>
-                      <p>Resultado:</p>
                       <SearchUserCard
                         avatar={user.avatar}
                         nickname={user.nickname}
@@ -163,13 +181,15 @@ const SearchLayout = () => {
                 })
               ) : noResults ? (
                 <div className="flex flex-col justify-center items-center space-y-2 w-full">
-                  <p className="font-poppins text-muted-foreground text-center w-full">
+                  <p className="font-poppins font-medium md:font-normal text-md md:text-sm text-muted-foreground text-center w-full">
                     Nenhum usuário encontrado.
                   </p>
                 </div>
               ) : (
                 <>
-                  <p>Sugestões:</p>
+                  <p className="font-poppins font-medium md:font-normal tracking-widest text-md md:text-sm text-muted-foreground">
+                    Sugestões:
+                  </p>
                   {suggestedUsers.map((user: User) => (
                     <SearchUserCard
                       avatar={user.avatar}
@@ -197,7 +217,7 @@ const SearchPage = () => {
     <>
       <NavBar user={userData} avatarPath={userData.avatar} />
 
-      <main className="flex flex-col justify-center items-center h-screen w-full">
+      <main className="flex flex-col justify-center items-center py-2 h-full w-full">
         <SearchLayout />
       </main>
 

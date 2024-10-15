@@ -36,7 +36,7 @@ const LogoLayout = () => {
   return (
     <div className="flex flex-col justify-center items-center">
       <img src={logo} className="h-32 md:h-[300px] w-32 md:w-[300px]" />
-      <h1 className="text-primary font-recursive font-semibold uppercase tracking-widest text-2xl md:text-5xl">
+      <h1 className="text-primary font-recursive font-bold md:font-semibold uppercase tracking-widest text-2xl md:text-5xl">
         CrushIF
       </h1>
     </div>
@@ -144,17 +144,17 @@ const LoginLayout = () => {
               </Button>
             </Link>
 
-            <p className="font-poppins text-wrap text-center text-sm">
+            <CardDescription className="text-center text-sm md:text-md">
               Ao entrar, você concorda com os Termos e e Política de Privacidade
               do{" "}
               <Link
                 to="/auth/terms"
-                className="text-primary font-recursive font-semibold uppercase tracking-widest"
+                className="text-primary font-recursive font-bold md:font-semibold uppercase tracking-widest"
               >
                 Crush
               </Link>
               .
-            </p>
+            </CardDescription>
           </CardFooter>
         </Card>
       </div>
@@ -171,7 +171,7 @@ const LoginLayout = () => {
           <CardContent>
             <Drawer>
               <DrawerTrigger className="w-full" asChild>
-                <Button className="w-full">Logar</Button>
+                <Button className="w-full">Entrar</Button>
               </DrawerTrigger>
 
               <DrawerContent>
@@ -243,17 +243,17 @@ const LoginLayout = () => {
               </Button>
             </Link>
 
-            <p className="font-poppins text-wrap text-center text-sm">
+            <CardDescription className="text-center text-sm md:text-md">
               Ao entrar, você concorda com os Termos e e Política de Privacidade
               do{" "}
               <Link
                 to="/auth/terms"
-                className="text-primary font-recursive font-semibold uppercase tracking-widest"
+                className="text-primary font-recursive font-bold md:font-semibold uppercase tracking-widest"
               >
                 Crush
               </Link>
               .
-            </p>
+            </CardDescription>
           </CardFooter>
         </Card>
       </div>
