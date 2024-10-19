@@ -11,17 +11,11 @@ import {
   DropdownTrigger,
 } from "./ui/dropdown.tsx";
 import { Button } from "./ui/button.tsx";
+import { Badge } from "./ui/badge.tsx"
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar.tsx";
 
 import {
-  LayoutGrid,
-  Search,
-  HeartHandshake,
-  CalendarDays,
   ArrowLeft,
-  BadgeCheck,
-  Bell,
-  ChevronDown,
   Zap,
   LogOut,
   Settings,
@@ -29,8 +23,7 @@ import {
   Heart,
   Crown,
 } from "lucide-react";
-
-import logoCrush from "../../public/images/logo/logo.png";
+import { GridSolid, SearchSolid, FireSolid, AcademicHatSolid, SendSolid, HeartCheckSolid, ChevronDown, CogFourSolid, SupportSolid } from "@mynaui/icons-react";
 
 import { getUserData } from "../utils/getUserData.tsx";
 
@@ -68,13 +61,10 @@ const Profile = ({ name, email, avatar }: profile) => {
   return (
     <Dropdown>
       <DropdownTrigger>
-        <Button variant={"outline"}>
           <Avatar className="h-8 w-8">
             <AvatarImage src={avatar} />
             <AvatarFallback>{name}</AvatarFallback>
           </Avatar>
-          <ChevronDown className="ml-2" />
-        </Button>
       </DropdownTrigger>
 
       <DropdownContent className="select-none">
@@ -97,7 +87,7 @@ const Profile = ({ name, email, avatar }: profile) => {
                   </div>
 
                   <div>
-                    <BadgeCheck className="fill-success text-background size-3.5" />
+                    <HeartCheckSolid className="fill-success text-background size-3.5" />
                   </div>
                 </div>
                 <p className="font-poppins font-medium tracking-tight text-[.7rem]">
@@ -178,7 +168,7 @@ const Navbar: React.FC<NavbarProps> = ({ className, children, ...props }) => {
   return (
     <nav
       className={cn(
-        "transition-transform duration-300 select-none bg-card border-b-2 md:border-b border-input shadow-[0_2px_4px_rgba(0,0,0,0.1)] flex flex-row justify-between items-center shadow-[0_-2px_4px_rgba(0,0,0,0.1)] sticky top-0 inset-x-0 translate-y-0 md:translate-y-0/2 px-4 md:px-2 py-2 md:py-1 w-full z-20",
+        "transition-transform duration-300 select-none bg-card shadow-[0_2px_4px_rgba(0,0,0,0.1)] flex flex-row justify-between items-center shadow-[0_-2px_4px_rgba(0,0,0,0.1)] sticky top-0 inset-x-0 translate-y-0 md:translate-y-0/2 px-4 md:px-2 py-2 md:py-1 w-full z-20",
         isVisible ? "translate-y-0" : "-translate-y-full",
         className
       )}
@@ -330,17 +320,34 @@ export const NavBar = (props: userData) => {
   return (
     <Navbar>
       <NavbarContent>
-        <NavbarBrand
-          className="text-primary font-recursive uppercase tracking-widest"
-          href="/"
-        >
-          <img
-            className="h-10 w-12 md:w-10"
-            alt="logo crush if"
-            src={logoCrush}
-          />
-          CrushIF
-        </NavbarBrand>
+        <Dropdown>
+          <DropdownTrigger>
+            <NavbarBrand className="text-primary font-cookie font-medium md:font-medium text-[2rem]">
+              <FireSolid />
+              Crushif
+              <ChevronDown className="text-muted-foreground" />
+            </NavbarBrand>
+          </DropdownTrigger>
+            
+          <DropdownContent className="select-none">
+            <DropdownLabel>Menu</DropdownLabel>
+            <DropdownSeparator />
+              
+            <Link to={"/settings"}>
+              <DropdownItem className="cursor-pointer font-poppins font-semibold">
+                <CogFourSolid className="mr-2 h-4 w-4" />
+                Configurações
+              </DropdownItem>
+            </Link>  
+              
+            <Link to={"/support"}>
+              <DropdownItem className="cursor-pointer font-poppins font-semibold">
+                <SupportSolid className="mr-2 h-4 w-4" />
+                Suporte
+              </DropdownItem>
+            </Link>
+          </DropdownContent>
+        </Dropdown>
       </NavbarContent>
 
       <NavbarContent className="hidden md:flex">
@@ -349,7 +356,7 @@ export const NavBar = (props: userData) => {
           activeClassName="text-primary"
           hoverClassName="text-primary/70"
         >
-          <LayoutGrid className="h-5 w-5" />
+          <GridSolid className="h-5 w-5" />
           Inicio
         </NavbarItem>
 
@@ -358,7 +365,7 @@ export const NavBar = (props: userData) => {
           activeClassName="text-primary"
           hoverClassName="text-primary/70"
         >
-          <Search className="h-5 w-5" />
+          <SearchSolid className="h-5 w-5" />
           Pesquisar
         </NavbarItem>
         <NavbarItem
@@ -366,7 +373,7 @@ export const NavBar = (props: userData) => {
           activeClassName="text-primary"
           hoverClassName="text-primary/70"
         >
-          <HeartHandshake className="h-5 w-5" />
+          <FireSolid className="h-5 w-5" />
           Crush
         </NavbarItem>
 
@@ -375,7 +382,7 @@ export const NavBar = (props: userData) => {
           activeClassName="text-primary"
           hoverClassName="text-primary/70"
         >
-          <CalendarDays className="h-5 w-5" />
+          <AcademicHatSolid className="h-5 w-5" />
           Evêntos
         </NavbarItem>
       </NavbarContent>
@@ -386,16 +393,16 @@ export const NavBar = (props: userData) => {
           activeClassName="text-primary"
           hoverClassName="text-primary/70"
         >
-          <Button variant={"outline"} size={"icon"}>
-            <Bell className="h-6 w-6 md:h-5 md:w-5" />
-          </Button>
+          <SendSolid className="h-6 w-6 md:h-5 md:w-5" />
         </NavbarItem>
-
-        <Profile
-          name={props.user?.nickname ? props.user.nickname : ""}
-          email={props.user?.email ? props.user.email : ""}
-          avatar={props.avatarPath ? props.avatarPath : ""}
-        />
+        
+        <NavbarItem>
+            <Profile
+              name={props.user?.nickname ? props.user.nickname : ""}
+              email={props.user?.email ? props.user.email : ""}
+              avatar={props.avatarPath ? props.avatarPath : ""}
+            />
+        </NavbarItem>
       </NavbarContent>
     </Navbar>
   );

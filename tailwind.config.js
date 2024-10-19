@@ -39,7 +39,7 @@ module.exports = {
       },
       fontFamily: {
         poppins: ["Poppins", "sans-serif"],
-        inter: ["Inter", "sans-serif"],
+        cookie: ["Cookie", "cursive"],
         recursive: ["Recursive", "sans-serif"],
       },
       borderRadius: {

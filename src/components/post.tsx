@@ -43,11 +43,7 @@ import { Label } from "../components/ui/label.tsx";
 
 import {
   BadgeCheck,
-  Heart,
-  MessageCircleHeart,
   Share,
-  Crown,
-  EllipsisVertical,
   Siren,
   Ban,
   Pencil,
@@ -57,6 +53,7 @@ import {
   CircleUser,
   UserRoundCheck,
 } from "lucide-react";
+import { DotsVertical, Heart, Bookmark, Message, ChatMessages } from "@mynaui/icons-react"; 
 
 import { getUserData } from "../utils/getUserData.tsx";
 
@@ -237,9 +234,7 @@ export const CardPost = (props: CardProps) => {
           {!props.isAnonymous && (
             <Drawer>
               <DrawerTrigger asChild>
-                <Button size={"icon"} variant={"outline"}>
-                  <EllipsisVertical className="cursor-pointer" />
-                </Button>
+                <DotsVertical className="cursor-pointer h-10 w-10" />
               </DrawerTrigger>
 
               <DrawerContent>
@@ -267,9 +262,9 @@ export const CardPost = (props: CardProps) => {
                         onClick={handleFavorite}
                       >
                         {favorited ? (
-                          <Crown className="text-warning fill-warning h-5 md:h-4 w-5 md:w-4" />
+                          <Bookmark className="text-warning fill-warning h-5 md:h-4 w-5 md:w-4" />
                         ) : (
-                          <Crown className="h-5 md:h-4 w-5 md:w-4" />
+                          <Bookmark className="h-5 md:h-4 w-5 md:w-4" />
                         )}
                       </Button>
                       <DrawerDescription>Favoritar</DrawerDescription>
@@ -374,7 +369,7 @@ export const CardPost = (props: CardProps) => {
 
             {showFavorited && (
               <div className="absolute inset-0 flex items-center justify-center">
-                <Crown className="animate-ping text-secondary fill-secondary size-20" />
+                <Bookmark className="animate-ping text-secondary fill-secondary size-20" />
               </div>
             )}
 
@@ -433,15 +428,16 @@ export const CardPost = (props: CardProps) => {
                     <Heart className="h-5 md:h-4 w-5 md:w-4" />
                   )}
                 </Button>
+                
                 <Button variant={"outline"} size={"icon"}>
-                  <MessageCircleHeart className="h-5 md:h-4 w-5 md:w-4" />
+                  <Message className="h-5 md:h-4 w-5 md:w-4" />
                 </Button>
               </div>
 
               <div className="flex flex-row">
                 <div className="flex flex-row items-center space-x-1">
                   <div className="flex flex-row items-center space-x-1">
-                    <MessageCircleHeart className="text-primary h-5 md:h-4 w-5 md:w-4" />
+                    <ChatMessages className="h-5 md:h-4 w-5 md:w-4" />
                     <CardDescription className="font-normal md:font-light tracking-tight text-md md:text-sm">
                       {0} coméntarios
                     </CardDescription>
