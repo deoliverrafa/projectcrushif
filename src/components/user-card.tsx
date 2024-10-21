@@ -6,11 +6,7 @@ import { Button } from "./ui/button.js";
 import { Card, CardTitle } from "./ui/card.js";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar.js";
 
-import { 
-  UserCheckSolid,
-  UserPlusSolid,
-  HeartWaves
-} from "@mynaui/icons-react";
+import { UserCheckSolid, UserPlusSolid, HeartWaves } from "@mynaui/icons-react";
 
 interface SearchUserCard {
   avatar: string;

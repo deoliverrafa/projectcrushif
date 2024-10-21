@@ -2,7 +2,12 @@ import * as React from "react";
 import { cn } from "../lib/utils";
 import { NavLink } from "react-router-dom";
 
-import { GridSolid, SearchSolid, FireSolid, AcademicHatSolid } from "@mynaui/icons-react";
+import {
+  GridSolid,
+  SearchSolid,
+  FireSolid,
+  AcademicHatSolid,
+} from "@mynaui/icons-react";
 
 interface BottombarProps extends React.HTMLAttributes<HTMLDivElement> {
   className?: string;

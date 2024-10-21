@@ -28,7 +28,7 @@ import {
   DrawerTrigger,
   DrawerDescription,
   DrawerHeader,
-  DrawerFooter
+  DrawerFooter,
 } from "./ui/drawer.tsx";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar.tsx";
 import { Separator } from "./ui/separator.tsx";
@@ -42,16 +42,16 @@ import {
 } from "../components/ui/dialog.tsx";
 import { Label } from "../components/ui/label.tsx";
 
-import { 
+import {
   MenuSolid,
-  HeartBrokenSolid, 
-  HeartSolid, 
+  HeartBrokenSolid,
+  HeartSolid,
   BookmarkSolid,
   BookmarkCheckSolid,
-  MessageSolid, 
+  MessageSolid,
   ChatMessagesSolid,
   UserPlusSolid,
-  ShareSolid, 
+  ShareSolid,
   UserCircleSolid,
   EditOneSolid,
   TrashOneSolid,
@@ -60,10 +60,9 @@ import {
   CopySolid,
   CheckSquareOneSolid,
   HeartWaves,
-  SendSolid,
   FatCornerUpRightSolid,
-  At
-} from "@mynaui/icons-react"; 
+  At,
+} from "@mynaui/icons-react";
 
 import { getUserData } from "../utils/getUserData.tsx";
 
@@ -259,9 +258,9 @@ export const CardPost = (props: CardProps) => {
                         onClick={handleLike}
                       >
                         {liked ? (
-                      <HeartSolid className="text-primary h-5 md:h-4 w-5 md:w-4" />
+                          <HeartSolid className="text-primary h-5 md:h-4 w-5 md:w-4" />
                         ) : (
-                        <HeartBrokenSolid className="h-5 md:h-4 w-5 md:w-4" />
+                          <HeartBrokenSolid className="h-5 md:h-4 w-5 md:w-4" />
                         )}
                       </Button>
                       <DrawerDescription>Curtir</DrawerDescription>
@@ -440,39 +439,49 @@ export const CardPost = (props: CardProps) => {
                     <HeartBrokenSolid className="h-5 md:h-4 w-5 md:w-4" />
                   )}
                 </Button>
-                
+
                 <Drawer>
                   <DrawerTrigger asChild>
                     <Button variant={"outline"} size={"icon"}>
                       <MessageSolid className="h-5 md:h-4 w-5 md:w-4" />
                     </Button>
                   </DrawerTrigger>
-                  
+
                   <DrawerContent>
                     <DrawerHeader>
                       <div className="flex items-start space-x-2">
                         <Avatar>
-                            <AvatarFallback>{dataUser.nickname}</AvatarFallback>
+                          <AvatarFallback>{dataUser.nickname}</AvatarFallback>
 
                           <AvatarImage src={dataUser.avatar} />
                         </Avatar>
-                        
+
                         <div className="rounded-lg bg-card border border-border p-4 w-auto max-w-[75%] shadow-sm">
-                        <div className="flex flex-row justify-center items-center space-x-1">
-                          <div className="flex flex-row items-center"><At  className="w-3 h-3"/><p className="text-muted-foreground font-poppins font-semibold md:font-medium text-xs tracking-tight">{dataUser.nickname}</p></div>
-                          
-                    <HeartWaves className="text-background fill-success h-4 w-4" />
-                    </div>
-          <div className="flex flex-row items-center">
-            <p className="font-poppins font-medium md:font-normal text-xs">Mensagem de teste que nao vale nada, apenas para testar a responsabilidade do site.</p>
-          </div>
-          <p className="font-poppins text-muted-foreground font-normal md:font-light tracking-tight text-xs">há 4 dias atrás</p>
-        </div>
-                    </div>
-                  </DrawerHeader>
-                  
-                  <Separator />
-                  
+                          <div className="flex flex-row justify-center items-center space-x-1">
+                            <div className="flex flex-row items-center">
+                              <At className="w-3 h-3" />
+                              <p className="text-muted-foreground font-poppins font-semibold md:font-medium text-xs tracking-tight">
+                                {dataUser.nickname}
+                              </p>
+                            </div>
+
+                            <HeartWaves className="text-background fill-success h-4 w-4" />
+                          </div>
+                          <div className="flex flex-row items-center">
+                            <p className="font-poppins font-medium md:font-normal text-xs">
+                              Mensagem de teste que nao vale nada, apenas para
+                              testar a responsabilidade do site.
+                            </p>
+                          </div>
+                          <p className="font-poppins text-muted-foreground font-normal md:font-light tracking-tight text-xs">
+                            há 4 dias atrás
+                          </p>
+                        </div>
+                      </div>
+                    </DrawerHeader>
+
+                    <Separator />
+
                     <DrawerFooter>
                       <div className="flex flex-row justify-between items-center gap-1 w-full">
                         <Avatar>
@@ -481,8 +490,11 @@ export const CardPost = (props: CardProps) => {
                           <AvatarImage src={dataUser.avatar} />
                         </Avatar>
 
-                        <Input type="text" placeholder="Adicione um coméntario" />
-      
+                        <Input
+                          type="text"
+                          placeholder="Adicione um coméntario"
+                        />
+
                         <Button variant={"outline"} size={"icon"}>
                           <FatCornerUpRightSolid className="h-5 w-5" />
                         </Button>
@@ -513,7 +525,7 @@ export const CardPost = (props: CardProps) => {
             </Avatar>
 
             <Input type="text" placeholder="Adicione um coméntario" />
-            
+
             <Button variant={"outline"} size={"icon"}>
               <FatCornerUpRightSolid className="h-5 w-5" />
             </Button>
