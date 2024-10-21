@@ -14,7 +14,7 @@ const buttonVariants = cva(
         secondary:
           "bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80 font-poppins font-semibold uppercase tracking-wider",
         outline:
-          "border-2 md:border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground font-poppins font-semibold uppercase tracking-wider",
+          "border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground font-poppins font-semibold uppercase tracking-wider",
         success:
           "bg-success text-success-foreground shadow-sm hover:bg-success/90 font-poppins font-semibold uppercase tracking-wider",
         warning:

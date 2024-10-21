@@ -6,7 +6,11 @@ import { Button } from "./ui/button.js";
 import { Card, CardTitle } from "./ui/card.js";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar.js";
 
-import { BadgeCheck, UserRoundPlus, UserRoundCheck } from "lucide-react";
+import { 
+  UserCheckSolid,
+  UserPlusSolid,
+  HeartWaves
+} from "@mynaui/icons-react";
 
 interface SearchUserCard {
   avatar: string;
@@ -59,7 +63,7 @@ export default function SearchUserCard(props: SearchUserCard) {
                 </CardTitle>
 
                 <div>
-                  <BadgeCheck
+                  <HeartWaves
                     className={`${
                       props.type === "Plus"
                         ? "fill-info"
@@ -81,11 +85,11 @@ export default function SearchUserCard(props: SearchUserCard) {
           <form action="" method="put" onSubmit={FollowUser}>
             <Button>
               {props.following ? (
-                <UserRoundCheck className="h-5 w-5 md:h-4 md:w-4 mr-2" />
+                <UserCheckSolid className="h-5 w-5 md:h-4 md:w-4 mr-2" />
               ) : followedUser ? (
-                <UserRoundCheck className="h-5 w-5 md:h-4 md:w-4 mr-2" />
+                <UserCheckSolid className="h-5 w-5 md:h-4 md:w-4 mr-2" />
               ) : (
-                <UserRoundPlus className="h-5 w-5 md:h-4 md:w-4 mr-2" />
+                <UserPlusSolid className="h-5 w-5 md:h-4 md:w-4 mr-2" />
               )}
 
               {props.following

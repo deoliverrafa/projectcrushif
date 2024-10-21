@@ -1,6 +1,11 @@
 import * as React from "react";
 import { cn } from "./../../lib/utils";
-import { EyeOff, Eye, X } from "lucide-react";
+
+import { 
+  EyeSlashSolid,
+  EyeSolid,
+  XCircleSolid
+} from "@mynaui/icons-react";
 
 export interface InputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {}
@@ -109,7 +114,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
                 }
               }}
               className={cn(
-                "flex h-12 md:h-9 w-full rounded-md border-2 md:border border-input bg-transparent font-poppins font-semibold md:font-medium px-3 py-1 text-md md:text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50",
+                "flex h-10 md:h-9 w-full rounded-md border border-input bg-transparent font-poppins font-medium md:font-normal px-3 py-1 text-md md:text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50",
                 className
               )}
               ref={ref}
@@ -125,20 +130,20 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             className="absolute inset-y-0 right-0 px-2 text-sm text-muted-foreground"
           >
             {inputType === "password" ? (
-              <Eye className="h-5 w-5" />
+              <EyeSolid className="h-5 w-5" />
             ) : (
-              <EyeOff className="h-5 w-5" />
+              <EyeSlashSolid className="h-5 w-5" />
             )}
           </button>
         )}
 
-        {inputValue && type !== "file" && (
+        {inputValue && type !== "file" && type !== "password" && (
           <button
             type="button"
             onClick={clearInput}
             className="absolute inset-y-0 right-0 px-2 text-sm text-muted-foreground"
           >
-            <X className="h-5 w-5" />
+            <XCircleSolid className="h-5 w-5" />
           </button>
         )}
       </div>
