@@ -39,8 +39,8 @@ const SearchLayout = () => {
 
   const [queryResponse, setQueryResponse] = useState([]);
 
+  
   const fetchData = useCallback((nickname: string) => {
-    console.log("Fiz fetch api com nickname: ", nickname);
     axios
       .post(
         `${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_SEARCH_PAGE_USER}`,
@@ -62,6 +62,7 @@ const SearchLayout = () => {
   const debounceFetchData = useCallback(debounce(fetchData, 1000), [fetchData]);
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+
     const { value } = e.target;
     setFormData((prevFormData) => ({
       ...prevFormData,

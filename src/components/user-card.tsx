@@ -27,12 +27,10 @@ export default function SearchUserCard(props: SearchUserCard) {
   const [followedUser, setFollowedUser] = React.useState(false);
 
   const FollowUser = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
+    e.preventDefault()
     axios
       .put(
-        `${import.meta.env.VITE_API_BASE_URL}${
-          import.meta.env.VITE_FOLLOW_USER
+        `${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_FOLLOW_USER
         }`,
         formData
       )
@@ -69,35 +67,27 @@ export default function SearchUserCard(props: SearchUserCard) {
 
                 <div>
                   <BadgeCheck
-                    className={`${
-                      props.type === "Plus"
+                    className={`${props.type === "Plus"
                         ? "text-info"
                         : props.type === "Admin"
-                        ? "text-danger"
-                        : "text-success"
-                    } size-3.5`}
+                          ? "text-danger"
+                          : "text-success"
+                      } size-3.5`}
                   />
                 </div>
               </div>
             </div>
           </Link>
-          <form action="" method="put" onSubmit={FollowUser}>
-            <Button>
-              {props.following ? (
-                <UserRoundCheck className="size-4 mr-2" />
-              ) : followedUser ? (
+          <form onSubmit={FollowUser}>
+            <Button type="submit">
+              {props.following || followedUser ? (
                 <UserRoundCheck className="size-4 mr-2" />
               ) : (
                 <UserRoundPlus className="size-4 mr-2" />
               )}
-
-              {props.following
-                ? "Seguindo"
-                : followedUser
-                ? "Seguindo"
-                : "Seguir"}
+              {props.following || followedUser ? "Seguindo" : "Seguir"}
             </Button>
-          </form>
+          </form> 
         </div>
       </Card>
     </>
