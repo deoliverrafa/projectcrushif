@@ -53,7 +53,7 @@ interface profile {
 interface User {
   _id: string;
   nickname: string;
-  name: string;
+  name?: string;
   email: string;
   campus: string;
   className?: string;
