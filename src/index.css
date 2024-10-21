@@ -58,6 +58,87 @@
     --ring: 335 78% 42%;
     --radius: 1rem;
   }
+
+  .black {
+    --background: 0 0% 1%;
+    --foreground: 0 0% 95%;
+    --card: 0 0% 0%;
+    --card-foreground: 215 18% 72%;
+    --popover: 0 0% 0%;
+    --popover-foreground: 215 18% 72%;
+    --primary: 336 74% 35%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 217 33% 17%;
+    --secondary-foreground: 0 0% 100%;
+    --primary: 335 78% 42%;
+    --success-foreground: 0 0% 100%;
+    --warning: 35 92% 33%;
+    --warning-foreground: 0 0% 100%;
+    --danger: 0 100% 30%;
+    --danger-foreground: 0 0% 100%;
+    --muted: 0 0% 0%;
+    --muted-foreground: 215 18% 72%;
+    --accent: 0 0% 0%;
+    --accent-foreground: 215 18% 72%;
+    --border: 216 24% 17%;
+    --input: 216 24% 17%;
+    --ring: 336 74% 35%;
+    --radius: 1rem;
+  }
+
+  .modern-light {
+    --background: 333 100% 95%;
+    --foreground: 333 5% 0%;
+    --card: 333 50% 90%;
+    --card-foreground: 333 5% 10%;
+    --popover: 333 50% 90%;
+    --popover-foreground: 333 5% 10%;
+    --primary: 333 71% 51%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 215 19% 35%;
+    --secondary-foreground: 0 0% 100%;
+    --success: 142 76% 36%;
+    --success-foreground: 0 0% 100%;
+    --warning: 41 96% 40%;
+    --warning-foreground: 0 0% 100%;
+    --danger: 0 72% 51%;
+    --danger-foreground: 0 0% 100%;
+    --muted: 295 30% 85%;
+    --muted-foreground: 333 5% 35%;
+    --accent: 295 30% 80%;
+    --accent-foreground: 333 5% 10%;
+    --border: 333 30% 50%;
+    --input: 333 30% 18%;
+    --ring: 333 71% 51%;
+    --radius: 1rem;
+  }
+
+  .modern-dark {
+    --background: 335 50% 5%;
+    --foreground: 335 5% 90%;
+    --card: 335 50% 0%;
+    --card-foreground: 335 5% 90%;
+    --popover: 335 50% 0%;
+    --popover-foreground: 335 5% 90%;
+    --primary: 335 78% 42%;
+    --primary-foreground: 335 5% 90%;
+    --secondary: 217 33% 17%;
+    --secondary-foreground: 335 5% 90%;
+    --success: 142 100% 30%;
+    --success-foreground: 335 5% 90%;
+    --warning: 35 92% 33%;
+    --warning-foreground: 335 5% 90%;
+    --danger: 0 100% 30%;
+    --danger-foreground: 335 5% 90%;
+    --muted: 297 30% 15%;
+    --muted-foreground: 335 5% 60%;
+    --accent: 297 30% 15%;
+    --accent-foreground: 335 5% 90%;
+    --border: 335 30% 18%;
+    --input: 335 30% 18%;
+    --ring: 335 78% 42%;
+    --radius: 1rem;
+  }
 }
 
 @layer base {

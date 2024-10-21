@@ -4,10 +4,9 @@ import { Link } from "react-router-dom";
 
 import { Button } from "./ui/button.js";
 import { Card, CardTitle } from "./ui/card.js";
-
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar.js";
 
-import { BadgeCheck, UserRoundPlus, UserRoundCheck } from "lucide-react";
+import { UserCheckSolid, UserPlusSolid, HeartWaves } from "@mynaui/icons-react";
 
 interface SearchUserCard {
   avatar: string;
@@ -47,43 +46,44 @@ export default function SearchUserCard(props: SearchUserCard) {
       <Card className="my-2 w-full">
         <div className="flex flex-row justify-between items-center p-4">
           <Link to={`/profile/${props._id}`} className="flex space-x-2 h-full">
-            <div className="flex relative">
-              <div className="flex absolute right-0 bottom-0 h-2.5 w-2.5 z-10">
-                <span className="animate-ping bg-success rounded-full opacity-75 inline-flex absolute h-full w-full"></span>
-                <span className="bg-success rounded-full inline-flex relative h-2.5 w-2.5"></span>
-              </div>
-              <Avatar>
-                <AvatarFallback>{props?.nickname}</AvatarFallback>
-                <AvatarImage src={props?.avatar} />
-              </Avatar>
-            </div>
-            <div className="flex flex-col items-start justify-center space-y-1">
+            <Avatar>
+              <AvatarFallback>{props?.nickname}</AvatarFallback>
+              <AvatarImage src={props?.avatar} />
+            </Avatar>
+            <div className="flex flex-col items-start justify-center">
               <div className="flex flex-row items-center space-x-1">
-                <div>
-                  <CardTitle className="font-medium tracking-tight">
-                    {props.nickname ? `${props.nickname}` : "indisponível"}
-                  </CardTitle>
-                </div>
+                <CardTitle className="font-semibold md:font-medium text-md md:text-sm tracking-tight">
+                  {props.nickname ? `${props.nickname}` : "indisponível"}
+                </CardTitle>
 
                 <div>
-                  <BadgeCheck
-                    className={`${props.type === "Plus"
-                        ? "text-info"
+                  <HeartWaves
+                    className={`${
+                      props.type === "Plus"
+                        ? "fill-info"
                         : props.type === "Admin"
-                          ? "text-danger"
-                          : "text-success"
-                      } size-3.5`}
+                        ? "fill-danger"
+                        : props.type === "verified"
+                        ? "fill-success"
+                        : "hidden"
+                    } text-background h-5 w-5 md:h-4 md:w-4`}
                   />
                 </div>
               </div>
+
+              <CardTitle className="font-normal md:font-light text-sm md:text-xs tracking-tight">
+                {props.userName ? `${props.userName}` : "indisponível"}
+              </CardTitle>
             </div>
           </Link>
-          <form onSubmit={FollowUser}>
-            <Button type="submit">
-              {props.following || followedUser ? (
-                <UserRoundCheck className="size-4 mr-2" />
+          <form action="" method="put" onSubmit={FollowUser}>
+            <Button>
+              {props.following ? (
+                <UserCheckSolid className="h-5 w-5 md:h-4 md:w-4 mr-2" />
+              ) : followedUser ? (
+                <UserCheckSolid className="h-5 w-5 md:h-4 md:w-4 mr-2" />
               ) : (
-                <UserRoundPlus className="size-4 mr-2" />
+                <UserPlusSolid className="h-5 w-5 md:h-4 md:w-4 mr-2" />
               )}
               {props.following || followedUser ? "Seguindo" : "Seguir"}
             </Button>

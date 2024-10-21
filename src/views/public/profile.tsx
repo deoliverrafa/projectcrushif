@@ -6,7 +6,6 @@ import { NavBarReturn } from "../../components/navbar.tsx";
 
 import LoadingPage from "../../views/public/loading.tsx";
 
-import { ShareComponent } from "../../components/share.component.tsx";
 import {
   Card,
   CardContent,
@@ -23,6 +22,23 @@ import {
   AvatarImage,
 } from "../../components/ui/avatar.tsx";
 import { Separator } from "../../components/ui/separator.tsx";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "../../components/ui/dialog.tsx";
+import { Label } from "../../components/ui/label.tsx";
+import { Input } from "../../components/ui/input.tsx";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+  TooltipProvider,
+} from "../../components/ui/tooltip.tsx";
 
 import { getUserData } from "../../utils/getUserData.tsx";
 import { getUserDataById } from "../../utils/getUserDataById.tsx";
@@ -34,6 +50,9 @@ import {
   UserRoundPlus,
   Share,
   EllipsisVertical,
+  Copy,
+  Check,
+  AtSign,
 } from "lucide-react";
 
 interface User {
@@ -56,15 +75,27 @@ const ProfileLayout = () => {
   const [age, setAge] = React.useState<number | null>(null);
   const { id } = useParams<string>();
 
-  const [shareIsOpen, setShareIsOpen] = React.useState(false);
+  const inputRef = React.useRef<HTMLInputElement>(null);
 
-  const handleOpenShare = () => {
-    setShareIsOpen(true);
+  const [copied, setCopied] = React.useState(false);
+
+  const handleCopy = async () => {
+    if (inputRef.current) {
+      try {
+        await navigator.clipboard.writeText(inputRef.current.value);
+        setCopied(true);
+      } catch (error) {
+        console.error("Erro ao copiar para área de transferência: ", error);
+      }
+    }
   };
 
-  const handleCloseShare = () => {
-    setShareIsOpen(false);
-  };
+  React.useEffect(() => {
+    if (copied) {
+      const timer = setTimeout(() => setCopied(false), 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [copied]);
 
   const calculateAge = (birthday: string) => {
     const today = new Date();
@@ -121,16 +152,10 @@ const ProfileLayout = () => {
               variant={"outline"}
               className="cursor-pointer flex flex-col items-center"
             >
-              <p className="font-medium text-sm">0</p>
-              <p className="tracking-tight font-light text-sm truncate">Posts</p>
-            </Badge>
-
-            <Badge
-              variant={"outline"}
-              className="cursor-pointer flex flex-col items-center"
-            >
-              <p className="font-medium text-sm">{viewingUser.Nfollowers}</p>
-              <p className="tracking-tight font-light text-sm">Seguindo</p>
+              <p className="text-foreground font-medium text-sm">
+                {viewingUser.Nfollowers}
+              </p>
+              <p className="tracking-tight font-light text-sm">Seguidores</p>
             </Badge>
 
             <Badge
@@ -150,34 +175,36 @@ const ProfileLayout = () => {
         <Separator className="mb-5" />
 
         <CardContent className="space-y-2">
-          <CardTitle className="tracking-tight font-light text-sm">
+          <CardTitle className="capitalie font-medium text-sm">
             {viewingUser.userName ? viewingUser.userName : "Nome indisponível"}
           </CardTitle>
 
-          <Badge variant={"secondary"}>
-            {viewingUser.nickname ? `@${viewingUser.nickname}` : "indisponível"}
-
+          <Badge variant={"outline"} className="font-light">
+            <AtSign className="h-3 w-3" />{" "}
+            {viewingUser.nickname ? `${viewingUser.nickname}` : "indisponível"}
             <BadgeCheck
               className={`${
                 viewingUser.type === "Plus"
-                  ? "text-info"
+                  ? "fill-info"
                   : viewingUser.type === "Admin"
-                  ? "text-danger"
-                  : "text-success"
-              } ml-1 size-3`}
+                  ? "fill-danger"
+                  : viewingUser.type === "verified"
+                  ? "fill-success"
+                  : "hidden"
+              } text-background ml-1 size-3.5`}
             />
           </Badge>
 
           <div className="space-y-0.5">
-            <CardDescription className="tracking-tight font-light text-sm">
+            <CardDescription className="uppercase tracking-tight font-medium text-[.8rem]">
               {age ? `Idade: ${age} anos` : "Idade: indisponível"}
             </CardDescription>
-            <CardDescription className="tracking-tight font-light text-sm">
+            <CardDescription className="uppercase tracking-tight font-medium text-[.8rem]">
               {viewingUser.curso
                 ? `Curso: ${viewingUser.curso}`
                 : "Curso: indisponível"}
             </CardDescription>
-            <CardDescription className="tracking-tight font-light text-sm">
+            <CardDescription className="uppercase tracking-tight font-medium text-[.8rem]">
               {viewingUser.campus
                 ? `Campus: ${viewingUser.campus}`
                 : "Campus: indisponível"}
@@ -190,10 +217,7 @@ const ProfileLayout = () => {
                 className="flex justify-center items-center w-full"
                 to="/profile/edit"
               >
-                <Button
-                  variant={"secondary"}
-                  className="font-poppins font-semibold uppercase w-full"
-                >
+                <Button className="w-full">
                   <PencilRuler className="mr-2 size-4" />
                   Editar
                 </Button>
@@ -201,22 +225,80 @@ const ProfileLayout = () => {
             )}
 
             {!isOwnProfile && (
-              <Button
-                variant={"secondary"}
-                className="font-poppins font-semibold uppercase w-full"
-              >
+              <Button className="w-full">
                 <UserRoundPlus className="mr-2 size-4" />
                 Seguir
               </Button>
             )}
 
-            <Button
-              variant={"secondary"}
-              size={"icon"}
-              onClick={handleOpenShare}
-            >
-              <Share className="size-4" />
-            </Button>
+            <Dialog>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger>
+                    <DialogTrigger asChild>
+                      <Button size={"icon"}>
+                        <Share className="h-4 w-4" />
+                      </Button>
+                    </DialogTrigger>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Compartilhar</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+
+              <DialogContent className="sm:max-w-md">
+                <DialogHeader>
+                  <DialogTitle>Compartilhar link</DialogTitle>
+                  <DialogDescription>
+                    Qualquer pessoa com acesso ao link poderar acessar ao
+                    conteúdo.
+                  </DialogDescription>
+                </DialogHeader>
+
+                <div className="flex items-center space-x-2">
+                  <div className="grid flex-1 gap-2">
+                    <Label htmlFor="link" className="sr-only">
+                      Link
+                    </Label>
+                    <Input
+                      id="link"
+                      ref={inputRef}
+                      value={`https://crushif.vercel.app/profile/${viewingUser._id}`}
+                      readOnly
+                    />
+                  </div>
+
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger>
+                        <Button
+                          type="submit"
+                          size="icon"
+                          variant={"outline"}
+                          onClick={handleCopy}
+                        >
+                          <span className="sr-only">Copiar</span>
+                          <Copy className="h-4 w-4" />
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Copiar</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                </div>
+
+                {copied && (
+                  <DialogFooter className="sm:justify-start">
+                    <DialogDescription className="text-success flex flex-row items-center gap-2">
+                      <Check className="h-4 w-4" />
+                      copiado com sucesso!
+                    </DialogDescription>
+                  </DialogFooter>
+                )}
+              </DialogContent>
+            </Dialog>
           </div>
         </CardContent>
 
@@ -224,20 +306,13 @@ const ProfileLayout = () => {
 
         <CardFooter className="space-y-2">
           <div className="flex flex-col justify-center items-center space-y-2 w-full">
-            <SearchX className="text-slate-500 dark:text-slate-400 size-14" />
-            <CardDescription className="font-inter font-bold text-center w-full">
+            <SearchX className="text-muted-foreground size-14" />
+            <CardDescription className="text-muted-foreground text-center w-full">
               Usuário não possui nenhuma publicação.
             </CardDescription>
           </div>
         </CardFooter>
       </Card>
-
-      {shareIsOpen && (
-        <ShareComponent
-          link={`https://crushif.vercel.app/profile/${viewingUser._id}`}
-          onClose={handleCloseShare}
-        />
-      )}
     </>
   );
 };
@@ -247,7 +322,7 @@ const ProfilePage = () => {
     <>
       <NavBarReturn title={"Perfil"} />
 
-      <main className="flex flex-col justify-center items-center h-screen w-full">
+      <main className="flex flex-col justify-center items-center h-full w-full">
         <ProfileLayout />
       </main>
     </>

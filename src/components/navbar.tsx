@@ -3,46 +3,57 @@ import { cn } from "../lib/utils.ts";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 
 import {
+  Sheet,
+  SheetTrigger,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetDescription,
+} from "./ui/sheet.tsx";
+import {
   Dropdown,
   DropdownContent,
   DropdownItem,
   DropdownLabel,
-  DropdownSeparator,
   DropdownTrigger,
 } from "./ui/dropdown.tsx";
 import { Button } from "./ui/button.tsx";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar.tsx";
+import { Card, CardTitle } from "./ui/card.tsx";
+import { Separator } from "./ui/separator.tsx";
 
 import {
-  LayoutGrid,
-  Search,
-  HeartHandshake,
-  CalendarDays,
-  ArrowLeft,
-  BadgeCheck,
-  Bell,
+  GridSolid,
+  SearchSolid,
+  FireSolid,
+  AcademicHatSolid,
+  SendSolid,
   ChevronDown,
-  Zap,
-  LogOut,
-  Settings,
-  BadgeHelp,
-  Heart,
-  Crown,
-} from "lucide-react";
-
-import logoCrush from "../../public/images/logo/logo.png";
+  CogFourSolid,
+  QuestionCircleSolid,
+  HeartWavesSolid,
+  ChevronRight,
+  HeartSolid,
+  BookmarkSolid,
+  NotificationSolid,
+  LogoutSolid,
+  EditOneSolid,
+  LightningSolid,
+  ArrowLeftSolid
+} from "@mynaui/icons-react";
 
 import { getUserData } from "../utils/getUserData.tsx";
 
 interface profile {
+  nickname: string;
   name: string;
-  email: string;
   avatar: string;
 }
 
 interface User {
   _id: string;
   nickname: string;
+  name?: string;
   email: string;
   campus: string;
   className?: string;
@@ -58,7 +69,7 @@ interface NavbarProps extends React.HTMLAttributes<HTMLElement> {
   className?: string;
 }
 
-const Profile = ({ name, email, avatar }: profile) => {
+const Profile = ({ nickname, name, avatar }: profile) => {
   const userData = getUserData();
 
   function logOutHandle() {
@@ -66,96 +77,156 @@ const Profile = ({ name, email, avatar }: profile) => {
   }
 
   return (
-    <Dropdown>
-      <DropdownTrigger>
-        <Button variant={"outline"}>
-          <Avatar className="h-8 w-8">
-            <AvatarImage src={avatar} />
-            <AvatarFallback>{name}</AvatarFallback>
-          </Avatar>
-          <ChevronDown className="ml-2" />
-        </Button>
-      </DropdownTrigger>
+    <Sheet>
+      <SheetTrigger asChild>
+        <Avatar className="h-8 w-8">
+          <AvatarImage src={avatar} />
+          <AvatarFallback>{name}</AvatarFallback>
+        </Avatar>
+      </SheetTrigger>
 
-      <DropdownContent className="select-none">
-        <DropdownLabel>Conta</DropdownLabel>
-        <DropdownSeparator />
+      <SheetContent className="select-none p-0">
+        <SheetHeader className="p-4">
+          <SheetTitle className="text-center">Central de Contas</SheetTitle>
 
-        <Link to={`/profile/${userData._id}`}>
-          <DropdownItem className="cursor-pointer">
-            <div className="flex flex-row items-center space-x-2">
-              <div className="flex relative">
-                <div className="flex absolute right-0 bottom-0 h-2 w-2 z-10">
-                  <span className="animate-ping bg-success rounded-full opacity-75 inline-flex absolute h-full w-full"></span>
-                  <span className="bg-success rounded-full inline-flex relative h-2 w-2"></span>
-                </div>
-                <Avatar className="h-8 w-8">
+          <SheetDescription className="text-center">
+            Gerencie suas experiências com o Central de Contas do{" "}
+            <span className="font-cookie text-primary text-lg">Crushif</span>{" "}
+          </SheetDescription>
+        </SheetHeader>
+
+        <div className="grid gap-4 p-2">
+          <Card className="w-full">
+            <div className="flex flex-row justify-between items-center p-4">
+              <Link
+                to={`/profile/${userData._id}`}
+                className="flex space-x-2 h-full"
+              >
+                <Avatar>
+                  <AvatarFallback>{nickname}</AvatarFallback>
                   <AvatarImage src={avatar} />
-                  <AvatarFallback>{name}</AvatarFallback>
                 </Avatar>
-              </div>
-              <div className="flex flex-col">
-                <div className="flex flex-row items-center space-x-1">
-                  <div>
-                    <p className="font-poppins font-semibold">{name}</p>
+
+                <div className="flex flex-col items-start justify-center">
+                  <div className="flex flex-row items-center space-x-1">
+                    <CardTitle className="font-semibold md:font-medium text-md md:text-sm tracking-tight">
+                      {nickname ? `${nickname}` : "indisponível"}
+                    </CardTitle>
+
+                    <div>
+                      <HeartWavesSolid className="text-success h-5 w-5 md:h-4 md:w-4" />
+                    </div>
                   </div>
 
-                  <div>
-                    <BadgeCheck className="text-success size-3.5" />
-                  </div>
+                  <CardTitle className="font-normal md:font-light text-sm md:text-xs tracking-tight text-wrap">
+                    {name ? `${name}` : "indisponível"}
+                  </CardTitle>
                 </div>
-                <p className="font-poppins text-tiny font-light tracking-light">
-                  {email}
+              </Link>
+
+              <Link to={`/profile/${userData._id}`}>
+                <ChevronRight />
+              </Link>
+            </div>
+          </Card>
+
+          <Separator />
+
+          <Card className="flex flex-col p-2 space-y-2 w-full">
+            <SheetDescription className="font-semibold md:font-medium">
+              Experiência do usuário
+            </SheetDescription>
+
+            <Link
+              to=""
+              className="flex flex-row justify-between items-center p-3"
+            >
+              <div className="flex flex-row items-center gap-2">
+                <NotificationSolid />
+                <p className="font-poppins font-semibold md:font-medium text-md md:text-sm tracking-tight">
+                  Notificações
                 </p>
               </div>
-            </div>
-          </DropdownItem>
-        </Link>
+              <ChevronRight />
+            </Link>
 
-        <DropdownSeparator />
+            <Link
+              to=""
+              className="flex flex-row justify-between items-center p-3"
+            >
+              <div className="flex flex-row items-center gap-2">
+                <LightningSolid />
+                <p className="font-poppins font-semibold md:font-medium text-md md:text-sm tracking-tight">
+                  Upgrade
+                </p>
+              </div>
+              <ChevronRight />
+            </Link>
 
-        <Link to={""}>
-          <DropdownItem className="cursor-pointer font-poppins font-semibold">
-            <Heart className="mr-2 size-4" />
-            Curtidas
-          </DropdownItem>
-        </Link>
-        <Link to={""}>
-          <DropdownItem className="cursor-pointer font-poppins font-semibold">
-            <Crown className="mr-2 size-4" />
-            Favoritos
-          </DropdownItem>
-        </Link>
-        <Link to={""}>
-          <DropdownItem className="cursor-pointer font-poppins font-semibold">
-            <Zap className="mr-2 size-4" />
-            Upgrade
-          </DropdownItem>
-        </Link>
-        <Link to={"/settings"}>
-          <DropdownItem className="cursor-pointer font-poppins font-semibold">
-            <Settings className="mr-2 size-4" />
-            Configurações
-          </DropdownItem>
-        </Link>
-        <Link to={"/support"}>
-          <DropdownItem className="cursor-pointer font-poppins font-semibold">
-            <BadgeHelp className="mr-2 size-4" />
-            Suporte
-          </DropdownItem>
-        </Link>
-        <DropdownSeparator />
-        <Link to={"/auth/login"}>
-          <DropdownItem
-            className="cursor-pointer text-danger font-poppins font-semibold"
-            onClick={logOutHandle}
-          >
-            <LogOut className="mr-2 size-4" />
-            Deslogar
-          </DropdownItem>
-        </Link>
-      </DropdownContent>
-    </Dropdown>
+            <Link
+              to=""
+              className="flex flex-row justify-between items-center p-3"
+            >
+              <div className="flex flex-row items-center gap-2">
+                <HeartSolid />
+                <p className="font-poppins font-semibold md:font-medium text-md md:text-sm tracking-tight">
+                  Salvos
+                </p>
+              </div>
+              <ChevronRight />
+            </Link>
+
+            <Link
+              to=""
+              className="flex flex-row justify-between items-center p-3"
+            >
+              <div className="flex flex-row items-center gap-2">
+                <BookmarkSolid />
+                <p className="font-poppins font-semibold md:font-medium text-md md:text-sm tracking-tight">
+                  Favoritos
+                </p>
+              </div>
+              <ChevronRight />
+            </Link>
+          </Card>
+
+          <Separator />
+
+          <Card className="flex flex-col p-2 space-y-2 w-full">
+            <SheetDescription className="font-semibold md:font-medium">
+              Conta do usuário
+            </SheetDescription>
+
+            <Link
+              to=""
+              className="flex flex-row justify-between items-center p-3"
+            >
+              <div className="flex flex-row items-center gap-2">
+                <EditOneSolid />
+                <p className="font-poppins font-semibold md:font-medium text-md md:text-sm tracking-tight">
+                  Editar
+                </p>
+              </div>
+              <ChevronRight />
+            </Link>
+
+            <Link
+              to="/auth/login"
+              className="flex flex-row justify-between items-center p-3"
+              onClick={logOutHandle}
+            >
+              <div className="flex flex-row items-center gap-2">
+                <LogoutSolid className="text-danger" />
+                <p className="text-danger font-poppins font-semibold md:font-medium text-md md:text-sm tracking-tight">
+                  Sair
+                </p>
+              </div>
+              <ChevronRight className="text-danger" />
+            </Link>
+          </Card>
+        </div>
+      </SheetContent>
+    </Sheet>
   );
 };
 
@@ -182,7 +253,7 @@ const Navbar: React.FC<NavbarProps> = ({ className, children, ...props }) => {
   return (
     <nav
       className={cn(
-        "transition-transform duration-300 select-none bg-card border-b border-input shadow-[0_2px_4px_rgba(0,0,0,0.1)] flex flex-row justify-between items-center shadow-[0_-2px_4px_rgba(0,0,0,0.1)] sticky top-0 inset-x-0 translate-y-0 md:translate-y-0/2 px-4 md:px-2 py-2 md:py-1 w-full z-20",
+        "transition-transform duration-300 select-none bg-card shadow-[0_2px_4px_rgba(0,0,0,0.1)] flex flex-row justify-between items-center shadow-[0_-2px_4px_rgba(0,0,0,0.1)] sticky top-0 inset-x-0 translate-y-0 md:translate-y-0/2 px-4 md:px-2 py-2 md:py-1 w-full z-20",
         isVisible ? "translate-y-0" : "-translate-y-full",
         className
       )}
@@ -318,7 +389,7 @@ const NavbarBrand: React.FC<NavbarBrandProps> = ({
   return (
     <Link
       className={cn(
-        "font-semibold flex items-center gap-2 text-lg md:text-md",
+        "font-bold md:font-semibold flex items-center gap-2 text-lg md:text-md",
         className
       )}
       to={href}
@@ -334,17 +405,52 @@ export const NavBar = (props: userData) => {
   return (
     <Navbar>
       <NavbarContent>
-        <NavbarBrand
-          className="text-primary font-recursive uppercase tracking-widest"
-          href="/"
-        >
-          <img
-            className="h-10 w-12 md:w-10"
-            alt="logo crush if"
-            src={logoCrush}
-          />
-          CrushIF
-        </NavbarBrand>
+        <Dropdown>
+          <DropdownTrigger>
+            <NavbarBrand
+              className="text-primary font-cookie font-medium md:font-medium text-[2rem]"
+              href={""}
+            >
+              <FireSolid />
+              Crushif
+              <ChevronDown className="text-muted-foreground" />
+            </NavbarBrand>
+          </DropdownTrigger>
+
+          <DropdownContent className="select-none">
+            <DropdownLabel className="text-sm text-muted-foreground font-semibold md:font-medium">
+              Menu
+            </DropdownLabel>
+
+            <Link
+              to={"/settings"}
+              className="flex flex-row justify-between items-center p-2"
+            >
+              <DropdownItem className="flex flex-row items-center gap-2">
+                <CogFourSolid />
+                <p className="font-poppins font-semibold md:font-medium text-lg md:text-md tracking-tight">
+                  Configurações
+                </p>
+              </DropdownItem>
+
+              <ChevronRight />
+            </Link>
+
+            <Link
+              to={"/support"}
+              className="flex flex-row justify-between items-center p-2"
+            >
+              <DropdownItem className="flex flex-row items-center gap-2">
+                <QuestionCircleSolid />
+                <p className="font-poppins font-semibold md:font-medium text-lg md:text-md tracking-tight">
+                  Suporte
+                </p>
+              </DropdownItem>
+
+              <ChevronRight />
+            </Link>
+          </DropdownContent>
+        </Dropdown>
       </NavbarContent>
 
       <NavbarContent className="hidden md:flex">
@@ -353,7 +459,7 @@ export const NavBar = (props: userData) => {
           activeClassName="text-primary"
           hoverClassName="text-primary/70"
         >
-          <LayoutGrid className="h-5 w-5" />
+          <GridSolid className="h-5 w-5" />
           Inicio
         </NavbarItem>
 
@@ -362,7 +468,7 @@ export const NavBar = (props: userData) => {
           activeClassName="text-primary"
           hoverClassName="text-primary/70"
         >
-          <Search className="h-5 w-5" />
+          <SearchSolid className="h-5 w-5" />
           Pesquisar
         </NavbarItem>
         <NavbarItem
@@ -370,7 +476,7 @@ export const NavBar = (props: userData) => {
           activeClassName="text-primary"
           hoverClassName="text-primary/70"
         >
-          <HeartHandshake className="h-5 w-5" />
+          <FireSolid className="h-5 w-5" />
           Crush
         </NavbarItem>
 
@@ -379,7 +485,7 @@ export const NavBar = (props: userData) => {
           activeClassName="text-primary"
           hoverClassName="text-primary/70"
         >
-          <CalendarDays className="h-5 w-5" />
+          <AcademicHatSolid className="h-5 w-5" />
           Evêntos
         </NavbarItem>
       </NavbarContent>
@@ -390,16 +496,16 @@ export const NavBar = (props: userData) => {
           activeClassName="text-primary"
           hoverClassName="text-primary/70"
         >
-          <Button variant={"outline"} size={"icon"}>
-            <Bell className="h-5 w-5" />
-          </Button>
+          <SendSolid className="h-6 w-6 md:h-5 md:w-5" />
         </NavbarItem>
 
-        <Profile
-          name={props.user?.nickname ? props.user.nickname : ""}
-          email={props.user?.email ? props.user.email : ""}
-          avatar={props.avatarPath ? props.avatarPath : ""}
-        />
+        <NavbarItem href={""}>
+          <Profile
+            nickname={props.user?.nickname ? props.user.nickname : ""}
+            name={props.user?.name ? props.user.name : ""}
+            avatar={props.avatarPath ? props.avatarPath : ""}
+          />
+        </NavbarItem>
       </NavbarContent>
     </Navbar>
   );
@@ -421,7 +527,7 @@ export const NavBarReturn = (props: NavBarReturnProps) => {
             className="text-primary"
             onClick={() => navigate(-1)}
           >
-            <ArrowLeft className="mr-2" />
+            <ArrowLeftSolid className="mr-2" />
             {props.title}
           </Button>
         </NavbarContent>

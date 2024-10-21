@@ -29,8 +29,8 @@ interface UserData {
 const SettingsLayout = ({
   userData,
   logOutHandle,
-} : {
- userData: UserData;
+}: {
+  userData: UserData;
   logOutHandle: () => void;
 }) => {
   return (
@@ -59,20 +59,15 @@ const SettingsLayout = ({
         <Separator className="mb-5" />
         <CardContent>
           <div className="flex flex-row items-center space-x-2">
-            <div className="flex relative">
-              <div className="flex absolute right-0 bottom-0 h-2 w-2 z-10">
-                <span className="animate-ping bg-success rounded-full opacity-75 inline-flex absolute h-full w-full"></span>
-                <span className="bg-success rounded-full inline-flex relative h-2 w-2"></span>
-              </div>
-              <Avatar>
-                <AvatarFallback>{userData.nickname}</AvatarFallback>
-                <AvatarImage src={userData.avatar} />
-              </Avatar>
-            </div>
+            <Avatar>
+              <AvatarFallback>{userData.nickname}</AvatarFallback>
+              <AvatarImage src={userData.avatar} />
+            </Avatar>
+
             <div className="flex flex-col">
               <div className="flex flex-row items-center space-x-1">
                 <p className="font-inter font-semibold">{userData.nickname}</p>
-                <BadgeCheck className="text-success size-3" />
+                <BadgeCheck className="fill-success text-background size-3.5" />
               </div>
               <p className="text-default text-tiny font-inter tracking-tight">
                 {userData.email}
