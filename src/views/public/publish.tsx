@@ -22,23 +22,19 @@ import { Button } from "../../components/ui/button";
 import { Label } from "../../components/ui/label";
 import { Progress } from "../../components/ui/progress";
 import { Switch } from "../../components/ui/switch";
+import { Badge } from "../../components/ui/badge";
 
 import logo from "../../../public/images/logo/logo.png";
 
-const LogoLayout = () => {
-  return (
-    <div className="flex flex-col justify-center items-center">
-      <img src={logo} className="h-32 md:h-[300px] w-32 md:w-[300px]" />
-      <h1 className="text-primary font-recursive font-semibold uppercase tracking-widest text-2xl md:text-5xl">
-        CrushIF
-      </h1>
-    </div>
-  );
-};
-
 import { getUserData } from "../../utils/getUserData";
 
-import { SendHorizontal, ArrowRight, ArrowLeft } from "lucide-react";
+import {
+  IncognitoSolid,
+  LabelSolid,
+  At,
+  ImageSolid,
+  EarthSolid,
+} from "@mynaui/icons-react";
 
 interface CardData {
   nickname: string;
@@ -50,6 +46,17 @@ interface CardData {
   photoURL?: string;
   userPhotoUrl?: string;
 }
+
+const LogoLayout = () => {
+  return (
+    <div className="flex flex-col justify-center items-center">
+      <img src={logo} className="h-32 md:h-[300px] w-32 md:w-[300px]" />
+      <h1 className="text-primary font-cookie font-medium text-[3rem]">
+        Crushif
+      </h1>
+    </div>
+  );
+};
 
 const PublishLayout = () => {
   const userData = getUserData();
@@ -184,42 +191,47 @@ const PublishLayout = () => {
       <Card className="hidden md:flex flex-col w-5/6 max-w-sm">
         <CardHeader>
           <div className={`${step === 1 ? null : "hidden"}`}>
-            <CardTitle className="uppercase tracking-widest">
-              Anônimo/Usuário
-            </CardTitle>
+            <Badge variant={"outline"}>
+              <IncognitoSolid className="text-foreground" />
+            </Badge>
+            <CardTitle className="tracking-wider">Anônimo/Usuário</CardTitle>
+
             <CardDescription className="tracking-wide">
-              Selecione o tipo de publicação, se será uma publicação anônima, ou
-              se será uma publicação feita pelo usuário.
+              Selecione o tipo de publicação: anônima ou pelo usuário.
             </CardDescription>
           </div>
 
           <div className={`${step === 2 ? null : "hidden"}`}>
-            <CardTitle className="uppercase tracking-widest">
-              Descrição
-            </CardTitle>
+            <Badge variant={"outline"}>
+              <LabelSolid className="text-success" />
+            </Badge>
+            <CardTitle className="tracking-wider">Descrição</CardTitle>
+
             <CardDescription className="tracking-wide">
-              Introduza um texto para a publicação, faça uma breve descrição
-              sobre sua publicação.
+              Insira o texto e uma breve descrição da publicação.
             </CardDescription>
           </div>
 
           <div className={`${step === 3 ? null : "hidden"}`}>
-            <CardTitle className="uppercase tracking-widest">
-              Marcações
-            </CardTitle>
+            <Badge variant={"outline"}>
+              <At className="text-warning" />
+            </Badge>
+            <CardTitle className="tracking-wider">Marcações</CardTitle>
+
             <CardDescription className="tracking-wide">
-              Informe uma #hashtag ou um @usuário, marque alguem na publicação,
-              ou puxe uma corrente na sua postagem.
+              Adicione uma #hashtag, @usuário, ou marque alguém na publicação.
             </CardDescription>
           </div>
 
           <div className={`${step === 4 ? null : "hidden"}`}>
-            <CardTitle className="uppercase tracking-widest">
-              Upload
-            </CardTitle>
+            <Badge variant={"outline"}>
+              <ImageSolid className="text-primary" />
+            </Badge>
+            <CardTitle className="tracking-wider">Upload</CardTitle>
+
             <CardDescription className="tracking-wide">
-              Faça o upload de uma foto, escolha uma foto para ilustrar sua
-              publicação, poste fotos de locais, pessoas, viagens...
+              Envie uma foto para ilustrar sua publicação, como de locais,
+              pessoas ou viagens.
             </CardDescription>
           </div>
         </CardHeader>
@@ -254,7 +266,7 @@ const PublishLayout = () => {
               <Input
                 type="text"
                 key="content"
-                placeholder="ex: Descrição da publicação"
+                placeholder="Adicione uma descrição"
                 name="content"
                 id="content"
                 onChange={handleChangeData}
@@ -270,7 +282,7 @@ const PublishLayout = () => {
               <Input
                 type="text"
                 key="references"
-                placeholder="ex: #Hashtag, #HashTag, #hashtag"
+                placeholder="Adicione uma marcação"
                 name="references"
                 id="references"
                 onChange={handleChangeData}
@@ -327,15 +339,21 @@ const PublishLayout = () => {
                 step === 4 ? null : "hidden"
               } flex flex-row justify-center items-center my-2`}
             >
-              <Button
-                type="submit"
-                className="w-full"
-              >
-                <SendHorizontal className="mr-2 h-4 w-4" />
+              <Button type="submit" className="w-full">
                 Enviar
               </Button>
             </div>
           </form>
+
+          <div
+            className={`${
+              step === 4 ? "hidden" : null
+            } flex flex-row justify-center items-center my-2`}
+          >
+            <Button className="w-full" onClick={handleNextStep}>
+              Proximo
+            </Button>
+          </div>
 
           <div
             className={`${
@@ -347,22 +365,7 @@ const PublishLayout = () => {
               variant={"outline"}
               onClick={handlePreviousStep}
             >
-              <ArrowLeft className="mr-2 h-4 w-4" />
               Voltar
-            </Button>
-          </div>
-
-          <div
-            className={`${
-              step === 4 ? "hidden" : null
-            } flex flex-row justify-center items-center my-2`}
-          >
-            <Button
-              className="w-full"
-              onClick={handleNextStep}
-            >
-              <ArrowRight className="mr-2 h-4 w-4" />
-              Proximo
             </Button>
           </div>
         </CardContent>
@@ -370,9 +373,10 @@ const PublishLayout = () => {
 
       <Card className="flex flex-col md:hidden w-5/6 max-w-sm">
         <CardHeader>
-          <CardTitle className="tracking-widest">
-            Publique
-          </CardTitle>
+          <Badge className="w-fit" variant={"outline"}>
+            <EarthSolid className="text-primary" />
+          </Badge>
+          <CardTitle className="tracking-wider">Publique</CardTitle>
           <CardDescription className="tracking-wide">
             Faça uma publicação anônima ou feita pelo usuário.
           </CardDescription>
@@ -386,50 +390,62 @@ const PublishLayout = () => {
 
             <DrawerContent>
               <DrawerHeader>
-                <div className={`${step === 1 ? null : "hidden"}`}>
-                  <DrawerTitle className="tracking-widest">
+                <div className={`${step === 1 ? null : "hidden"} space-y-1.5`}>
+                  <Badge variant={"outline"}>
+                    <IncognitoSolid className="text-foreground" />
+                  </Badge>
+                  <DrawerTitle className="tracking-wider">
                     Anônimo/Usuário
                   </DrawerTitle>
+
                   <DrawerDescription className="tracking-wide">
-                    Selecione o tipo de publicação, se será uma publicação
-                    anônima, ou se será uma publicação feita pelo usuário.
+                    Selecione o tipo de publicação: anônima ou pelo usuário.
                   </DrawerDescription>
                 </div>
 
-                <div className={`${step === 2 ? null : "hidden"}`}>
-                  <DrawerTitle className="tracking-widest">
+                <div className={`${step === 2 ? null : "hidden"} space-y-1.5`}>
+                  <Badge variant={"outline"}>
+                    <LabelSolid className="text-success"/>
+                  </Badge>
+                  <DrawerTitle className="tracking-wider">
                     Descrição
                   </DrawerTitle>
+
                   <DrawerDescription className="tracking-wide">
-                    Introduza um texto para a publicação, faça uma breve
-                    descrição sobre sua publicação.
+                    Insira o texto e uma breve descrição da publicação.
                   </DrawerDescription>
                 </div>
 
-                <div className={`${step === 3 ? null : "hidden"}`}>
-                  <DrawerTitle className="tracking-widest">
+                <div className={`${step === 3 ? null : "hidden"} space-y-1.5`}>
+                  <Badge variant={"outline"}>
+                    <At className="text-warning" />
+                  </Badge>
+                  <DrawerTitle className="tracking-wider">
                     Marcações
                   </DrawerTitle>
+
                   <DrawerDescription className="tracking-wide">
-                    Informe uma #hashtag ou um @usuário, marque alguem na
-                    publicação, ou puxe uma corrente na sua postagem.
+                    Adicione uma #hashtag, @usuário, ou marque alguém na
+                    publicação.
                   </DrawerDescription>
                 </div>
 
-                <div className={`${step === 4 ? null : "hidden"}`}>
-                  <DrawerTitle className="tracking-widest">
-                    Upload
-                  </DrawerTitle>
+                <div className={`${step === 4 ? null : "hidden"} space-y-1.5`}>
+                  <Badge variant={"outline"}>
+                    <ImageSolid className="text-primary" />
+                  </Badge>
+                  <DrawerTitle className="tracking-wider">Upload</DrawerTitle>
+
                   <DrawerDescription className="tracking-wide">
-                    Faça o upload de uma foto, escolha uma foto para ilustrar
-                    sua publicação, poste fotos de locais, pessoas, viagens...
+                    Envie uma foto para ilustrar sua publicação, como de locais,
+                    pessoas ou viagens.
                   </DrawerDescription>
                 </div>
               </DrawerHeader>
 
               <form
                 onSubmit={handleSubmit}
-                className="flex flex-col relative space-y-2"
+                className="flex flex-col relative space-y-2 w-full"
               >
                 <div
                   className={`${
@@ -450,13 +466,14 @@ const PublishLayout = () => {
                 <div
                   className={`${
                     step === 2 ? null : "hidden"
-                  } grid items-center gap-1.5 m-2 w-full max-w-sm`}
+                  } grid items-center gap-1.5 m-2 w-full`}
                 >
                   <Label htmlFor="content">Descrição</Label>
                   <Input
                     type="text"
                     key="content"
-                    placeholder="ex: Descrição da publicação"
+                    placeholder="Adicione uma descrição"
+                    className="w-11/12"
                     name="content"
                     id="content"
                     onChange={handleChangeData}
@@ -466,21 +483,26 @@ const PublishLayout = () => {
                 <div
                   className={`${
                     step === 3 ? null : "hidden"
-                  } grid items-center gap-1.5 m-2 w-full max-w-sm`}
+                  } grid items-center gap-1.5 m-2 w-full`}
                 >
                   <Label htmlFor="references">Marcações</Label>
                   <Input
                     type="text"
                     key="references"
-                    placeholder="ex: #Hashtag, #HashTag, #hashtag"
+                    placeholder="Adicione uma marcação"
+                    className="w-11/12"
                     name="references"
                     id="references"
                     onChange={handleChangeData}
                   />
                 </div>
 
-                <div className={`${step === 4 ? null : "hidden"} m-2`}>
-                  <Label htmlFor="inputFoto">Upload</Label>
+                <div
+                  className={`${
+                    step === 4 ? null : "hidden"
+                  } flex gap-1.5 m-2 w-full`}
+                >
+                  <Label className="invisible" htmlFor="inputFoto">Upload</Label>
                   <Input
                     type="file"
                     key="foto"
@@ -512,15 +534,21 @@ const PublishLayout = () => {
                     step === 4 ? null : "hidden"
                   } flex flex-row justify-center items-center m-2`}
                 >
-                  <Button
-                    type="submit"
-                    className="w-full"
-                  >
-                    <SendHorizontal className="mr-2 h-4 w-4" />
+                  <Button type="submit" className="w-full">
                     Enviar
                   </Button>
                 </div>
               </form>
+
+              <div
+                className={`${
+                  step === 4 ? "hidden" : null
+                } flex flex-row justify-center items-center m-2`}
+              >
+                <Button className="w-full" onClick={handleNextStep}>
+                  Proximo
+                </Button>
+              </div>
 
               <div
                 className={`${
@@ -532,22 +560,7 @@ const PublishLayout = () => {
                   variant={"outline"}
                   onClick={handlePreviousStep}
                 >
-                  <ArrowLeft className="mr-2 h-4 w-4" />
                   Voltar
-                </Button>
-              </div>
-
-              <div
-                className={`${
-                  step === 4 ? "hidden" : null
-                } flex flex-row justify-center items-center m-2`}
-              >
-                <Button
-                  className="w-full"
-                  onClick={handleNextStep}
-                >
-                  <ArrowRight className="mr-2 h-4 w-4" />
-                  Proximo
                 </Button>
               </div>
             </DrawerContent>

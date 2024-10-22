@@ -77,7 +77,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         {type === "file" ? (
           <>
             <div
-              className="flex justify-center items-center mb-4 h-48 w-full border-2 border-dashed border-gray-400 rounded-md cursor-pointer"
+              className="flex justify-center items-center mb-4 h-36 md:h-48 w-5/6 md:w-full border-2 border-dashed border-gray-400 rounded-md cursor-pointer"
               onClick={handleClick}
               onDrop={handleDrop}
               onDragOver={(e) => e.preventDefault()}
@@ -90,7 +90,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
                 />
               ) : (
                 <div className="text-muted-foreground">
-                  Arraste e solte a imagem aqui
+                  Faça o upload aqui
                 </div>
               )}
             </div>
@@ -114,7 +114,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
                 }
               }}
               className={cn(
-                "flex h-10 md:h-9 w-full rounded-md border border-input bg-transparent font-poppins font-medium md:font-normal px-3 py-1 text-md md:text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50",
+                "flex h-10 md:h-9 w-full rounded border border-input bg-transparent font-poppins font-medium md:font-normal px-3 py-1 text-md md:text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50",
                 className
               )}
               ref={ref}

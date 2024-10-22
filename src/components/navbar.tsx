@@ -85,7 +85,7 @@ const Profile = ({ nickname, name, avatar }: profile) => {
         </Avatar>
       </SheetTrigger>
 
-      <SheetContent className="select-none p-0">
+      <SheetContent className="overflow-y-auto select-none p-0">
         <SheetHeader className="p-4">
           <SheetTitle className="text-center">Central de Contas</SheetTitle>
 

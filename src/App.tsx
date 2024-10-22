@@ -15,11 +15,13 @@ const SupportPage = React.lazy(() => import("./views/public/support.tsx"));
 const NotificationsPage = React.lazy(
   () => import("./views/public/notifications.page.tsx")
 );
+
+const ErrorPage = React.lazy(() => import("./views/error/error.tsx"));
+
 const PublishPage = React.lazy(() => import("./views/public/publish.tsx"));
 const EditProfilePage = React.lazy(
   () => import("./views/public/edit-profile.tsx")
 );
-
 const ProfilePage = React.lazy(() => import("./views/public/profile.tsx"));
 
 const LoginPage = React.lazy(() => import("./views/auth/login.tsx"));
@@ -50,10 +52,7 @@ const App = () => {
               <Route path="/match" element={<MatchPage />} />
               <Route path="/settings" element={<SettingsPage />} />
               <Route path="/support" element={<SupportPage />} />
-              <Route
-                path="/notifications"
-                element={<NotificationsPage />}
-              />
+              <Route path="/notifications" element={<NotificationsPage />} />
               <Route path="/publish" element={<PublishPage />} />
               <Route path="/profile/edit" element={<EditProfilePage />} />
 
@@ -62,6 +61,8 @@ const App = () => {
               <Route path="/auth/login" element={<LoginPage />} />
               <Route path="/auth/register" element={<RegisterPage />} />
               <Route path="/auth/terms" element={<TermsPage />} />
+
+              <Route path="*" element={<ErrorPage />} />
             </Routes>
           </Router>
         </React.Suspense>

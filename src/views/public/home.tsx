@@ -10,8 +10,7 @@ import { BottomBar } from "../../components/bottombar.tsx";
 import { Fab } from "../../components/ui/fab.tsx";
 import { CardPost } from "../../components/post.tsx";
 
-import { LoaderCircle } from "lucide-react";
-import { Plus } from "@mynaui/icons-react";
+import { PlusSolid, SpinnerSolid } from "@mynaui/icons-react";
 
 const localAvatarPath = localStorage.getItem("avatar") ?? "";
 
@@ -156,8 +155,8 @@ export default function HomePage() {
 
             {loading && (
               <div className="flex flex-row items-center">
-                <LoaderCircle className="animate-spin mr-2 h-5 w-5" />
-                <p>Carregando...</p>
+                <SpinnerSolid className="animate-spin mr-2 h-5 w-5" />
+                <p className="text-muted-foreground text-sm">Carregando...</p>
               </div>
             )}
           </main>
@@ -166,7 +165,7 @@ export default function HomePage() {
 
           <Link to={"/publish"}>
             <Fab>
-              <Plus className="h-8 w-8 md:h-7 md:w-7" />
+              <PlusSolid className="h-8 w-8 md:h-7 md:w-7" />
             </Fab>
           </Link>
 
