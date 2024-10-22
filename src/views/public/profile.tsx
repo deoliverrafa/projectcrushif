@@ -140,7 +140,7 @@ const ProfileLayout = () => {
 
   return (
     <>
-      <Card className="w-full md:w-10/12">
+      <Card className="mt-2 w-full md:w-10/12">
         <CardHeader className="flex flex-row justify-between items-center">
           <div className="flex flex-row items-center gap-2">
             <Avatar className="md:h-16 md:w-16">

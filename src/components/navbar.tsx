@@ -39,7 +39,7 @@ import {
   LogoutSolid,
   EditOneSolid,
   LightningSolid,
-  ArrowLeftSolid
+  ChevronLeft
 } from "@mynaui/icons-react";
 
 import { getUserData } from "../utils/getUserData.tsx";
@@ -114,7 +114,7 @@ const Profile = ({ nickname, name, avatar }: profile) => {
                     </CardTitle>
 
                     <div>
-                      <HeartWavesSolid className="text-success h-5 w-5 md:h-4 md:w-4" />
+                      <HeartWavesSolid className="text-success h-4 w-4 md:h-3 md:w-3" />
                     </div>
                   </div>
 
@@ -527,7 +527,7 @@ export const NavBarReturn = (props: NavBarReturnProps) => {
             className="text-primary"
             onClick={() => navigate(-1)}
           >
-            <ArrowLeftSolid className="mr-2" />
+            <ChevronLeft className="mr-1" />
             {props.title}
           </Button>
         </NavbarContent>
