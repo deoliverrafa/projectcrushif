@@ -46,7 +46,7 @@ export default function SearchUserCard(props: SearchUserCard) {
       <Card className="my-2 w-full">
         <div className="flex flex-row justify-between items-center p-4">
           <Link to={`/profile/${props._id}`} className="flex space-x-2 h-full">
-            <Avatar>
+            <Avatar className="shadow-lg border-2 border-secondary">
               <AvatarFallback>{props?.nickname}</AvatarFallback>
               <AvatarImage src={props?.avatar} />
             </Avatar>

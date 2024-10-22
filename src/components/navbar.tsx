@@ -79,7 +79,7 @@ const Profile = ({ nickname, name, avatar }: profile) => {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Avatar className="h-8 w-8">
+        <Avatar className="shadow-lg border-2 border-secondary h-8 w-8">
           <AvatarImage src={avatar} />
           <AvatarFallback>{name}</AvatarFallback>
         </Avatar>
@@ -102,7 +102,7 @@ const Profile = ({ nickname, name, avatar }: profile) => {
                 to={`/profile/${userData._id}`}
                 className="flex space-x-2 h-full"
               >
-                <Avatar>
+                <Avatar className="shadow-lg border-2 border-secondary">
                   <AvatarFallback>{nickname}</AvatarFallback>
                   <AvatarImage src={avatar} />
                 </Avatar>
