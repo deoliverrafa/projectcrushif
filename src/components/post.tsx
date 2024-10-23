@@ -20,6 +20,12 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "./ui/carousel.tsx";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "./ui/tooltip.tsx";
 import { Button } from "./ui/button.tsx";
 import { Input } from "./ui/input.tsx";
 import {
@@ -143,7 +149,7 @@ export const CardPost = (props: CardProps) => {
     setTimeout(() => setShowFavorited(false), 500);
   };
 
-  const [open, setOpen] = React.useState(false);
+  const [openShare, setOpenShare] = React.useState(false);
   const [copied, setCopied] = React.useState(false);
   const inputRef = React.useRef<HTMLInputElement>(null);
 
@@ -214,7 +220,7 @@ export const CardPost = (props: CardProps) => {
         <CardHeader className="flex flex-row justify-between items-center">
           {!props.isAnonymous ? (
             <Link to={`/profile/${props.id}`} className="flex space-x-2">
-              <Avatar>
+              <Avatar className="shadow-lg border-2 border-secondary">
                 <AvatarFallback>
                   {!props.isAnonymous ? userData?.nickname : ""}
                 </AvatarFallback>
@@ -236,7 +242,7 @@ export const CardPost = (props: CardProps) => {
             </Link>
           ) : (
             <div className="flex space-x-2">
-              <Avatar>
+              <Avatar className="shadow-lg border-2 border-secondary">
                 <AvatarFallback>
                   {!props.isAnonymous ? userData?.nickname : "Anônimo"}
                 </AvatarFallback>
@@ -304,24 +310,28 @@ export const CardPost = (props: CardProps) => {
                 <Separator />
 
                 <div className="py-5 space-y-2 mx-auto w-full max-w-sm">
-                  <Button variant={"ghost"} className="justify-start w-full">
-                    <UserPlusSolid className="h-5 md:h-4 w-5 md:w-4 mr-2" />
-                    Seguir
-                  </Button>
+                  {props.id === dataUser._id ? null : (
+                    <Button variant={"ghost"} className="justify-start w-full">
+                      <UserPlusSolid className="h-5 md:h-4 w-5 md:w-4 mr-2" />
+                      Seguir
+                    </Button>
+                  )}
 
                   <Button
                     className="justify-start w-full"
                     variant={"ghost"}
-                    onClick={() => setOpen(true)}
+                    onClick={() => setOpenShare(true)}
                   >
                     <ShareSolid className="h-5 md:h-4 w-5 md:w-4 mr-2" />
                     Compartilhar
                   </Button>
 
-                  <Button className="justify-start w-full" variant={"ghost"}>
-                    <UserCircleSolid className="h-5 md:h-4 w-5 md:w-4 mr-2" />
-                    Sobre
-                  </Button>
+                  <Link to={`/about/${props.id}`}>
+                    <Button className="justify-start w-full" variant={"ghost"}>
+                      <UserCircleSolid className="h-5 md:h-4 w-5 md:w-4 mr-2" />
+                      Sobre
+                    </Button>
+                  </Link>
                 </div>
 
                 <Separator />
@@ -467,7 +477,7 @@ export const CardPost = (props: CardProps) => {
                   <DrawerContent>
                     <DrawerHeader>
                       <div className="flex items-start space-x-2">
-                        <Avatar>
+                        <Avatar className="shadow-lg border-2 border-secondary">
                           <AvatarFallback>{dataUser.nickname}</AvatarFallback>
 
                           <AvatarImage src={dataUser.avatar} />
@@ -500,7 +510,7 @@ export const CardPost = (props: CardProps) => {
 
                     <DrawerFooter>
                       <div className="flex flex-row justify-between items-center gap-1 w-full">
-                        <Avatar>
+                        <Avatar className="shadow-lg border-2 border-secondary">
                           <AvatarFallback>{dataUser.nickname}</AvatarFallback>
 
                           <AvatarImage src={dataUser.avatar} />
@@ -538,7 +548,7 @@ export const CardPost = (props: CardProps) => {
           )}
 
           <div className="flex flex-row justify-between items-center gap-1 w-full">
-            <Avatar>
+            <Avatar className="shadow-lg border-2 border-secondary">
               <AvatarFallback>{dataUser.nickname}</AvatarFallback>
 
               <AvatarImage src={dataUser.avatar} />
@@ -559,7 +569,7 @@ export const CardPost = (props: CardProps) => {
         </CardFooter>
       </Card>
 
-      <Dialog open={open} onOpenChange={setOpen}>
+      <Dialog open={openShare} onOpenChange={setOpenShare}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle>Compartilhar link</DialogTitle>
@@ -581,15 +591,25 @@ export const CardPost = (props: CardProps) => {
               />
             </div>
 
-            <Button
-              type="submit"
-              size="icon"
-              variant={"outline"}
-              onClick={handleCopy}
-            >
-              <span className="sr-only">Copiar</span>
-              <CopySolid className="h-4 w-4" />
-            </Button>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger>
+                  <Button
+                    type="submit"
+                    size="icon"
+                    className="rounded"
+                    variant={"outline"}
+                    onClick={handleCopy}
+                  >
+                    <span className="sr-only">Copiar</span>
+                    <CopySolid className="h-4 w-4" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Copiar</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
           </div>
 
           {copied && (

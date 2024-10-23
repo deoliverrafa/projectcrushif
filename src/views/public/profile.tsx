@@ -1,6 +1,5 @@
 import * as React from "react";
-import { useParams } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 
 import { NavBarReturn } from "../../components/navbar.tsx";
 
@@ -21,6 +20,13 @@ import {
   AvatarFallback,
   AvatarImage,
 } from "../../components/ui/avatar.tsx";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerDescription,
+  DrawerHeader,
+  DrawerTrigger,
+} from "../../components/ui/drawer.tsx";
 import { Separator } from "../../components/ui/separator.tsx";
 import {
   Dialog,
@@ -29,7 +35,6 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "../../components/ui/dialog.tsx";
 import { Label } from "../../components/ui/label.tsx";
 import { Input } from "../../components/ui/input.tsx";
@@ -39,21 +44,28 @@ import {
   TooltipTrigger,
   TooltipProvider,
 } from "../../components/ui/tooltip.tsx";
+import { ScrollArea } from "../../components/ui/scroll-area.tsx";
 
 import { getUserData } from "../../utils/getUserData.tsx";
 import { getUserDataById } from "../../utils/getUserDataById.tsx";
 
 import {
-  PencilRuler,
-  SearchX,
-  BadgeCheck,
-  UserRoundPlus,
-  Share,
-  EllipsisVertical,
-  Copy,
-  Check,
-  AtSign,
-} from "lucide-react";
+  HeartWavesSolid,
+  MenuSolid,
+  ShareSolid,
+  MessageSolid,
+  CopySolid,
+  At,
+  FolderSlashSolid,
+  HeartSolid,
+  FolderHeartSolid,
+  CheckSquareOneSolid,
+  UserPlusSolid,
+  UserCircleSolid,
+  EditOneSolid,
+  Ban,
+  FlagOneSolid,
+} from "@mynaui/icons-react";
 
 interface User {
   userName: string;
@@ -72,11 +84,11 @@ interface User {
 const ProfileLayout = () => {
   const currentUser = getUserData();
   const [viewingUser, setViewingUser] = React.useState<User | null>(null);
-  const [age, setAge] = React.useState<number | null>(null);
   const { id } = useParams<string>();
 
   const inputRef = React.useRef<HTMLInputElement>(null);
 
+  const [openShare, setOpenShare] = React.useState(false);
   const [copied, setCopied] = React.useState(false);
 
   const handleCopy = async () => {
@@ -97,31 +109,11 @@ const ProfileLayout = () => {
     }
   }, [copied]);
 
-  const calculateAge = (birthday: string) => {
-    const today = new Date();
-    const birthDate = new Date(birthday);
-    let age = today.getFullYear() - birthDate.getFullYear();
-    const monthDifference = today.getMonth() - birthDate.getMonth();
-
-    if (
-      monthDifference < 0 ||
-      (monthDifference === 0 && today.getDate() < birthDate.getDate())
-    ) {
-      age--;
-    }
-
-    return age;
-  };
-
   React.useEffect(() => {
     const fetchViewingUserData = async () => {
       try {
         const data = await getUserDataById(id);
         setViewingUser(data);
-        if (data && data.birthdaydata) {
-          const calculatedAge = calculateAge(data.birthdaydata);
-          setAge(calculatedAge);
-        }
       } catch (error) {
         console.error("Error fetching viewing user data:", error);
       }
@@ -140,75 +132,161 @@ const ProfileLayout = () => {
 
   return (
     <>
-      <Card className="w-full md:w-10/12">
-        <CardHeader className="flex flex-row justify-between items-center">
-          <div className="flex flex-row items-center gap-2">
-            <Avatar className="md:h-16 md:w-16">
+      <Card className="mt-2 w-full md:w-6/12">
+        <div className="relative w-full h-40">
+          <img
+            src="https://img.freepik.com/fotos-premium/fundo-abstrato-da-lua-em-cores-esteticas-generative-ai_888418-6857.jpg?w=996"
+            alt="Banner"
+            className="absolute top-0 left-0 w-full h-full object-fill"
+          />
+
+          <div className="absolute bottom-[-30px] left-4">
+            <Avatar className="h-20 w-20 shadow-lg border-4 border-secondary rounded-full">
               <AvatarFallback>{viewingUser.nickname}</AvatarFallback>
               <AvatarImage src={viewingUser.avatar} />
             </Avatar>
+          </div>
+        </div>
 
-            <Badge
-              variant={"outline"}
-              className="cursor-pointer flex flex-col items-center"
-            >
-              <p className="text-foreground font-medium text-sm">
-                {viewingUser.Nfollowers}
-              </p>
-              <p className="tracking-tight font-light text-sm">Seguidores</p>
-            </Badge>
+        <CardHeader className="flex flex-row justify-between items-center mt-8">
+          <div className="flex flex-col gap-1">
+            <CardTitle className="font-medium text-sm md:text-sm">
+              {viewingUser.userName
+                ? viewingUser.userName
+                : "Nome indisponível"}
+            </CardTitle>
 
-            <Badge
-              variant={"outline"}
-              className="cursor-pointer flex flex-col items-center"
-            >
-              <p className="font-medium text-sm">{viewingUser.Nfollowing}</p>
-              <p className="tracking-tight font-light text-sm">Seguindo</p>
-            </Badge>
+            <div className="flex flex-row items-center gap-1">
+              <Badge variant={"outline"} className="font-light w-fit">
+                <At className="h-2.5 w-2.5" />{" "}
+                {viewingUser.nickname
+                  ? `${viewingUser.nickname}`
+                  : "indisponível"}
+                <HeartWavesSolid
+                  className={`${
+                    viewingUser?.type === "Plus"
+                      ? "text-info"
+                      : viewingUser?.type === "Admin"
+                      ? "text-danger"
+                      : viewingUser?.type === "verified"
+                      ? "text-success"
+                      : "hidden"
+                  } ml-1 h-3 w-3`}
+                />
+              </Badge>
+            </div>
           </div>
 
-          <Button variant={"outline"} size={"icon"}>
-            <EllipsisVertical className="cursor-pointer" />
-          </Button>
+          <Drawer>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger>
+                  <DrawerTrigger asChild>
+                    <Button variant={"outline"} size={"icon"}>
+                      <MenuSolid className="h-5 w-5" />
+                    </Button>
+                  </DrawerTrigger>
+                </TooltipTrigger>
+
+                <TooltipContent>
+                  <p>Menu</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+
+            <DrawerContent>
+              <div className="mx-auto w-full max-w-sm">
+                <DrawerHeader className="flex flex-row justify-around items-center">
+                  <div className="flex flex-col items-center space-y-1">
+                    <Button variant={"outline"} size={"icon"}>
+                      <HeartSolid className="text-primary h-5 md:h-4 w-5 md:w-4" />
+                    </Button>
+                    <DrawerDescription>Curtir</DrawerDescription>
+                  </div>
+                </DrawerHeader>
+              </div>
+
+              <Separator />
+
+              <div className="py-5 space-y-2 mx-auto w-full max-w-sm">
+                {!isOwnProfile && (
+                  <Button variant={"ghost"} className="justify-start w-full">
+                    <UserPlusSolid className="h-5 md:h-4 w-5 md:w-4 mr-2" />
+                    Seguir
+                  </Button>
+                )}
+
+                <Button
+                  className="justify-start w-full"
+                  variant={"ghost"}
+                  onClick={() => setOpenShare(true)}
+                >
+                  <ShareSolid className="h-5 md:h-4 w-5 md:w-4 mr-2" />
+                  Compartilhar
+                </Button>
+
+                <Link to={`/about/${viewingUser._id}`}>
+                  <Button className="justify-start w-full" variant={"ghost"}>
+                    <UserCircleSolid className="h-5 md:h-4 w-5 md:w-4 mr-2" />
+                    Sobre
+                  </Button>
+                </Link>
+              </div>
+
+              <Separator />
+
+              <div className="py-5 space-y-2 mx-auto w-full max-w-sm">
+                {isOwnProfile && (
+                  <Button
+                    variant={"ghost"}
+                    className="text-danger justify-start w-full"
+                  >
+                    <EditOneSolid className="h-5 md:h-4 w-5 md:w-4 mr-2" />
+                    Editar
+                  </Button>
+                )}
+
+                {!isOwnProfile && (
+                  <Button
+                    variant={"ghost"}
+                    className="text-danger justify-start w-full"
+                  >
+                    <FlagOneSolid className="h-5 md:h-4 w-5 md:w-4 mr-2" />
+                    Reportar
+                  </Button>
+                )}
+
+                {!isOwnProfile && (
+                  <Button
+                    variant={"ghost"}
+                    className="text-danger justify-start w-full"
+                  >
+                    <Ban className="h-5 md:h-4 w-5 md:w-4 mr-2" />
+                    Bloquear
+                  </Button>
+                )}
+              </div>
+            </DrawerContent>
+          </Drawer>
         </CardHeader>
 
         <Separator className="mb-5" />
 
-        <CardContent className="space-y-2">
-          <CardTitle className="capitalie font-medium text-sm">
-            {viewingUser.userName ? viewingUser.userName : "Nome indisponível"}
-          </CardTitle>
+        <CardContent className="space-y-6">
+          <div className="flex flex-row justify-evenly items-center">
+            <div className="flex flex-col items-center">
+              <CardTitle>{viewingUser.Nfollowers}</CardTitle>
 
-          <Badge variant={"outline"} className="font-light">
-            <AtSign className="h-3 w-3" />{" "}
-            {viewingUser.nickname ? `${viewingUser.nickname}` : "indisponível"}
-            <BadgeCheck
-              className={`${
-                viewingUser.type === "Plus"
-                  ? "fill-info"
-                  : viewingUser.type === "Admin"
-                  ? "fill-danger"
-                  : viewingUser.type === "verified"
-                  ? "fill-success"
-                  : "hidden"
-              } text-background ml-1 size-3.5`}
-            />
-          </Badge>
+              <CardDescription>Seguidores</CardDescription>
+            </div>
 
-          <div className="space-y-0.5">
-            <CardDescription className="uppercase tracking-tight font-medium text-[.8rem]">
-              {age ? `Idade: ${age} anos` : "Idade: indisponível"}
-            </CardDescription>
-            <CardDescription className="uppercase tracking-tight font-medium text-[.8rem]">
-              {viewingUser.curso
-                ? `Curso: ${viewingUser.curso}`
-                : "Curso: indisponível"}
-            </CardDescription>
-            <CardDescription className="uppercase tracking-tight font-medium text-[.8rem]">
-              {viewingUser.campus
-                ? `Campus: ${viewingUser.campus}`
-                : "Campus: indisponível"}
-            </CardDescription>
+            <Separator className="h-10" orientation="vertical" />
+
+            <div className="flex flex-col items-center">
+              <CardTitle>{viewingUser.Nfollowing}</CardTitle>
+
+              <CardDescription>Seguindo</CardDescription>
+            </div>
           </div>
 
           <div className="flex flex-row justify-center items-center space-x-1">
@@ -217,102 +295,137 @@ const ProfileLayout = () => {
                 className="flex justify-center items-center w-full"
                 to="/profile/edit"
               >
-                <Button className="w-full">
-                  <PencilRuler className="mr-2 size-4" />
+                <Button variant={"outline"} className="w-full">
                   Editar
                 </Button>
               </Link>
             )}
 
             {!isOwnProfile && (
-              <Button className="w-full">
-                <UserRoundPlus className="mr-2 size-4" />
+              <Button variant={"outline"} className="w-full">
                 Seguir
               </Button>
             )}
 
-            <Dialog>
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger>
-                    <DialogTrigger asChild>
-                      <Button size={"icon"}>
-                        <Share className="h-4 w-4" />
-                      </Button>
-                    </DialogTrigger>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>Compartilhar</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger>
+                  {!isOwnProfile && (
+                    <Button
+                      variant={"outline"}
+                      className="rounded"
+                      size={"icon"}
+                    >
+                      <MessageSolid className="h-5 w-5" />
+                    </Button>
+                  )}
+                </TooltipTrigger>
 
-              <DialogContent className="sm:max-w-md">
-                <DialogHeader>
-                  <DialogTitle>Compartilhar link</DialogTitle>
-                  <DialogDescription>
-                    Qualquer pessoa com acesso ao link poderar acessar ao
-                    conteúdo.
-                  </DialogDescription>
-                </DialogHeader>
+                <TooltipContent>
+                  <p>Mensagem</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
 
-                <div className="flex items-center space-x-2">
-                  <div className="grid flex-1 gap-2">
-                    <Label htmlFor="link" className="sr-only">
-                      Link
-                    </Label>
-                    <Input
-                      id="link"
-                      ref={inputRef}
-                      value={`https://crushif.vercel.app/profile/${viewingUser._id}`}
-                      readOnly
-                    />
-                  </div>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger>
+                  {isOwnProfile && (
+                    <Button
+                      variant={"outline"}
+                      className="rounded"
+                      size={"icon"}
+                      onClick={() => setOpenShare(true)}
+                    >
+                      <ShareSolid className="h-5 w-5" />
+                    </Button>
+                  )}
+                </TooltipTrigger>
 
-                  <TooltipProvider>
-                    <Tooltip>
-                      <TooltipTrigger>
-                        <Button
-                          type="submit"
-                          size="icon"
-                          variant={"outline"}
-                          onClick={handleCopy}
-                        >
-                          <span className="sr-only">Copiar</span>
-                          <Copy className="h-4 w-4" />
-                        </Button>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p>Copiar</p>
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
-                </div>
-
-                {copied && (
-                  <DialogFooter className="sm:justify-start">
-                    <DialogDescription className="text-success flex flex-row items-center gap-2">
-                      <Check className="h-4 w-4" />
-                      copiado com sucesso!
-                    </DialogDescription>
-                  </DialogFooter>
-                )}
-              </DialogContent>
-            </Dialog>
+                <TooltipContent>
+                  <p>Compartilhar</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
           </div>
         </CardContent>
 
         <Separator />
 
-        <CardFooter className="space-y-2">
-          <div className="flex flex-col justify-center items-center space-y-2 w-full">
-            <SearchX className="text-muted-foreground size-14" />
-            <CardDescription className="text-muted-foreground text-center w-full">
-              Usuário não possui nenhuma publicação.
-            </CardDescription>
+        <CardFooter className="flex flex-col space-y-2 w-full">
+          <div className="flex flex-row justify-around items-center my-4 w-full">
+            <Badge variant={"outline"} className="text-primary gap-1">
+              <HeartSolid className="h-3 w-3" />
+              Curtidas: 0
+            </Badge>
+
+            <Badge variant={"outline"} className="text-warning gap-1">
+              <FolderHeartSolid className="h-3 w-3" />
+              Postagens: 0
+            </Badge>
+
+            <Badge variant={"outline"} className="text-success gap-1">
+              <span className="bg-success rounded-full h-2 w-2"></span>
+              Online
+            </Badge>
           </div>
+
+          <ScrollArea className="w-full rounded-md">
+            <div className="flex flex-col items-center space-y-4">
+              <FolderSlashSolid className="h-20 w-20" />
+
+              <CardDescription className="text-center text-wrap text-sm md:text-md">
+                Usuário {viewingUser.nickname} não possui nenhuma publicação
+              </CardDescription>
+            </div>
+          </ScrollArea>
         </CardFooter>
       </Card>
+
+      <Dialog open={openShare} onOpenChange={setOpenShare}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Compartilhar link</DialogTitle>
+            <DialogDescription>
+              Qualquer pessoa com acesso ao link poderá acessar o conteúdo.
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="flex items-center space-x-2">
+            <div className="grid flex-1 gap-2">
+              <Label htmlFor="link" className="sr-only">
+                Link
+              </Label>
+              <Input
+                id="link"
+                ref={inputRef}
+                value={`https://crushif.vercel.app/profile/${viewingUser._id}}`}
+                readOnly
+              />
+            </div>
+
+            <Button
+              type="submit"
+              size="icon"
+              className="rounded"
+              variant={"outline"}
+              onClick={handleCopy}
+            >
+              <span className="sr-only">Copiar</span>
+              <CopySolid className="h-4 w-4" />
+            </Button>
+          </div>
+
+          {copied && (
+            <DialogFooter className="sm:justify-start">
+              <DialogDescription className="text-success flex flex-row items-center gap-2">
+                <CheckSquareOneSolid className="h-4 w-4" />
+                copiado com sucesso!
+              </DialogDescription>
+            </DialogFooter>
+          )}
+        </DialogContent>
+      </Dialog>
     </>
   );
 };

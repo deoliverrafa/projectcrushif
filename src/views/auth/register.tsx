@@ -12,7 +12,6 @@ import {
 } from "../../components/ui/card";
 import { Input } from "../../components/ui/input";
 import { Label } from "../../components/ui/label";
-import { Alert, AlertTitle, AlertDescription } from "../../components/ui/alert";
 import { Button } from "../../components/ui/button";
 import {
   Drawer,
@@ -23,8 +22,9 @@ import {
   DrawerTrigger,
 } from "../../components/ui/drawer";
 import { Separator } from "../../components/ui/separator";
+import { Badge } from "../../components/ui/badge";
 
-import { Siren, LoaderCircle } from "lucide-react";
+import { FireSolid, SpinnerSolid, XCircleSolid } from "@mynaui/icons-react";
 
 import logo from "../../../public/images/logo/logo.png";
 
@@ -108,9 +108,10 @@ export const RegisterLayout = () => {
       <div className="hidden md:flex flex-col space-y-2">
         <Card className="max-w-sm">
           <CardHeader>
-            <CardTitle className="uppercase tracking-widest">
-              Registre-se
-            </CardTitle>
+            <Badge className="w-fit" variant={"outline"}>
+              <FireSolid className="text-primary" />
+            </Badge>
+            <CardTitle className="tracking-wider">Registre-se</CardTitle>
             <CardDescription className="tracking-wide">
               Faça registro para ter acesso a plataforma!
             </CardDescription>
@@ -128,7 +129,7 @@ export const RegisterLayout = () => {
                   <Label htmlFor="email">E-mail</Label>
                   <Input
                     type="text"
-                    placeholder="ex: name@email.com"
+                    placeholder="Informe seu e-mail"
                     id="email"
                     name="email"
                     onChange={handleChange}
@@ -142,7 +143,7 @@ export const RegisterLayout = () => {
                   <Label htmlFor="userName">Nome Completo</Label>
                   <Input
                     type="text"
-                    placeholder="ex: nome sobrenome"
+                    placeholder="Informe seu nome"
                     id="userName"
                     name="userName"
                     onChange={handleChange}
@@ -154,7 +155,7 @@ export const RegisterLayout = () => {
                   <Label htmlFor="nickname">Usuário</Label>
                   <Input
                     type="text"
-                    placeholder="ex: nickname"
+                    placeholder="Nome do usuário"
                     id="nickname"
                     name="nickname"
                     onChange={handleChange}
@@ -167,7 +168,7 @@ export const RegisterLayout = () => {
                 <Label htmlFor="password">Senha</Label>
                 <Input
                   type="password"
-                  placeholder="ex: ••••••"
+                  placeholder="Informe sua senha"
                   id="password"
                   name="password"
                   onChange={handleChange}
@@ -175,9 +176,16 @@ export const RegisterLayout = () => {
                 />
               </div>
 
+              {messageError ? (
+                <CardDescription className="text-danger flex flex-row items-center gap-2">
+                  <XCircleSolid className="h-4 w-4" />
+                  {messageError}
+                </CardDescription>
+              ) : null}
+
               <Button disabled={clickedButton} type="submit">
                 {clickedButton ? (
-                  <LoaderCircle className="animate-spin mr-2 h-5 w-5" />
+                  <SpinnerSolid className="animate-spin mr-2 h-5 w-5" />
                 ) : null}
                 Registrar
               </Button>
@@ -198,9 +206,9 @@ export const RegisterLayout = () => {
               do{" "}
               <Link
                 to="/auth/terms"
-                className="text-primary font-recursive font-semibold uppercase tracking-widest"
+                className="text-primary font-cookie font-medium text-xl"
               >
-                Crush
+                Crushif
               </Link>
               .
             </p>
@@ -208,27 +216,14 @@ export const RegisterLayout = () => {
         </Card>
       </div>
 
-      {messageError ? (
-        <Alert
-          className="fixed top-2 inset-x-auto max-w-sm"
-          variant="destructive"
-        >
-          <Siren className="size-4" />
-          <AlertTitle className="font-recursive uppercase tracking-widest">
-            Error
-          </AlertTitle>
-          <AlertDescription className="font-semibold text-tiny">
-            Mensagem: {messageError}
-          </AlertDescription>
-        </Alert>
-      ) : null}
-
       <div className="md:hidden flex justify-center items-center h-screen">
         <Card className="flex flex-col md:hidden w-5/6 max-w-sm">
           <CardHeader>
-            <CardTitle className="uppercase tracking-widest">
-              Registre-se
-            </CardTitle>
+            <Badge className="w-fit" variant={"outline"}>
+              <FireSolid className="text-primary" />
+            </Badge>
+            <CardTitle className="tracking-wider">Registre-se</CardTitle>
+
             <CardDescription className="tracking-wide">
               Faça registro para ter acesso a plataforma!
             </CardDescription>
@@ -242,9 +237,15 @@ export const RegisterLayout = () => {
 
               <DrawerContent>
                 <DrawerHeader>
-                  <DrawerTitle className="uppercase tracking-widest">
-                    Registre-se
-                  </DrawerTitle>
+                  <div className="flex flex-col items-center space-y-1.5">
+                    <Badge className="w-fit" variant={"outline"}>
+                      <FireSolid className="text-primary" />
+                    </Badge>
+                    <DrawerTitle className="tracking-wider">
+                      Registre-se
+                    </DrawerTitle>
+                  </div>
+
                   <DrawerDescription className="tracking-wide">
                     Faça registro para ter acesso a plataforma!
                   </DrawerDescription>
@@ -260,7 +261,7 @@ export const RegisterLayout = () => {
                     <Label htmlFor="email">E-mail</Label>
                     <Input
                       type="text"
-                      placeholder="ex: name@email.com"
+                      placeholder="Informe seu e-mail"
                       id="email"
                       name="email"
                       onChange={handleChange}
@@ -273,7 +274,7 @@ export const RegisterLayout = () => {
                       <Label htmlFor="userName">Nome Completo</Label>
                       <Input
                         type="text"
-                        placeholder="ex: nome sobrenome"
+                        placeholder="Infome seu nome"
                         id="userName"
                         name="userName"
                         onChange={handleChange}
@@ -285,7 +286,7 @@ export const RegisterLayout = () => {
                       <Label htmlFor="nickname">Usuário</Label>
                       <Input
                         type="text"
-                        placeholder="ex: nickname"
+                        placeholder="Nome do usuário"
                         id="nickname"
                         name="nickname"
                         onChange={handleChange}
@@ -298,7 +299,7 @@ export const RegisterLayout = () => {
                     <Label htmlFor="password">Senha</Label>
                     <Input
                       type="password"
-                      placeholder="ex: ••••••"
+                      placeholder="Informe sua senha"
                       id="password"
                       name="password"
                       onChange={handleChange}
@@ -307,20 +308,15 @@ export const RegisterLayout = () => {
                   </div>
 
                   {messageError ? (
-                    <Alert className="max-w-sm" variant="destructive">
-                      <Siren className="size-4" />
-                      <AlertTitle className="font-recursive uppercase tracking-widest">
-                        Error
-                      </AlertTitle>
-                      <AlertDescription className="font-semibold text-tiny">
-                        Mensagem: {messageError}
-                      </AlertDescription>
-                    </Alert>
+                    <CardDescription className="text-danger flex flex-row items-center gap-2">
+                      <XCircleSolid className="h-4 w-4" />
+                      {messageError}
+                    </CardDescription>
                   ) : null}
 
                   <Button disabled={clickedButton} type="submit">
                     {clickedButton ? (
-                      <LoaderCircle className="animate-spin mr-2 h-5 w-5" />
+                      <SpinnerSolid className="animate-spin mr-2 h-5 w-5" />
                     ) : null}
                     Registrar
                   </Button>

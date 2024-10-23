@@ -39,7 +39,7 @@ import {
   LogoutSolid,
   EditOneSolid,
   LightningSolid,
-  ArrowLeftSolid
+  ChevronLeft
 } from "@mynaui/icons-react";
 
 import { getUserData } from "../utils/getUserData.tsx";
@@ -79,13 +79,13 @@ const Profile = ({ nickname, name, avatar }: profile) => {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Avatar className="h-8 w-8">
+        <Avatar className="shadow-lg border-2 border-secondary h-8 w-8">
           <AvatarImage src={avatar} />
           <AvatarFallback>{name}</AvatarFallback>
         </Avatar>
       </SheetTrigger>
 
-      <SheetContent className="select-none p-0">
+      <SheetContent className="overflow-y-auto select-none p-0">
         <SheetHeader className="p-4">
           <SheetTitle className="text-center">Central de Contas</SheetTitle>
 
@@ -102,7 +102,7 @@ const Profile = ({ nickname, name, avatar }: profile) => {
                 to={`/profile/${userData._id}`}
                 className="flex space-x-2 h-full"
               >
-                <Avatar>
+                <Avatar className="shadow-lg border-2 border-secondary">
                   <AvatarFallback>{nickname}</AvatarFallback>
                   <AvatarImage src={avatar} />
                 </Avatar>
@@ -114,7 +114,7 @@ const Profile = ({ nickname, name, avatar }: profile) => {
                     </CardTitle>
 
                     <div>
-                      <HeartWavesSolid className="text-success h-5 w-5 md:h-4 md:w-4" />
+                      <HeartWavesSolid className="text-success h-4 w-4 md:h-3 md:w-3" />
                     </div>
                   </div>
 
@@ -527,7 +527,7 @@ export const NavBarReturn = (props: NavBarReturnProps) => {
             className="text-primary"
             onClick={() => navigate(-1)}
           >
-            <ArrowLeftSolid className="mr-2" />
+            <ChevronLeft className="mr-1" />
             {props.title}
           </Button>
         </NavbarContent>

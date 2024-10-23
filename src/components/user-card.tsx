@@ -6,7 +6,7 @@ import { Button } from "./ui/button.js";
 import { Card, CardTitle } from "./ui/card.js";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar.js";
 
-import { UserCheckSolid, UserPlusSolid, HeartWaves } from "@mynaui/icons-react";
+import { HeartWaves } from "@mynaui/icons-react";
 
 interface SearchUserCard {
   avatar: string;
@@ -46,7 +46,7 @@ export default function SearchUserCard(props: SearchUserCard) {
       <Card className="my-2 w-full">
         <div className="flex flex-row justify-between items-center p-4">
           <Link to={`/profile/${props._id}`} className="flex space-x-2 h-full">
-            <Avatar>
+            <Avatar className="shadow-lg border-2 border-secondary">
               <AvatarFallback>{props?.nickname}</AvatarFallback>
               <AvatarImage src={props?.avatar} />
             </Avatar>
@@ -78,13 +78,6 @@ export default function SearchUserCard(props: SearchUserCard) {
           </Link>
           <form action="" method="put" onSubmit={FollowUser}>
             <Button>
-              {props.following ? (
-                <UserCheckSolid className="h-5 w-5 md:h-4 md:w-4 mr-2" />
-              ) : followedUser ? (
-                <UserCheckSolid className="h-5 w-5 md:h-4 md:w-4 mr-2" />
-              ) : (
-                <UserPlusSolid className="h-5 w-5 md:h-4 md:w-4 mr-2" />
-              )}
               {props.following || followedUser ? "Seguindo" : "Seguir"}
             </Button>
           </form> 

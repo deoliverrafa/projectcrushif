@@ -14,11 +14,6 @@ import { Input } from "../../components/ui/input.tsx";
 import { Button } from "../../components/ui/button.tsx";
 import { Label } from "../../components/ui/label.tsx";
 import {
-  Alert,
-  AlertTitle,
-  AlertDescription,
-} from "../../components/ui/alert.tsx";
-import {
   Drawer,
   DrawerTrigger,
   DrawerContent,
@@ -27,8 +22,9 @@ import {
   DrawerDescription,
 } from "../../components/ui/drawer";
 import { Separator } from "../../components/ui/separator.tsx";
+import { Badge } from "../../components/ui/badge.tsx";
 
-import { Siren, LoaderCircle } from "lucide-react";
+import { FireSolid, XCircleSolid, SpinnerSolid } from "@mynaui/icons-react";
 
 import logo from "../../../public/images/logo/logo.png";
 
@@ -93,7 +89,10 @@ const LoginLayout = () => {
       <div className="hidden md:flex flex-col space-y-2">
         <Card className="max-w-sm">
           <CardHeader>
-            <CardTitle className="uppercase tracking-widest">Login</CardTitle>
+            <Badge className="w-fit" variant={"outline"}>
+              <FireSolid className="text-primary" />
+            </Badge>
+            <CardTitle className="tracking-wider">Login</CardTitle>
             <CardDescription className="tracking-wide">
               Faça login para ter acesso a plataforma!
             </CardDescription>
@@ -108,7 +107,7 @@ const LoginLayout = () => {
                 <Label htmlFor="nickname">Usuário</Label>
                 <Input
                   type="text"
-                  placeholder="ex: nickname"
+                  placeholder="Nome do usuário"
                   name="nickname"
                   id="nickname"
                   onChange={handleChange}
@@ -119,16 +118,23 @@ const LoginLayout = () => {
                 <Label htmlFor="password">Senha</Label>
                 <Input
                   type="password"
-                  placeholder="ex: ••••••"
+                  placeholder="Informe sua senha"
                   name="password"
                   id="password"
                   onChange={handleChange}
                 />
               </div>
 
+              {messageError ? (
+                <CardDescription className="text-danger flex flex-row items-center gap-2">
+                  <XCircleSolid className="h-4 w-4" />
+                  {messageError}
+                </CardDescription>
+              ) : null}
+
               <Button disabled={clickedButton} type="submit">
                 {clickedButton ? (
-                  <LoaderCircle className="animate-spin mr-2 h-5 w-5" />
+                  <SpinnerSolid className="animate-spin mr-2 h-5 w-5" />
                 ) : null}
                 Entrar
               </Button>
@@ -144,17 +150,17 @@ const LoginLayout = () => {
               </Button>
             </Link>
 
-            <CardDescription className="text-center text-sm md:text-md">
+            <p className="text-center text-sm md:text-md">
               Ao entrar, você concorda com os Termos e e Política de Privacidade
               do{" "}
               <Link
                 to="/auth/terms"
-                className="text-primary font-recursive font-bold md:font-semibold uppercase tracking-widest"
+                className="text-primary font-cookie font-medium text-xl"
               >
-                Crush
+                Crushif
               </Link>
               .
-            </CardDescription>
+            </p>
           </CardFooter>
         </Card>
       </div>
@@ -162,7 +168,11 @@ const LoginLayout = () => {
       <div className="md:hidden flex justify-center items-center h-screen">
         <Card className="flex flex-col w-5/6 max-w-sm">
           <CardHeader>
-            <CardTitle className="uppercase tracking-widest">Login</CardTitle>
+            <Badge className="w-fit" variant={"outline"}>
+              <FireSolid className="text-primary" />
+            </Badge>
+
+            <CardTitle className="tracking-wider">Login</CardTitle>
             <CardDescription className="tracking-wide">
               Faça login para ter acesso a plataforma!
             </CardDescription>
@@ -176,9 +186,13 @@ const LoginLayout = () => {
 
               <DrawerContent>
                 <DrawerHeader>
-                  <DrawerTitle className="uppercase tracking-widest">
-                    Login
-                  </DrawerTitle>
+                  <div className="flex flex-col items-center space-y-1.5">
+                    <Badge className="w-fit" variant={"outline"}>
+                      <FireSolid className="text-primary" />
+                    </Badge>
+                    <DrawerTitle className="tracking-wider">Login</DrawerTitle>
+                  </div>
+
                   <DrawerDescription className="tracking-wide">
                     Faça login para ter acesso a plataforma!
                   </DrawerDescription>
@@ -192,7 +206,7 @@ const LoginLayout = () => {
                     <Label htmlFor="nickname">Usuário</Label>
                     <Input
                       type="text"
-                      placeholder="ex: nickname"
+                      placeholder="Nome do usuário"
                       name="nickname"
                       id="nickname"
                       onChange={handleChange}
@@ -203,7 +217,7 @@ const LoginLayout = () => {
                     <Label htmlFor="password">Senha</Label>
                     <Input
                       type="password"
-                      placeholder="ex: ••••••"
+                      placeholder="Informe sua senha"
                       name="password"
                       id="password"
                       onChange={handleChange}
@@ -211,21 +225,16 @@ const LoginLayout = () => {
                     />
                   </div>
 
-                  {messageError && (
-                    <Alert className="max-w-sm" variant="destructive">
-                      <Siren className="size-4" />
-                      <AlertTitle className="font-recursive uppercase tracking-widest">
-                        Error
-                      </AlertTitle>
-                      <AlertDescription className="font-semibold text-tiny">
-                        Mensagem: {messageError}
-                      </AlertDescription>
-                    </Alert>
-                  )}
+                  {messageError ? (
+                    <CardDescription className="text-danger flex flex-row items-center gap-2">
+                      <XCircleSolid className="h-4 w-4" />
+                      {messageError}
+                    </CardDescription>
+                  ) : null}
 
                   <Button disabled={clickedButton} type="submit">
                     {clickedButton ? (
-                      <LoaderCircle className="animate-spin mr-2 h-5 w-5" />
+                      <SpinnerSolid className="animate-spin mr-2 h-5 w-5" />
                     ) : null}
                     Entrar
                   </Button>
@@ -243,7 +252,7 @@ const LoginLayout = () => {
               </Button>
             </Link>
 
-            <CardDescription className="text-center text-sm md:text-md">
+            <p className="font-poppins text-wrap text-center text-sm">
               Ao entrar, você concorda com os Termos e e Política de Privacidade
               do{" "}
               <Link
@@ -253,7 +262,7 @@ const LoginLayout = () => {
                 Crush
               </Link>
               .
-            </CardDescription>
+            </p>
           </CardFooter>
         </Card>
       </div>

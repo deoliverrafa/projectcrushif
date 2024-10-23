@@ -14,7 +14,14 @@ import {
   DropdownItem,
 } from "../../components/ui/dropdown";
 
-import { Moon, Sun, Eclipse, SunMoon } from "lucide-react";
+import {  
+  SunSolid,
+  EclipseSolid,
+  MoonSolid,
+  SunriseSolid,
+  SunsetSolid,
+  PlanetSolid
+} from "@mynaui/icons-react";
 
 interface ThemeProviderProps {
   children: ReactNode;
@@ -122,7 +129,7 @@ export const ThemeToggle: React.FC = () => {
     <Dropdown>
       <DropdownTrigger asChild>
         <Button variant="outline" size="icon">
-          <Sun
+          <SunSolid
             className={`h-[1.2rem] w-[1.2rem] ${
               theme === "dark" ||
               theme === "black" ||
@@ -133,7 +140,7 @@ export const ThemeToggle: React.FC = () => {
                 : ""
             }`}
           />
-          <Moon
+          <MoonSolid
             className={`h-[1.2rem] w-[1.2rem] ${
               theme === "light" ||
               theme === "black" ||
@@ -144,7 +151,7 @@ export const ThemeToggle: React.FC = () => {
                 : ""
             }`}
           />
-          <Eclipse
+          <EclipseSolid
             className={`h-[1.2rem] w-[1.2rem] ${
               theme === "dark" ||
               theme === "light" ||
@@ -155,7 +162,7 @@ export const ThemeToggle: React.FC = () => {
                 : ""
             }`}
           />
-          <SunMoon
+          <SunriseSolid
             className={`h-[1.2rem] w-[1.2rem] ${
               theme === "dark" ||
               theme === "light" ||
@@ -166,7 +173,7 @@ export const ThemeToggle: React.FC = () => {
                 : ""
             }`}
           />
-          <SunMoon
+          <SunsetSolid
             className={`h-[1.2rem] w-[1.2rem] ${
               theme === "dark" ||
               theme === "light" ||
@@ -177,7 +184,7 @@ export const ThemeToggle: React.FC = () => {
                 : ""
             }`}
           />
-          <SunMoon
+          <PlanetSolid
             className={`h-[1.2rem] w-[1.2rem] ${
               theme === "dark" ||
               theme === "light" ||
