@@ -30,6 +30,7 @@ interface CardProps {
   type: string;
   likeCount: number;
   likedBy: String[];
+  coments: String[];
 }
 
 interface userData {

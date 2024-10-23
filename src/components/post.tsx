@@ -126,8 +126,7 @@ export const CardPost = (props: CardProps) => {
       setLikeCount(likeCount + 1);
     } else {
       axios.post(
-        `${import.meta.env.VITE_API_BASE_URL}${
-          import.meta.env.VITE_POST_UNLIKE
+        `${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_POST_UNLIKE
         }`,
         { token: localStorage.getItem("token"), postId: props._id }
       );
@@ -163,8 +162,7 @@ export const CardPost = (props: CardProps) => {
     const fetchUserData = async () => {
       try {
         const response = await axios.get(
-          `${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_USER_ID}${
-            props.userId
+          `${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_USER_ID}${props.userId
           }`
         );
 
@@ -187,10 +185,30 @@ export const CardPost = (props: CardProps) => {
     }
   }, [props.userId, props.insertAt]);
 
+
+  // Comment Logic
+  const [comment, setComment] = React.useState<String>();
+  const [statusComment, setStatusComment] = React.useState<Boolean>(false)
+
+  const handleCommentSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    try {
+      await axios.post(`${import.meta.env.VITE_BASE_URL}${import.meta.env.VITE_POST_COMMENT}`,{ comment, token:localStorage.getItem('token'), postId: props._id})
+    } catch (error: any) {
+      console.log("Erro ao postar comentário", error)
+    }
+  }
+
+  const handleCommentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target
+    setComment(value)
+  }
+
+
   return (
     <>
       <Card
-        className="select-none my-2 w-full md:w-6/12"
+        className="select-none my-2 w-full md:w-4/12"
         onDoubleClick={handleLike}
       >
         <CardHeader className="flex flex-row justify-between items-center">
@@ -405,8 +423,7 @@ export const CardPost = (props: CardProps) => {
                     )}
                   </>
                 ) : (
-                  `${props.content.substring(0, 50)}${
-                    props.references ? "" : ""
+                  `${props.content.substring(0, 50)}${props.references ? "" : ""
                   }`
                 )}
                 {(props.content.length > 50 || props.references) && (
@@ -469,8 +486,7 @@ export const CardPost = (props: CardProps) => {
                           </div>
                           <div className="flex flex-row items-center">
                             <p className="font-poppins font-medium md:font-normal text-xs">
-                              Mensagem de teste que nao vale nada, apenas para
-                              testar a responsabilidade do site.
+                              {comment ? comment : "Mensagem de teste que nao vale nada, apenas para testar a responsabilidade do site"}
                             </p>
                           </div>
                           <p className="font-poppins text-muted-foreground font-normal md:font-light tracking-tight text-xs">
@@ -490,14 +506,18 @@ export const CardPost = (props: CardProps) => {
                           <AvatarImage src={dataUser.avatar} />
                         </Avatar>
 
-                        <Input
-                          type="text"
-                          placeholder="Adicione um coméntario"
-                        />
+                        <form action="" method="POST" onSubmit={handleCommentSubmit} className="flex flex-row justify-between w-full">
+                          <Input
+                            type="text"
+                            placeholder="Adicione um coméntario"
+                            onInput={handleCommentChange}
+                          />
 
-                        <Button variant={"outline"} size={"icon"}>
-                          <FatCornerUpRightSolid className="h-5 w-5" />
-                        </Button>
+                          {/* Confirmador do comentário */}
+                          <Button variant={"outline"} size={"icon"}>
+                            <FatCornerUpRightSolid className="h-5 w-5" />
+                          </Button>
+                        </form>
                       </div>
                     </DrawerFooter>
                   </DrawerContent>
