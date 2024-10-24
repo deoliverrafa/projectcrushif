@@ -14,13 +14,13 @@ import { Input } from "../../components/ui/input";
 import { Label } from "../../components/ui/label";
 import { Button } from "../../components/ui/button";
 import {
-  Drawer,
-  DrawerContent,
-  DrawerDescription,
-  DrawerTitle,
-  DrawerHeader,
-  DrawerTrigger,
-} from "../../components/ui/drawer";
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+  DialogHeader,
+  DialogTrigger,
+} from "../../components/ui/dialog";
 import { Separator } from "../../components/ui/separator";
 import { Badge } from "../../components/ui/badge";
 
@@ -230,26 +230,26 @@ export const RegisterLayout = () => {
           </CardHeader>
 
           <CardContent>
-            <Drawer>
-              <DrawerTrigger className="w-full" asChild>
+            <Dialog>
+              <DialogTrigger className="w-full" asChild>
                 <Button className="w-full">Registre-se</Button>
-              </DrawerTrigger>
+              </DialogTrigger>
 
-              <DrawerContent>
-                <DrawerHeader>
+              <DialogContent>
+                <DialogHeader>
                   <div className="flex flex-col items-center space-y-1.5">
                     <Badge className="w-fit" variant={"outline"}>
                       <FireSolid className="text-primary" />
                     </Badge>
-                    <DrawerTitle className="tracking-wider">
+                    <DialogTitle className="tracking-wider">
                       Registre-se
-                    </DrawerTitle>
+                    </DialogTitle>
                   </div>
 
-                  <DrawerDescription className="tracking-wide">
+                  <DialogDescription className="tracking-wide">
                     Faça registro para ter acesso a plataforma!
-                  </DrawerDescription>
-                </DrawerHeader>
+                  </DialogDescription>
+                </DialogHeader>
 
                 <form
                   action="register"
@@ -321,8 +321,8 @@ export const RegisterLayout = () => {
                     Registrar
                   </Button>
                 </form>
-              </DrawerContent>
-            </Drawer>
+              </DialogContent>
+            </Dialog>
           </CardContent>
 
           <Separator className="mb-5" />

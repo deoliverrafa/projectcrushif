@@ -65,9 +65,8 @@ import {
   FlagOneSolid,
   CopySolid,
   CheckSquareOneSolid,
-  HeartWaves,
+  HeartWavesSolid,
   FatCornerUpRightSolid,
-  At,
 } from "@mynaui/icons-react";
 
 import { getUserData } from "../utils/getUserData.tsx";
@@ -132,7 +131,8 @@ export const CardPost = (props: CardProps) => {
       setLikeCount(likeCount + 1);
     } else {
       axios.post(
-        `${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_POST_UNLIKE
+        `${import.meta.env.VITE_API_BASE_URL}${
+          import.meta.env.VITE_POST_UNLIKE
         }`,
         { token: localStorage.getItem("token"), postId: props._id }
       );
@@ -168,7 +168,8 @@ export const CardPost = (props: CardProps) => {
     const fetchUserData = async () => {
       try {
         const response = await axios.get(
-          `${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_USER_ID}${props.userId
+          `${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_USER_ID}${
+            props.userId
           }`
         );
 
@@ -191,30 +192,31 @@ export const CardPost = (props: CardProps) => {
     }
   }, [props.userId, props.insertAt]);
 
-
   // Comment Logic
   const [comment, setComment] = React.useState<String>();
-  const [statusComment, setStatusComment] = React.useState<Boolean>(false)
+  const [statusComment, setStatusComment] = React.useState<Boolean>(false);
 
   const handleCommentSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
+    e.preventDefault();
     try {
-      await axios.post(`${import.meta.env.VITE_BASE_URL}${import.meta.env.VITE_POST_COMMENT}`,{ comment, token:localStorage.getItem('token'), postId: props._id})
+      await axios.post(
+        `${import.meta.env.VITE_BASE_URL}${import.meta.env.VITE_POST_COMMENT}`,
+        { comment, token: localStorage.getItem("token"), postId: props._id }
+      );
     } catch (error: any) {
-      console.log("Erro ao postar comentário", error)
+      console.log("Erro ao postar comentário", error);
     }
-  }
+  };
 
   const handleCommentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = e.target
-    setComment(value)
-  }
-
+    const { value } = e.target;
+    setComment(value);
+  };
 
   return (
     <>
       <Card
-        className="select-none my-2 w-full md:w-4/12"
+        className="select-none my-2 w-full md:w-5/12"
         onDoubleClick={handleLike}
       >
         <CardHeader className="flex flex-row justify-between items-center">
@@ -235,7 +237,7 @@ export const CardPost = (props: CardProps) => {
                     </CardTitle>
                   </div>
                   <div>
-                    <HeartWaves className="text-background fill-success h-5 w-5 md:h-4 md:w-4" />
+                    <HeartWavesSolid className="text-success h-4 w-4" />
                   </div>
                 </div>
               </div>
@@ -257,7 +259,7 @@ export const CardPost = (props: CardProps) => {
                     </CardTitle>
                   </div>
                   <div>
-                    <HeartWaves className="text-background fill-success h-5 w-5 md:h-4 md:w-4" />
+                    <HeartWavesSolid className="text-success h-4 w-4" />
                   </div>
                 </div>
               </div>
@@ -433,7 +435,8 @@ export const CardPost = (props: CardProps) => {
                     )}
                   </>
                 ) : (
-                  `${props.content.substring(0, 50)}${props.references ? "" : ""
+                  `${props.content.substring(0, 50)}${
+                    props.references ? "" : ""
                   }`
                 )}
                 {(props.content.length > 50 || props.references) && (
@@ -483,20 +486,21 @@ export const CardPost = (props: CardProps) => {
                           <AvatarImage src={dataUser.avatar} />
                         </Avatar>
 
-                        <div className="rounded-lg bg-card border border-border p-4 w-auto max-w-[75%] shadow-sm">
-                          <div className="flex flex-row justify-center items-center space-x-1">
+                        <div className="flex flex-col items-center rounded-lg bg-card border border-border p-4 w-auto max-w-[75%] shadow-sm">
+                          <div className="flex flex-row justify-center items-center gap-0.5">
                             <div className="flex flex-row items-center">
-                              <At className="w-3 h-3" />
                               <p className="text-muted-foreground font-poppins font-semibold md:font-medium text-xs tracking-tight">
                                 {dataUser.nickname}
                               </p>
                             </div>
 
-                            <HeartWaves className="text-background fill-success h-4 w-4" />
+                            <HeartWavesSolid className="text-success h-3 w-3" />
                           </div>
-                          <div className="flex flex-row items-center">
+                          <div>
                             <p className="font-poppins font-medium md:font-normal text-xs">
-                              {comment ? comment : "Mensagem de teste que nao vale nada, apenas para testar a responsabilidade do site"}
+                              {comment
+                                ? comment
+                                : "Mensagem de teste que nao vale nada, apenas para testar a responsabilidade do site"}
                             </p>
                           </div>
                           <p className="font-poppins text-muted-foreground font-normal md:font-light tracking-tight text-xs">
@@ -516,7 +520,12 @@ export const CardPost = (props: CardProps) => {
                           <AvatarImage src={dataUser.avatar} />
                         </Avatar>
 
-                        <form action="" method="POST" onSubmit={handleCommentSubmit} className="flex flex-row justify-between w-full">
+                        <form
+                          action=""
+                          method="POST"
+                          onSubmit={handleCommentSubmit}
+                          className="flex flex-row justify-between gap-1 w-full"
+                        >
                           <Input
                             type="text"
                             placeholder="Adicione um coméntario"
@@ -524,7 +533,11 @@ export const CardPost = (props: CardProps) => {
                           />
 
                           {/* Confirmador do comentário */}
-                          <Button variant={"outline"} size={"icon"}>
+                          <Button
+                            className="rounded"
+                            variant={"outline"}
+                            size={"icon"}
+                          >
                             <FatCornerUpRightSolid className="h-5 w-5" />
                           </Button>
                         </form>
@@ -556,7 +569,7 @@ export const CardPost = (props: CardProps) => {
 
             <Input type="text" placeholder="Adicione um coméntario" />
 
-            <Button variant={"outline"} size={"icon"}>
+            <Button className="rounded" variant={"outline"} size={"icon"}>
               <FatCornerUpRightSolid className="h-5 w-5" />
             </Button>
           </div>

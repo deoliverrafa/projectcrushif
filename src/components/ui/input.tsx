@@ -77,7 +77,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         {type === "file" ? (
           <>
             <div
-              className="flex justify-center items-center mb-4 h-36 md:h-48 w-5/6 md:w-full border-2 border-dashed border-gray-400 rounded-md cursor-pointer"
+              className="flex justify-center items-center mb-4 h-48 w-full border-2 border-dashed border-gray-400 rounded-md cursor-pointer"
               onClick={handleClick}
               onDrop={handleDrop}
               onDragOver={(e) => e.preventDefault()}

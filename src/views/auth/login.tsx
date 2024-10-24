@@ -14,13 +14,13 @@ import { Input } from "../../components/ui/input.tsx";
 import { Button } from "../../components/ui/button.tsx";
 import { Label } from "../../components/ui/label.tsx";
 import {
-  Drawer,
-  DrawerTrigger,
-  DrawerContent,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerDescription,
-} from "../../components/ui/drawer";
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "../../components/ui/dialog";
 import { Separator } from "../../components/ui/separator.tsx";
 import { Badge } from "../../components/ui/badge.tsx";
 
@@ -179,24 +179,24 @@ const LoginLayout = () => {
           </CardHeader>
 
           <CardContent>
-            <Drawer>
-              <DrawerTrigger className="w-full" asChild>
+            <Dialog>
+              <DialogTrigger className="w-full" asChild>
                 <Button className="w-full">Entrar</Button>
-              </DrawerTrigger>
+              </DialogTrigger>
 
-              <DrawerContent>
-                <DrawerHeader>
+              <DialogContent>
+                <DialogHeader>
                   <div className="flex flex-col items-center space-y-1.5">
                     <Badge className="w-fit" variant={"outline"}>
                       <FireSolid className="text-primary" />
                     </Badge>
-                    <DrawerTitle className="tracking-wider">Login</DrawerTitle>
+                    <DialogTitle className="tracking-wider">Login</DialogTitle>
                   </div>
 
-                  <DrawerDescription className="tracking-wide">
+                  <DialogDescription className="tracking-wide">
                     Faça login para ter acesso a plataforma!
-                  </DrawerDescription>
-                </DrawerHeader>
+                  </DialogDescription>
+                </DialogHeader>
 
                 <form
                   className="flex flex-col relative px-4 py-6 space-y-5"
@@ -239,8 +239,8 @@ const LoginLayout = () => {
                     Entrar
                   </Button>
                 </form>
-              </DrawerContent>
-            </Drawer>
+              </DialogContent>
+            </Dialog>
           </CardContent>
 
           <Separator className="mb-5" />
