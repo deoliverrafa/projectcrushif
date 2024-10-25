@@ -70,6 +70,7 @@ import {
 } from "@mynaui/icons-react";
 
 import { getUserData } from "../utils/getUserData.tsx";
+import { getUserDataById } from "../utils/getUserDataById.tsx";
 
 interface CardProps {
   className?: string;
@@ -89,15 +90,31 @@ interface CardProps {
   likedBy: String[];
 }
 
-interface UserData {
+// interface UserData {
+//   nickname: string;
+//   avatar: string;
+//   email: string;
+// }
+
+interface User {
+  userName: string;
+  _id: string;
   nickname: string;
-  avatar: string;
   email: string;
+  campus: string;
+  avatar: string;
+  birthdaydata: string;
+  Nfollowers: number;
+  Nfollowing: number;
+  curso: string;
+  type: string;
+  insertAt: string;
 }
 
 export const CardPost = (props: CardProps) => {
-  const [userData, setUserData] = React.useState<UserData>();
+  // const [userData, setUserData] = React.useState<UserData>();
   const dataUser = getUserData();
+  const [viewingUser, setViewingUser] = React.useState<User | null>(null);
   const [formattedData, setFormattedData] = React.useState("");
 
   const [liked, setLiked] = React.useState(false);
@@ -165,22 +182,36 @@ export const CardPost = (props: CardProps) => {
   };
 
   React.useEffect(() => {
+    const fetchViewingUserData = async () => {
+      try {
+        const data = await getUserDataById(props.userId);
+        setViewingUser(data);
+      } catch (error) {
+        console.error("Error fetching viewing user data:", error);
+      }
+    };
+
+    if (props.userId) {
+      fetchViewingUserData();
+    }
+  }, [props.userId]);
+
+  React.useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await axios.get(
-          `${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_USER_ID}${
-            props.userId
-          }`
-        );
-
-        setUserData(response.data.userFinded);
+        // const response = await axios.get(
+        //   `${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_USER_ID}${
+        //     props.userId
+        //   }`
+        // );
+        // setUserData(response.data.userFinded);
       } catch (error) {
         console.error("Erro ao buscar dados do usuário:", error);
-        setUserData({
-          nickname: "Deletado",
-          avatar: "",
-          email: "Deletado",
-        });
+        // setUserData({
+        //   nickname: "Deletado",
+        //   avatar: "",
+        //   email: "Deletado",
+        // });
       }
     };
 
@@ -224,20 +255,32 @@ export const CardPost = (props: CardProps) => {
             <Link to={`/profile/${props.id}`} className="flex space-x-2">
               <Avatar className="shadow-lg border-2 border-secondary">
                 <AvatarFallback>
-                  {!props.isAnonymous ? userData?.nickname : ""}
+                  {!props.isAnonymous ? viewingUser?.nickname : ""}
                 </AvatarFallback>
 
-                <AvatarImage src={!props.isAnonymous ? userData?.avatar : ""} />
+                <AvatarImage
+                  src={!props.isAnonymous ? viewingUser?.avatar : ""}
+                />
               </Avatar>
               <div className="flex flex-col items-start justify-center space-y-1">
                 <div className="flex flex-row items-center space-x-1">
                   <div>
                     <CardTitle className="font-semibold md:font-medium text-lg md:text-md tracking-tight">
-                      {!props.isAnonymous ? userData?.nickname : "Anônimo"}
+                      {!props.isAnonymous ? viewingUser?.nickname : "Anônimo"}
                     </CardTitle>
                   </div>
                   <div>
-                    <HeartWavesSolid className="text-success h-4 w-4" />
+                    <HeartWavesSolid
+                      className={`${
+                        viewingUser?.type === "Plus"
+                          ? "text-info"
+                          : viewingUser?.type === "Admin"
+                          ? "text-danger"
+                          : viewingUser?.type === "verified"
+                          ? "text-success"
+                          : "hidden"
+                      } h-4 w-4`}
+                    />
                   </div>
                 </div>
               </div>
@@ -246,129 +289,134 @@ export const CardPost = (props: CardProps) => {
             <div className="flex space-x-2">
               <Avatar className="shadow-lg border-2 border-secondary">
                 <AvatarFallback>
-                  {!props.isAnonymous ? userData?.nickname : "Anônimo"}
+                  {!props.isAnonymous ? viewingUser?.nickname : "Anônimo"}
                 </AvatarFallback>
 
-                <AvatarImage src={!props.isAnonymous ? userData?.avatar : ""} />
+                <AvatarImage
+                  src={
+                    !props.isAnonymous
+                      ? viewingUser?.avatar
+                      : "https://i.postimg.cc/L87Rk9Bq/incognito-1.png"
+                  }
+                />
               </Avatar>
               <div className="flex flex-col items-start justify-center space-y-1">
                 <div className="flex flex-row items-center space-x-1">
                   <div>
                     <CardTitle className="font-semibold md:font-medium text-lg md:text-md tracking-tight">
-                      {!props.isAnonymous ? userData?.nickname : "Anônimo"}
+                      {!props.isAnonymous ? viewingUser?.nickname : "Anônimo"}
                     </CardTitle>
-                  </div>
-                  <div>
-                    <HeartWavesSolid className="text-success h-4 w-4" />
                   </div>
                 </div>
               </div>
             </div>
           )}
 
-          {!props.isAnonymous && (
-            <Drawer>
-              <DrawerTrigger asChild>
-                <Button variant={"outline"} size={"icon"}>
-                  <MenuSolid className="h-5 md:h-4 w-5 md:w-4" />
-                </Button>
-              </DrawerTrigger>
+          <Drawer>
+            <DrawerTrigger asChild>
+              <Button variant={"outline"} size={"icon"}>
+                <MenuSolid className="h-5 md:h-4 w-5 md:w-4" />
+              </Button>
+            </DrawerTrigger>
 
-              <DrawerContent>
-                <div className="mx-auto w-full max-w-sm">
-                  <DrawerHeader className="flex flex-row justify-around items-center">
-                    <div className="flex flex-col items-center space-y-1">
-                      <Button
-                        variant={"outline"}
-                        size={"icon"}
-                        onClick={handleLike}
-                      >
-                        {liked ? (
-                          <HeartSolid className="text-primary h-5 md:h-4 w-5 md:w-4" />
-                        ) : (
-                          <HeartBrokenSolid className="h-5 md:h-4 w-5 md:w-4" />
-                        )}
-                      </Button>
-                      <DrawerDescription>Curtir</DrawerDescription>
-                    </div>
-
-                    <div className="flex flex-col items-center space-y-1">
-                      <Button
-                        variant={"outline"}
-                        size={"icon"}
-                        onClick={handleFavorite}
-                      >
-                        {favorited ? (
-                          <BookmarkCheckSolid className="text-warning h-5 md:h-4 w-5 md:w-4" />
-                        ) : (
-                          <BookmarkSolid className="h-5 md:h-4 w-5 md:w-4" />
-                        )}
-                      </Button>
-                      <DrawerDescription>Favoritar</DrawerDescription>
-                    </div>
-                  </DrawerHeader>
-                </div>
-
-                <Separator />
-
-                <div className="py-5 space-y-2 mx-auto w-full max-w-sm">
-                  {props.id === dataUser._id ? null : (
-                    <Button variant={"ghost"} className="justify-start w-full">
-                      <UserPlusSolid className="h-5 md:h-4 w-5 md:w-4 mr-2" />
-                      Seguir
+            <DrawerContent>
+              <div className="mx-auto w-full max-w-sm">
+                <DrawerHeader className="flex flex-row justify-around items-center">
+                  <div className="flex flex-col items-center space-y-1">
+                    <Button
+                      variant={"outline"}
+                      size={"icon"}
+                      onClick={handleLike}
+                    >
+                      {liked ? (
+                        <HeartSolid className="text-primary h-5 md:h-4 w-5 md:w-4" />
+                      ) : (
+                        <HeartBrokenSolid className="h-5 md:h-4 w-5 md:w-4" />
+                      )}
                     </Button>
-                  )}
+                    <DrawerDescription>Curtir</DrawerDescription>
+                  </div>
 
-                  <Button
-                    className="justify-start w-full"
-                    variant={"ghost"}
-                    onClick={() => setOpenShare(true)}
-                  >
-                    <ShareSolid className="h-5 md:h-4 w-5 md:w-4 mr-2" />
-                    Compartilhar
+                  <div className="flex flex-col items-center space-y-1">
+                    <Button
+                      variant={"outline"}
+                      size={"icon"}
+                      onClick={handleFavorite}
+                    >
+                      {favorited ? (
+                        <BookmarkCheckSolid className="text-warning h-5 md:h-4 w-5 md:w-4" />
+                      ) : (
+                        <BookmarkSolid className="h-5 md:h-4 w-5 md:w-4" />
+                      )}
+                    </Button>
+                    <DrawerDescription>Favoritar</DrawerDescription>
+                  </div>
+                </DrawerHeader>
+              </div>
+
+              <Separator />
+
+              <div className="py-5 space-y-2 mx-auto w-full max-w-sm">
+                {props.isAnonymous || props.id === dataUser._id ? null : (
+                  <Button variant={"ghost"} className="justify-start w-full">
+                    <UserPlusSolid className="h-5 md:h-4 w-5 md:w-4 mr-2" />
+                    Seguir
                   </Button>
+                )}
 
+                <Button
+                  className="justify-start w-full"
+                  variant={"ghost"}
+                  onClick={() => setOpenShare(true)}
+                >
+                  <ShareSolid className="h-5 md:h-4 w-5 md:w-4 mr-2" />
+                  Compartilhar
+                </Button>
+
+                {props.isAnonymous ? null : (
                   <Link to={`/about/${props.id}`}>
                     <Button className="justify-start w-full" variant={"ghost"}>
                       <UserCircleSolid className="h-5 md:h-4 w-5 md:w-4 mr-2" />
                       Sobre
                     </Button>
                   </Link>
-                </div>
+                )}
+              </div>
 
-                <Separator />
+              <Separator />
 
-                <div className="py-5 space-y-2 mx-auto w-full max-w-sm">
-                  {props.id !== dataUser._id ? null : (
-                    <>
-                      <Button
-                        variant={"ghost"}
-                        className="text-danger justify-start w-full"
-                      >
-                        <EditOneSolid className="h-5 md:h-4 w-5 md:w-4 mr-2" />
-                        Editar
-                      </Button>
+              <div className="py-5 space-y-2 mx-auto w-full max-w-sm">
+                {props.id !== dataUser._id ? null : (
+                  <>
+                    <Button
+                      variant={"ghost"}
+                      className="text-danger justify-start w-full"
+                    >
+                      <EditOneSolid className="h-5 md:h-4 w-5 md:w-4 mr-2" />
+                      Editar
+                    </Button>
 
-                      <Button
-                        variant={"ghost"}
-                        className="text-danger justify-start w-full"
-                      >
-                        <TrashOneSolid className="h-5 md:h-4 w-5 md:w-4 mr-2" />
-                        Excluir
-                      </Button>
-                    </>
-                  )}
+                    <Button
+                      variant={"ghost"}
+                      className="text-danger justify-start w-full"
+                    >
+                      <TrashOneSolid className="h-5 md:h-4 w-5 md:w-4 mr-2" />
+                      Excluir
+                    </Button>
+                  </>
+                )}
 
-                  {props.id === dataUser._id ? null : (
-                    <>
-                      <Button
-                        variant={"ghost"}
-                        className="text-danger justify-start w-full"
-                      >
-                        <FlagOneSolid className="h-5 md:h-4 w-5 md:w-4 mr-2" />
-                        Reportar
-                      </Button>
+                {props.id === dataUser._id ? null : (
+                  <>
+                    <Button
+                      variant={"ghost"}
+                      className="text-danger justify-start w-full"
+                    >
+                      <FlagOneSolid className="h-5 md:h-4 w-5 md:w-4 mr-2" />
+                      Reportar
+                    </Button>
 
+                    {props.isAnonymous ? null : (
                       <Button
                         variant={"ghost"}
                         className="text-danger justify-start w-full"
@@ -376,12 +424,12 @@ export const CardPost = (props: CardProps) => {
                         <Ban className="h-5 md:h-4 w-5 md:w-4 mr-2" />
                         Bloquear
                       </Button>
-                    </>
-                  )}
-                </div>
-              </DrawerContent>
-            </Drawer>
-          )}
+                    )}
+                  </>
+                )}
+              </div>
+            </DrawerContent>
+          </Drawer>
         </CardHeader>
 
         <CardContent className="relative pb-0">
@@ -417,7 +465,7 @@ export const CardPost = (props: CardProps) => {
             <div className="flex flex-row items-center h-full w-full">
               <CardDescription className="text-foreground font-normal md:font-light tracking-tight text-md md:text-sm">
                 <span className="font-semibold md:font-medium">
-                  {!props.isAnonymous ? userData?.nickname : "anônimo"}:{" "}
+                  {!props.isAnonymous ? viewingUser?.nickname : "anônimo"}:{" "}
                 </span>
                 {showFullContent ? (
                   <>

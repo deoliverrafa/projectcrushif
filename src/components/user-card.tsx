@@ -6,7 +6,7 @@ import { Button } from "./ui/button.js";
 import { Card, CardTitle } from "./ui/card.js";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar.js";
 
-import { HeartWaves } from "@mynaui/icons-react";
+import { HeartWavesSolid } from "@mynaui/icons-react";
 
 interface SearchUserCard {
   avatar: string;
@@ -26,10 +26,11 @@ export default function SearchUserCard(props: SearchUserCard) {
   const [followedUser, setFollowedUser] = React.useState(false);
 
   const FollowUser = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
+    e.preventDefault();
     axios
       .put(
-        `${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_FOLLOW_USER
+        `${import.meta.env.VITE_API_BASE_URL}${
+          import.meta.env.VITE_FOLLOW_USER
         }`,
         formData
       )
@@ -57,16 +58,16 @@ export default function SearchUserCard(props: SearchUserCard) {
                 </CardTitle>
 
                 <div>
-                  <HeartWaves
+                  <HeartWavesSolid
                     className={`${
-                      props.type === "Plus"
-                        ? "fill-info"
-                        : props.type === "Admin"
-                        ? "fill-danger"
-                        : props.type === "verified"
-                        ? "fill-success"
+                      props?.type === "Plus"
+                        ? "text-info"
+                        : props?.type === "Admin"
+                        ? "text-danger"
+                        : props?.type === "verified"
+                        ? "text-success"
                         : "hidden"
-                    } text-background h-5 w-5 md:h-4 md:w-4`}
+                    } h-3 w-3`}
                   />
                 </div>
               </div>
@@ -80,7 +81,7 @@ export default function SearchUserCard(props: SearchUserCard) {
             <Button>
               {props.following || followedUser ? "Seguindo" : "Seguir"}
             </Button>
-          </form> 
+          </form>
         </div>
       </Card>
     </>

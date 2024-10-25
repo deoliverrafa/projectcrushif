@@ -24,7 +24,7 @@ import {
 import { Separator } from "../../components/ui/separator.tsx";
 import { Badge } from "../../components/ui/badge.tsx";
 
-import { FireSolid, XCircleSolid, SpinnerSolid } from "@mynaui/icons-react";
+import { FireSolid, XSolid, SpinnerSolid } from "@mynaui/icons-react";
 
 import logo from "../../../public/images/logo/logo.png";
 
@@ -127,7 +127,7 @@ const LoginLayout = () => {
 
               {messageError ? (
                 <CardDescription className="text-danger flex flex-row items-center gap-2">
-                  <XCircleSolid className="h-4 w-4" />
+                  <XSolid className="h-4 w-4" />
                   {messageError}
                 </CardDescription>
               ) : null}
@@ -227,7 +227,7 @@ const LoginLayout = () => {
 
                   {messageError ? (
                     <CardDescription className="text-danger flex flex-row items-center gap-2">
-                      <XCircleSolid className="h-4 w-4" />
+                      <XSolid className="h-4 w-4" />
                       {messageError}
                     </CardDescription>
                   ) : null}
@@ -257,9 +257,9 @@ const LoginLayout = () => {
               do{" "}
               <Link
                 to="/auth/terms"
-                className="text-primary font-recursive font-bold md:font-semibold uppercase tracking-widest"
+                className="text-primary font-cookie font-medium text-xl"
               >
-                Crush
+                Crushif
               </Link>
               .
             </p>

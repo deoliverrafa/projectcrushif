@@ -351,7 +351,7 @@ const PublishLayout = () => {
             } flex flex-row justify-center items-center my-2`}
           >
             <Button className="w-full" onClick={handleNextStep}>
-              Proximo
+              Próximo
             </Button>
           </div>
 
@@ -546,7 +546,7 @@ const PublishLayout = () => {
                 } flex flex-row justify-center items-center m-2`}
               >
                 <Button className="w-full" onClick={handleNextStep}>
-                  Proximo
+                  Próximo
                 </Button>
               </div>
 

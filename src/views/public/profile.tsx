@@ -237,13 +237,15 @@ const ProfileLayout = () => {
 
               <div className="py-5 space-y-2 mx-auto w-full max-w-sm">
                 {isOwnProfile && (
-                  <Button
-                    variant={"ghost"}
-                    className="text-danger justify-start w-full"
-                  >
-                    <EditOneSolid className="h-5 md:h-4 w-5 md:w-4 mr-2" />
-                    Editar
-                  </Button>
+                  <Link to={"/profile/edit"}>
+                    <Button
+                      variant={"ghost"}
+                      className="text-danger justify-start w-full"
+                    >
+                      <EditOneSolid className="h-5 md:h-4 w-5 md:w-4 mr-2" />
+                      Editar
+                    </Button>
+                  </Link>
                 )}
 
                 {!isOwnProfile && (

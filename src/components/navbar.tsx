@@ -39,7 +39,7 @@ import {
   LogoutSolid,
   EditOneSolid,
   LightningSolid,
-  ChevronLeft
+  ChevronLeft,
 } from "@mynaui/icons-react";
 
 import { getUserData } from "../utils/getUserData.tsx";
@@ -48,6 +48,7 @@ interface profile {
   nickname: string;
   name: string;
   avatar: string;
+  type: string;
 }
 
 interface User {
@@ -69,7 +70,7 @@ interface NavbarProps extends React.HTMLAttributes<HTMLElement> {
   className?: string;
 }
 
-const Profile = ({ nickname, name, avatar }: profile) => {
+const Profile = ({ nickname, name, avatar, type }: profile) => {
   const userData = getUserData();
 
   function logOutHandle() {
@@ -114,7 +115,17 @@ const Profile = ({ nickname, name, avatar }: profile) => {
                     </CardTitle>
 
                     <div>
-                      <HeartWavesSolid className="text-success h-4 w-4 md:h-3 md:w-3" />
+                      <HeartWavesSolid
+                        className={`${
+                          type === "Plus"
+                            ? "text-info"
+                            : type === "Admin"
+                            ? "text-danger"
+                            : type === "verified"
+                            ? "text-success"
+                            : "hidden"
+                        } h-3 w-3`}
+                      />
                     </div>
                   </div>
 
@@ -198,7 +209,7 @@ const Profile = ({ nickname, name, avatar }: profile) => {
             </SheetDescription>
 
             <Link
-              to=""
+              to="/profile/edit"
               className="flex flex-row justify-between items-center p-3"
             >
               <div className="flex flex-row items-center gap-2">
@@ -402,6 +413,8 @@ const NavbarBrand: React.FC<NavbarBrandProps> = ({
 NavbarBrand.displayName = "NavbarBrand";
 
 export const NavBar = (props: userData) => {
+  const userData = getUserData();
+
   return (
     <Navbar>
       <NavbarContent>
@@ -491,19 +504,26 @@ export const NavBar = (props: userData) => {
       </NavbarContent>
 
       <NavbarContent>
-        <NavbarItem
-          href="/notifications"
-          activeClassName="text-primary"
-          hoverClassName="text-primary/70"
-        >
-          <SendSolid className="h-6 w-6 md:h-5 md:w-5" />
-        </NavbarItem>
+        <div className="relative">
+          <NavbarItem
+            href="/notifications"
+            activeClassName="text-primary"
+            hoverClassName="text-primary/70"
+          >
+            <SendSolid className="h-6 w-6" />
+          </NavbarItem>
+
+          <span className="flex flex-row justify-center items-center h-4 md:h-3.5 w-4 md:w-3.5 rounded-full text-xs bg-primary absolute top-0 right-1 md:right-0">
+            0
+          </span>
+        </div>
 
         <NavbarItem href={""}>
           <Profile
             nickname={props.user?.nickname ? props.user.nickname : ""}
             name={props.user?.name ? props.user.name : ""}
             avatar={props.avatarPath ? props.avatarPath : ""}
+            type={userData.type ? userData.type : ""}
           />
         </NavbarItem>
       </NavbarContent>
