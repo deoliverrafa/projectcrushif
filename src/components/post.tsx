@@ -28,6 +28,7 @@ import {
 } from "./ui/tooltip.tsx";
 import { Button } from "./ui/button.tsx";
 import { Input } from "./ui/input.tsx";
+import { Comment } from "./ui/comment.tsx";
 import {
   Drawer,
   DrawerContent,
@@ -67,7 +68,6 @@ import {
   CheckSquareOneSolid,
   HeartWaves,
   FatCornerUpRightSolid,
-  At,
 } from "@mynaui/icons-react";
 
 import { getUserData } from "../utils/getUserData.tsx";
@@ -91,13 +91,35 @@ interface CardProps {
 }
 
 interface UserData {
-  nickname: string;
-  avatar: string;
-  email: string;
+  _id: string
+  nickname: string
+  userName: string
+  email: string
+  campus: string
+  avatar: string
+  birthdaydata: string
+  Nfollowing: number
+  Nfollowers: number
+  following: string[]
+  followers: string[]
+  curso: string
 }
 
 export const CardPost = (props: CardProps) => {
-  const [userData, setUserData] = React.useState<UserData>();
+  const [userData, setUserData] = React.useState<UserData>({
+    _id: '',
+    nickname: '',
+    userName: '',
+    email: '',
+    campus: '',
+    avatar: '',
+    birthdaydata: '',
+    Nfollowing: 0,
+    Nfollowers: 0,
+    following: [],
+    followers: [],
+    curso: ''
+  });
   const dataUser = getUserData();
   const [formattedData, setFormattedData] = React.useState("");
 
@@ -174,11 +196,19 @@ export const CardPost = (props: CardProps) => {
 
         setUserData(response.data.userFinded);
       } catch (error) {
-        console.error("Erro ao buscar dados do usuário:", error);
         setUserData({
           nickname: "Deletado",
           avatar: "",
           email: "Deletado",
+          _id: '',
+          userName: '',
+          campus: '',
+          birthdaydata: '',
+          Nfollowing: 0,
+          Nfollowers: 0,
+          following: [],
+          followers: [],
+          curso: ''
         });
       }
     };
@@ -193,13 +223,35 @@ export const CardPost = (props: CardProps) => {
 
 
   // Comment Logic
-  const [comment, setComment] = React.useState<String>();
-  const [statusComment, setStatusComment] = React.useState<Boolean>(false)
+  const [comment, setComment] = React.useState<string>();
+  const [errorComment, setErrorComment] = React.useState<string>();
+  const [statusComment, setStatusComment] = React.useState<boolean>(false)
 
   const handleCommentSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     try {
-      await axios.post(`${import.meta.env.VITE_BASE_URL}${import.meta.env.VITE_POST_COMMENT}`,{ comment, token:localStorage.getItem('token'), postId: props._id})
+      if (comment == null || comment == '' || comment == undefined) return setErrorComment("Seu comentário está vazio")
+
+      await axios.post(`${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_POST_COMMENT}`, { content: comment, token: localStorage.getItem('token'), postId: props._id })
+        .then((response) => {
+          if (response.data.posted) setStatusComment(true);
+        })
+        .catch((error: any) => {
+          // Postagem não encontrada ou deletada
+          // Comentário vazio
+          // Token Expirado | Aqui o usuário precisa reiniciar a sessão
+          setStatusComment(false)
+          setErrorComment(error.message)
+
+          if (error.message == "Token Expirado") {
+            setErrorComment(error.message + "Você será redirecionado para login em 3s")
+
+            setTimeout(() => {
+              window.location.href = "/"
+            }, 3000)
+          }
+        }
+        )
     } catch (error: any) {
       console.log("Erro ao postar comentário", error)
     }
@@ -210,6 +262,24 @@ export const CardPost = (props: CardProps) => {
     setComment(value)
   }
 
+
+  // GET COMMENT LOGIC
+
+  const [comments, setComments] = React.useState<[]>();
+
+  React.useEffect(() => {
+
+    const getComments = async () => {
+      axios.get(`${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_POST_GETCOMMENTS}`)
+        .then((response) => {
+          setComment(response.data.posts)
+        })
+
+      setComments(comments)
+    }
+
+    getComments();
+  }, []);
 
   return (
     <>
@@ -477,32 +547,7 @@ export const CardPost = (props: CardProps) => {
                   <DrawerContent>
                     <DrawerHeader>
                       <div className="flex items-start space-x-2">
-                        <Avatar className="shadow-lg border-2 border-secondary">
-                          <AvatarFallback>{dataUser.nickname}</AvatarFallback>
-
-                          <AvatarImage src={dataUser.avatar} />
-                        </Avatar>
-
-                        <div className="rounded-lg bg-card border border-border p-4 w-auto max-w-[75%] shadow-sm">
-                          <div className="flex flex-row justify-center items-center space-x-1">
-                            <div className="flex flex-row items-center">
-                              <At className="w-3 h-3" />
-                              <p className="text-muted-foreground font-poppins font-semibold md:font-medium text-xs tracking-tight">
-                                {dataUser.nickname}
-                              </p>
-                            </div>
-
-                            <HeartWaves className="text-background fill-success h-4 w-4" />
-                          </div>
-                          <div className="flex flex-row items-center">
-                            <p className="font-poppins font-medium md:font-normal text-xs">
-                              {comment ? comment : "Mensagem de teste que nao vale nada, apenas para testar a responsabilidade do site"}
-                            </p>
-                          </div>
-                          <p className="font-poppins text-muted-foreground font-normal md:font-light tracking-tight text-xs">
-                            há 4 dias atrás
-                          </p>
-                        </div>
+                        <Comment postUser={userData} userData={userData} comment={comment} errorComment={errorComment} statusComment={statusComment} />
                       </div>
                     </DrawerHeader>
 
