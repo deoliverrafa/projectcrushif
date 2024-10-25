@@ -66,11 +66,12 @@ import {
   FlagOneSolid,
   CopySolid,
   CheckSquareOneSolid,
-  HeartWaves,
+  HeartWavesSolid,
   FatCornerUpRightSolid,
 } from "@mynaui/icons-react";
 
 import { getUserData } from "../utils/getUserData.tsx";
+import { getUserDataById } from "../utils/getUserDataById.tsx";
 
 interface CardProps {
   className?: string;
@@ -91,36 +92,15 @@ interface CardProps {
 }
 
 interface UserData {
-  _id: string
-  nickname: string
-  userName: string
-  email: string
-  campus: string
-  avatar: string
-  birthdaydata: string
-  Nfollowing: number
-  Nfollowers: number
-  following: string[]
-  followers: string[]
-  curso: string
+  nickname: string;
+  avatar: string;
+  email: string;
 }
 
 export const CardPost = (props: CardProps) => {
-  const [userData, setUserData] = React.useState<UserData>({
-    _id: '',
-    nickname: '',
-    userName: '',
-    email: '',
-    campus: '',
-    avatar: '',
-    birthdaydata: '',
-    Nfollowing: 0,
-    Nfollowers: 0,
-    following: [],
-    followers: [],
-    curso: ''
-  });
+  const [userData, setUserData] = React.useState<UserData>();
   const dataUser = getUserData();
+  const [viewingUser, setViewingUser] = React.useState<User | null>(null);
   const [formattedData, setFormattedData] = React.useState("");
 
   const [liked, setLiked] = React.useState(false);
@@ -154,7 +134,8 @@ export const CardPost = (props: CardProps) => {
       setLikeCount(likeCount + 1);
     } else {
       axios.post(
-        `${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_POST_UNLIKE
+        `${import.meta.env.VITE_API_BASE_URL}${
+          import.meta.env.VITE_POST_UNLIKE
         }`,
         { token: localStorage.getItem("token"), postId: props._id }
       );
@@ -187,28 +168,35 @@ export const CardPost = (props: CardProps) => {
   };
 
   React.useEffect(() => {
+    const fetchViewingUserData = async () => {
+      try {
+        const data = await getUserDataById(props.userId);
+        setViewingUser(data);
+      } catch (error) {
+        console.error("Error fetching viewing user data:", error);
+      }
+    };
+
+    if (props.userId) {
+      fetchViewingUserData();
+    }
+  }, [props.userId]);
+
+  React.useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await axios.get(
-          `${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_USER_ID}${props.userId
-          }`
-        );
-
-        setUserData(response.data.userFinded);
+        // const response = await axios.get(
+        //   `${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_USER_ID}${
+        //     props.userId
+        //   }`
+        // );
+        // setUserData(response.data.userFinded);
       } catch (error) {
+        console.error("Erro ao buscar dados do usuário:", error);
         setUserData({
           nickname: "Deletado",
           avatar: "",
           email: "Deletado",
-          _id: '',
-          userName: '',
-          campus: '',
-          birthdaydata: '',
-          Nfollowing: 0,
-          Nfollowers: 0,
-          following: [],
-          followers: [],
-          curso: ''
         });
       }
     };
@@ -221,41 +209,18 @@ export const CardPost = (props: CardProps) => {
     }
   }, [props.userId, props.insertAt]);
 
-
   // Comment Logic
-  const [comment, setComment] = React.useState<string>();
-  const [errorComment, setErrorComment] = React.useState<string>();
-  const [statusComment, setStatusComment] = React.useState<boolean>(false)
+  const [comment, setComment] = React.useState<String>();
+  const [statusComment, setStatusComment] = React.useState<Boolean>(false)
 
   const handleCommentSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
+    e.preventDefault();
     try {
-      if (comment == null || comment == '' || comment == undefined) return setErrorComment("Seu comentário está vazio")
-
-      await axios.post(`${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_POST_COMMENT}`, { content: comment, token: localStorage.getItem('token'), postId: props._id })
-        .then((response) => {
-          if (response.data.posted) setStatusComment(true);
-        })
-        .catch((error: any) => {
-          // Postagem não encontrada ou deletada
-          // Comentário vazio
-          // Token Expirado | Aqui o usuário precisa reiniciar a sessão
-          setStatusComment(false)
-          setErrorComment(error.message)
-
-          if (error.message == "Token Expirado") {
-            setErrorComment(error.message + "Você será redirecionado para login em 3s")
-
-            setTimeout(() => {
-              window.location.href = "/"
-            }, 3000)
-          }
-        }
-        )
+      await axios.post(`${import.meta.env.VITE_BASE_URL}${import.meta.env.VITE_POST_COMMENT}`,{ comment, token:localStorage.getItem('token'), postId: props._id})
     } catch (error: any) {
-      console.log("Erro ao postar comentário", error)
+      console.log("Erro ao postar comentário", error);
     }
-  }
+  };
 
   const handleCommentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target
@@ -263,28 +228,10 @@ export const CardPost = (props: CardProps) => {
   }
 
 
-  // GET COMMENT LOGIC
-
-  const [comments, setComments] = React.useState<[]>();
-
-  React.useEffect(() => {
-
-    const getComments = async () => {
-      axios.get(`${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_POST_GETCOMMENTS}`)
-        .then((response) => {
-          setComment(response.data.posts)
-        })
-
-      setComments(comments)
-    }
-
-    getComments();
-  }, []);
-
   return (
     <>
       <Card
-        className="select-none my-2 w-full md:w-4/12"
+        className="select-none my-2 w-full md:w-5/12"
         onDoubleClick={handleLike}
       >
         <CardHeader className="flex flex-row justify-between items-center">
@@ -292,20 +239,32 @@ export const CardPost = (props: CardProps) => {
             <Link to={`/profile/${props.id}`} className="flex space-x-2">
               <Avatar className="shadow-lg border-2 border-secondary">
                 <AvatarFallback>
-                  {!props.isAnonymous ? userData?.nickname : ""}
+                  {!props.isAnonymous ? viewingUser?.nickname : ""}
                 </AvatarFallback>
 
-                <AvatarImage src={!props.isAnonymous ? userData?.avatar : ""} />
+                <AvatarImage
+                  src={!props.isAnonymous ? viewingUser?.avatar : ""}
+                />
               </Avatar>
               <div className="flex flex-col items-start justify-center space-y-1">
                 <div className="flex flex-row items-center space-x-1">
                   <div>
                     <CardTitle className="font-semibold md:font-medium text-lg md:text-md tracking-tight">
-                      {!props.isAnonymous ? userData?.nickname : "Anônimo"}
+                      {!props.isAnonymous ? viewingUser?.nickname : "Anônimo"}
                     </CardTitle>
                   </div>
                   <div>
-                    <HeartWaves className="text-background fill-success h-5 w-5 md:h-4 md:w-4" />
+                    <HeartWavesSolid
+                      className={`${
+                        viewingUser?.type === "Plus"
+                          ? "text-info"
+                          : viewingUser?.type === "Admin"
+                          ? "text-danger"
+                          : viewingUser?.type === "verified"
+                          ? "text-success"
+                          : "hidden"
+                      } h-4 w-4`}
+                    />
                   </div>
                 </div>
               </div>
@@ -314,129 +273,134 @@ export const CardPost = (props: CardProps) => {
             <div className="flex space-x-2">
               <Avatar className="shadow-lg border-2 border-secondary">
                 <AvatarFallback>
-                  {!props.isAnonymous ? userData?.nickname : "Anônimo"}
+                  {!props.isAnonymous ? viewingUser?.nickname : "Anônimo"}
                 </AvatarFallback>
 
-                <AvatarImage src={!props.isAnonymous ? userData?.avatar : ""} />
+                <AvatarImage
+                  src={
+                    !props.isAnonymous
+                      ? viewingUser?.avatar
+                      : "https://i.postimg.cc/L87Rk9Bq/incognito-1.png"
+                  }
+                />
               </Avatar>
               <div className="flex flex-col items-start justify-center space-y-1">
                 <div className="flex flex-row items-center space-x-1">
                   <div>
                     <CardTitle className="font-semibold md:font-medium text-lg md:text-md tracking-tight">
-                      {!props.isAnonymous ? userData?.nickname : "Anônimo"}
+                      {!props.isAnonymous ? viewingUser?.nickname : "Anônimo"}
                     </CardTitle>
-                  </div>
-                  <div>
-                    <HeartWaves className="text-background fill-success h-5 w-5 md:h-4 md:w-4" />
                   </div>
                 </div>
               </div>
             </div>
           )}
 
-          {!props.isAnonymous && (
-            <Drawer>
-              <DrawerTrigger asChild>
-                <Button variant={"outline"} size={"icon"}>
-                  <MenuSolid className="h-5 md:h-4 w-5 md:w-4" />
-                </Button>
-              </DrawerTrigger>
+          <Drawer>
+            <DrawerTrigger asChild>
+              <Button variant={"outline"} size={"icon"}>
+                <MenuSolid className="h-5 md:h-4 w-5 md:w-4" />
+              </Button>
+            </DrawerTrigger>
 
-              <DrawerContent>
-                <div className="mx-auto w-full max-w-sm">
-                  <DrawerHeader className="flex flex-row justify-around items-center">
-                    <div className="flex flex-col items-center space-y-1">
-                      <Button
-                        variant={"outline"}
-                        size={"icon"}
-                        onClick={handleLike}
-                      >
-                        {liked ? (
-                          <HeartSolid className="text-primary h-5 md:h-4 w-5 md:w-4" />
-                        ) : (
-                          <HeartBrokenSolid className="h-5 md:h-4 w-5 md:w-4" />
-                        )}
-                      </Button>
-                      <DrawerDescription>Curtir</DrawerDescription>
-                    </div>
-
-                    <div className="flex flex-col items-center space-y-1">
-                      <Button
-                        variant={"outline"}
-                        size={"icon"}
-                        onClick={handleFavorite}
-                      >
-                        {favorited ? (
-                          <BookmarkCheckSolid className="text-warning h-5 md:h-4 w-5 md:w-4" />
-                        ) : (
-                          <BookmarkSolid className="h-5 md:h-4 w-5 md:w-4" />
-                        )}
-                      </Button>
-                      <DrawerDescription>Favoritar</DrawerDescription>
-                    </div>
-                  </DrawerHeader>
-                </div>
-
-                <Separator />
-
-                <div className="py-5 space-y-2 mx-auto w-full max-w-sm">
-                  {props.id === dataUser._id ? null : (
-                    <Button variant={"ghost"} className="justify-start w-full">
-                      <UserPlusSolid className="h-5 md:h-4 w-5 md:w-4 mr-2" />
-                      Seguir
+            <DrawerContent>
+              <div className="mx-auto w-full max-w-sm">
+                <DrawerHeader className="flex flex-row justify-around items-center">
+                  <div className="flex flex-col items-center space-y-1">
+                    <Button
+                      variant={"outline"}
+                      size={"icon"}
+                      onClick={handleLike}
+                    >
+                      {liked ? (
+                        <HeartSolid className="text-primary h-5 md:h-4 w-5 md:w-4" />
+                      ) : (
+                        <HeartBrokenSolid className="h-5 md:h-4 w-5 md:w-4" />
+                      )}
                     </Button>
-                  )}
+                    <DrawerDescription>Curtir</DrawerDescription>
+                  </div>
 
-                  <Button
-                    className="justify-start w-full"
-                    variant={"ghost"}
-                    onClick={() => setOpenShare(true)}
-                  >
-                    <ShareSolid className="h-5 md:h-4 w-5 md:w-4 mr-2" />
-                    Compartilhar
+                  <div className="flex flex-col items-center space-y-1">
+                    <Button
+                      variant={"outline"}
+                      size={"icon"}
+                      onClick={handleFavorite}
+                    >
+                      {favorited ? (
+                        <BookmarkCheckSolid className="text-warning h-5 md:h-4 w-5 md:w-4" />
+                      ) : (
+                        <BookmarkSolid className="h-5 md:h-4 w-5 md:w-4" />
+                      )}
+                    </Button>
+                    <DrawerDescription>Favoritar</DrawerDescription>
+                  </div>
+                </DrawerHeader>
+              </div>
+
+              <Separator />
+
+              <div className="py-5 space-y-2 mx-auto w-full max-w-sm">
+                {props.isAnonymous || props.id === dataUser._id ? null : (
+                  <Button variant={"ghost"} className="justify-start w-full">
+                    <UserPlusSolid className="h-5 md:h-4 w-5 md:w-4 mr-2" />
+                    Seguir
                   </Button>
+                )}
 
+                <Button
+                  className="justify-start w-full"
+                  variant={"ghost"}
+                  onClick={() => setOpenShare(true)}
+                >
+                  <ShareSolid className="h-5 md:h-4 w-5 md:w-4 mr-2" />
+                  Compartilhar
+                </Button>
+
+                {props.isAnonymous ? null : (
                   <Link to={`/about/${props.id}`}>
                     <Button className="justify-start w-full" variant={"ghost"}>
                       <UserCircleSolid className="h-5 md:h-4 w-5 md:w-4 mr-2" />
                       Sobre
                     </Button>
                   </Link>
-                </div>
+                )}
+              </div>
 
-                <Separator />
+              <Separator />
 
-                <div className="py-5 space-y-2 mx-auto w-full max-w-sm">
-                  {props.id !== dataUser._id ? null : (
-                    <>
-                      <Button
-                        variant={"ghost"}
-                        className="text-danger justify-start w-full"
-                      >
-                        <EditOneSolid className="h-5 md:h-4 w-5 md:w-4 mr-2" />
-                        Editar
-                      </Button>
+              <div className="py-5 space-y-2 mx-auto w-full max-w-sm">
+                {props.id !== dataUser._id ? null : (
+                  <>
+                    <Button
+                      variant={"ghost"}
+                      className="text-danger justify-start w-full"
+                    >
+                      <EditOneSolid className="h-5 md:h-4 w-5 md:w-4 mr-2" />
+                      Editar
+                    </Button>
 
-                      <Button
-                        variant={"ghost"}
-                        className="text-danger justify-start w-full"
-                      >
-                        <TrashOneSolid className="h-5 md:h-4 w-5 md:w-4 mr-2" />
-                        Excluir
-                      </Button>
-                    </>
-                  )}
+                    <Button
+                      variant={"ghost"}
+                      className="text-danger justify-start w-full"
+                    >
+                      <TrashOneSolid className="h-5 md:h-4 w-5 md:w-4 mr-2" />
+                      Excluir
+                    </Button>
+                  </>
+                )}
 
-                  {props.id === dataUser._id ? null : (
-                    <>
-                      <Button
-                        variant={"ghost"}
-                        className="text-danger justify-start w-full"
-                      >
-                        <FlagOneSolid className="h-5 md:h-4 w-5 md:w-4 mr-2" />
-                        Reportar
-                      </Button>
+                {props.id === dataUser._id ? null : (
+                  <>
+                    <Button
+                      variant={"ghost"}
+                      className="text-danger justify-start w-full"
+                    >
+                      <FlagOneSolid className="h-5 md:h-4 w-5 md:w-4 mr-2" />
+                      Reportar
+                    </Button>
 
+                    {props.isAnonymous ? null : (
                       <Button
                         variant={"ghost"}
                         className="text-danger justify-start w-full"
@@ -444,12 +408,12 @@ export const CardPost = (props: CardProps) => {
                         <Ban className="h-5 md:h-4 w-5 md:w-4 mr-2" />
                         Bloquear
                       </Button>
-                    </>
-                  )}
-                </div>
-              </DrawerContent>
-            </Drawer>
-          )}
+                    )}
+                  </>
+                )}
+              </div>
+            </DrawerContent>
+          </Drawer>
         </CardHeader>
 
         <CardContent className="relative pb-0">
@@ -485,7 +449,7 @@ export const CardPost = (props: CardProps) => {
             <div className="flex flex-row items-center h-full w-full">
               <CardDescription className="text-foreground font-normal md:font-light tracking-tight text-md md:text-sm">
                 <span className="font-semibold md:font-medium">
-                  {!props.isAnonymous ? userData?.nickname : "anônimo"}:{" "}
+                  {!props.isAnonymous ? viewingUser?.nickname : "anônimo"}:{" "}
                 </span>
                 {showFullContent ? (
                   <>
@@ -503,7 +467,8 @@ export const CardPost = (props: CardProps) => {
                     )}
                   </>
                 ) : (
-                  `${props.content.substring(0, 50)}${props.references ? "" : ""
+                  `${props.content.substring(0, 50)}${
+                    props.references ? "" : ""
                   }`
                 )}
                 {(props.content.length > 50 || props.references) && (
@@ -547,7 +512,32 @@ export const CardPost = (props: CardProps) => {
                   <DrawerContent>
                     <DrawerHeader>
                       <div className="flex items-start space-x-2">
-                        <Comment postUser={userData} userData={userData} comment={comment} errorComment={errorComment} statusComment={statusComment} />
+                        <Avatar className="shadow-lg border-2 border-secondary">
+                          <AvatarFallback>{dataUser.nickname}</AvatarFallback>
+
+                          <AvatarImage src={dataUser.avatar} />
+                        </Avatar>
+
+                        <div className="rounded-lg bg-card border border-border p-4 w-auto max-w-[75%] shadow-sm">
+                          <div className="flex flex-row justify-center items-center space-x-1">
+                            <div className="flex flex-row items-center">
+                              <At className="w-3 h-3" />
+                              <p className="text-muted-foreground font-poppins font-semibold md:font-medium text-xs tracking-tight">
+                                {dataUser.nickname}
+                              </p>
+                            </div>
+
+                            <HeartWaves className="text-background fill-success h-4 w-4" />
+                          </div>
+                          <div className="flex flex-row items-center">
+                            <p className="font-poppins font-medium md:font-normal text-xs">
+                              {comment ? comment : "Mensagem de teste que nao vale nada, apenas para testar a responsabilidade do site"}
+                            </p>
+                          </div>
+                          <p className="font-poppins text-muted-foreground font-normal md:font-light tracking-tight text-xs">
+                            há 4 dias atrás
+                          </p>
+                        </div>
                       </div>
                     </DrawerHeader>
 
@@ -561,7 +551,12 @@ export const CardPost = (props: CardProps) => {
                           <AvatarImage src={dataUser.avatar} />
                         </Avatar>
 
-                        <form action="" method="POST" onSubmit={handleCommentSubmit} className="flex flex-row justify-between w-full">
+                        <form
+                          action=""
+                          method="POST"
+                          onSubmit={handleCommentSubmit}
+                          className="flex flex-row justify-between gap-1 w-full"
+                        >
                           <Input
                             type="text"
                             placeholder="Adicione um coméntario"
@@ -569,7 +564,11 @@ export const CardPost = (props: CardProps) => {
                           />
 
                           {/* Confirmador do comentário */}
-                          <Button variant={"outline"} size={"icon"}>
+                          <Button
+                            className="rounded"
+                            variant={"outline"}
+                            size={"icon"}
+                          >
                             <FatCornerUpRightSolid className="h-5 w-5" />
                           </Button>
                         </form>
@@ -601,7 +600,7 @@ export const CardPost = (props: CardProps) => {
 
             <Input type="text" placeholder="Adicione um coméntario" />
 
-            <Button variant={"outline"} size={"icon"}>
+            <Button className="rounded" variant={"outline"} size={"icon"}>
               <FatCornerUpRightSolid className="h-5 w-5" />
             </Button>
           </div>

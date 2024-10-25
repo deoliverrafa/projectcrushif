@@ -7,6 +7,7 @@ import {
   CardContent,
   CardFooter,
   CardHeader,
+  CardTitle,
 } from "../../components/ui/card.tsx";
 import { Button } from "../../components/ui/button.tsx";
 import { Separator } from "../../components/ui/separator.tsx";
@@ -16,7 +17,11 @@ import {
   AvatarImage,
 } from "../../components/ui/avatar.tsx";
 
-import { BadgeCheck, LogOut, Trash } from "lucide-react";
+import {
+  LogoutSolid,
+  TrashOneSolid,
+  HeartWavesSolid,
+} from "@mynaui/icons-react";
 
 import { getUserData } from "../../utils/getUserData.tsx";
 
@@ -24,6 +29,7 @@ interface UserData {
   nickname: string;
   avatar: string;
   email: string;
+  type: string;
 }
 
 const SettingsLayout = ({
@@ -66,12 +72,22 @@ const SettingsLayout = ({
 
             <div className="flex flex-col">
               <div className="flex flex-row items-center space-x-1">
-                <p className="font-inter font-semibold">{userData.nickname}</p>
-                <BadgeCheck className="fill-success text-background size-3.5" />
+                <CardTitle className="font-semibold md:font-medium text-md md:text-sm tracking-tight">{userData.nickname}</CardTitle>
+                <HeartWavesSolid
+                  className={`${
+                    userData?.type === "Plus"
+                      ? "text-info"
+                      : userData?.type === "Admin"
+                      ? "text-danger"
+                      : userData?.type === "verified"
+                      ? "text-success"
+                      : "hidden"
+                  } h-3 w-3`}
+                />
               </div>
-              <p className="text-default text-tiny font-inter tracking-tight">
+              <CardTitle className="font-normal md:font-light text-sm md:text-xs tracking-tight">
                 {userData.email}
-              </p>
+              </CardTitle>
             </div>
           </div>
         </CardContent>
@@ -81,12 +97,12 @@ const SettingsLayout = ({
         <CardFooter className="flex-col justify-start items-start space-y-2">
           <Link to={"/"}>
             <Button variant={"danger"} onClick={logOutHandle}>
-              <LogOut className="mr-2 h-5 w-5" />
+              <LogoutSolid className="mr-2 h-5 w-5" />
               Deslogar
             </Button>
           </Link>
-          <Button variant={"danger"} onClick={logOutHandle}>
-            <Trash className="mr-2 h-5 w-5" />
+          <Button variant={"danger"}>
+            <TrashOneSolid className="mr-2 h-5 w-5" />
             Deletar conta
           </Button>
         </CardFooter>

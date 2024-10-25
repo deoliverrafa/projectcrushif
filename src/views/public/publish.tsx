@@ -9,13 +9,13 @@ import {
   CardDescription,
 } from "../../components/ui/card";
 import {
-  Drawer,
-  DrawerContent,
-  DrawerDescription,
-  DrawerTrigger,
-  DrawerTitle,
-  DrawerHeader,
-} from "../../components/ui/drawer";
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogTrigger,
+  DialogTitle,
+  DialogHeader,
+} from "../../components/ui/dialog";
 
 import { Input } from "../../components/ui/input";
 import { Button } from "../../components/ui/button";
@@ -351,7 +351,7 @@ const PublishLayout = () => {
             } flex flex-row justify-center items-center my-2`}
           >
             <Button className="w-full" onClick={handleNextStep}>
-              Proximo
+              Próximo
             </Button>
           </div>
 
@@ -383,65 +383,65 @@ const PublishLayout = () => {
         </CardHeader>
 
         <CardContent>
-          <Drawer>
-            <DrawerTrigger className="w-full" asChild>
+          <Dialog>
+            <DialogTrigger className="w-full" asChild>
               <Button className="w-full">Publicar</Button>
-            </DrawerTrigger>
+            </DialogTrigger>
 
-            <DrawerContent>
-              <DrawerHeader>
+            <DialogContent>
+              <DialogHeader>
                 <div className={`${step === 1 ? null : "hidden"} space-y-1.5`}>
                   <Badge variant={"outline"}>
                     <IncognitoSolid className="text-foreground" />
                   </Badge>
-                  <DrawerTitle className="tracking-wider">
+                  <DialogTitle className="tracking-wider">
                     Anônimo/Usuário
-                  </DrawerTitle>
+                  </DialogTitle>
 
-                  <DrawerDescription className="tracking-wide">
+                  <DialogDescription className="tracking-wide">
                     Selecione o tipo de publicação: anônima ou pelo usuário.
-                  </DrawerDescription>
+                  </DialogDescription>
                 </div>
 
                 <div className={`${step === 2 ? null : "hidden"} space-y-1.5`}>
                   <Badge variant={"outline"}>
                     <LabelSolid className="text-success"/>
                   </Badge>
-                  <DrawerTitle className="tracking-wider">
+                  <DialogTitle className="tracking-wider">
                     Descrição
-                  </DrawerTitle>
+                  </DialogTitle>
 
-                  <DrawerDescription className="tracking-wide">
+                  <DialogDescription className="tracking-wide">
                     Insira o texto e uma breve descrição da publicação.
-                  </DrawerDescription>
+                  </DialogDescription>
                 </div>
 
                 <div className={`${step === 3 ? null : "hidden"} space-y-1.5`}>
                   <Badge variant={"outline"}>
                     <At className="text-warning" />
                   </Badge>
-                  <DrawerTitle className="tracking-wider">
+                  <DialogTitle className="tracking-wider">
                     Marcações
-                  </DrawerTitle>
+                  </DialogTitle>
 
-                  <DrawerDescription className="tracking-wide">
+                  <DialogDescription className="tracking-wide">
                     Adicione uma #hashtag, @usuário, ou marque alguém na
                     publicação.
-                  </DrawerDescription>
+                  </DialogDescription>
                 </div>
 
                 <div className={`${step === 4 ? null : "hidden"} space-y-1.5`}>
                   <Badge variant={"outline"}>
                     <ImageSolid className="text-primary" />
                   </Badge>
-                  <DrawerTitle className="tracking-wider">Upload</DrawerTitle>
+                  <DialogTitle className="tracking-wider">Upload</DialogTitle>
 
-                  <DrawerDescription className="tracking-wide">
+                  <DialogDescription className="tracking-wide">
                     Envie uma foto para ilustrar sua publicação, como de locais,
                     pessoas ou viagens.
-                  </DrawerDescription>
+                  </DialogDescription>
                 </div>
-              </DrawerHeader>
+              </DialogHeader>
 
               <form
                 onSubmit={handleSubmit}
@@ -500,9 +500,9 @@ const PublishLayout = () => {
                 <div
                   className={`${
                     step === 4 ? null : "hidden"
-                  } flex gap-1.5 m-2 w-full`}
+                  } grid items-center gap-1.5 m-2 w-full`}
                 >
-                  <Label className="invisible" htmlFor="inputFoto">Upload</Label>
+                  <Label htmlFor="inputFoto">Upload</Label>
                   <Input
                     type="file"
                     key="foto"
@@ -546,7 +546,7 @@ const PublishLayout = () => {
                 } flex flex-row justify-center items-center m-2`}
               >
                 <Button className="w-full" onClick={handleNextStep}>
-                  Proximo
+                  Próximo
                 </Button>
               </div>
 
@@ -563,8 +563,8 @@ const PublishLayout = () => {
                   Voltar
                 </Button>
               </div>
-            </DrawerContent>
-          </Drawer>
+            </DialogContent>
+          </Dialog>
         </CardContent>
       </Card>
     </>

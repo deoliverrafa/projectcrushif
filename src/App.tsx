@@ -15,7 +15,9 @@ const SupportPage = React.lazy(() => import("./views/public/support.tsx"));
 const NotificationsPage = React.lazy(
   () => import("./views/public/notifications.page.tsx")
 );
+
 const PublishPage = React.lazy(() => import("./views/public/publish.tsx"));
+const PostPage = React.lazy(() => import("./views/public/post.tsx"));
 
 const ErrorPage = React.lazy(() => import("./views/error/error.tsx"));
 
@@ -53,12 +55,14 @@ const App = () => {
               <Route path="/match" element={<MatchPage />} />
               <Route path="/settings" element={<SettingsPage />} />
               <Route path="/support" element={<SupportPage />} />
-              <Route path="/notifications" element={<NotificationsPage />} />
+
               <Route path="/publish" element={<PublishPage />} />
-              <Route path="/profile/edit" element={<EditProfilePage />} />
+              <Route path="/post/:id" element={<PostPage />} />
 
               <Route path="/profile/:id" element={<ProfilePage />} />
+              <Route path="/profile/edit" element={<EditProfilePage />} />
               <Route path="/about/:id" element={<AboutPage />} />
+              <Route path="/notifications" element={<NotificationsPage />} />
 
               <Route path="/auth/login" element={<LoginPage />} />
               <Route path="/auth/register" element={<RegisterPage />} />
