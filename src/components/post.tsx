@@ -151,8 +151,7 @@ export const CardPost = (props: CardProps) => {
       setLikeCount(likeCount + 1);
     } else {
       axios.post(
-        `${import.meta.env.VITE_API_BASE_URL}${
-          import.meta.env.VITE_POST_UNLIKE
+        `${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_POST_UNLIKE
         }`,
         { token: localStorage.getItem("token"), postId: props._id }
       );
@@ -241,8 +240,7 @@ export const CardPost = (props: CardProps) => {
     try {
       await axios
         .post(
-          `${import.meta.env.VITE_API_BASE_URL}${
-            import.meta.env.VITE_POST_COMMENT
+          `${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_POST_COMMENT
           }`,
           {
             content: comment,
@@ -311,8 +309,7 @@ export const CardPost = (props: CardProps) => {
     setLoading(true);
     try {
       const response = await axios.get(
-        `${import.meta.env.VITE_API_BASE_URL}${
-          import.meta.env.VITE_POST_GETCOMMENTS
+        `${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_POST_GETCOMMENTS
         }${localStorage.getItem("token")}/${props._id}`,
         {
           params: { skip, limit },
@@ -345,7 +342,7 @@ export const CardPost = (props: CardProps) => {
   const handleScroll = () => {
     if (
       window.innerHeight + document.documentElement.scrollTop ===
-        document.documentElement.offsetHeight &&
+      document.documentElement.offsetHeight &&
       hasMore &&
       !loading
     ) {
@@ -385,15 +382,14 @@ export const CardPost = (props: CardProps) => {
                   </div>
                   <div>
                     <HeartWavesSolid
-                      className={`${
-                        viewingUser?.type === "Plus"
-                          ? "text-info"
-                          : viewingUser?.type === "Admin"
+                      className={`${viewingUser?.type === "Plus"
+                        ? "text-info"
+                        : viewingUser?.type === "Admin"
                           ? "text-danger"
                           : viewingUser?.type === "verified"
-                          ? "text-success"
-                          : "hidden"
-                      } h-4 w-4`}
+                            ? "text-success"
+                            : "hidden"
+                        } h-4 w-4`}
                     />
                   </div>
                 </div>
@@ -597,8 +593,7 @@ export const CardPost = (props: CardProps) => {
                     )}
                   </>
                 ) : (
-                  `${props.content.substring(0, 50)}${
-                    props.references ? "" : ""
+                  `${props.content.substring(0, 50)}${props.references ? "" : ""
                   }`
                 )}
                 {(props.content.length > 50 || props.references) && (
@@ -650,52 +645,53 @@ export const CardPost = (props: CardProps) => {
                       <ScrollArea className="h-72 w-full rounded-md">
                         {comments.map((comment) => {
                           const dataUser = commentUserData[comment.userId];
+                          if (dataUser) {
+                            return (
+                              <div
+                                key={comment._id}
+                                className="flex flex-row items-center space-x-2 my-2"
+                              >
+                                <Avatar className="shadow-lg border-2 border-secondary">
+                                  <AvatarFallback>
+                                    {dataUser ? dataUser.nickname : "?"}
+                                  </AvatarFallback>
+                                  <AvatarImage
+                                    src={dataUser ? dataUser.avatar : ""}
+                                  />
+                                </Avatar>
 
-                          return (
-                            <div
-                              key={comment._id}
-                              className="flex flex-row items-center space-x-2 my-2"
-                            >
-                              <Avatar className="shadow-lg border-2 border-secondary">
-                                <AvatarFallback>
-                                  {dataUser ? dataUser.nickname : "?"}
-                                </AvatarFallback>
-                                <AvatarImage
-                                  src={dataUser ? dataUser.avatar : ""}
-                                />
-                              </Avatar>
+                                <div className="flex flex-col justify-start items-start rounded bg-card border border-border p-4 w-full max-w-[75%] shadow-sm gap-1">
+                                  <div className="flex flex-row justify-center items-center gap-1">
+                                    <div className="flex flex-row items-center">
+                                      <p className="text-muted-foreground font-poppins font-semibold md:font-medium text-xs tracking-tight">
+                                        {dataUser
+                                          ? dataUser.nickname
+                                          : "Indisponível"}
+                                      </p>
+                                    </div>
 
-                              <div className="flex flex-col justify-start items-start rounded bg-card border border-border p-4 w-full max-w-[75%] shadow-sm gap-1">
-                                <div className="flex flex-row justify-center items-center gap-1">
-                                  <div className="flex flex-row items-center">
-                                    <p className="text-muted-foreground font-poppins font-semibold md:font-medium text-xs tracking-tight">
-                                      {dataUser
-                                        ? dataUser.nickname
-                                        : "Indisponível"}
-                                    </p>
-                                  </div>
-
-                                  <HeartWavesSolid
-                                    className={`${
-                                      dataUser.type === "Plus"
+                                    <HeartWavesSolid
+                                      className={`${dataUser.type === "Plus"
                                         ? "text-info"
                                         : dataUser.type === "Admin"
-                                        ? "text-danger"
-                                        : dataUser.type === "verified"
-                                        ? "text-success"
-                                        : "hidden"
-                                    } h-3 w-3`}
-                                  />
-                                </div>
-                                <div className="flex flex-row items-center">
-                                  <p className="font-poppins font-medium md:font-normal text-xs">
-                                    {comment.content}
-                                  </p>
+                                          ? "text-danger"
+                                          : dataUser.type === "verified"
+                                            ? "text-success"
+                                            : "hidden"
+                                        } h-3 w-3`}
+                                    />
+                                  </div>
+                                  <div className="flex flex-row items-center">
+                                    <p className="font-poppins font-medium md:font-normal text-xs">
+                                      {comment.content}
+                                    </p>
+                                  </div>
                                 </div>
                               </div>
-                            </div>
-                          );
+                            );
+                          }
                         })}
+
                       </ScrollArea>
                     </DrawerHeader>
 
