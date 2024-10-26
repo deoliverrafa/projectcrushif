@@ -28,8 +28,8 @@ interface CardProps {
   userId: string;
   type: string;
   likeCount: number;
+  commentCount: number;
   likedBy: String[];
-  coments: String[];
 }
 
 interface userData {
@@ -151,6 +151,7 @@ export default function HomePage() {
                 insertAt={post.insertAt}
                 likeCount={post.likeCount}
                 likedBy={post.likedBy}
+                commentCount={post.commentCount}
               />
             ))}
 

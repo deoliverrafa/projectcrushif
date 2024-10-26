@@ -1,7 +1,7 @@
 import { At, HeartWaves } from '@mynaui/icons-react';
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar.tsx";
 
-
+// DESCARTADO A USABILIDADE
 interface PostUser {
     _id: string
     nickname: string
@@ -33,7 +33,6 @@ interface CommentProps {
 
 export const Comment = (props: CommentProps) => {
 
-    
     return (
         <div>
             <Avatar className="shadow-lg border-2 border-secondary">
@@ -54,16 +53,14 @@ export const Comment = (props: CommentProps) => {
                     <HeartWaves className="text-background fill-success h-4 w-4" />
                 </div>
                 <div className="flex flex-row items-center">
-                    <div className="flex flex-col justify-center items-center">
-                        <p className="font-poppins font-medium md:font-normal text-xs">
-                            {props.comment ? props.comment : (props.errorComment ? props.errorComment : "Mensagem de teste que nao vale nada, apenas para testar a responsabilidade do site")}
-                        </p>
-                    </div>
+                    <p className="font-poppins font-medium md:font-normal text-xs">
+                        {props.comment ? props.comment : (props.errorComment ? props.errorComment : "Mensagem de teste que nao vale nada, apenas para testar a responsabilidade do site")}
+                    </p>
                 </div>
                 <p className="font-poppins text-muted-foreground font-normal md:font-light tracking-tight text-xs">
                     há 4 dias atrás
                 </p>
+                </div>
             </div>
-        </div>
-    )
+            )
 }

@@ -68,6 +68,8 @@ import {
   CheckSquareOneSolid,
   HeartWavesSolid,
   FatCornerUpRightSolid,
+  HeartWaves,
+  At
 } from "@mynaui/icons-react";
 
 import { getUserData } from "../utils/getUserData.tsx";
@@ -88,6 +90,7 @@ interface CardProps {
   insertAt?: string;
   id?: string;
   likeCount: number;
+  commentCount: number;
   likedBy: String[];
 }
 
@@ -97,8 +100,31 @@ interface UserData {
   email: string;
 }
 
+interface User {
+  _id: string;
+  nickname: string;
+  userName: string;
+  email: string;
+  campus: string;
+  avatar: string;
+  birthdaydata: string;
+  Nfollowing: number;
+  Nfollowers: number;
+  following: string[];
+  followers: string[];
+  curso: string;
+  type: string;
+  bio: string;
+}
+
 export const CardPost = (props: CardProps) => {
-  const [userData, setUserData] = React.useState<UserData>();
+  const [userData, setUserData] = React.useState<UserData>({
+    avatar: '',
+    nickname: '',
+    email: '',
+  });
+
+
   const dataUser = getUserData();
   const [viewingUser, setViewingUser] = React.useState<User | null>(null);
   const [formattedData, setFormattedData] = React.useState("");
@@ -134,8 +160,7 @@ export const CardPost = (props: CardProps) => {
       setLikeCount(likeCount + 1);
     } else {
       axios.post(
-        `${import.meta.env.VITE_API_BASE_URL}${
-          import.meta.env.VITE_POST_UNLIKE
+        `${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_POST_UNLIKE
         }`,
         { token: localStorage.getItem("token"), postId: props._id }
       );
@@ -209,24 +234,110 @@ export const CardPost = (props: CardProps) => {
     }
   }, [props.userId, props.insertAt]);
 
-  // Comment Logic
-  const [comment, setComment] = React.useState<String>();
-  const [statusComment, setStatusComment] = React.useState<Boolean>(false)
+  // Lógica para comentar
+  const [comment, setComment] = React.useState<string | undefined>(undefined);
+  const [statusComment, setStatusComment] = React.useState<boolean>(false)
+  const [errorMessage, setErrorMessage] = React.useState<string | undefined>(undefined);
+  const [commentCount, setCommentCount] = React.useState<number>(props.commentCount);
 
   const handleCommentSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      await axios.post(`${import.meta.env.VITE_BASE_URL}${import.meta.env.VITE_POST_COMMENT}`,{ comment, token:localStorage.getItem('token'), postId: props._id})
+      await axios.post(`${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_POST_COMMENT}`, { content: comment, token: localStorage.getItem('token'), postId: props._id, userId: localStorage.getItem('userId') })
+        .then((response) => {
+          if (response.data.posted) {
+            setStatusComment(true);
+            setCommentCount(commentCount + 1)
+            setComment(undefined)
+          }
+        })
+        .catch((error: any) => {
+          setErrorMessage(error.response.data.message || 'Erro ao comentar'
+          )
+          setStatusComment(false)
+        })
     } catch (error: any) {
       console.log("Erro ao postar comentário", error);
+      setStatusComment(false);
     }
   };
 
   const handleCommentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setStatusComment(false)
+
     const { value } = e.target
     setComment(value)
   }
 
+  // Lógica de buscar comentários
+
+  interface Comment {
+    _id: string;
+    content: string;
+    insertAt: Date;
+    userId: string;
+  }
+
+  const [comments, setComments] = React.useState<Comment[]>([]);
+  const [skip, setSkip] = React.useState(0);
+  const limit = 10;
+  const [loading, setLoading] = React.useState(false);
+  const [hasMore, setHasMore] = React.useState(true);
+  const [commentUserData, setCommentUserData] = React.useState<{ [key: string]: UserData }>({});
+
+
+  const fetchUserData = async (userId: string) => {
+    if (!commentUserData[userId]) {
+      try {
+        const data = await getUserDataById(userId);
+        setCommentUserData((prevUserData) => ({
+          ...prevUserData,
+          [userId]: data
+        }));
+      } catch (error) {
+        console.error("Erro ao buscar dados do usuário:", error);
+      }
+    }
+  };
+
+  const fetchComments = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_POST_GETCOMMENTS}${localStorage.getItem('token')}/${props._id}`, {
+        params: { skip, limit }
+      });
+
+      response.data.comments.forEach((comment: Comment) => fetchUserData(comment.userId));
+      const newComments = response.data.comments;
+
+      setComments((prevComments) => [...prevComments, ...newComments]);
+      setSkip(skip + limit);
+      if (newComments.length < limit) {
+        setHasMore(false);
+      }
+    } catch (error) {
+      console.error("Erro ao buscar comentários:", error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  // Hook para carregar comentários ao montar o componente
+  // React.useEffect(() => {
+  //   fetchComments();
+  // }, []);
+
+  // Função para buscar comentários ao chegar no final deles
+  const handleScroll = () => {
+    if (window.innerHeight + document.documentElement.scrollTop === document.documentElement.offsetHeight && hasMore && !loading) {
+      fetchComments();
+    }
+  };
+
+  React.useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [hasMore, loading]);
 
   return (
     <>
@@ -255,15 +366,14 @@ export const CardPost = (props: CardProps) => {
                   </div>
                   <div>
                     <HeartWavesSolid
-                      className={`${
-                        viewingUser?.type === "Plus"
-                          ? "text-info"
-                          : viewingUser?.type === "Admin"
+                      className={`${viewingUser?.type === "Plus"
+                        ? "text-info"
+                        : viewingUser?.type === "Admin"
                           ? "text-danger"
                           : viewingUser?.type === "verified"
-                          ? "text-success"
-                          : "hidden"
-                      } h-4 w-4`}
+                            ? "text-success"
+                            : "hidden"
+                        } h-4 w-4`}
                     />
                   </div>
                 </div>
@@ -467,8 +577,7 @@ export const CardPost = (props: CardProps) => {
                     )}
                   </>
                 ) : (
-                  `${props.content.substring(0, 50)}${
-                    props.references ? "" : ""
+                  `${props.content.substring(0, 50)}${props.references ? "" : ""
                   }`
                 )}
                 {(props.content.length > 50 || props.references) && (
@@ -504,13 +613,16 @@ export const CardPost = (props: CardProps) => {
 
                 <Drawer>
                   <DrawerTrigger asChild>
-                    <Button variant={"outline"} size={"icon"}>
+                    <Button variant={"outline"} size={"icon"} onClick={() => {
+                      fetchComments()
+                    }}>
                       <MessageSolid className="h-5 md:h-4 w-5 md:w-4" />
                     </Button>
                   </DrawerTrigger>
 
                   <DrawerContent>
                     <DrawerHeader>
+
                       <div className="flex items-start space-x-2">
                         <Avatar className="shadow-lg border-2 border-secondary">
                           <AvatarFallback>{dataUser.nickname}</AvatarFallback>
@@ -531,14 +643,46 @@ export const CardPost = (props: CardProps) => {
                           </div>
                           <div className="flex flex-row items-center">
                             <p className="font-poppins font-medium md:font-normal text-xs">
-                              {comment ? comment : "Mensagem de teste que nao vale nada, apenas para testar a responsabilidade do site"}
+                              {comment ? comment : (errorMessage ? errorMessage : "Mensagem de teste que nao vale nada, apenas para testar a responsabilidade do site")}
                             </p>
                           </div>
                           <p className="font-poppins text-muted-foreground font-normal md:font-light tracking-tight text-xs">
-                            há 4 dias atrás
+                            {!statusComment ? 'Você está comentando' : 'Comentado'}
                           </p>
                         </div>
                       </div>
+
+
+                      {comments.map((comment) => {
+                        const dataUser = commentUserData[comment.userId]
+
+                        return (
+                          <div key={comment._id} className="flex items-start space-x-2">
+                            <Avatar className="shadow-lg border-2 border-secondary">
+                              <AvatarFallback>{dataUser ? dataUser.nickname : "?"}</AvatarFallback>
+                              <AvatarImage src={dataUser ? dataUser.avatar : ""} />
+                            </Avatar>
+
+                            <div className="rounded-lg bg-card border border-border p-4 w-auto max-w-[75%] shadow-sm">
+                              <div className="flex flex-row justify-center items-center space-x-1">
+                                <div className="flex flex-row items-center">
+                                  <At className="w-3 h-3" />
+                                  <p className="text-muted-foreground font-poppins font-semibold md:font-medium text-xs tracking-tight">
+                                    {dataUser ? dataUser.nickname : "Carregando..."}
+                                  </p>
+                                </div>
+
+                                <HeartWaves className="text-background fill-success h-4 w-4" />
+                              </div>
+                              <div className="flex flex-row items-center">
+                                <p className="font-poppins font-medium md:font-normal text-xs">
+                                  {comment.content}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      })}
                     </DrawerHeader>
 
                     <Separator />
@@ -583,7 +727,7 @@ export const CardPost = (props: CardProps) => {
                   <div className="flex flex-row items-center space-x-1">
                     <ChatMessagesSolid className="h-5 md:h-4 w-5 md:w-4" />
                     <CardDescription className="font-normal md:font-light tracking-tight text-md md:text-sm">
-                      {0} coméntarios
+                      {commentCount} coméntarios
                     </CardDescription>
                   </div>
                 </div>
@@ -597,12 +741,18 @@ export const CardPost = (props: CardProps) => {
 
               <AvatarImage src={dataUser.avatar} />
             </Avatar>
+            <form
+              action=""
+              method="POST"
+              onSubmit={handleCommentSubmit}
+              className="flex flex-row justify-between gap-1 w-full"
+            >
+              <Input type="text" placeholder="Adicione um coméntario" onInput={handleCommentChange} />
 
-            <Input type="text" placeholder="Adicione um coméntario" />
-
-            <Button className="rounded" variant={"outline"} size={"icon"}>
-              <FatCornerUpRightSolid className="h-5 w-5" />
-            </Button>
+              <Button className="rounded" variant={"outline"} size={"icon"}>
+                <FatCornerUpRightSolid className="h-5 w-5" />
+              </Button>
+            </form>
           </div>
 
           {formattedData && (
