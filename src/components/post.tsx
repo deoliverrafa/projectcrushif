@@ -671,8 +671,8 @@ export const CardPost = (props: CardProps) => {
                                 />
                               </Avatar>
 
-                              <div className="flex flex-col justify-start items-start rounded-lg bg-card border border-border p-4 w-auto max-w-[75%] shadow-sm">
-                                <div className="flex flex-row justify-center items-center space-x-1">
+                              <div className="flex flex-col justify-start items-start rounded bg-card border border-border p-4 w-full max-w-[75%] shadow-sm gap-1">
+                                <div className="flex flex-row justify-center items-center gap-1">
                                   <div className="flex flex-row items-center">
                                     <p className="text-muted-foreground font-poppins font-semibold md:font-medium text-xs tracking-tight">
                                       {dataUser
@@ -683,11 +683,11 @@ export const CardPost = (props: CardProps) => {
 
                                   <HeartWavesSolid
                                     className={`${
-                                      viewingUser?.type === "Plus"
+                                      dataUser?.type === "Plus"
                                         ? "text-info"
-                                        : viewingUser?.type === "Admin"
+                                        : dataUser?.type === "Admin"
                                         ? "text-danger"
-                                        : viewingUser?.type === "verified"
+                                        : dataUser?.type === "verified"
                                         ? "text-success"
                                         : "hidden"
                                     } h-3 w-3`}
@@ -708,13 +708,13 @@ export const CardPost = (props: CardProps) => {
                     <Separator />
 
                     <DrawerFooter>
-                      <div className="flex flex-col gap-1 w-full">
+                      <div className="flex flex-col gap-2 w-full">
                         <div className="mr-2">
                           {!statusComment ? (
                             <div className="flex flex-row justify-end items-center gap-1">
-                              <span className="animate-bounce delay-75 bg-accent-foreground rounded-full h-1 w-1"></span>
                               <span className="animate-bounce delay-100 bg-accent-foreground rounded-full h-1 w-1"></span>
-                              <span className="animate-bounce delay-150 bg-accent-foreground rounded-full h-1 w-1"></span>
+                              <span className="animate-bounce delay-200 bg-accent-foreground rounded-full h-1 w-1"></span>
+                              <span className="animate-bounce delay-300 bg-accent-foreground rounded-full h-1 w-1"></span>
                             </div>
                           ) : errorMessage ? (
                             <DrawerDescription className="text-danger text-xs md:text-xs">
