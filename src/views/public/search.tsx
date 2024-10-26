@@ -43,7 +43,7 @@ const SearchLayout = () => {
         `${import.meta.env.VITE_API_BASE_URL}${
           import.meta.env.VITE_SEARCH_PAGE_USER
         }`,
-        { nickname: "a", token: formData.token }
+        { nickname: "o", token: formData.token }
       )
       .then((response: any) => {
         const users = response.data.usersFinded.map((user: any) => ({

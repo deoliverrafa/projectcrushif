@@ -92,12 +92,6 @@ interface CardProps {
   likedBy: String[];
 }
 
-interface UserData {
-  nickname: string;
-  avatar: string;
-  email: string;
-}
-
 interface User {
   _id: string;
   nickname: string;
@@ -122,8 +116,8 @@ export const CardPost = (props: CardProps) => {
   //   email: '',
   // });
 
-  const dataUser = getUserData();
-  const [viewingUser, setViewingUser] = React.useState<User | null>(null);
+  const dataUser: User = getUserData();
+  const [viewingUser, setViewingUser] = React.useState<User | undefined>(undefined);
   const [formattedData, setFormattedData] = React.useState("");
 
   const [liked, setLiked] = React.useState(false);
@@ -296,7 +290,7 @@ export const CardPost = (props: CardProps) => {
   const [loading, setLoading] = React.useState(false);
   const [hasMore, setHasMore] = React.useState(true);
   const [commentUserData, setCommentUserData] = React.useState<{
-    [key: string]: UserData;
+    [key: string]: User;
   }>({});
 
   const fetchUserData = async (userId: string) => {
@@ -683,11 +677,11 @@ export const CardPost = (props: CardProps) => {
 
                                   <HeartWavesSolid
                                     className={`${
-                                      dataUser?.type === "Plus"
+                                      dataUser.type === "Plus"
                                         ? "text-info"
-                                        : dataUser?.type === "Admin"
+                                        : dataUser.type === "Admin"
                                         ? "text-danger"
-                                        : dataUser?.type === "verified"
+                                        : dataUser.type === "verified"
                                         ? "text-success"
                                         : "hidden"
                                     } h-3 w-3`}
