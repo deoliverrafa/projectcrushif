@@ -68,6 +68,7 @@ import {
   CheckSquareOneSolid,
   HeartWavesSolid,
   FatCornerUpRightSolid,
+  SpinnerSolid,
 } from "@mynaui/icons-react";
 
 import { getUserData } from "../utils/getUserData.tsx";
@@ -645,7 +646,15 @@ export const CardPost = (props: CardProps) => {
                       <ScrollArea className="h-72 w-full rounded-md">
                         {comments.map((comment) => {
                           const dataUser = commentUserData[comment.userId];
-                          if (dataUser) {
+                          if (!dataUser) {
+                            return (
+                              <div className="flex flex-row items-center">
+                                <SpinnerSolid className="animate-spin mr-2 h-5 w-5" />
+                                <p className="text-muted-foreground text-sm">Carregando...</p>
+                              </div>
+                            );
+                          }
+                          else {
                             return (
                               <div
                                 key={comment._id}
@@ -688,7 +697,7 @@ export const CardPost = (props: CardProps) => {
                                   </div>
                                 </div>
                               </div>
-                            );
+                            )
                           }
                         })}
 
