@@ -215,7 +215,7 @@ export const CardPost = (props: CardProps) => {
         // );
         // setUserData(response.data.userFinded);
       } catch (error) {
-        console.error("Erro ao buscar dados do usuário:", error);
+        // console.error("Erro ao buscar dados do usuário:", error);
         // setUserData({
         //   nickname: "Deletado",
         //   avatar: "",

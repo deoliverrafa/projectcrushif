@@ -85,7 +85,7 @@ const SearchLayout = () => {
   const debounceFetchData = useCallback(debounce(fetchData, 1000), [fetchData]);
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-
+    e.preventDefault();
     const { value } = e.target;
     setFormData((prevFormData) => ({
       ...prevFormData,
@@ -141,13 +141,13 @@ const SearchLayout = () => {
           <p className="font-poppins font-medium md:font-normal tracking-wide text-md md:text-sm text-muted-foreground">
             {queryResponse.length === 1 ? (
               <div className="flex flex-row items-center pl-4 pb-2">
-                <p className="font-poppins tracking-widest font-medium md:font-normal tracking-wide text-md md:text-sm text-muted-foreground">
+                <p className="font-poppins tracking-widest font-medium md:font-normal text-md md:text-sm text-muted-foreground">
                   Resultado:
                 </p>
               </div>
             ) : queryResponse.length > 1 ? (
               <div className="flex flex-row items-center pl-4 pb-2">
-                <p className="font-poppins tracking-widest font-medium md:font-normal tracking-wide text-md md:text-sm text-muted-foreground">
+                <p className="font-poppins tracking-widest font-medium md:font-normal text-md md:text-sm text-muted-foreground">
                   Resultados:
                 </p>
               </div>
