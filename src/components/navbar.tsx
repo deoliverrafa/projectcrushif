@@ -46,7 +46,7 @@ import { getUserData } from "../utils/getUserData.tsx";
 
 interface profile {
   nickname: string;
-  name: string;
+  userName: string;
   avatar: string;
   type: string;
 }
@@ -54,7 +54,7 @@ interface profile {
 interface User {
   _id: string;
   nickname: string;
-  name?: string;
+  userName?: string;
   email: string;
   campus: string;
   className?: string;
@@ -70,7 +70,7 @@ interface NavbarProps extends React.HTMLAttributes<HTMLElement> {
   className?: string;
 }
 
-const Profile = ({ nickname, name, avatar, type }: profile) => {
+const Profile = ({ nickname, userName, avatar, type }: profile) => {
   const userData = getUserData();
 
   function logOutHandle() {
@@ -82,7 +82,7 @@ const Profile = ({ nickname, name, avatar, type }: profile) => {
       <SheetTrigger asChild>
         <Avatar className="shadow-lg border-2 border-secondary h-8 w-8">
           <AvatarImage src={avatar} />
-          <AvatarFallback>{name}</AvatarFallback>
+          <AvatarFallback>{userName}</AvatarFallback>
         </Avatar>
       </SheetTrigger>
 
@@ -130,7 +130,7 @@ const Profile = ({ nickname, name, avatar, type }: profile) => {
                   </div>
 
                   <CardTitle className="font-normal md:font-light text-sm md:text-xs tracking-tight text-wrap">
-                    {name ? `${name}` : "indisponível"}
+                    {userName ? `${userName}` : "indisponível"}
                   </CardTitle>
                 </div>
               </Link>
@@ -521,7 +521,7 @@ export const NavBar = (props: userData) => {
         <NavbarItem href={""}>
           <Profile
             nickname={props.user?.nickname ? props.user.nickname : ""}
-            name={props.user?.name ? props.user.name : ""}
+            userName={props.user?.userName ? props.user.userName : ""}
             avatar={props.avatarPath ? props.avatarPath : ""}
             type={userData.type ? userData.type : ""}
           />

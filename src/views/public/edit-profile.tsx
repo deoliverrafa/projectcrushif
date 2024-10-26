@@ -60,7 +60,7 @@ import {
 } from "@mynaui/icons-react";
 
 import { getUserData } from "../../utils/getUserData.tsx";
-// import { isValidImage } from "../../controllers/avatarUpdate";
+import { isValidImage } from "../../controllers/avatarUpdate";
 
 interface User {
   _id: string;
@@ -78,116 +78,106 @@ interface userData {
   user: User;
 }
 
-// Campos IF'S
 const IFs = [
-  // Acre
   "IFAC",
-  // Alagoas
   "IFAL",
-  // Amapá
   "IFAP",
-  // Amazonas
   "IFAM",
-  // Bahia
   "IFBA",
-  // Ceará
   "IFCE",
-  // Distrito Federal
   "IFB",
-  // Espírito Santo
   "IFES",
-  // Goiás
   "IFG",
-  // Maranhão
   "IFMA",
-  // Mato Grosso
   "IFMT",
-  // Mato Grosso do Sul
   "IFMS",
-  // Minas Gerais
   "IFMG",
-  // Pará
   "IFPA",
-  // Paraíba
   "IFPB",
-  // Paraná
   "IFPR",
-  // Pernambuco
   "IFPE",
-  // Piauí
   "IFPI",
-  // Rio de Janeiro
   "IFRJ",
-  // Rio Grande do Norte
   "IFRN",
-  // Rio Grande do Sul
   "IFRS",
-  // Rondônia
   "IFRO",
-  // Roraima
   "IFRR",
-  // Santa Catarina
   "IFSC",
-  // São Paulo
   "IFSP",
-  // Sergipe
   "IFS",
-  // Tocantins
   "IFTO",
 ];
 
 const EditProfileLayout = (props: userData) => {
-  // const [errorImage, setErrorImage] = React.useState("");
-  // const [responseImage, setResponseImage] = React.useState<string>();
+  const [errorImage, setErrorImage] = React.useState("");
+  const [responseImage, setResponseImage] = React.useState<string>();
+  const [imageFile, setImageFile] = React.useState<File | null>(null);
 
-  // const handleImageChange = async (event: React.BaseSyntheticEvent) => {
-  //   const imageFile = event.target.files[0];
-  //   if (isValidImage(imageFile)) {
-  //     setErrorImage("");
-  //     const formData = new FormData();
-  //     formData.append("avatar", imageFile);
-  //     formData.append("token", `${localStorage.getItem("token")}`);
+  const handleImageChange = async (event: React.BaseSyntheticEvent) => {
+    const file = event.target.files[0];
+    if (isValidImage(file)) {
+      setImageFile(file);
+      setErrorImage("");
+    } else {
+      setErrorImage(
+        "Por favor, selecione uma imagem válida (JPEG, PNG ou GIF)."
+      );
+    }
+  };
 
-  //     const response = await axios.post(
-  //       `${import.meta.env.VITE_API_BASE_URL}${
-  //         import.meta.env.VITE_UPDATE_PROFILE_PHOTO
-  //       }`,
-  //       formData,
-  //       {
-  //         headers: {
-  //           Authorization: `Bearer ${localStorage.getItem("token")}`,
-  //         },
-  //       }
-  //     );
+  const updateProfilePhoto = async () => {
+    if (!imageFile) {
+      setErrorImage("Nenhuma imagem selecionada.");
+      return;
+    }
 
-  //     if (response.data.updated) {
-  //       setResponseImage(response.data.avatarURL);
-  //       window.dispatchEvent(new Event("storage"));
-  //     }
-  //   } else {
-  //     setErrorImage(
-  //       "Por favor, selecione uma imagem válida (JPEG, PNG ou GIF)."
-  //     );
-  //   }
-  // };
+    setLoading(true);
+    const formData = new FormData();
+    formData.append("avatar", imageFile);
+    formData.append("token", `${localStorage.getItem("token")}`);
+
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_BASE_URL}${
+          import.meta.env.VITE_UPDATE_PROFILE_PHOTO
+        }`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+
+      if (response.data.updated) {
+        setResponseImage(response.data.avatarURL);
+        window.dispatchEvent(new Event("storage"));
+        setdataSuccessMessage("Foto de perfil atualizada com sucesso.");
+      } else {
+        setdataErrorMessage(response.data.message);
+      }
+    } catch (error: any) {
+      setdataErrorMessage(
+        error.response?.data.message || "Erro ao atualizar a foto de perfil."
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const [errorMessage, setdataErrorMessage] = React.useState<String>();
   const [successMessage, setdataSuccessMessage] = React.useState<String>();
   const [selectedData, setSelectedData] = React.useState<String>("info");
-  // const [isVisible, setIsVisible] = React.useState(false);
-  // const toggleVisibility = () => setIsVisible(!isVisible);
 
   const [nickname, setNickname] = React.useState(props.user?.nickname || "");
+  const [userName, setUserName] = React.useState(props.user?.userName || "");
   const [campus, setCampus] = React.useState(props.user?.campus || "");
-  const [email, setEmail] = React.useState(props.user?.email || "");
   const [curso, setCurso] = React.useState(props.user?.curso);
-  const [password, setPassword] = React.useState("");
-  const [newPassword, setnewPassword] = React.useState("");
 
   React.useEffect(() => {
     setNickname(props.user.nickname);
+    setUserName(props.user.userName)
     setCampus(props.user.campus);
-    setEmail(props.user.email);
     setCurso(props.user.curso);
   }, [props.user]);
 
@@ -195,79 +185,50 @@ const EditProfileLayout = (props: userData) => {
     setSelectedData(data);
   }
 
-  const handleChangeData = async () => {
+  const handleInfoChange = async () => {
     try {
       setdataErrorMessage("");
       setdataSuccessMessage("");
-
       const formData = new FormData();
-
+  
+      // Adiciona os dados que você deseja atualizar
       formData.append("nickname", nickname);
       formData.append("curso", curso);
       formData.append("campus", campus);
-      formData.append("email", email);
-      formData.append("password", password);
-      formData.append("novasenha", newPassword);
-
-      if (selectedData == "info") {
-        try {
-          const response = await axios.post(
-            `${import.meta.env.VITE_API_BASE_URL}${
-              import.meta.env.VITE_CHANGE_NAME_CAMPUS_CURSO
-            }${localStorage.getItem("token")}`,
-            formData
-          );
-
-          if (response.data.updated == true) {
-            setdataSuccessMessage("Dados atualizados com Sucesso");
-          } else {
-            setdataErrorMessage(response.data.message);
-          }
-        } catch (error: any) {
-          setdataErrorMessage(error.response.data.message);
-        }
-      }
-
-      if (selectedData == "email") {
-        try {
-          const response = await axios.post(
-            `${import.meta.env.VITE_API_BASE_URL}${
-              import.meta.env.VITE_CHANGE_EMAIL
-            }${localStorage.getItem("token")}`,
-            formData
-          );
-
-          if (response.data.updated == true) {
-            setdataSuccessMessage("Email alterado com sucesso");
-          } else {
-            setdataErrorMessage(response.data.message);
-          }
-        } catch (error: any) {
-          setdataErrorMessage(error.response.data.message);
-        }
-      }
-
-      if (selectedData == "password") {
-        try {
-          const response = await axios.post(
-            `${import.meta.env.VITE_API_BASE_URL}${
-              import.meta.env.VITE_CHANGE_PASSWORD
-            }${localStorage.getItem("token")}`,
-            formData
-          );
-
-          if (response.data.updated == true) {
-            setdataSuccessMessage("Senha alterado com sucesso");
-          } else {
-            setdataErrorMessage(response.data.message);
-          }
-        } catch (error: any) {
-          setdataErrorMessage(error.response.data.message);
+      formData.append("userName", userName);
+  
+      // Define o endpoint para atualização de informações
+      const endpoint = import.meta.env.VITE_CHANGE_NAME_CAMPUS_CURSO;
+  
+      // Verifica se o endpoint está definido
+      if (endpoint) {
+        const response = await axios.post(
+          `${import.meta.env.VITE_API_BASE_URL}${endpoint}${localStorage.getItem("token")}`,
+          formData
+        );
+  
+        // Verifica se os dados foram atualizados com sucesso
+        if (response.data.updated) {
+          setdataSuccessMessage("Dados atualizados com sucesso");
+          resetFormFields(); // Reseta os campos do formulário após a atualização
+        } else {
+          setdataErrorMessage(response.data.message);
         }
       }
     } catch (error: any) {
-      setdataErrorMessage(error.response?.message);
+      setdataErrorMessage(
+        error.response?.data.message || "Erro ao atualizar dados."
+      );
     }
+  };
+
+  const [loading, setLoading] = React.useState(false);
+
+  const resetFormFields = () => {
+    setNickname(props.user?.nickname || "");
+    setUserName(props.user?.userName || "");
+    setCampus(props.user?.campus || "");
+    setCurso(props.user?.curso || "");
   };
 
   return (
@@ -284,7 +245,7 @@ const EditProfileLayout = (props: userData) => {
             <Avatar className="h-20 w-20 shadow-lg border-4 border-secondary rounded-full">
               <AvatarFallback>{nickname}</AvatarFallback>
               <AvatarImage
-              // src={responseImage ? responseImage : props.user.avatar}
+                src={responseImage ? responseImage : props.user.avatar}
               />
             </Avatar>
           </div>
@@ -385,15 +346,31 @@ const EditProfileLayout = (props: userData) => {
                   </Button>
                 )}
 
-                <Button variant={"ghost"} className="justify-start w-full">
-                  <ImageSolid className="h-5 md:h-4 w-5 md:w-4 mr-2" />
-                  Foto
-                </Button>
+                {selectedData === "avatar" ? null : (
+                  <Button
+                    variant={"ghost"}
+                    className="justify-start w-full"
+                    onClick={() => {
+                      handleSelectedData("avatar");
+                    }}
+                  >
+                    <ImageSolid className="h-5 md:h-4 w-5 md:w-4 mr-2" />
+                    Avatar
+                  </Button>
+                )}
 
-                <Button variant={"ghost"} className="justify-start w-full">
-                  <ImageRectangleSolid className="h-5 md:h-4 w-5 md:w-4 mr-2" />
-                  Banner
-                </Button>
+                {selectedData === "banner" ? null : (
+                  <Button
+                    variant={"ghost"}
+                    className="justify-start w-full"
+                    onClick={() => {
+                      handleSelectedData("banner");
+                    }}
+                  >
+                    <ImageRectangleSolid className="h-5 md:h-4 w-5 md:w-4 mr-2" />
+                    Banner
+                  </Button>
+                )}
               </div>
             </DrawerContent>
           </Drawer>
@@ -401,122 +378,157 @@ const EditProfileLayout = (props: userData) => {
 
         <Separator />
 
-        <form action="updateData" className="mt-4">
+        {selectedData === "info" && (
+          <CardContent className="mt-4 space-y-6">
+<div className="flex flex-col gap-1 w-full">
+              <Label htmlFor="userName">Nome Completo</Label>
+              <Input
+                value={userName}
+                id="userName"
+                onChange={(e: React.BaseSyntheticEvent) => {
+                  setUserName(e.target.value);
+                }}
+              />
+            </div>
+
+            <div className="flex flex-col gap-1 w-full">
+              <Label htmlFor="nickname">Usuário</Label>
+              <Input
+                value={nickname}
+                id="nickname"
+                onChange={(e: React.BaseSyntheticEvent) => {
+                  setNickname(e.target.value);
+                }}
+              />
+            </div>
+
+            <div className="flex flex-col gap-1 w-full">
+              <Label htmlFor="campus">Campus</Label>
+
+              <Select
+                onValueChange={(value) => setCampus(value)}
+                value={campus}
+              >
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Escolha seu campus" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    {IFs.map((campus, index) => (
+                      <SelectItem key={index} value={campus}>
+                        {campus}
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="flex flex-col gap-1 w-full">
+              <Label htmlFor="curso">Curso</Label>
+
+              <Select
+                onValueChange={(value) => setCampus(value)}
+                value={campus}
+              >
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Escolha seu campus" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    {IFs.map((campus, index) => (
+                      <SelectItem key={index} value={campus}>
+                        {campus}
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            </div>
+          </CardContent>
+        )}
+
+        {selectedData === "email" && (
+          <CardContent className="mt-4 space-y-2">
+            <div className="flex flex-col gap-1 w-full">
+              <Label htmlFor="email">E-mail</Label>
+              <Input
+                id="email"
+                type="email"
+              />
+            </div>
+          </CardContent>
+        )}
+
+        {selectedData === "password" && (
+          <CardContent className="mt-4 space-y-6">
+            <div className="flex flex-col gap-1 w-full">
+              <Label htmlFor="password">Senha atual</Label>
+              <Input
+                id="password"
+                type="password"
+              />
+            </div>
+
+            <div className="flex flex-col gap-1 w-full">
+              <Label htmlFor="newPassword">Nova senha</Label>
+              <Input
+                type="password"
+              />
+            </div>
+          </CardContent>
+        )}
+
+        {selectedData === "avatar" && (
+          <CardContent className="mt-4">
+            <div className="flex flex-col gap-1 w-full">
+              <Label htmlFor="avatar">Avatar</Label>
+              <Input
+                type="file"
+                name="avatar"
+                id="avatar"
+                accept="image/jpeg, image/png, image/gif"
+                onChange={handleImageChange}
+              />
+            </div>
+          </CardContent>
+        )}
+
+        <Separator />
+
+        <CardFooter className="flex flex-col items-end space-y-2 mt-4">
+          {successMessage ? (
+            <CardDescription className="text-success flex flex-row items-center gap-2">
+              <CheckSquareOneSolid className="h-4 w-4" />
+              Salvo com sucesso!
+            </CardDescription>
+          ) : errorMessage || errorImage ? (
+            <CardDescription className="text-danger flex flex-row items-center gap-2">
+              <XSolid className="h-4 w-4" />
+              {errorMessage || errorImage}
+            </CardDescription>
+          ) : null}
+
           {selectedData === "info" && (
-            <CardContent className="space-y-6">
-              <div className="flex flex-col gap-1 w-full">
-                <Label htmlFor="nickname">Usuário</Label>
-                <Input
-                  value={nickname}
-                  id="nickname"
-                  onChange={(e: React.BaseSyntheticEvent) => {
-                    setNickname(e.target.value);
-                  }}
-                />
-              </div>
-
-              <div className="flex flex-col gap-1 w-full">
-                <Label htmlFor="campus">Campus</Label>
-
-                <Select>
-                  <SelectTrigger>
-                    <SelectValue
-                      placeholder={campus ? campus : "Selecione seu campus"}
-                    />
-                  </SelectTrigger>
-
-                  <SelectContent>
-                    <SelectGroup>
-                      {IFs.map((instituto) => (
-                        <SelectItem
-                          onChange={(e: React.BaseSyntheticEvent) => {
-                            setCampus(e.target.value);
-                          }}
-                          key={instituto}
-                          value={instituto}
-                        >
-                          {instituto}
-                        </SelectItem>
-                      ))}
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="flex flex-col gap-1 w-full">
-                <Label htmlFor="curso">Curso</Label>
-                <Input
-                  value={curso}
-                  id="curso"
-                  onChange={(e: React.BaseSyntheticEvent) => {
-                    setCurso(e.target.value);
-                  }}
-                />
-              </div>
-            </CardContent>
-          )}
-
-          {selectedData === "email" && (
-            <CardContent className="space-y-2">
-              <div className="flex flex-col gap-1 w-full">
-                <Label htmlFor="email">E-mail</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  onChange={(e: React.BaseSyntheticEvent) => {
-                    setEmail(e.target.value);
-                  }}
-                  value={props.user?.email}
-                />
-              </div>
-            </CardContent>
-          )}
-
-          {selectedData === "password" && (
-            <CardContent className="space-y-6">
-              <div className="flex flex-col gap-1 w-full">
-                <Label htmlFor="oldPassword">Senha atual</Label>
-                <Input
-                  id="oldPassword"
-                  type="password"
-                  onChange={(e: React.BaseSyntheticEvent) => {
-                    setPassword(e.target.value);
-                  }}
-                />
-              </div>
-
-              <div className="flex flex-col gap-1 w-full">
-                <Label htmlFor="newPassword">Nova senha</Label>
-                <Input
-                  id="newPassword"
-                  type="password"
-                  onChange={(e: React.BaseSyntheticEvent) => {
-                    setnewPassword(e.target.value);
-                  }}
-                />
-              </div>
-            </CardContent>
-          )}
-
-          <Separator />
-
-          <CardFooter className="flex flex-col items-end space-y-2 mt-4">
-            {successMessage ? (
-              <CardDescription className="text-success flex flex-row items-center gap-2">
-                <CheckSquareOneSolid className="h-4 w-4" />
-                Salvo com sucesso!
-              </CardDescription>
-            ) : errorMessage ? (
-              <CardDescription className="text-danger flex flex-row items-center gap-2">
-                <XSolid className="h-4 w-4" />
-                {errorMessage}
-              </CardDescription>
-            ) : null}
-            <Button variant={"success"} onClick={handleChangeData}>
-              Salvar
+            <Button
+              onClick={handleInfoChange}
+              disabled={loading}
+              variant={"success"}
+            >
+              {loading ? "Salvando..." : "Salvar informações"}
             </Button>
-          </CardFooter>
-        </form>
+          )}
+
+          {selectedData === "avatar" && (
+            <Button
+              onClick={updateProfilePhoto}
+              disabled={loading}
+              variant={"success"}
+            >
+              {loading ? "Salvando..." : "Salvar foto"}
+            </Button>
+          )}
+        </CardFooter>
       </Card>
     </React.Fragment>
   );
