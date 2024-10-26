@@ -60,7 +60,7 @@ import {
 } from "@mynaui/icons-react";
 
 import { getUserData } from "../../utils/getUserData.tsx";
-import { isValidImage } from "../../controllers/avatarUpdate";
+// import { isValidImage } from "../../controllers/avatarUpdate";
 
 interface User {
   _id: string;
@@ -137,45 +137,45 @@ const IFs = [
 ];
 
 const EditProfileLayout = (props: userData) => {
-  const [errorImage, setErrorImage] = React.useState("");
-  const [responseImage, setResponseImage] = React.useState<string>();
+  // const [errorImage, setErrorImage] = React.useState("");
+  // const [responseImage, setResponseImage] = React.useState<string>();
 
-  const handleImageChange = async (event: React.BaseSyntheticEvent) => {
-    const imageFile = event.target.files[0];
-    if (isValidImage(imageFile)) {
-      setErrorImage("");
-      const formData = new FormData();
-      formData.append("avatar", imageFile);
-      formData.append("token", `${localStorage.getItem("token")}`);
+  // const handleImageChange = async (event: React.BaseSyntheticEvent) => {
+  //   const imageFile = event.target.files[0];
+  //   if (isValidImage(imageFile)) {
+  //     setErrorImage("");
+  //     const formData = new FormData();
+  //     formData.append("avatar", imageFile);
+  //     formData.append("token", `${localStorage.getItem("token")}`);
 
-      const response = await axios.post(
-        `${import.meta.env.VITE_API_BASE_URL}${
-          import.meta.env.VITE_UPDATE_PROFILE_PHOTO
-        }`,
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
+  //     const response = await axios.post(
+  //       `${import.meta.env.VITE_API_BASE_URL}${
+  //         import.meta.env.VITE_UPDATE_PROFILE_PHOTO
+  //       }`,
+  //       formData,
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${localStorage.getItem("token")}`,
+  //         },
+  //       }
+  //     );
 
-      if (response.data.updated) {
-        setResponseImage(response.data.avatarURL);
-        window.dispatchEvent(new Event("storage"));
-      }
-    } else {
-      setErrorImage(
-        "Por favor, selecione uma imagem válida (JPEG, PNG ou GIF)."
-      );
-    }
-  };
+  //     if (response.data.updated) {
+  //       setResponseImage(response.data.avatarURL);
+  //       window.dispatchEvent(new Event("storage"));
+  //     }
+  //   } else {
+  //     setErrorImage(
+  //       "Por favor, selecione uma imagem válida (JPEG, PNG ou GIF)."
+  //     );
+  //   }
+  // };
 
   const [errorMessage, setdataErrorMessage] = React.useState<String>();
   const [successMessage, setdataSuccessMessage] = React.useState<String>();
   const [selectedData, setSelectedData] = React.useState<String>("info");
-  const [isVisible, setIsVisible] = React.useState(false);
-  const toggleVisibility = () => setIsVisible(!isVisible);
+  // const [isVisible, setIsVisible] = React.useState(false);
+  // const toggleVisibility = () => setIsVisible(!isVisible);
 
   const [nickname, setNickname] = React.useState(props.user?.nickname || "");
   const [campus, setCampus] = React.useState(props.user?.campus || "");
@@ -284,7 +284,7 @@ const EditProfileLayout = (props: userData) => {
             <Avatar className="h-20 w-20 shadow-lg border-4 border-secondary rounded-full">
               <AvatarFallback>{nickname}</AvatarFallback>
               <AvatarImage
-                src={responseImage ? responseImage : props.user.avatar}
+              // src={responseImage ? responseImage : props.user.avatar}
               />
             </Avatar>
           </div>

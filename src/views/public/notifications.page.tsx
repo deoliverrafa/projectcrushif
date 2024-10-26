@@ -2,20 +2,21 @@ import * as React from "react";
 
 import ErrorPage from "../error/error";
 
-import { NavBar } from '../../components/navbar';
-import { BottomBar } from '../../components/bottombar';
+import { NavBar } from "../../components/navbar";
+import { BottomBar } from "../../components/bottombar";
 
 import { getUserData } from "../../utils/getUserData";
 
 const NotificationsPage = () => {
   const userData = getUserData();
-  
+
   return (
     <React.Fragment>
       <NavBar
-        user={userData} 
-        avatarPath={userData?.avatar ? userData.avatar : ""} />
-      
+        user={userData}
+        avatarPath={userData?.avatar ? userData.avatar : ""}
+      />
+
       <ErrorPage />
 
       <BottomBar />

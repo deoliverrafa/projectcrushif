@@ -7,21 +7,22 @@ import { NavBarReturn } from "../../components/navbar";
 import { CardPost } from "../../components/post";
 
 interface Post {
-    className?: string;
-    userId?: string;
-    _id?: string;
-    nickname: string;
-    email: string;
-    campus: string;
-    references: string;
-    content: string;
-    isAnonymous: boolean;
-    photoURL?: string;
-    userAvatar?: string;
-    insertAt?: string;
-    id?: string;
-    likeCount: number;
-    likedBy: String[];
+  className?: string;
+  userId?: string;
+  _id?: string;
+  nickname: string;
+  email: string;
+  campus: string;
+  references: string;
+  content: string;
+  isAnonymous: boolean;
+  photoURL?: string;
+  userAvatar?: string;
+  insertAt?: string;
+  id?: string;
+  likeCount: number;
+  likedBy: String[];
+  commentCount: number;
 }
 
 import { getPostDataById } from "../../utils/getPostDataById";
@@ -67,6 +68,7 @@ const PostLayout = () => {
         insertAt={viewingPost.insertAt}
         likeCount={viewingPost.likeCount}
         likedBy={viewingPost.likedBy}
+        commentCount={viewingPost.commentCount}
       />
     </React.Fragment>
   );

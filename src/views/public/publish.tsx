@@ -405,7 +405,7 @@ const PublishLayout = () => {
 
                 <div className={`${step === 2 ? null : "hidden"} space-y-1.5`}>
                   <Badge variant={"outline"}>
-                    <LabelSolid className="text-success"/>
+                    <LabelSolid className="text-success" />
                   </Badge>
                   <DialogTitle className="tracking-wider">
                     Descrição
