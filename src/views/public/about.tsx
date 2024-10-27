@@ -26,6 +26,7 @@ import {
   PencilSolid,
   MaleSolid,
   UserCircleSolid,
+  FemaleSolid,
 } from "@mynaui/icons-react";
 
 import { getUserDataById } from "../../utils/getUserDataById";
@@ -44,6 +45,7 @@ interface User {
   type: string;
   insertAt: string;
   bio: string;
+  genre: string;
 }
 
 const AboutLayout = () => {
@@ -191,14 +193,20 @@ const AboutLayout = () => {
           </div>
 
           <div className="flex flex-row items-center gap-1">
-            <MaleSolid />
+            {viewingUser?.genre === "Feminino" ? (
+              <FemaleSolid />
+            ) : (
+              <MaleSolid />
+            )}
 
             <div className="flex flex-col">
               <CardDescription className="text-foreground">
                 Gênero
               </CardDescription>
               <CardDescription className="text-xs md:text-xs">
-                {"indisponível"}
+              {viewingUser?.genre
+                  ? `${viewingUser?.genre}`
+                  : "indisponível"}
               </CardDescription>
             </div>
           </div>

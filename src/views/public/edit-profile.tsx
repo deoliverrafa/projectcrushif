@@ -57,10 +57,14 @@ import {
   ImageSolid,
   ImageRectangleSolid,
   LockPasswordSolid,
+  MaleSolid,
+  PencilSolid,
+  FemaleSolid,
 } from "@mynaui/icons-react";
 
 import { getUserData } from "../../utils/getUserData.tsx";
 import { isValidImage } from "../../controllers/avatarUpdate";
+import { Textarea } from "../../components/ui/textarea.tsx";
 
 interface User {
   _id: string;
@@ -70,13 +74,19 @@ interface User {
   campus: string;
   className?: string;
   avatar: string;
+  banner: string;
   curso: string;
   type: string;
+  password: string;
+  genre: string;
+  bio: string;
 }
 
 interface userData {
   user: User;
 }
+
+const GENREs = ["Masculino", "Feminino"];
 
 const IFs = [
   "IFAC",
@@ -109,31 +119,236 @@ const IFs = [
 ];
 
 const EditProfileLayout = (props: userData) => {
-  const [errorImage, setErrorImage] = React.useState("");
-  const [responseImage, setResponseImage] = React.useState<string>();
-  const [imageFile, setImageFile] = React.useState<File | null>(null);
+  const [errorMessage, setDataErrorMessage] = React.useState<String>();
+  const [successMessage, setDataSuccessMessage] = React.useState<String>();
+  const [selectedData, setSelectedData] = React.useState<String>("info");
+  const [loading, setLoading] = React.useState(false);
 
-  const handleImageChange = async (event: React.BaseSyntheticEvent) => {
+  const [nickname, setNickname] = React.useState(props.user.nickname || "");
+  const [userName, setUserName] = React.useState(props.user.userName || "");
+  const [campus, setCampus] = React.useState(props.user?.campus || "");
+  const [curso, setCurso] = React.useState(props.user?.curso || "");
+
+  const [email, setEmail] = React.useState(props.user.email || "");
+
+  const [password, setPassword] = React.useState("");
+  const [novasenha, setNovasenha] = React.useState("");
+
+  const [genre, setGenre] = React.useState(props.user?.genre || "");
+
+  const [bio, setBio] = React.useState(props.user?.bio || "");
+
+  const [responseAvatar, setResponseAvatar] = React.useState<string>();
+  const [avatarFile, setAvatarFile] = React.useState<File | null>(null);
+
+  const [responseBanner, setResponseBanner] = React.useState<string>();
+  const [bannerFile, setBannerFile] = React.useState<File | null>(null);
+
+  React.useEffect(() => {
+    setNickname(props.user.nickname);
+    setUserName(props.user.userName);
+    setCampus(props.user.campus);
+    setCurso(props.user.curso);
+    setEmail(props.user.email);
+    setPassword(props.user.password);
+    setGenre(props.user.genre);
+    setBio(props.user.bio);
+  }, [props.user]);
+
+  function handleSelectedData(data: string) {
+    setSelectedData(data);
+  }
+
+  const handleChangeInfo = async () => {
+    try {
+      setDataErrorMessage("");
+      setDataSuccessMessage("");
+
+      const formData = new FormData();
+      formData.append("nickname", nickname);
+      formData.append("curso", curso);
+      formData.append("campus", campus);
+      formData.append("userName", userName);
+
+      const endpoint = import.meta.env.VITE_CHANGE_NAME_CAMPUS_CURSO;
+
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_BASE_URL}${endpoint}${localStorage.getItem(
+          "token"
+        )}`,
+        formData
+      );
+
+      if (response.data.updated) {
+        setDataSuccessMessage("Dados atualizados com sucesso");
+      } else {
+        setDataErrorMessage(response.data.message);
+      }
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error) && error.response) {
+        setDataErrorMessage(
+          error.response.data.message || "Erro ao atualizar dados."
+        );
+      } else {
+        setDataErrorMessage("Erro ao atualizar dados.");
+      }
+    }
+  };
+
+  const handleChangeEmail = async () => {
+    try {
+      setDataErrorMessage("");
+      setDataSuccessMessage("");
+
+      const formData = new FormData();
+      formData.append("email", email);
+
+      const endpoint = import.meta.env.VITE_CHANGE_EMAIL;
+
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_BASE_URL}${endpoint}${localStorage.getItem(
+          "token"
+        )}`,
+        formData
+      );
+
+      if (response.data.updated) {
+        setDataSuccessMessage("E-mail atualizado com sucesso");
+      } else {
+        setDataErrorMessage(response.data.message);
+      }
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error) && error.response) {
+        setDataErrorMessage(
+          error.response.data.message || "Erro ao atualizar e-mail."
+        );
+      } else {
+        setDataErrorMessage("Erro ao atualizar e-mail.");
+      }
+    }
+  };
+
+  const handleChangePassword = async () => {
+    try {
+      setDataErrorMessage("");
+      setDataSuccessMessage("");
+
+      const formData = new FormData();
+      formData.append("password", password);
+      formData.append("novasenha", novasenha);
+
+      const endpoint = import.meta.env.VITE_CHANGE_PASSWORD;
+
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_BASE_URL}${endpoint}${localStorage.getItem(
+          "token"
+        )}`,
+        formData
+      );
+
+      if (response.data.updated) {
+        setDataSuccessMessage("Senha atualizado com sucesso");
+      } else {
+        setDataErrorMessage(response.data.message);
+      }
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error) && error.response) {
+        setDataErrorMessage(
+          error.response.data.message || "Erro ao atualizar senha."
+        );
+      } else {
+        setDataErrorMessage("Erro ao atualizar senha.");
+      }
+    }
+  };
+
+  const handleChangeGenre = async () => {
+    try {
+      setDataErrorMessage("");
+      setDataSuccessMessage("");
+
+      const formData = new FormData();
+      formData.append("genre", genre);
+
+      const endpoint = import.meta.env.VITE_CHANGE_GENRE;
+
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_BASE_URL}${endpoint}${localStorage.getItem(
+          "token"
+        )}`,
+        formData
+      );
+
+      if (response.data.updated) {
+        setDataSuccessMessage("Gênero atualizado com sucesso");
+      } else {
+        setDataErrorMessage(response.data.message);
+      }
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error) && error.response) {
+        setDataErrorMessage(
+          error.response.data.message || "Erro ao atualizar gênero."
+        );
+      } else {
+        setDataErrorMessage("Erro ao atualizar gênero.");
+      }
+    }
+  };
+
+  const handleChangeBio = async () => {
+    try {
+      setDataErrorMessage("");
+      setDataSuccessMessage("");
+
+      const formData = new FormData();
+      formData.append("bio", bio);
+
+      const endpoint = import.meta.env.VITE_CHANGE_BIO;
+
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_BASE_URL}${endpoint}${localStorage.getItem(
+          "token"
+        )}`,
+        formData
+      );
+
+      if (response.data.updated) {
+        setDataSuccessMessage("Bio atualizado com sucesso");
+      } else {
+        setDataErrorMessage(response.data.message);
+      }
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error) && error.response) {
+        setDataErrorMessage(
+          error.response.data.message || "Erro ao atualizar bio."
+        );
+      } else {
+        setDataErrorMessage("Erro ao atualizar bio.");
+      }
+    }
+  };
+
+  const updateAvatar = async (event: React.BaseSyntheticEvent) => {
     const file = event.target.files[0];
     if (isValidImage(file)) {
-      setImageFile(file);
-      setErrorImage("");
+      setAvatarFile(file);
+      setDataErrorMessage("");
     } else {
-      setErrorImage(
+      setDataErrorMessage(
         "Por favor, selecione uma imagem válida (JPEG, PNG ou GIF)."
       );
     }
   };
 
-  const updateProfilePhoto = async () => {
-    if (!imageFile) {
-      setErrorImage("Nenhuma imagem selecionada.");
+  const handleChangeAvatar = async () => {
+    if (!avatarFile) {
+      setDataErrorMessage("Nenhuma imagem selecionada.");
       return;
     }
 
     setLoading(true);
     const formData = new FormData();
-    formData.append("avatar", imageFile);
+    formData.append("avatar", avatarFile);
     formData.append("token", `${localStorage.getItem("token")}`);
 
     try {
@@ -150,85 +365,71 @@ const EditProfileLayout = (props: userData) => {
       );
 
       if (response.data.updated) {
-        setResponseImage(response.data.avatarURL);
+        setResponseAvatar(response.data.avatarURL);
         window.dispatchEvent(new Event("storage"));
-        setdataSuccessMessage("Foto de perfil atualizada com sucesso.");
+        setDataSuccessMessage("Avatar atualizada com sucesso.");
       } else {
-        setdataErrorMessage(response.data.message);
+        setDataErrorMessage(response.data.message);
       }
     } catch (error: any) {
-      setdataErrorMessage(
-        error.response?.data.message || "Erro ao atualizar a foto de perfil."
+      setDataErrorMessage(
+        error.response?.data.message || "Erro ao atualizar o avatar."
       );
     } finally {
       setLoading(false);
     }
   };
 
-  const [errorMessage, setdataErrorMessage] = React.useState<String>();
-  const [successMessage, setdataSuccessMessage] = React.useState<String>();
-  const [selectedData, setSelectedData] = React.useState<String>("info");
-
-  const [nickname, setNickname] = React.useState(props.user?.nickname || "");
-  const [userName, setUserName] = React.useState(props.user?.userName || "");
-  const [campus, setCampus] = React.useState(props.user?.campus || "");
-  const [curso, setCurso] = React.useState(props.user?.curso);
-
-  React.useEffect(() => {
-    setNickname(props.user.nickname);
-    setUserName(props.user.userName)
-    setCampus(props.user.campus);
-    setCurso(props.user.curso);
-  }, [props.user]);
-
-  function handleSelectedData(data: string) {
-    setSelectedData(data);
-  }
-
-  const handleInfoChange = async () => {
-    try {
-      setdataErrorMessage("");
-      setdataSuccessMessage("");
-      const formData = new FormData();
-  
-      // Adiciona os dados que você deseja atualizar
-      formData.append("nickname", nickname);
-      formData.append("curso", curso);
-      formData.append("campus", campus);
-      formData.append("userName", userName);
-  
-      // Define o endpoint para atualização de informações
-      const endpoint = import.meta.env.VITE_CHANGE_NAME_CAMPUS_CURSO;
-  
-      // Verifica se o endpoint está definido
-      if (endpoint) {
-        const response = await axios.post(
-          `${import.meta.env.VITE_API_BASE_URL}${endpoint}${localStorage.getItem("token")}`,
-          formData
-        );
-  
-        // Verifica se os dados foram atualizados com sucesso
-        if (response.data.updated) {
-          setdataSuccessMessage("Dados atualizados com sucesso");
-          resetFormFields(); // Reseta os campos do formulário após a atualização
-        } else {
-          setdataErrorMessage(response.data.message);
-        }
-      }
-    } catch (error: any) {
-      setdataErrorMessage(
-        error.response?.data.message || "Erro ao atualizar dados."
+  const updateBanner = async (event: React.BaseSyntheticEvent) => {
+    const file = event.target.files[0];
+    if (isValidImage(file)) {
+      setBannerFile(file);
+      setDataErrorMessage("");
+    } else {
+      setDataErrorMessage(
+        "Por favor, selecione uma imagem válida (JPEG, PNG ou GIF)."
       );
     }
   };
 
-  const [loading, setLoading] = React.useState(false);
+  const handleChangeBanner = async () => {
+    if (!bannerFile) {
+      setDataErrorMessage("Nenhuma imagem selecionada.");
+      return;
+    }
 
-  const resetFormFields = () => {
-    setNickname(props.user?.nickname || "");
-    setUserName(props.user?.userName || "");
-    setCampus(props.user?.campus || "");
-    setCurso(props.user?.curso || "");
+    setLoading(true);
+    const formData = new FormData();
+    formData.append("banner", bannerFile);
+    formData.append("token", `${localStorage.getItem("token")}`);
+
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_BASE_URL}${
+          import.meta.env.VITE_UPDATE_BANNER_PHOTO
+        }`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+
+      if (response.data.updated) {
+        setResponseBanner(response.data.avatarURL);
+        window.dispatchEvent(new Event("storage"));
+        setDataSuccessMessage("Banner atualizada com sucesso.");
+      } else {
+        setDataErrorMessage(response.data.message);
+      }
+    } catch (error: any) {
+      setDataErrorMessage(
+        error.response?.data.message || "Erro ao atualizar o banner."
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -236,7 +437,13 @@ const EditProfileLayout = (props: userData) => {
       <Card className="mt-2 w-full md:w-6/12">
         <div className="relative w-full h-40">
           <img
-            src="https://img.freepik.com/fotos-premium/fundo-abstrato-da-lua-em-cores-esteticas-generative-ai_888418-6857.jpg?w=996"
+            src={
+              responseBanner
+                ? responseBanner
+                : props.user.banner
+                ? props.user.banner
+                : "https://img.freepik.com/fotos-premium/fundo-abstrato-da-lua-em-cores-esteticas-generative-ai_888418-6857.jpg?w=996"
+            }
             alt="Banner"
             className="absolute top-0 left-0 w-full h-full object-fill"
           />
@@ -245,7 +452,7 @@ const EditProfileLayout = (props: userData) => {
             <Avatar className="h-20 w-20 shadow-lg border-4 border-secondary rounded-full">
               <AvatarFallback>{nickname}</AvatarFallback>
               <AvatarImage
-                src={responseImage ? responseImage : props.user.avatar}
+                src={responseAvatar ? responseAvatar : props.user.avatar}
               />
             </Avatar>
           </div>
@@ -346,6 +553,23 @@ const EditProfileLayout = (props: userData) => {
                   </Button>
                 )}
 
+                {selectedData === "genre" ? null : (
+                  <Button
+                    variant={"ghost"}
+                    className="justify-start w-full"
+                    onClick={() => {
+                      handleSelectedData("genre");
+                    }}
+                  >
+                    {props.user.genre === "Feminino" ? (
+                      <FemaleSolid className="h-5 md:h-4 w-5 md:w-4 mr-2" />
+                    ) : (
+                      <MaleSolid className="h-5 md:h-4 w-5 md:w-4 mr-2" />
+                    )}
+                    Gênero
+                  </Button>
+                )}
+
                 {selectedData === "avatar" ? null : (
                   <Button
                     variant={"ghost"}
@@ -371,6 +595,19 @@ const EditProfileLayout = (props: userData) => {
                     Banner
                   </Button>
                 )}
+
+                {selectedData === "bio" ? null : (
+                  <Button
+                    variant={"ghost"}
+                    className="justify-start w-full"
+                    onClick={() => {
+                      handleSelectedData("bio");
+                    }}
+                  >
+                    <PencilSolid className="h-5 md:h-4 w-5 md:w-4 mr-2" />
+                    Bio
+                  </Button>
+                )}
               </div>
             </DrawerContent>
           </Drawer>
@@ -380,7 +617,7 @@ const EditProfileLayout = (props: userData) => {
 
         {selectedData === "info" && (
           <CardContent className="mt-4 space-y-6">
-<div className="flex flex-col gap-1 w-full">
+            <div className="flex flex-col gap-1 w-full">
               <Label htmlFor="userName">Nome Completo</Label>
               <Input
                 value={userName}
@@ -453,8 +690,11 @@ const EditProfileLayout = (props: userData) => {
             <div className="flex flex-col gap-1 w-full">
               <Label htmlFor="email">E-mail</Label>
               <Input
+                value={email}
                 id="email"
-                type="email"
+                onChange={(e: React.BaseSyntheticEvent) => {
+                  setEmail(e.target.value);
+                }}
               />
             </div>
           </CardContent>
@@ -465,16 +705,46 @@ const EditProfileLayout = (props: userData) => {
             <div className="flex flex-col gap-1 w-full">
               <Label htmlFor="password">Senha atual</Label>
               <Input
-                id="password"
                 type="password"
+                id="password"
+                onChange={(e: React.BaseSyntheticEvent) => {
+                  setPassword(e.target.value);
+                }}
               />
             </div>
 
             <div className="flex flex-col gap-1 w-full">
-              <Label htmlFor="newPassword">Nova senha</Label>
+              <Label htmlFor="novasenha">Nova senha</Label>
               <Input
                 type="password"
+                id="novasenha"
+                onChange={(e: React.BaseSyntheticEvent) => {
+                  setNovasenha(e.target.value);
+                }}
               />
+            </div>
+          </CardContent>
+        )}
+
+        {selectedData === "genre" && (
+          <CardContent className="mt-4 space-y-6">
+            <div className="flex flex-col gap-1 w-full">
+              <Label htmlFor="genre">Gênero</Label>
+
+              <Select onValueChange={(value) => setGenre(value)} value={genre}>
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Escolha seu gênero" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    {GENREs.map((genre, index) => (
+                      <SelectItem key={index} value={genre}>
+                        {genre}
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
             </div>
           </CardContent>
         )}
@@ -488,7 +758,38 @@ const EditProfileLayout = (props: userData) => {
                 name="avatar"
                 id="avatar"
                 accept="image/jpeg, image/png, image/gif"
-                onChange={handleImageChange}
+                onChange={updateAvatar}
+              />
+            </div>
+          </CardContent>
+        )}
+
+        {selectedData === "banner" && (
+          <CardContent className="mt-4">
+            <div className="flex flex-col gap-1 w-full">
+              <Label htmlFor="banner">Banner</Label>
+              <Input
+                type="file"
+                name="banner"
+                id="banner"
+                accept="image/jpeg, image/png, image/gif"
+                onChange={updateBanner}
+              />
+            </div>
+          </CardContent>
+        )}
+
+        {selectedData === "bio" && (
+          <CardContent className="mt-4 space-y-2">
+            <div className="flex flex-col gap-1 w-full">
+              <Label htmlFor="bio">Bio</Label>
+              <Textarea
+                value={bio}
+                id="bio"
+                placeholder="Adicione uma bio aqui..."
+                onChange={(e: React.BaseSyntheticEvent) => {
+                  setBio(e.target.value);
+                }}
               />
             </div>
           </CardContent>
@@ -500,18 +801,18 @@ const EditProfileLayout = (props: userData) => {
           {successMessage ? (
             <CardDescription className="text-success flex flex-row items-center gap-2">
               <CheckSquareOneSolid className="h-4 w-4" />
-              Salvo com sucesso!
+              {successMessage}
             </CardDescription>
-          ) : errorMessage || errorImage ? (
+          ) : errorMessage ? (
             <CardDescription className="text-danger flex flex-row items-center gap-2">
               <XSolid className="h-4 w-4" />
-              {errorMessage || errorImage}
+              {errorMessage}
             </CardDescription>
           ) : null}
 
           {selectedData === "info" && (
             <Button
-              onClick={handleInfoChange}
+              onClick={handleChangeInfo}
               disabled={loading}
               variant={"success"}
             >
@@ -519,13 +820,63 @@ const EditProfileLayout = (props: userData) => {
             </Button>
           )}
 
+          {selectedData === "email" && (
+            <Button
+              onClick={handleChangeEmail}
+              disabled={loading}
+              variant={"success"}
+            >
+              {loading ? "Salvando..." : "Salvar informações"}
+            </Button>
+          )}
+
+          {selectedData === "password" && (
+            <Button
+              onClick={handleChangePassword}
+              disabled={loading}
+              variant={"success"}
+            >
+              {loading ? "Salvando..." : "Salvar senha"}
+            </Button>
+          )}
+
+          {selectedData === "genre" && (
+            <Button
+              onClick={handleChangeGenre}
+              disabled={loading}
+              variant={"success"}
+            >
+              {loading ? "Salvando..." : "Salvar gênero"}
+            </Button>
+          )}
+
           {selectedData === "avatar" && (
             <Button
-              onClick={updateProfilePhoto}
+              onClick={handleChangeAvatar}
               disabled={loading}
               variant={"success"}
             >
               {loading ? "Salvando..." : "Salvar foto"}
+            </Button>
+          )}
+
+          {selectedData === "banner" && (
+            <Button
+              onClick={handleChangeBanner}
+              disabled={loading}
+              variant={"success"}
+            >
+              {loading ? "Salvando..." : "Salvar banner"}
+            </Button>
+          )}
+
+          {selectedData === "bio" && (
+            <Button
+              onClick={handleChangeBio}
+              disabled={loading}
+              variant={"success"}
+            >
+              {loading ? "Salvando..." : "Salvar bio"}
             </Button>
           )}
         </CardFooter>

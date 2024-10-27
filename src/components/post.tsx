@@ -118,7 +118,9 @@ export const CardPost = (props: CardProps) => {
   // });
 
   const dataUser: User = getUserData();
-  const [viewingUser, setViewingUser] = React.useState<User | undefined>(undefined);
+  const [viewingUser, setViewingUser] = React.useState<User | undefined>(
+    undefined
+  );
   const [formattedData, setFormattedData] = React.useState("");
 
   const [liked, setLiked] = React.useState(false);
@@ -152,7 +154,8 @@ export const CardPost = (props: CardProps) => {
       setLikeCount(likeCount + 1);
     } else {
       axios.post(
-        `${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_POST_UNLIKE
+        `${import.meta.env.VITE_API_BASE_URL}${
+          import.meta.env.VITE_POST_UNLIKE
         }`,
         { token: localStorage.getItem("token"), postId: props._id }
       );
@@ -228,7 +231,6 @@ export const CardPost = (props: CardProps) => {
 
   // Lógica para comentar
   const [comment, setComment] = React.useState<string | undefined>(undefined);
-  const [statusComment, setStatusComment] = React.useState<boolean>(false);
   const [errorMessage, setErrorMessage] = React.useState<string | undefined>(
     undefined
   );
@@ -241,7 +243,8 @@ export const CardPost = (props: CardProps) => {
     try {
       await axios
         .post(
-          `${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_POST_COMMENT
+          `${import.meta.env.VITE_API_BASE_URL}${
+            import.meta.env.VITE_POST_COMMENT
           }`,
           {
             content: comment,
@@ -252,24 +255,19 @@ export const CardPost = (props: CardProps) => {
         )
         .then((response) => {
           if (response.data.posted) {
-            setStatusComment(true);
             setCommentCount(commentCount + 1);
             setComment(undefined);
           }
         })
         .catch((error: any) => {
           setErrorMessage(error.response.data.message || "Erro ao comentar");
-          setStatusComment(false);
         });
     } catch (error: any) {
       console.log("Erro ao postar comentário", error);
-      setStatusComment(false);
     }
   };
 
   const handleCommentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setStatusComment(false);
-
     const { value } = e.target;
     setComment(value);
   };
@@ -310,7 +308,8 @@ export const CardPost = (props: CardProps) => {
     setLoading(true);
     try {
       const response = await axios.get(
-        `${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_POST_GETCOMMENTS
+        `${import.meta.env.VITE_API_BASE_URL}${
+          import.meta.env.VITE_POST_GETCOMMENTS
         }${localStorage.getItem("token")}/${props._id}`,
         {
           params: { skip, limit },
@@ -343,7 +342,7 @@ export const CardPost = (props: CardProps) => {
   const handleScroll = () => {
     if (
       window.innerHeight + document.documentElement.scrollTop ===
-      document.documentElement.offsetHeight &&
+        document.documentElement.offsetHeight &&
       hasMore &&
       !loading
     ) {
@@ -383,14 +382,15 @@ export const CardPost = (props: CardProps) => {
                   </div>
                   <div>
                     <HeartWavesSolid
-                      className={`${viewingUser?.type === "Plus"
-                        ? "text-info"
-                        : viewingUser?.type === "Admin"
+                      className={`${
+                        viewingUser?.type === "Plus"
+                          ? "text-info"
+                          : viewingUser?.type === "Admin"
                           ? "text-danger"
                           : viewingUser?.type === "verified"
-                            ? "text-success"
-                            : "hidden"
-                        } h-4 w-4`}
+                          ? "text-success"
+                          : "hidden"
+                      } h-4 w-4`}
                     />
                   </div>
                 </div>
@@ -594,7 +594,8 @@ export const CardPost = (props: CardProps) => {
                     )}
                   </>
                 ) : (
-                  `${props.content.substring(0, 50)}${props.references ? "" : ""
+                  `${props.content.substring(0, 50)}${
+                    props.references ? "" : ""
                   }`
                 )}
                 {(props.content.length > 50 || props.references) && (
@@ -650,11 +651,12 @@ export const CardPost = (props: CardProps) => {
                             return (
                               <div className="flex flex-row items-center">
                                 <SpinnerSolid className="animate-spin mr-2 h-5 w-5" />
-                                <p className="text-muted-foreground text-sm">Carregando...</p>
+                                <p className="text-muted-foreground text-sm">
+                                  Carregando...
+                                </p>
                               </div>
                             );
-                          }
-                          else {
+                          } else {
                             return (
                               <div
                                 key={comment._id}
@@ -672,55 +674,75 @@ export const CardPost = (props: CardProps) => {
                                 <div className="flex flex-col justify-start items-start rounded bg-card border border-border p-4 w-full max-w-[75%] shadow-sm gap-1">
                                   <div className="flex flex-row justify-center items-center gap-1">
                                     <div className="flex flex-row items-center">
-                                      <p className="text-muted-foreground font-poppins font-semibold md:font-medium text-xs tracking-tight">
+                                      <DrawerDescription className="font-semibold md:font-medium tracking-tight text-xs md:text-xs">
                                         {dataUser
                                           ? dataUser.nickname
                                           : "Indisponível"}
-                                      </p>
+                                      </DrawerDescription>
                                     </div>
 
                                     <HeartWavesSolid
-                                      className={`${dataUser.type === "Plus"
-                                        ? "text-info"
-                                        : dataUser.type === "Admin"
+                                      className={`${
+                                        dataUser.type === "Plus"
+                                          ? "text-info"
+                                          : dataUser.type === "Admin"
                                           ? "text-danger"
                                           : dataUser.type === "verified"
-                                            ? "text-success"
-                                            : "hidden"
-                                        } h-3 w-3`}
+                                          ? "text-success"
+                                          : "hidden"
+                                      } h-3 w-3`}
                                     />
+
+                                    <DrawerDescription className="text-xs md:text-xs">
+                                      •
+                                    </DrawerDescription>
+
+                                    <DrawerDescription className="font-normal md:font-light tracking-tight text-xs md:text-xs">
+                                      {formatDistanceToNow(
+                                        new Date(comment.insertAt),
+                                        { addSuffix: true, locale: ptBR }
+                                      )}{" "}
+                                      atrás
+                                    </DrawerDescription>
                                   </div>
                                   <div className="flex flex-row items-center">
-                                    <p className="font-poppins font-medium md:font-normal text-xs">
+                                    <DrawerDescription className="text-foreground font-normal md:font-light tracking-tight text-sm md:text-sm">
+                                      <span className="font-semibold md:font-medium">
+                                        {dataUser?.nickname}:
+                                      </span>{" "}
                                       {comment.content}
-                                    </p>
+                                    </DrawerDescription>
+                                  </div>
+
+                                  <div className="flex flex-row justify-between items-center w-full">
+                                    <DrawerDescription className="cursor-pointer font-normal md:font-light tracking-tight text-xs md:text-xs">
+                                      ver todas as 0 curtidas
+                                    </DrawerDescription>
+
+                                    <div className="flex flex-row items-center gap-2">
+                                      <DrawerDescription className="cursor-pointer font-normal md:font-light tracking-tight text-xs md:text-xs">
+                                        Curtir
+                                      </DrawerDescription>
+                                    </div>
                                   </div>
                                 </div>
                               </div>
-                            )
+                            );
                           }
                         })}
-
                       </ScrollArea>
                     </DrawerHeader>
 
                     <Separator />
 
                     <DrawerFooter>
-                      <div className="flex flex-col gap-2 w-full">
-                        <div className="mr-2">
-                          {!statusComment ? (
-                            <div className="flex flex-row justify-end items-center gap-1">
-                              <span className="animate-bounce delay-100 bg-accent-foreground rounded-full h-1 w-1"></span>
-                              <span className="animate-bounce delay-200 bg-accent-foreground rounded-full h-1 w-1"></span>
-                              <span className="animate-bounce delay-300 bg-accent-foreground rounded-full h-1 w-1"></span>
-                            </div>
-                          ) : errorMessage ? (
-                            <DrawerDescription className="text-danger text-xs md:text-xs">
-                              {errorMessage}
-                            </DrawerDescription>
-                          ) : null}
-                        </div>
+                      <div className="flex flex-col w-full">
+                        {errorMessage ? (
+                          <DrawerDescription className="text-danger text-xs md:text-xs">
+                            {errorMessage}
+                          </DrawerDescription>
+                        ) : null}
+
                         <div className="flex flex-row justify-between items-center gap-1 w-full">
                           <Avatar className="shadow-lg border-2 border-secondary">
                             <AvatarFallback>{dataUser.nickname}</AvatarFallback>

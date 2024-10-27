@@ -8,6 +8,7 @@ interface User {
   email: string;
   campus: string;
   avatar: string;
+  banner: string;
   birthdaydata: string;
   Nfollowing: number;
   Nfollowers: number;
@@ -16,6 +17,8 @@ interface User {
   curso: string;
   type: string;
   bio: string;
+  password: string;
+  genre: string;
 }
 
 export function getUserData() {
@@ -34,6 +37,9 @@ export function getUserData() {
     followers: [],
     type: "",
     bio: "",
+    password: "",
+    banner: "",
+    genre: "",
   });
 
   useEffect(() => {
