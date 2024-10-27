@@ -136,7 +136,11 @@ const ProfileLayout = () => {
       <Card className="mt-2 w-full md:w-6/12">
         <div className="relative w-full h-40">
           <img
-            src={viewingUser.banner ? viewingUser.banner : "https://img.freepik.com/fotos-premium/fundo-abstrato-da-lua-em-cores-esteticas-generative-ai_888418-6857.jpg?w=996"}
+            src={
+              viewingUser.banner
+                ? viewingUser.banner
+                : "https://img.freepik.com/fotos-premium/fundo-abstrato-da-lua-em-cores-esteticas-generative-ai_888418-6857.jpg?w=996"
+            }
             alt="Banner"
             className="absolute top-0 left-0 w-full h-full object-fill"
           />
