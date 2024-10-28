@@ -18,6 +18,7 @@ const NotificationsPage = React.lazy(
 
 const PublishPage = React.lazy(() => import("./views/public/publish.tsx"));
 const PostPage = React.lazy(() => import("./views/public/post.tsx"));
+const LikedByPage = React.lazy(() => import("./views/public/likedBy.tsx"));
 
 const ErrorPage = React.lazy(() => import("./views/error/error.tsx"));
 
@@ -58,6 +59,7 @@ const App = () => {
 
               <Route path="/publish" element={<PublishPage />} />
               <Route path="/post/:id" element={<PostPage />} />
+              <Route path="/likedBy/:id" element={<LikedByPage />} />
 
               <Route path="/profile/:id" element={<ProfilePage />} />
               <Route path="/profile/edit" element={<EditProfilePage />} />

@@ -1,6 +1,5 @@
 import * as React from "react";
 import { Link } from "react-router-dom";
-
 import axios from "axios";
 import { formatDistanceToNow, parseISO } from "date-fns";
 import { ptBR } from "date-fns/locale";
@@ -111,12 +110,6 @@ interface User {
 }
 
 export const CardPost = (props: CardProps) => {
-  // const [userData, setUserData] = React.useState<UserData>({
-  //   avatar: '',
-  //   nickname: '',
-  //   email: '',
-  // });
-
   const dataUser: User = getUserData();
   const [viewingUser, setViewingUser] = React.useState<User | undefined>(
     undefined
@@ -129,13 +122,29 @@ export const CardPost = (props: CardProps) => {
   const [showFavorited, setShowFavorited] = React.useState(false);
   const [likeCount, setLikeCount] = React.useState(props.likeCount);
 
+  const [likedComments, setLikedComments] = React.useState<{
+    [key: string]: boolean;
+  }>({});
+  const [likeCommentCounts, setLikeCommentCounts] = React.useState<{
+    [key: string]: number;
+  }>({});
+
   const [showFullContent, setShowFullContent] = React.useState(false);
+  const [showFullComment, setShowFullComment] = React.useState(false);
 
   const toggleContent = () => {
     setShowFullContent(!showFullContent);
   };
 
+  const toggleComment = () => {
+    setShowFullComment(!showFullComment);
+  };
+
   React.useEffect(() => {
+    if (props.likedBy.includes(localStorage.getItem("userId") || "")) {
+      setLiked(true);
+    }
+
     if (props.likedBy.includes(localStorage.getItem("userId") || "")) {
       setLiked(true);
     }
@@ -164,6 +173,48 @@ export const CardPost = (props: CardProps) => {
 
     setShowHeart(true);
     setTimeout(() => setShowHeart(false), 500);
+  };
+
+  const handleLikeComment = async (commentId: string) => {
+    const newLiked = !likedComments[commentId];
+    setLikedComments((prevLikedComments) => ({
+      ...prevLikedComments,
+      [commentId]: newLiked,
+    }));
+
+    const newLikeCount = newLiked
+      ? likeCommentCounts[commentId] + 1
+      : likeCommentCounts[commentId] - 1;
+    setLikeCommentCounts((prevLikeCommentCounts) => ({
+      ...prevLikeCommentCounts,
+      [commentId]: newLikeCount,
+    }));
+
+    try {
+      if (newLiked) {
+        await axios.post(
+          `${import.meta.env.VITE_API_BASE_URL}${
+            import.meta.env.VITE_COMMENT_LIKE
+          }`,
+          {
+            token: localStorage.getItem("token"),
+            commentId,
+          }
+        );
+      } else {
+        await axios.post(
+          `${import.meta.env.VITE_API_BASE_URL}${
+            import.meta.env.VITE_COMMENT_UNLIKE
+          }`,
+          {
+            token: localStorage.getItem("token"),
+            commentId,
+          }
+        );
+      }
+    } catch (error) {
+      console.error("Erro ao curtir/descurtir comentário:", error);
+    }
   };
 
   const handleFavorite = () => {
@@ -203,26 +254,6 @@ export const CardPost = (props: CardProps) => {
   }, [props.userId]);
 
   React.useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        // const response = await axios.get(
-        //   `${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_USER_ID}${
-        //     props.userId
-        //   }`
-        // );
-        // setUserData(response.data.userFinded);
-      } catch (error) {
-        // console.error("Erro ao buscar dados do usuário:", error);
-        // setUserData({
-        //   nickname: "Deletado",
-        //   avatar: "",
-        //   email: "Deletado",
-        // });
-      }
-    };
-
-    fetchUserData();
-
     if (props.insertAt) {
       const parsedDate = parseISO(props.insertAt);
       setFormattedData(formatDistanceToNow(parsedDate, { locale: ptBR }));
@@ -272,13 +303,13 @@ export const CardPost = (props: CardProps) => {
     setComment(value);
   };
 
-  // Lógica de buscar comentários
-
   interface Comment {
     _id: string;
     content: string;
     insertAt: Date;
     userId: string;
+    likeCount: number;
+    likedBy: String[];
   }
 
   const [comments, setComments] = React.useState<Comment[]>([]);
@@ -311,15 +342,26 @@ export const CardPost = (props: CardProps) => {
         `${import.meta.env.VITE_API_BASE_URL}${
           import.meta.env.VITE_POST_GETCOMMENTS
         }${localStorage.getItem("token")}/${props._id}`,
-        {
-          params: { skip, limit },
-        }
+        { params: { skip, limit } }
       );
 
-      response.data.comments.forEach((comment: Comment) =>
-        fetchUserData(comment.userId)
-      );
       const newComments = response.data.comments;
+      newComments.forEach((comment: Comment) => {
+        fetchUserData(comment.userId);
+
+        // Inicialize o estado de likes e contagens de likes para cada comentário
+        setLikedComments((prevLikedComments) => ({
+          ...prevLikedComments,
+          [comment._id]: comment.likedBy.includes(
+            localStorage.getItem("userId") || ""
+          ),
+        }));
+
+        setLikeCommentCounts((prevLikeCommentCounts) => ({
+          ...prevLikeCommentCounts,
+          [comment._id]: comment.likeCount,
+        }));
+      });
 
       setComments((prevComments) => [...prevComments, ...newComments]);
       setSkip(skip + limit);
@@ -332,11 +374,6 @@ export const CardPost = (props: CardProps) => {
       setLoading(false);
     }
   };
-
-  // Hook para carregar comentários ao montar o componente
-  // React.useEffect(() => {
-  //   fetchComments();
-  // }, []);
 
   // Função para buscar comentários ao chegar no final deles
   const handleScroll = () => {
@@ -610,9 +647,11 @@ export const CardPost = (props: CardProps) => {
             </div>
           </div>
 
-          <CardDescription className="cursor-pointer font-normal md:font-light tracking-tight text-md md:text-sm">
-            ver todas as {likeCount} curtidas
-          </CardDescription>
+          <Link to={`/likedBy/${props._id}`}>
+            <CardDescription className="cursor-pointer font-normal md:font-light tracking-tight text-md md:text-sm">
+              ver todas as {likeCount} curtidas
+            </CardDescription>
+          </Link>
         </CardContent>
 
         <Separator className="my-2" />
@@ -643,7 +682,7 @@ export const CardPost = (props: CardProps) => {
                   </DrawerTrigger>
 
                   <DrawerContent>
-                    <DrawerHeader>
+                    <div className="mx-auto w-full max-w-sm">
                       <ScrollArea className="h-72 w-full rounded-md">
                         {comments.map((comment) => {
                           const dataUser = commentUserData[comment.userId];
@@ -658,122 +697,145 @@ export const CardPost = (props: CardProps) => {
                             );
                           } else {
                             return (
-                              <div
+                              <Card
                                 key={comment._id}
-                                className="flex flex-row items-center space-x-2 my-2"
+                                className="my-2 w-full max-w-md"
                               >
-                                <Avatar className="shadow-lg border-2 border-secondary">
-                                  <AvatarFallback>
-                                    {dataUser ? dataUser.nickname : "?"}
-                                  </AvatarFallback>
-                                  <AvatarImage
-                                    src={dataUser ? dataUser.avatar : ""}
-                                  />
-                                </Avatar>
+                                <Link to={`/profile/${comment.userId}`}>
+                                  <CardHeader className="flex flex-row items-center space-x-4 p-4">
+                                    <Avatar className="h-10 w-10 border-2 border-secondary">
+                                      <AvatarFallback>
+                                        {dataUser.nickname[0]}
+                                      </AvatarFallback>
+                                      <AvatarImage
+                                        src={dataUser.avatar}
+                                        alt={dataUser.nickname}
+                                      />
+                                    </Avatar>
+                                    <div className="flex flex-col">
+                                      <div className="flex items-center gap-1">
+                                        <CardDescription className="font-semibold md:font-semibold">
+                                          {dataUser.nickname}
+                                        </CardDescription>
 
-                                <div className="flex flex-col justify-start items-start rounded bg-card border border-border p-4 w-full max-w-[75%] shadow-sm gap-1">
-                                  <div className="flex flex-row justify-center items-center gap-1">
-                                    <div className="flex flex-row items-center">
-                                      <DrawerDescription className="font-semibold md:font-medium tracking-tight text-xs md:text-xs">
-                                        {dataUser
-                                          ? dataUser.nickname
-                                          : "Indisponível"}
-                                      </DrawerDescription>
+                                        <HeartWavesSolid
+                                          className={`${
+                                            dataUser?.type === "Plus"
+                                              ? "text-info"
+                                              : dataUser?.type === "Admin"
+                                              ? "text-danger"
+                                              : dataUser?.type === "verified"
+                                              ? "text-success"
+                                              : "hidden"
+                                          } h-3 w-3`}
+                                        />
+                                      </div>
+                                      <CardDescription className="text-xs md:text-xs">
+                                        {formatDistanceToNow(
+                                          new Date(comment.insertAt),
+                                          {
+                                            addSuffix: true,
+                                            locale: ptBR,
+                                          }
+                                        )}
+                                      </CardDescription>
                                     </div>
+                                  </CardHeader>
+                                </Link>
 
-                                    <HeartWavesSolid
-                                      className={`${
-                                        dataUser.type === "Plus"
-                                          ? "text-info"
-                                          : dataUser.type === "Admin"
-                                          ? "text-danger"
-                                          : dataUser.type === "verified"
-                                          ? "text-success"
-                                          : "hidden"
-                                      } h-3 w-3`}
-                                    />
+                                <CardContent className="relative pb-0">
+                                  <CardDescription className="text-foreground font-normal md:font-light tracking-tight text-md md:text-sm">
+                                    <span className="font-semibold md:font-medium">
+                                      {dataUser.nickname}:{" "}
+                                    </span>
+                                    {showFullComment ? (
+                                      <>{comment.content}</>
+                                    ) : (
+                                      `${comment.content.substring(0, 50)}`
+                                    )}
+                                    {comment.content.length > 50 && (
+                                      <span
+                                        className="text-muted-foreground tracking-tight font-normal md:font-light cursor-pointer"
+                                        onClick={toggleComment}
+                                      >
+                                        {showFullComment
+                                          ? " ...ver menos"
+                                          : " ...ver mais"}
+                                      </span>
+                                    )}
+                                  </CardDescription>
+                                </CardContent>
 
-                                    <DrawerDescription className="text-xs md:text-xs">
-                                      •
-                                    </DrawerDescription>
+                                <Separator className="my-2" />
 
-                                    <DrawerDescription className="font-normal md:font-light tracking-tight text-xs md:text-xs">
-                                      {formatDistanceToNow(
-                                        new Date(comment.insertAt),
-                                        { addSuffix: true, locale: ptBR }
-                                      )}{" "}
-                                      atrás
-                                    </DrawerDescription>
-                                  </div>
-                                  <div className="flex flex-row items-center">
-                                    <DrawerDescription className="text-foreground font-normal md:font-light tracking-tight text-sm md:text-sm">
-                                      <span className="font-semibold md:font-medium">
-                                        {dataUser?.nickname}:
-                                      </span>{" "}
-                                      {comment.content}
-                                    </DrawerDescription>
-                                  </div>
-
-                                  <div className="flex flex-row justify-between items-center w-full">
-                                    <DrawerDescription className="cursor-pointer font-normal md:font-light tracking-tight text-xs md:text-xs">
-                                      ver todas as 0 curtidas
-                                    </DrawerDescription>
-
-                                    <div className="flex flex-row items-center gap-2">
-                                      <DrawerDescription className="cursor-pointer font-normal md:font-light tracking-tight text-xs md:text-xs">
-                                        Curtir
-                                      </DrawerDescription>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
+                                <CardFooter className="flex flex-row items-center gap-1">
+                                  <Button
+                                    variant="outline"
+                                    size="sm"
+                                    onClick={() =>
+                                      handleLikeComment(comment._id)
+                                    }
+                                  >
+                                    {likedComments[comment._id] ? (
+                                      <HeartSolid className="text-primary mr-2 h-4 w-4" />
+                                    ) : (
+                                      <HeartBrokenSolid className="mr-2 h-4 w-4" />
+                                    )}{" "}
+                                    {likeCommentCounts[comment._id] || 0}
+                                  </Button>
+                                  <Button variant="outline" size="sm">
+                                    <MessageSolid className="mr-2 h-4 w-4" />
+                                    Responder
+                                  </Button>
+                                </CardFooter>
+                              </Card>
                             );
                           }
                         })}
                       </ScrollArea>
-                    </DrawerHeader>
 
-                    <Separator />
+                      <DrawerFooter>
+                        <div className="flex flex-col w-full">
+                          {errorMessage ? (
+                            <DrawerDescription className="text-danger text-xs md:text-xs">
+                              {errorMessage}
+                            </DrawerDescription>
+                          ) : null}
 
-                    <DrawerFooter>
-                      <div className="flex flex-col w-full">
-                        {errorMessage ? (
-                          <DrawerDescription className="text-danger text-xs md:text-xs">
-                            {errorMessage}
-                          </DrawerDescription>
-                        ) : null}
+                          <div className="flex flex-row justify-between items-center gap-1 w-full">
+                            <Avatar className="shadow-lg border-2 border-secondary">
+                              <AvatarFallback>
+                                {dataUser.nickname}
+                              </AvatarFallback>
 
-                        <div className="flex flex-row justify-between items-center gap-1 w-full">
-                          <Avatar className="shadow-lg border-2 border-secondary">
-                            <AvatarFallback>{dataUser.nickname}</AvatarFallback>
+                              <AvatarImage src={dataUser.avatar} />
+                            </Avatar>
 
-                            <AvatarImage src={dataUser.avatar} />
-                          </Avatar>
-
-                          <form
-                            action=""
-                            method="POST"
-                            onSubmit={handleCommentSubmit}
-                            className="flex flex-row justify-between gap-1 w-full"
-                          >
-                            <Input
-                              type="text"
-                              placeholder="Adicione um coméntario"
-                              onInput={handleCommentChange}
-                            />
-
-                            {/* Confirmador do comentário */}
-                            <Button
-                              className="rounded"
-                              variant={"outline"}
-                              size={"icon"}
+                            <form
+                              action=""
+                              method="POST"
+                              onSubmit={handleCommentSubmit}
+                              className="flex flex-row justify-between gap-1 w-full"
                             >
-                              <FatCornerUpRightSolid className="h-5 w-5" />
-                            </Button>
-                          </form>
+                              <Input
+                                type="text"
+                                placeholder="Adicione um coméntario"
+                                onInput={handleCommentChange}
+                              />
+
+                              {/* Confirmador do comentário */}
+                              <Button
+                                className="rounded"
+                                variant={"outline"}
+                                size={"icon"}
+                              >
+                                <FatCornerUpRightSolid className="h-5 w-5" />
+                              </Button>
+                            </form>
+                          </div>
                         </div>
-                      </div>
-                    </DrawerFooter>
+                      </DrawerFooter>
+                    </div>
                   </DrawerContent>
                 </Drawer>
               </div>

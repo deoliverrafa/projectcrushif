@@ -406,7 +406,7 @@ const ProfileLayout = () => {
               <Input
                 id="link"
                 ref={inputRef}
-                value={`https://crushif.vercel.app/profile/${viewingUser._id}}`}
+                value={`https://crushif.vercel.app/profile/${viewingUser._id}`}
                 readOnly
               />
             </div>
