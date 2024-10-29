@@ -45,6 +45,7 @@ import {
   SelectGroup,
   SelectValue,
 } from "../../components/ui/select.tsx";
+import { Textarea } from "../../components/ui/textarea.tsx";
 
 import {
   HeartWavesSolid,
@@ -64,7 +65,7 @@ import {
 
 import { getUserData } from "../../utils/getUserData.tsx";
 import { isValidImage } from "../../controllers/avatarUpdate";
-import { Textarea } from "../../components/ui/textarea.tsx";
+import { IFs, CURSOs } from "../../utils/infoIFs.ts";
 
 interface User {
   _id: string;
@@ -88,36 +89,6 @@ interface userData {
 
 const GENREs = ["Masculino", "Feminino"];
 
-const IFs = [
-  "IFAC",
-  "IFAL",
-  "IFAP",
-  "IFAM",
-  "IFBA",
-  "IFCE",
-  "IFB",
-  "IFES",
-  "IFG",
-  "IFMA",
-  "IFMT",
-  "IFMS",
-  "IFMG",
-  "IFPA",
-  "IFPB",
-  "IFPR",
-  "IFPE",
-  "IFPI",
-  "IFRJ",
-  "IFRN",
-  "IFRS",
-  "IFRO",
-  "IFRR",
-  "IFSC",
-  "IFSP",
-  "IFS",
-  "IFTO",
-];
-
 const EditProfileLayout = (props: userData) => {
   const [errorMessage, setDataErrorMessage] = React.useState<String>();
   const [successMessage, setDataSuccessMessage] = React.useState<String>();
@@ -128,6 +99,7 @@ const EditProfileLayout = (props: userData) => {
   const [userName, setUserName] = React.useState(props.user.userName || "");
   const [campus, setCampus] = React.useState(props.user?.campus || "");
   const [curso, setCurso] = React.useState(props.user?.curso || "");
+  const [filteredCourses, setFilteredCourses] = React.useState<string[]>([]);
 
   const [email, setEmail] = React.useState(props.user.email || "");
 
@@ -158,6 +130,10 @@ const EditProfileLayout = (props: userData) => {
   function handleSelectedData(data: string) {
     setSelectedData(data);
   }
+
+  React.useEffect(() => {
+    setFilteredCourses(CURSOs[campus] || []);
+  }, [campus]);
 
   const handleChangeInfo = async () => {
     try {
@@ -445,13 +421,14 @@ const EditProfileLayout = (props: userData) => {
                 : "https://img.freepik.com/fotos-premium/fundo-abstrato-da-lua-em-cores-esteticas-generative-ai_888418-6857.jpg?w=996"
             }
             alt="Banner"
-            className="absolute top-0 left-0 w-full h-full object-fill"
+            className="absolute top-0 left-0 w-full h-full object-cover"
           />
 
           <div className="absolute bottom-[-30px] left-4">
             <Avatar className="h-20 w-20 shadow-lg border-4 border-secondary rounded-full">
               <AvatarFallback>{nickname}</AvatarFallback>
               <AvatarImage
+                className="object-cover"
                 src={responseAvatar ? responseAvatar : props.user.avatar}
               />
             </Avatar>
@@ -641,7 +618,6 @@ const EditProfileLayout = (props: userData) => {
 
             <div className="flex flex-col gap-1 w-full">
               <Label htmlFor="campus">Campus</Label>
-
               <Select
                 onValueChange={(value) => setCampus(value)}
                 value={campus}
@@ -663,19 +639,15 @@ const EditProfileLayout = (props: userData) => {
 
             <div className="flex flex-col gap-1 w-full">
               <Label htmlFor="curso">Curso</Label>
-
-              <Select
-                onValueChange={(value) => setCampus(value)}
-                value={campus}
-              >
+              <Select onValueChange={(value) => setCurso(value)} value={curso}>
                 <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Escolha seu campus" />
+                  <SelectValue placeholder="Escolha seu curso" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectGroup>
-                    {IFs.map((campus, index) => (
-                      <SelectItem key={index} value={campus}>
-                        {campus}
+                    {filteredCourses.map((curso, index) => (
+                      <SelectItem key={index} value={curso}>
+                        {curso}
                       </SelectItem>
                     ))}
                   </SelectGroup>

@@ -171,7 +171,6 @@ const SearchLayout = () => {
                       <SearchUserCard
                         avatar={user.avatar}
                         nickname={user.nickname}
-                        userName={user.userName}
                         type={user.type}
                         _id={user._id}
                         following={isFollowing}
@@ -195,7 +194,6 @@ const SearchLayout = () => {
                     <SearchUserCard
                       avatar={user.avatar}
                       nickname={user.nickname}
-                      userName={user.userName}
                       type={user.type}
                       _id={user._id}
                       following={user.isFollowing}

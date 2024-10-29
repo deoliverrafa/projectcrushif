@@ -46,7 +46,6 @@ import { getUserData } from "../utils/getUserData.tsx";
 
 interface profile {
   nickname: string;
-  userName: string;
   avatar: string;
   type: string;
 }
@@ -54,7 +53,6 @@ interface profile {
 interface User {
   _id: string;
   nickname: string;
-  userName?: string;
   email: string;
   campus: string;
   className?: string;
@@ -70,7 +68,7 @@ interface NavbarProps extends React.HTMLAttributes<HTMLElement> {
   className?: string;
 }
 
-const Profile = ({ nickname, userName, avatar, type }: profile) => {
+const Profile = ({ nickname, avatar, type }: profile) => {
   const userData = getUserData();
 
   function logOutHandle() {
@@ -81,8 +79,8 @@ const Profile = ({ nickname, userName, avatar, type }: profile) => {
     <Sheet>
       <SheetTrigger asChild>
         <Avatar className="shadow-lg border-2 border-secondary h-8 w-8">
-          <AvatarImage src={avatar} />
-          <AvatarFallback>{userName}</AvatarFallback>
+          <AvatarImage className="object-cover" src={avatar} />
+          <AvatarFallback>{nickname}</AvatarFallback>
         </Avatar>
       </SheetTrigger>
 
@@ -105,33 +103,27 @@ const Profile = ({ nickname, userName, avatar, type }: profile) => {
               >
                 <Avatar className="shadow-lg border-2 border-secondary">
                   <AvatarFallback>{nickname}</AvatarFallback>
-                  <AvatarImage src={avatar} />
+                  <AvatarImage className="object-cover" src={avatar} />
                 </Avatar>
 
-                <div className="flex flex-col items-start justify-center">
-                  <div className="flex flex-row items-center space-x-1">
-                    <CardTitle className="font-semibold md:font-medium text-md md:text-sm tracking-tight">
-                      {nickname ? `${nickname}` : "indisponível"}
-                    </CardTitle>
-
-                    <div>
-                      <HeartWavesSolid
-                        className={`${
-                          type === "Plus"
-                            ? "text-info"
-                            : type === "Admin"
-                            ? "text-danger"
-                            : type === "verified"
-                            ? "text-success"
-                            : "hidden"
-                        } h-3 w-3`}
-                      />
-                    </div>
-                  </div>
-
-                  <CardTitle className="font-normal md:font-light text-sm md:text-xs tracking-tight text-wrap">
-                    {userName ? `${userName}` : "indisponível"}
+                <div className="flex flex-row items-center space-x-1">
+                  <CardTitle className="font-semibold md:font-medium text-md md:text-sm tracking-tight">
+                    {nickname ? `${nickname}` : "indisponível"}
                   </CardTitle>
+
+                  <div>
+                    <HeartWavesSolid
+                      className={`${
+                        type === "Plus"
+                          ? "text-info"
+                          : type === "Admin"
+                          ? "text-danger"
+                          : type === "verified"
+                          ? "text-success"
+                          : "hidden"
+                      } h-3 w-3`}
+                    />
+                  </div>
                 </div>
               </Link>
 
@@ -521,7 +513,6 @@ export const NavBar = (props: userData) => {
         <NavbarItem href={""}>
           <Profile
             nickname={props.user?.nickname ? props.user.nickname : ""}
-            userName={props.user?.userName ? props.user.userName : ""}
             avatar={props.avatarPath ? props.avatarPath : ""}
             type={userData.type ? userData.type : ""}
           />

@@ -18,7 +18,7 @@ const NotificationsPage = React.lazy(
 
 const PublishPage = React.lazy(() => import("./views/public/publish.tsx"));
 const PostPage = React.lazy(() => import("./views/public/post.tsx"));
-const LikedByPage = React.lazy(() => import("./views/public/likedBy.tsx"));
+const LikedByPostPage = React.lazy(() => import("./views/public/likedByPost.tsx"));
 
 const ErrorPage = React.lazy(() => import("./views/error/error.tsx"));
 
@@ -27,6 +27,7 @@ const AboutPage = React.lazy(() => import("./views/public/about.tsx"));
 const EditProfilePage = React.lazy(
   () => import("./views/public/edit-profile.tsx")
 );
+const LikedByPage = React.lazy(() => import("./views/public/likedBy.tsx"));
 
 const LoginPage = React.lazy(() => import("./views/auth/login.tsx"));
 const RegisterPage = React.lazy(() => import("./views/auth/register.tsx"));
@@ -59,12 +60,13 @@ const App = () => {
 
               <Route path="/publish" element={<PublishPage />} />
               <Route path="/post/:id" element={<PostPage />} />
-              <Route path="/likedBy/:id" element={<LikedByPage />} />
+              <Route path="/likedByPost/:id" element={<LikedByPostPage />} />
 
               <Route path="/profile/:id" element={<ProfilePage />} />
               <Route path="/profile/edit" element={<EditProfilePage />} />
               <Route path="/about/:id" element={<AboutPage />} />
               <Route path="/notifications" element={<NotificationsPage />} />
+              <Route path="/likedBy/:id" element={<LikedByPage />} />
 
               <Route path="/auth/login" element={<LoginPage />} />
               <Route path="/auth/register" element={<RegisterPage />} />

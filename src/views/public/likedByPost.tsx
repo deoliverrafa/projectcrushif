@@ -7,7 +7,13 @@ import { NavBarReturn } from "../../components/navbar";
 import SearchUserCard from "../../components/user-card";
 
 import { Card, CardContent } from "../../components/ui/card";
+import { getPostDataById } from "../../utils/getPostDataById";
 import { getUserDataById } from "../../utils/getUserDataById";
+
+interface Post {
+  _id: string;
+  likedBy: string[];
+}
 
 interface User {
   _id: string;
@@ -20,19 +26,19 @@ interface User {
   type: string;
 }
 
-const LikedByLayout = () => {
+const LikedByPostLayout = () => {
   const { id } = useParams<string>();
-  const [viewingUser, setViewingUser] = React.useState<User | null>(null);
+  const [viewingPost, setViewingPost] = React.useState<Post | null>(null);
   const [likedUsers, setLikedUsers] = React.useState<User[]>([]);
   const [loadingUsers, setLoadingUsers] = React.useState(true);
 
   React.useEffect(() => {
-    const fetchViewingUserData = async () => {
+    const fetchViewingPostData = async () => {
       try {
-        const data = await getUserDataById(id);
-        setViewingUser(data);
+        const postData = await getPostDataById(id);
+        setViewingPost(postData);
 
-        const usersPromises = data.likedBy.map((userId: string) =>
+        const usersPromises = postData.likedBy.map((userId: string) =>
           getUserDataById(userId)
         );
         const users = await Promise.all(usersPromises);
@@ -45,11 +51,11 @@ const LikedByLayout = () => {
     };
 
     if (id) {
-      fetchViewingUserData();
+      fetchViewingPostData();
     }
   }, [id]);
 
-  if (!viewingUser) {
+  if (!viewingPost) {
     return <LoadingPage />;
   }
 
@@ -85,15 +91,15 @@ const LikedByLayout = () => {
   );
 };
 
-const LikedByPage = () => {
+const LikedByPostPage = () => {
   return (
     <React.Fragment>
       <NavBarReturn title="Curtidas" />
       <main className="flex flex-col justify-center items-center h-full w-full">
-        <LikedByLayout />
+        <LikedByPostLayout />
       </main>
     </React.Fragment>
   );
 };
 
-export default LikedByPage;
+export default LikedByPostPage;

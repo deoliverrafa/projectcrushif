@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import * as React from "react";
 import axios from "axios";
 import { debounce } from "lodash";
 import { Link } from "react-router-dom";
@@ -11,6 +11,8 @@ import { Fab } from "../../components/ui/fab.tsx";
 import { CardPost } from "../../components/post.tsx";
 
 import { PlusSolid, SpinnerSolid } from "@mynaui/icons-react";
+
+import { getStatusUser } from "../../utils/getStatusUser.tsx";
 
 const localAvatarPath = localStorage.getItem("avatar") ?? "";
 
@@ -42,14 +44,18 @@ interface userData {
 }
 
 export default function HomePage() {
-  const [userData, setUserData] = useState<userData | null>(null);
-  const [finishedPosts, setFinishedPosts] = useState(false);
-  const [posts, setPosts] = useState<CardProps[]>([]);
-  const [skip, setSkip] = useState(0);
-  const [limit] = useState(5);
-  const [loading, setLoading] = useState(false);
+  const [userData, setUserData] = React.useState<userData | null>(null);
+  const [finishedPosts, setFinishedPosts] = React.useState(false);
+  const [posts, setPosts] = React.useState<CardProps[]>([]);
+  const [skip, setSkip] = React.useState(0);
+  const [limit] = React.useState(5);
+  const [loading, setLoading] = React.useState(false);
 
-  useEffect(() => {
+  const [userId] = React.useState<string | null>(
+    localStorage.getItem("userId")
+  );
+
+  React.useEffect(() => {
     const token = localStorage.getItem("token");
 
     if (!token) {
@@ -77,7 +83,7 @@ export default function HomePage() {
     getUserData();
   }, []);
 
-  useEffect(() => {
+  React.useEffect(() => {
     async function getPosts() {
       try {
         setLoading(true);
@@ -108,7 +114,9 @@ export default function HomePage() {
     }
   }, [skip, finishedPosts]);
 
-  useEffect(() => {
+  getStatusUser(userId);
+
+  React.useEffect(() => {
     const handleScroll = debounce(() => {
       if (
         window.innerHeight + document.documentElement.scrollTop >=

@@ -67,7 +67,7 @@ const SettingsLayout = ({
           <div className="flex flex-row items-center space-x-2">
             <Avatar>
               <AvatarFallback>{userData.nickname}</AvatarFallback>
-              <AvatarImage src={userData.avatar} />
+              <AvatarImage className="object-cover" src={userData.avatar} />
             </Avatar>
 
             <div className="flex flex-col">

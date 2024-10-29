@@ -4,6 +4,8 @@ import axios from "axios";
 import { formatDistanceToNow, parseISO } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
+import { Comment } from "./comment.tsx";
+
 import {
   Card,
   CardContent,
@@ -117,34 +119,18 @@ export const CardPost = (props: CardProps) => {
   const [formattedData, setFormattedData] = React.useState("");
 
   const [liked, setLiked] = React.useState(false);
+  const [likeCount, setLikeCount] = React.useState(props.likeCount);
   const [showHeart, setShowHeart] = React.useState(false);
   const [favorited, setFavorited] = React.useState(false);
   const [showFavorited, setShowFavorited] = React.useState(false);
-  const [likeCount, setLikeCount] = React.useState(props.likeCount);
-
-  const [likedComments, setLikedComments] = React.useState<{
-    [key: string]: boolean;
-  }>({});
-  const [likeCommentCounts, setLikeCommentCounts] = React.useState<{
-    [key: string]: number;
-  }>({});
 
   const [showFullContent, setShowFullContent] = React.useState(false);
-  const [showFullComment, setShowFullComment] = React.useState(false);
 
   const toggleContent = () => {
     setShowFullContent(!showFullContent);
   };
 
-  const toggleComment = () => {
-    setShowFullComment(!showFullComment);
-  };
-
   React.useEffect(() => {
-    if (props.likedBy.includes(localStorage.getItem("userId") || "")) {
-      setLiked(true);
-    }
-
     if (props.likedBy.includes(localStorage.getItem("userId") || "")) {
       setLiked(true);
     }
@@ -173,48 +159,6 @@ export const CardPost = (props: CardProps) => {
 
     setShowHeart(true);
     setTimeout(() => setShowHeart(false), 500);
-  };
-
-  const handleLikeComment = async (commentId: string) => {
-    const newLiked = !likedComments[commentId];
-    setLikedComments((prevLikedComments) => ({
-      ...prevLikedComments,
-      [commentId]: newLiked,
-    }));
-
-    const newLikeCount = newLiked
-      ? likeCommentCounts[commentId] + 1
-      : likeCommentCounts[commentId] - 1;
-    setLikeCommentCounts((prevLikeCommentCounts) => ({
-      ...prevLikeCommentCounts,
-      [commentId]: newLikeCount,
-    }));
-
-    try {
-      if (newLiked) {
-        await axios.post(
-          `${import.meta.env.VITE_API_BASE_URL}${
-            import.meta.env.VITE_COMMENT_LIKE
-          }`,
-          {
-            token: localStorage.getItem("token"),
-            commentId,
-          }
-        );
-      } else {
-        await axios.post(
-          `${import.meta.env.VITE_API_BASE_URL}${
-            import.meta.env.VITE_COMMENT_UNLIKE
-          }`,
-          {
-            token: localStorage.getItem("token"),
-            commentId,
-          }
-        );
-      }
-    } catch (error) {
-      console.error("Erro ao curtir/descurtir comentário:", error);
-    }
   };
 
   const handleFavorite = () => {
@@ -348,19 +292,6 @@ export const CardPost = (props: CardProps) => {
       const newComments = response.data.comments;
       newComments.forEach((comment: Comment) => {
         fetchUserData(comment.userId);
-
-        // Inicialize o estado de likes e contagens de likes para cada comentário
-        setLikedComments((prevLikedComments) => ({
-          ...prevLikedComments,
-          [comment._id]: comment.likedBy.includes(
-            localStorage.getItem("userId") || ""
-          ),
-        }));
-
-        setLikeCommentCounts((prevLikeCommentCounts) => ({
-          ...prevLikeCommentCounts,
-          [comment._id]: comment.likeCount,
-        }));
       });
 
       setComments((prevComments) => [...prevComments, ...newComments]);
@@ -394,10 +325,7 @@ export const CardPost = (props: CardProps) => {
 
   return (
     <>
-      <Card
-        className="select-none my-2 w-full md:w-5/12"
-        onDoubleClick={handleLike}
-      >
+      <Card className="select-none my-2 w-full md:w-5/12">
         <CardHeader className="flex flex-row justify-between items-center">
           {!props.isAnonymous ? (
             <Link to={`/profile/${props.id}`} className="flex space-x-2">
@@ -407,6 +335,7 @@ export const CardPost = (props: CardProps) => {
                 </AvatarFallback>
 
                 <AvatarImage
+                  className="object-cover"
                   src={!props.isAnonymous ? viewingUser?.avatar : ""}
                 />
               </Avatar>
@@ -441,6 +370,7 @@ export const CardPost = (props: CardProps) => {
                 </AvatarFallback>
 
                 <AvatarImage
+                  className="object-cover"
                   src={
                     !props.isAnonymous
                       ? viewingUser?.avatar
@@ -647,7 +577,7 @@ export const CardPost = (props: CardProps) => {
             </div>
           </div>
 
-          <Link to={`/likedBy/${props._id}`}>
+          <Link to={`/likedByPost/${props._id}`}>
             <CardDescription className="cursor-pointer font-normal md:font-light tracking-tight text-md md:text-sm">
               ver todas as {likeCount} curtidas
             </CardDescription>
@@ -697,98 +627,14 @@ export const CardPost = (props: CardProps) => {
                             );
                           } else {
                             return (
-                              <Card
-                                key={comment._id}
-                                className="my-2 w-full max-w-md"
-                              >
-                                <Link to={`/profile/${comment.userId}`}>
-                                  <CardHeader className="flex flex-row items-center space-x-4 p-4">
-                                    <Avatar className="h-10 w-10 border-2 border-secondary">
-                                      <AvatarFallback>
-                                        {dataUser.nickname[0]}
-                                      </AvatarFallback>
-                                      <AvatarImage
-                                        src={dataUser.avatar}
-                                        alt={dataUser.nickname}
-                                      />
-                                    </Avatar>
-                                    <div className="flex flex-col">
-                                      <div className="flex items-center gap-1">
-                                        <CardDescription className="font-semibold md:font-semibold">
-                                          {dataUser.nickname}
-                                        </CardDescription>
-
-                                        <HeartWavesSolid
-                                          className={`${
-                                            dataUser?.type === "Plus"
-                                              ? "text-info"
-                                              : dataUser?.type === "Admin"
-                                              ? "text-danger"
-                                              : dataUser?.type === "verified"
-                                              ? "text-success"
-                                              : "hidden"
-                                          } h-3 w-3`}
-                                        />
-                                      </div>
-                                      <CardDescription className="text-xs md:text-xs">
-                                        {formatDistanceToNow(
-                                          new Date(comment.insertAt),
-                                          {
-                                            addSuffix: true,
-                                            locale: ptBR,
-                                          }
-                                        )}
-                                      </CardDescription>
-                                    </div>
-                                  </CardHeader>
-                                </Link>
-
-                                <CardContent className="relative pb-0">
-                                  <CardDescription className="text-foreground font-normal md:font-light tracking-tight text-md md:text-sm">
-                                    <span className="font-semibold md:font-medium">
-                                      {dataUser.nickname}:{" "}
-                                    </span>
-                                    {showFullComment ? (
-                                      <>{comment.content}</>
-                                    ) : (
-                                      `${comment.content.substring(0, 50)}`
-                                    )}
-                                    {comment.content.length > 50 && (
-                                      <span
-                                        className="text-muted-foreground tracking-tight font-normal md:font-light cursor-pointer"
-                                        onClick={toggleComment}
-                                      >
-                                        {showFullComment
-                                          ? " ...ver menos"
-                                          : " ...ver mais"}
-                                      </span>
-                                    )}
-                                  </CardDescription>
-                                </CardContent>
-
-                                <Separator className="my-2" />
-
-                                <CardFooter className="flex flex-row items-center gap-1">
-                                  <Button
-                                    variant="outline"
-                                    size="sm"
-                                    onClick={() =>
-                                      handleLikeComment(comment._id)
-                                    }
-                                  >
-                                    {likedComments[comment._id] ? (
-                                      <HeartSolid className="text-primary mr-2 h-4 w-4" />
-                                    ) : (
-                                      <HeartBrokenSolid className="mr-2 h-4 w-4" />
-                                    )}{" "}
-                                    {likeCommentCounts[comment._id] || 0}
-                                  </Button>
-                                  <Button variant="outline" size="sm">
-                                    <MessageSolid className="mr-2 h-4 w-4" />
-                                    Responder
-                                  </Button>
-                                </CardFooter>
-                              </Card>
+                              <Comment
+                                _id={comment._id}
+                                content={comment.content}
+                                insertAt={comment.insertAt}
+                                userId={comment.userId}
+                                likeCount={comment.likeCount}
+                                likedBy={comment.likedBy}
+                              />
                             );
                           }
                         })}
@@ -808,7 +654,7 @@ export const CardPost = (props: CardProps) => {
                                 {dataUser.nickname}
                               </AvatarFallback>
 
-                              <AvatarImage src={dataUser.avatar} />
+                              <AvatarImage className="object-cover" src={dataUser.avatar} />
                             </Avatar>
 
                             <form
@@ -857,7 +703,7 @@ export const CardPost = (props: CardProps) => {
             <Avatar className="shadow-lg border-2 border-secondary">
               <AvatarFallback>{dataUser.nickname}</AvatarFallback>
 
-              <AvatarImage src={dataUser.avatar} />
+              <AvatarImage className="object-cover" src={dataUser.avatar} />
             </Avatar>
             <form
               action=""

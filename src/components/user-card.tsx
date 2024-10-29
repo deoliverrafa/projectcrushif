@@ -11,7 +11,6 @@ import { HeartWavesSolid } from "@mynaui/icons-react";
 interface SearchUserCard {
   avatar: string;
   nickname: string;
-  userName: string;
   type: string;
   _id: string;
   following: boolean;
@@ -24,13 +23,19 @@ export default function SearchUserCard(props: SearchUserCard) {
     token: localStorage.getItem("token"),
   });
 
+  const [userId] = React.useState<string | null>(
+    localStorage.getItem("userId")
+  );
+
   const [followedUser, setFollowedUser] = React.useState(props.following);
 
   const handleFollowToggle = () => {
     if (followedUser) {
       axios
         .put(
-          `${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_UNFOLLOW_USER}`,
+          `${import.meta.env.VITE_API_BASE_URL}${
+            import.meta.env.VITE_UNFOLLOW_USER
+          }`,
           formData
         )
         .then((response) => {
@@ -42,7 +47,9 @@ export default function SearchUserCard(props: SearchUserCard) {
     } else {
       axios
         .put(
-          `${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_FOLLOW_USER}`,
+          `${import.meta.env.VITE_API_BASE_URL}${
+            import.meta.env.VITE_FOLLOW_USER
+          }`,
           formData
         )
         .then((response) => {
@@ -60,36 +67,33 @@ export default function SearchUserCard(props: SearchUserCard) {
         <Link to={`/profile/${props._id}`} className="flex space-x-2 h-full">
           <Avatar className="shadow-lg border-2 border-secondary">
             <AvatarFallback>{props?.nickname}</AvatarFallback>
-            <AvatarImage src={props?.avatar} />
+            <AvatarImage className="object-cover" src={props?.avatar} />
           </Avatar>
-          <div className="flex flex-col items-start justify-center">
-            <div className="flex flex-row items-center space-x-1">
-              <CardTitle className="font-semibold md:font-medium text-md md:text-sm tracking-tight">
-                {props.nickname ? `${props.nickname}` : "indisponível"}
-              </CardTitle>
+          <div className="flex flex-row items-center gap-1">
+            <CardTitle className="font-semibold md:font-medium text-md md:text-sm tracking-tight">
+              {props.nickname ? `${props.nickname}` : "indisponível"}
+            </CardTitle>
 
-              <div>
-                <HeartWavesSolid
-                  className={`${props?.type === "Plus"
+            <div>
+              <HeartWavesSolid
+                className={`${
+                  props?.type === "Plus"
                     ? "text-info"
                     : props?.type === "Admin"
-                      ? "text-danger"
-                      : props?.type === "verified"
-                        ? "text-success"
-                        : "hidden"
-                    } h-3 w-3`}
-                />
-              </div>
+                    ? "text-danger"
+                    : props?.type === "verified"
+                    ? "text-success"
+                    : "hidden"
+                } h-3 w-3`}
+              />
             </div>
-
-            <CardTitle className="font-normal md:font-light text-sm md:text-xs tracking-tight">
-              {props.userName ? `${props.userName}` : "indisponível"}
-            </CardTitle>
           </div>
         </Link>
-        <Button type="button" onClick={handleFollowToggle}>
-          {followedUser ? "Seguindo" : "Seguir"}
-        </Button>
+        {userId === props._id ? null : (
+          <Button type="button" onClick={handleFollowToggle}>
+            {followedUser ? "Seguindo" : "Seguir"}
+          </Button>
+        )}
       </div>
     </Card>
   );

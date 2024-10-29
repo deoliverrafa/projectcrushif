@@ -85,7 +85,7 @@ const AboutLayout = () => {
             <AvatarFallback>
               {viewingUser?.nickname?.slice(0, 3) || "N/A"}{" "}
             </AvatarFallback>
-            <AvatarImage src={viewingUser?.avatar} />
+            <AvatarImage className="object-cover" src={viewingUser?.avatar} />
           </Avatar>
 
           <div className="flex flex-row items-center">

@@ -1,5 +1,6 @@
 import * as React from "react";
 import { useParams, Link } from "react-router-dom";
+import axios from "axios";
 
 import { NavBarReturn } from "../../components/navbar.tsx";
 
@@ -48,6 +49,7 @@ import { ScrollArea } from "../../components/ui/scroll-area.tsx";
 
 import { getUserData } from "../../utils/getUserData.tsx";
 import { getUserDataById } from "../../utils/getUserDataById.tsx";
+import { getStatusUser } from "../../utils/getStatusUser.tsx";
 
 import {
   HeartWavesSolid,
@@ -58,6 +60,7 @@ import {
   At,
   FolderSlashSolid,
   HeartSolid,
+  HeartBrokenSolid,
   FolderHeartSolid,
   CheckSquareOneSolid,
   UserPlusSolid,
@@ -80,12 +83,21 @@ interface User {
   Nfollowing: number;
   curso: string;
   type: string;
+  status: string;
+  likeCount: number;
+  likedBy: String[];
 }
 
 const ProfileLayout = () => {
   const currentUser = getUserData();
   const [viewingUser, setViewingUser] = React.useState<User | null>(null);
   const { id } = useParams<string>();
+  const [userId] = React.useState<string | null>(
+    localStorage.getItem("userId")
+  );
+
+  const [liked, setLiked] = React.useState(false);
+  const [likeCount, setLikeCount] = React.useState(0);
 
   const inputRef = React.useRef<HTMLInputElement>(null);
 
@@ -115,6 +127,10 @@ const ProfileLayout = () => {
       try {
         const data = await getUserDataById(id);
         setViewingUser(data);
+        if (data.likedBy.includes(userId || "")) {
+          setLiked(true);
+        }
+        setLikeCount(data.likeCount);
       } catch (error) {
         console.error("Error fetching viewing user data:", error);
       }
@@ -123,7 +139,31 @@ const ProfileLayout = () => {
     if (id) {
       fetchViewingUserData();
     }
-  }, [id]);
+  }, [id, userId]);
+
+  const handleLike = () => {
+    const newLiked = !liked;
+
+    setLiked(newLiked);
+
+    if (newLiked) {
+      axios.post(
+        `${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_USER_LIKE}`,
+        { token: localStorage.getItem("token"), userId: viewingUser?._id }
+      );
+      setLikeCount(likeCount + 1);
+    } else {
+      axios.post(
+        `${import.meta.env.VITE_API_BASE_URL}${
+          import.meta.env.VITE_USER_UNLIKE
+        }`,
+        { token: localStorage.getItem("token"), userId: viewingUser?._id }
+      );
+      setLikeCount(likeCount - 1);
+    }
+  };
+
+  getStatusUser(userId);
 
   if (!currentUser || !viewingUser) {
     return <LoadingPage />;
@@ -142,13 +182,13 @@ const ProfileLayout = () => {
                 : "https://img.freepik.com/fotos-premium/fundo-abstrato-da-lua-em-cores-esteticas-generative-ai_888418-6857.jpg?w=996"
             }
             alt="Banner"
-            className="absolute top-0 left-0 w-full h-full object-fill"
+            className="absolute top-0 left-0 w-full h-full object-cover"
           />
 
           <div className="absolute bottom-[-30px] left-4">
             <Avatar className="h-20 w-20 shadow-lg border-4 border-secondary rounded-full">
               <AvatarFallback>{viewingUser.nickname}</AvatarFallback>
-              <AvatarImage src={viewingUser.avatar} />
+              <AvatarImage className="object-cover" src={viewingUser.avatar} />
             </Avatar>
           </div>
         </div>
@@ -203,8 +243,16 @@ const ProfileLayout = () => {
               <div className="mx-auto w-full max-w-sm">
                 <DrawerHeader className="flex flex-row justify-around items-center">
                   <div className="flex flex-col items-center space-y-1">
-                    <Button variant={"outline"} size={"icon"}>
-                      <HeartSolid className="text-primary h-5 md:h-4 w-5 md:w-4" />
+                    <Button
+                      variant={"outline"}
+                      size={"icon"}
+                      onClick={handleLike}
+                    >
+                      {liked ? (
+                        <HeartSolid className="text-primary h-5 md:h-4 w-5 md:w-4" />
+                      ) : (
+                        <HeartBrokenSolid className="h-5 md:h-4 w-5 md:w-4" />
+                      )}
                     </Button>
                     <DrawerDescription>Curtir</DrawerDescription>
                   </div>
@@ -361,19 +409,32 @@ const ProfileLayout = () => {
 
         <CardFooter className="flex flex-col space-y-2 w-full">
           <div className="flex flex-row justify-around items-center my-4 w-full">
-            <Badge variant={"outline"} className="text-primary gap-1">
-              <HeartSolid className="h-3 w-3" />
-              Curtidas: 0
-            </Badge>
+            <Link to={`/likedBy/${viewingUser._id}`}>
+              <Badge variant={"outline"} className="text-primary gap-1">
+                <HeartSolid className="h-3 w-3" />
+                Curtidas: {likeCount}
+              </Badge>
+            </Link>
 
             <Badge variant={"outline"} className="text-warning gap-1">
               <FolderHeartSolid className="h-3 w-3" />
               Postagens: 0
             </Badge>
 
-            <Badge variant={"outline"} className="text-success gap-1">
-              <span className="bg-success rounded-full h-2 w-2"></span>
-              Online
+            <Badge
+              variant={"outline"}
+              className={`${
+                viewingUser.status === "online"
+                  ? "text-success"
+                  : "text-secondary"
+              } gap-1`}
+            >
+              {viewingUser.status === "online" ? (
+                <span className="bg-success rounded-full h-2 w-2"></span>
+              ) : (
+                <span className="bg-secondary rounded-full h-2 w-2"></span>
+              )}
+              {viewingUser.status}
             </Badge>
           </div>
 
