@@ -22,6 +22,8 @@
     --warning-foreground: 0 0% 100%;
     --danger: 0 72% 51%;
     --danger-foreground: 0 0% 100%;
+    --info: 221 83.2% 53.3%;
+    --info-foreground: 0 0% 100%;
     --muted: 0 0% 100%;
     --muted-foreground: 213 16% 37%;
     --accent: 0 0% 100%;
@@ -49,6 +51,8 @@
     --warning-foreground: 0 0% 100%;
     --danger: 0 74% 42%;
     --danger-foreground: 0 0% 100%;
+    --info: 224 76.3% 48%;
+    --info-foreground: 0 0% 100%;
     --muted: 222 47% 13%;
     --muted-foreground: 215 18% 62%;
     --accent: 222 47% 13%;
@@ -76,6 +80,8 @@
     --warning-foreground: 0 0% 100%;
     --danger: 0 100% 30%;
     --danger-foreground: 0 0% 100%;
+    --info: 224 76.3% 48%;
+    --info-foreground: 0 0% 100%;
     --muted: 0 0% 0%;
     --muted-foreground: 215 18% 72%;
     --accent: 0 0% 0%;
@@ -103,6 +109,8 @@
     --warning-foreground: 0 0% 100%;
     --danger: 0 72% 51%;
     --danger-foreground: 0 0% 100%;
+    --info: 221 83.2% 53.3%;
+    --info-foreground: 0 0% 100%;
     --muted: 295 30% 85%;
     --muted-foreground: 333 5% 35%;
     --accent: 295 30% 80%;
@@ -130,6 +138,8 @@
     --warning-foreground: 335 5% 90%;
     --danger: 0 100% 30%;
     --danger-foreground: 335 5% 90%;
+    --info: 224 76.3% 48%;
+    --info-foreground: 0 0% 100%;
     --muted: 297 30% 15%;
     --muted-foreground: 335 5% 60%;
     --accent: 297 30% 15%;

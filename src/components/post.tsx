@@ -237,6 +237,7 @@ export const CardPost = (props: CardProps) => {
               userId: localStorage.getItem("userId") || "",
               likeCount: 0,
               likedBy: [],
+              mentionedUsers: [],
             };
 
             setComments((prevComments) => [newComment, ...prevComments]);
@@ -264,7 +265,8 @@ export const CardPost = (props: CardProps) => {
     insertAt: Date;
     userId: string;
     likeCount: number;
-    likedBy: String[];
+    likedBy: string[];
+    mentionedUsers: string[];
   }
 
   const [comments, setComments] = React.useState<Comment[]>([]);
@@ -624,7 +626,7 @@ export const CardPost = (props: CardProps) => {
 
                   <DrawerContent>
                     <div className="mx-auto w-full max-w-sm">
-                      <ScrollArea className="h-96 w-full rounded-md">
+                      <ScrollArea className="h-72 w-full rounded-md">
                         {comments.map((comment) => {
                           const dataUser = commentUserData[comment.userId];
                           if (!dataUser) {
@@ -639,12 +641,14 @@ export const CardPost = (props: CardProps) => {
                           } else {
                             return (
                               <Comment
+                                key={comment._id}
                                 _id={comment._id}
                                 content={comment.content}
                                 insertAt={comment.insertAt}
                                 userId={comment.userId}
                                 likeCount={comment.likeCount}
                                 likedBy={comment.likedBy}
+                                mentionedUsers={comment.mentionedUsers}
                               />
                             );
                           }

@@ -35,7 +35,7 @@ const Bottombar = React.forwardRef<HTMLDivElement, BottombarProps>(
       <div
         ref={ref}
         className={cn(
-          "transition-transform duration-300 bg-background shadow-[0_-2px_4px_rgba(0,0,0,0.1)] flex flex-row justify-around items-center fixed bottom-0 inset-x-0 px-2 md:px-1 py-2 md:py-1 w-full z-20",
+          "border-t border-borderbtransition-transform duration-300 bg-background shadow-[0_-2px_4px_rgba(0,0,0,0.1)] flex flex-row justify-around items-center fixed bottom-0 inset-x-0 px-2 md:px-1 py-2 md:py-1 w-full z-20",
           isVisible ? "translate-y-0" : "translate-y-full",
           className
         )}

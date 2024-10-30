@@ -95,18 +95,14 @@ const Profile = ({ nickname, avatar, type }: profile) => {
         </SheetHeader>
 
         <div className="grid gap-4 p-2">
-          <Card className="w-full">
-            <div className="flex flex-row justify-between items-center p-4">
-              <Link
-                to={`/profile/${userData._id}`}
-                className="flex space-x-2 h-full"
-              >
-                <Avatar className="shadow-lg border-2 border-secondary">
-                  <AvatarFallback>{nickname}</AvatarFallback>
-                  <AvatarImage className="object-cover" src={avatar} />
-                </Avatar>
-
+          <Link to={`/profile/${userData._id}`}>
+            <Card className="w-full">
+              <div className="flex flex-row justify-between items-center space-x-2 h-full p-4">
                 <div className="flex flex-row items-center space-x-1">
+                  <Avatar className="shadow-lg border-2 border-secondary">
+                    <AvatarFallback>{nickname}</AvatarFallback>
+                    <AvatarImage className="object-cover" src={avatar} />
+                  </Avatar>
                   <CardTitle className="font-semibold md:font-medium text-md md:text-sm tracking-tight">
                     {nickname ? `${nickname}` : "indisponível"}
                   </CardTitle>
@@ -125,13 +121,11 @@ const Profile = ({ nickname, avatar, type }: profile) => {
                     />
                   </div>
                 </div>
-              </Link>
 
-              <Link to={`/profile/${userData._id}`}>
                 <ChevronRight />
-              </Link>
-            </div>
-          </Card>
+              </div>
+            </Card>
+          </Link>
 
           <Separator />
 
@@ -256,7 +250,7 @@ const Navbar: React.FC<NavbarProps> = ({ className, children, ...props }) => {
   return (
     <nav
       className={cn(
-        "transition-transform duration-300 select-none bg-card shadow-[0_2px_4px_rgba(0,0,0,0.1)] flex flex-row justify-between items-center shadow-[0_-2px_4px_rgba(0,0,0,0.1)] sticky top-0 inset-x-0 translate-y-0 md:translate-y-0/2 px-4 md:px-2 py-2 md:py-1 w-full z-20",
+        "border-b border-border transition-transform duration-300 select-none bg-card shadow-[0_2px_4px_rgba(0,0,0,0.1)] flex flex-row justify-between items-center shadow-[0_-2px_4px_rgba(0,0,0,0.1)] sticky top-0 inset-x-0 translate-y-0 md:translate-y-0/2 px-4 md:px-2 py-2 md:py-1 w-full z-20",
         isVisible ? "translate-y-0" : "-translate-y-full",
         className
       )}
