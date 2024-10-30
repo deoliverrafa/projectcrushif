@@ -3,18 +3,22 @@ import { debounce } from "lodash";
 import axios from "axios";
 
 import SearchUserCard from "../../components/user-card.tsx";
+import { UserSuggestions } from "../../components/userSuggestions.tsx";
+
 import { BottomBar } from "../../components/bottombar.tsx";
 import { NavBar } from "../../components/navbar.tsx";
 import { Input } from "../../components/ui/input.tsx";
 import {
   Card,
   CardContent,
+  CardDescription,
   CardHeader,
   CardTitle,
 } from "../../components/ui/card.tsx";
 import { ScrollArea } from "../../components/ui/scroll-area.tsx";
 
 import { getUserData } from "../../utils/getUserData.tsx";
+import { getStatusUser } from "../../utils/getStatusUser.tsx";
 
 interface User {
   nickname: string;
@@ -27,6 +31,9 @@ interface User {
 
 const SearchLayout = () => {
   const userData = getUserData();
+  const [userId] = React.useState<string | null>(
+    localStorage.getItem("userId")
+  );
 
   const [formData, setFormData] = useState({
     nickname: "",
@@ -109,12 +116,14 @@ const SearchLayout = () => {
     fetchSuggestedUsers();
   }, [fetchSuggestedUsers]);
 
+  getStatusUser(userId);
+
   return (
     <form
       action="searchUser"
       method="post"
       onSubmit={handleFormSubmit}
-      className="flex flex-col items-center w-full"
+      className="select-none flex flex-col items-center w-full"
     >
       <Card className="w-full md:w-6/12">
         <CardHeader>
@@ -140,16 +149,12 @@ const SearchLayout = () => {
         {queryResponse.length > 0 && (
           <p className="font-poppins font-medium md:font-normal tracking-wide text-md md:text-sm text-muted-foreground">
             {queryResponse.length === 1 ? (
-              <div className="flex flex-row items-center pl-4 pb-2">
-                <p className="font-poppins tracking-widest font-medium md:font-normal text-md md:text-sm text-muted-foreground">
-                  Resultado:
-                </p>
+              <div className="flex flex-row items-center ml-4">
+                <CardDescription>Resultado</CardDescription>
               </div>
             ) : queryResponse.length > 1 ? (
-              <div className="flex flex-row items-center pl-4 pb-2">
-                <p className="font-poppins tracking-widest font-medium md:font-normal text-md md:text-sm text-muted-foreground">
-                  Resultados:
-                </p>
+              <div className="flex flex-row items-center ml-4">
+                <CardDescription>Resultados</CardDescription>
               </div>
             ) : (
               ""
@@ -181,26 +186,13 @@ const SearchLayout = () => {
                 })
               ) : noResults ? (
                 <div className="flex flex-col justify-center items-center space-y-2 w-full">
-                  <p className="font-poppins font-medium md:font-normal text-md md:text-sm text-muted-foreground text-center w-full">
-                    Nenhum usuário encontrado.
-                  </p>
+                  <CardDescription>Nenhum usuário encontrado</CardDescription>
                 </div>
               ) : (
-                <>
-                  <p className="font-poppins font-medium md:font-normal tracking-widest text-md md:text-sm text-muted-foreground">
-                    Sugestões:
-                  </p>
-                  {suggestedUsers.map((user: User) => (
-                    <SearchUserCard
-                      avatar={user.avatar}
-                      nickname={user.nickname}
-                      type={user.type}
-                      _id={user._id}
-                      following={user.isFollowing}
-                      key={user._id}
-                    />
-                  ))}
-                </>
+                <div className="flex flex-col gap-1">
+                  <CardDescription>Sugestões para você</CardDescription>
+                  <UserSuggestions />
+                </div>
               )}
             </div>
           </ScrollArea>

@@ -84,7 +84,7 @@ export default function SearchUserCard(props: SearchUserCard) {
                     : props?.type === "verified"
                     ? "text-success"
                     : "hidden"
-                } h-3 w-3`}
+                } h-3.5 w-3.5`}
               />
             </div>
           </div>

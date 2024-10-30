@@ -81,14 +81,14 @@ const AboutLayout = () => {
     <React.Fragment>
       <Card className="select-none mt-2 w-full md:w-6/12">
         <CardHeader className="flex flex-col items-center gap-1.5">
-          <Avatar className="md:h-16 md:w-16">
+          <Avatar className="border-2 border-secondary md:h-16 md:w-16">
             <AvatarFallback>
               {viewingUser?.nickname?.slice(0, 3) || "N/A"}{" "}
             </AvatarFallback>
             <AvatarImage className="object-cover" src={viewingUser?.avatar} />
           </Avatar>
 
-          <div className="flex flex-row items-center">
+          <div className="flex flex-row items-center gap-1">
             <CardDescription className="">
               {viewingUser?.nickname || "Usuário"}
             </CardDescription>
@@ -102,7 +102,7 @@ const AboutLayout = () => {
                   : viewingUser?.type === "verified"
                   ? "text-success"
                   : "hidden"
-              } ml-1 h-3.5 w-3.5`}
+              } h-3.5 w-3.5`}
             />
           </div>
         </CardHeader>

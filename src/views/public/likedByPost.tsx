@@ -9,6 +9,7 @@ import SearchUserCard from "../../components/user-card";
 import { Card, CardContent } from "../../components/ui/card";
 import { getPostDataById } from "../../utils/getPostDataById";
 import { getUserDataById } from "../../utils/getUserDataById";
+import { getStatusUser } from "../../utils/getStatusUser";
 
 interface Post {
   _id: string;
@@ -28,6 +29,9 @@ interface User {
 
 const LikedByPostLayout = () => {
   const { id } = useParams<string>();
+  const [userId] = React.useState<string | null>(
+    localStorage.getItem("userId")
+  );
   const [viewingPost, setViewingPost] = React.useState<Post | null>(null);
   const [likedUsers, setLikedUsers] = React.useState<User[]>([]);
   const [loadingUsers, setLoadingUsers] = React.useState(true);
@@ -55,6 +59,8 @@ const LikedByPostLayout = () => {
     }
   }, [id]);
 
+  getStatusUser(userId);
+
   if (!viewingPost) {
     return <LoadingPage />;
   }
@@ -67,7 +73,7 @@ const LikedByPostLayout = () => {
     <React.Fragment>
       <Card className="select-none mt-2 w-full md:w-6/12">
         <CardContent>
-          <p className="font-poppins font-medium md:font-normal tracking-widest text-md md:text-sm text-muted-foreground mt-6">
+          <p className="font-poppins font-medium md:font-normal text-md md:text-sm text-muted-foreground mt-6">
             Curtiram:
           </p>
 

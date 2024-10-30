@@ -121,7 +121,7 @@ const Profile = ({ nickname, avatar, type }: profile) => {
                           : type === "verified"
                           ? "text-success"
                           : "hidden"
-                      } h-3 w-3`}
+                      } h-3.5 w-3.5`}
                     />
                   </div>
                 </div>

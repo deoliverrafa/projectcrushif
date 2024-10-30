@@ -129,7 +129,7 @@ export const Comment = (props: Comment) => {
                       : viewingUser?.type === "verified"
                       ? "text-success"
                       : "hidden"
-                  } h-3 w-3`}
+                  } h-3.5 w-3.5`}
                 />
               </div>
               <CardDescription className="text-xs md:text-xs">

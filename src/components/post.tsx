@@ -230,8 +230,19 @@ export const CardPost = (props: CardProps) => {
         )
         .then((response) => {
           if (response.data.posted) {
+            const newComment = {
+              _id: response.data.commentId,
+              content: comment || "",
+              insertAt: new Date(),
+              userId: localStorage.getItem("userId") || "",
+              likeCount: 0,
+              likedBy: [],
+            };
+
+            setComments((prevComments) => [newComment, ...prevComments]);
             setCommentCount(commentCount + 1);
-            setComment(undefined);
+
+            setComment("");
           }
         })
         .catch((error: any) => {
@@ -613,7 +624,7 @@ export const CardPost = (props: CardProps) => {
 
                   <DrawerContent>
                     <div className="mx-auto w-full max-w-sm">
-                      <ScrollArea className="h-72 w-full rounded-md">
+                      <ScrollArea className="h-96 w-full rounded-md">
                         {comments.map((comment) => {
                           const dataUser = commentUserData[comment.userId];
                           if (!dataUser) {
@@ -654,7 +665,10 @@ export const CardPost = (props: CardProps) => {
                                 {dataUser.nickname}
                               </AvatarFallback>
 
-                              <AvatarImage className="object-cover" src={dataUser.avatar} />
+                              <AvatarImage
+                                className="object-cover"
+                                src={dataUser.avatar}
+                              />
                             </Avatar>
 
                             <form
@@ -666,6 +680,7 @@ export const CardPost = (props: CardProps) => {
                               <Input
                                 type="text"
                                 placeholder="Adicione um coméntario"
+                                value={comment}
                                 onInput={handleCommentChange}
                               />
 
@@ -714,6 +729,7 @@ export const CardPost = (props: CardProps) => {
               <Input
                 type="text"
                 placeholder="Adicione um coméntario"
+                value={comment}
                 onInput={handleCommentChange}
               />
 

@@ -6,6 +6,8 @@ import { NavBarReturn } from "../../components/navbar.tsx";
 
 import LoadingPage from "../../views/public/loading.tsx";
 
+import { UserSuggestions } from "../../components/userSuggestions.tsx";
+
 import {
   Card,
   CardContent,
@@ -57,7 +59,6 @@ import {
   ShareSolid,
   MessageSolid,
   CopySolid,
-  At,
   FolderSlashSolid,
   HeartSolid,
   HeartBrokenSolid,
@@ -203,9 +204,8 @@ const ProfileLayout = () => {
 
             <div className="flex flex-row items-center gap-1">
               <Badge variant={"outline"} className="font-light w-fit">
-                <At className="h-2.5 w-2.5" />{" "}
                 {viewingUser.nickname
-                  ? `${viewingUser.nickname}`
+                  ? `@${viewingUser.nickname}`
                   : "indisponível"}
                 <HeartWavesSolid
                   className={`${
@@ -216,7 +216,7 @@ const ProfileLayout = () => {
                       : viewingUser?.type === "verified"
                       ? "text-success"
                       : "hidden"
-                  } ml-1 h-3 w-3`}
+                  } ml-1 h-3.5 w-3.5`}
                 />
               </Badge>
             </div>
@@ -402,6 +402,11 @@ const ProfileLayout = () => {
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
+          </div>
+
+          <div className="flex flex-col gap-1">
+            <CardDescription>Sugestões para você</CardDescription>
+            <UserSuggestions />
           </div>
         </CardContent>
 

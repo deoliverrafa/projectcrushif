@@ -61,11 +61,13 @@ import {
   MaleSolid,
   PencilSolid,
   FemaleSolid,
+  CalendarSolid,
 } from "@mynaui/icons-react";
 
 import { getUserData } from "../../utils/getUserData.tsx";
 import { isValidImage } from "../../controllers/avatarUpdate";
 import { IFs, CURSOs } from "../../utils/infoIFs.ts";
+import { getStatusUser } from "../../utils/getStatusUser.tsx";
 
 interface User {
   _id: string;
@@ -81,6 +83,7 @@ interface User {
   password: string;
   genre: string;
   bio: string;
+  birthdaydata: string;
 }
 
 interface userData {
@@ -90,6 +93,10 @@ interface userData {
 const GENREs = ["Masculino", "Feminino"];
 
 const EditProfileLayout = (props: userData) => {
+  const [userId] = React.useState<string | null>(
+    localStorage.getItem("userId")
+  );
+
   const [errorMessage, setDataErrorMessage] = React.useState<String>();
   const [successMessage, setDataSuccessMessage] = React.useState<String>();
   const [selectedData, setSelectedData] = React.useState<String>("info");
@@ -105,6 +112,10 @@ const EditProfileLayout = (props: userData) => {
 
   const [password, setPassword] = React.useState("");
   const [novasenha, setNovasenha] = React.useState("");
+
+  const [birthdaydata, setBirthdaydata] = React.useState(
+    props.user?.birthdaydata || ""
+  );
 
   const [genre, setGenre] = React.useState(props.user?.genre || "");
 
@@ -123,6 +134,7 @@ const EditProfileLayout = (props: userData) => {
     setCurso(props.user.curso);
     setEmail(props.user.email);
     setPassword(props.user.password);
+    setBirthdaydata(props.user.birthdaydata);
     setGenre(props.user.genre);
     setBio(props.user.bio);
   }, [props.user]);
@@ -234,6 +246,39 @@ const EditProfileLayout = (props: userData) => {
         );
       } else {
         setDataErrorMessage("Erro ao atualizar senha.");
+      }
+    }
+  };
+
+  const handleChangeBirthday = async () => {
+    try {
+      setDataErrorMessage("");
+      setDataSuccessMessage("");
+
+      const formData = new FormData();
+      formData.append("birthdaydata", birthdaydata);
+
+      const endpoint = import.meta.env.VITE_CHANGE_BIRTHDAY;
+
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_BASE_URL}${endpoint}${localStorage.getItem(
+          "token"
+        )}`,
+        formData
+      );
+
+      if (response.data.updated) {
+        setDataSuccessMessage("Nascimento atualizado com sucesso");
+      } else {
+        setDataErrorMessage(response.data.message);
+      }
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error) && error.response) {
+        setDataErrorMessage(
+          error.response.data.message || "Erro ao atualizar nascimento."
+        );
+      } else {
+        setDataErrorMessage("Erro ao atualizar nascimento.");
       }
     }
   };
@@ -408,6 +453,8 @@ const EditProfileLayout = (props: userData) => {
     }
   };
 
+  getStatusUser(userId);
+
   return (
     <React.Fragment>
       <Card className="mt-2 w-full md:w-6/12">
@@ -527,6 +574,19 @@ const EditProfileLayout = (props: userData) => {
                   >
                     <LockPasswordSolid className="h-5 md:h-4 w-5 md:w-4 mr-2" />
                     Senha
+                  </Button>
+                )}
+
+                {selectedData === "birthday" ? null : (
+                  <Button
+                    variant={"ghost"}
+                    className="justify-start w-full"
+                    onClick={() => {
+                      handleSelectedData("birthday");
+                    }}
+                  >
+                    <CalendarSolid className="h-5 md:h-4 w-5 md:w-4 mr-2" />
+                    Nascimento
                   </Button>
                 )}
 
@@ -698,6 +758,22 @@ const EditProfileLayout = (props: userData) => {
           </CardContent>
         )}
 
+        {selectedData === "birthday" && (
+          <CardContent className="mt-4 space-y-6">
+            <div className="flex flex-col gap-1 w-full">
+              <Label htmlFor="birthday">Nascimento</Label>
+              <Input
+                type="date"
+                id="birthday"
+                value={birthdaydata}
+                onChange={(e: React.BaseSyntheticEvent) => {
+                  setBirthdaydata(e.target.value);
+                }}
+              />
+            </div>
+          </CardContent>
+        )}
+
         {selectedData === "genre" && (
           <CardContent className="mt-4 space-y-6">
             <div className="flex flex-col gap-1 w-full">
@@ -809,6 +885,16 @@ const EditProfileLayout = (props: userData) => {
               variant={"success"}
             >
               {loading ? "Salvando..." : "Salvar senha"}
+            </Button>
+          )}
+
+          {selectedData === "birthday" && (
+            <Button
+              onClick={handleChangeBirthday}
+              disabled={loading}
+              variant={"success"}
+            >
+              {loading ? "Salvando..." : "Salvar nascimento"}
             </Button>
           )}
 
