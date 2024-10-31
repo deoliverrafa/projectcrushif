@@ -16,8 +16,10 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Separator } from "./ui/separator";
 import { Button } from "./ui/button";
+import { Input } from "./ui/input";
 
 import {
+  FatCornerUpRightSolid,
   HeartBrokenSolid,
   HeartSolid,
   HeartWavesSolid,
@@ -25,6 +27,7 @@ import {
 } from "@mynaui/icons-react";
 
 import { getUserDataById } from "../utils/getUserDataById";
+import { getUserData } from "../utils/getUserData";
 
 interface Comment {
   _id: string;
@@ -45,6 +48,8 @@ interface User {
 }
 
 export const Comment: React.FC<Comment> = (props) => {
+  const dataUser: User = getUserData();
+
   const [liked, setLiked] = React.useState(false);
   const [likeCount, setLikeCount] = React.useState(props.likeCount);
   const [showHeart, setShowHeart] = React.useState(false);
@@ -94,9 +99,9 @@ export const Comment: React.FC<Comment> = (props) => {
     setTimeout(() => setShowHeart(false), 500);
   };
 
+  const [isReply, setIsReply] = React.useState<boolean>(false);
   const [replies, setReplies] = React.useState<string[]>([]);
-
-  const [newReply, setNewReply] = React.useState(""); 
+  const [newReply, setNewReply] = React.useState("");
 
   const handleReply = async () => {
     try {
@@ -111,8 +116,8 @@ export const Comment: React.FC<Comment> = (props) => {
           userId: localStorage.getItem("userId"),
         }
       );
-      setReplies([...replies, response.data.replyId]); 
-      setNewReply(""); 
+      setReplies([...replies, response.data.replyId]);
+      setNewReply("");
     } catch (error) {
       console.error("Erro ao enviar resposta:", error);
     }
@@ -138,122 +143,147 @@ export const Comment: React.FC<Comment> = (props) => {
   };
 
   return (
-    <Card key={props._id} className="my-2 w-full max-w-md">
-      <Link to={`/profile/${props.userId}`}>
-        <CardHeader className="flex flex-row items-center space-x-4 p-4">
-          <Avatar className="h-10 w-10 border-2 border-secondary">
-            <AvatarFallback>{viewingUser?.nickname[0]}</AvatarFallback>
-            <AvatarImage
-              className="object-cover"
-              src={viewingUser?.avatar}
-              alt={viewingUser?.nickname}
-            />
-          </Avatar>
-          <div className="flex flex-col">
-            <div className="flex items-center gap-1">
-              <CardDescription className="font-semibold md:font-semibold">
-                {viewingUser?.nickname}
-              </CardDescription>
-              <HeartWavesSolid
-                className={`${
-                  viewingUser?.type === "Plus"
-                    ? "text-info"
-                    : viewingUser?.type === "Admin"
-                    ? "text-danger"
-                    : viewingUser?.type === "verified"
-                    ? "text-success"
-                    : "hidden"
-                } h-3.5 w-3.5`}
+    <div className="flex flex-col items-center my-2">
+      <Card key={props._id} className="w-full max-w-md">
+        <Link to={`/profile/${props.userId}`}>
+          <CardHeader className="flex flex-row items-center space-x-4 p-4">
+            <Avatar className="h-10 w-10 border-2 border-secondary">
+              <AvatarFallback>{viewingUser?.nickname[0]}</AvatarFallback>
+              <AvatarImage
+                className="object-cover"
+                src={viewingUser?.avatar}
+                alt={viewingUser?.nickname}
               />
+            </Avatar>
+            <div className="flex flex-col">
+              <div className="flex items-center gap-1">
+                <CardDescription className="font-semibold md:font-semibold">
+                  {viewingUser?.nickname}
+                </CardDescription>
+                <HeartWavesSolid
+                  className={`${
+                    viewingUser?.type === "Plus"
+                      ? "text-info"
+                      : viewingUser?.type === "Admin"
+                      ? "text-danger"
+                      : viewingUser?.type === "verified"
+                      ? "text-success"
+                      : "hidden"
+                  } h-3.5 w-3.5`}
+                />
+              </div>
+              <CardDescription className="text-xs md:text-xs">
+                {formatDistanceToNow(new Date(props.insertAt), {
+                  addSuffix: true,
+                  locale: ptBR,
+                })}
+              </CardDescription>
             </div>
-            <CardDescription className="text-xs md:text-xs">
-              {formatDistanceToNow(new Date(props.insertAt), {
-                addSuffix: true,
-                locale: ptBR,
-              })}
-            </CardDescription>
-          </div>
-        </CardHeader>
-      </Link>
+          </CardHeader>
+        </Link>
 
-      <CardContent className="relative pb-0">
-        <CardDescription className="text-foreground font-normal md:font-light tracking-tight text-md md:text-sm">
-          <span className="font-semibold md:font-medium">
-            {viewingUser?.nickname}:{" "}
-          </span>
-          {showFullComment ? (
-            <>{highlightMentionsAndHashtags(props.content)}</>
-          ) : (
-            highlightMentionsAndHashtags(props.content.substring(0, 50))
-          )}
-          {props.content.length > 50 && (
-            <span
-              className="text-muted-foreground tracking-tight font-normal md:font-light cursor-pointer"
-              onClick={toggleComment}
-            >
-              {showFullComment ? " ...ver menos" : " ...ver mais"}
+        <CardContent className="relative pb-0">
+          <CardDescription className="text-foreground font-normal md:font-light tracking-tight text-md md:text-sm">
+            <span className="font-semibold md:font-medium">
+              {viewingUser?.nickname}:{" "}
             </span>
-          )}
-        </CardDescription>
-
-        {showHeart && (
-          <div className="absolute inset-0 flex items-center justify-center">
-            <HeartSolid className="animate-ping text-primary h-20 w-20" />
-          </div>
-        )}
-
-        <input
-          type="text"
-          value={newReply}
-          onChange={(e) => setNewReply(e.target.value)}
-          placeholder="Responder..."
-        />
-        <Button onClick={handleReply}>Responder</Button>
-
-        {replies.map((replyId) => (
-          <div key={replyId}>
-            <p>Resposta ID: {replyId}</p>
-            <p></p>
-            {/* Aqui você poderia buscar e renderizar as informações da resposta */}
-          </div>
-        ))}
-      </CardContent>
-
-      <Separator className="my-2" />
-
-      <CardFooter className="flex flex-row justify-between items-center">
-        <div className="flex flex-row items-center gap-2">
-          <Button
-            variant="outline"
-            size="sm"
-            className="gap-1"
-            onClick={handleLike}
-          >
-            {liked ? (
-              <HeartSolid className="text-primary h-5 md:h-4 w-5 md:w-4" />
+            {showFullComment ? (
+              <>{highlightMentionsAndHashtags(props.content)}</>
             ) : (
-              <HeartBrokenSolid className="h-5 md:h-4 w-5 md:w-4" />
+              highlightMentionsAndHashtags(props.content.substring(0, 50))
             )}
-            {likeCount}
-          </Button>
-          <Button variant="outline" size="sm">
-            <MessageSolid className="mr-2 h-4 w-4" />
-            Responder
-          </Button>
-        </div>
+            {props.content.length > 50 && (
+              <span
+                className="text-muted-foreground tracking-tight font-normal md:font-light cursor-pointer"
+                onClick={toggleComment}
+              >
+                {showFullComment ? " ...ver menos" : " ...ver mais"}
+              </span>
+            )}
+          </CardDescription>
 
-        <div className="flex flex-row items-center gap-2">
-          <MentionedUsers
-            _id={props._id}
-            content={props.content}
-            insertAt={props.insertAt}
-            userId={props.userId}
-            likeCount={props.likeCount}
-            likedBy={props.likedBy}
-            mentionedUsers={props.mentionedUsers}
-          />
-        </div>
-      </CardFooter>
-    </Card>
+          {showHeart && (
+            <div className="absolute inset-0 flex items-center justify-center">
+              <HeartSolid className="animate-ping text-primary h-20 w-20" />
+            </div>
+          )}
+
+          {isReply ? (
+            <div className="flex flex-row justify-between gap-1 mt-4 w-full">
+              <Avatar className="shadow-lg border-2 border-secondary">
+                <AvatarFallback>{dataUser?.nickname[0]}</AvatarFallback>
+                <AvatarImage className="object-cover" src={dataUser?.avatar} />
+              </Avatar>
+
+              <Input
+                type="text"
+                placeholder="Responder um comentário"
+                value={newReply}
+                onChange={(e) => setNewReply(e.target.value)}
+              />
+
+              <Button
+                className="rounded"
+                variant={"outline"}
+                size={"icon"}
+                onClick={handleReply}
+              >
+                <FatCornerUpRightSolid className="h-5 w-5" />
+              </Button>
+            </div>
+          ) : null}
+
+          {replies.map((replyId) => (
+            <div key={replyId}>
+              <p>Resposta ID: {replyId}</p>
+              <p></p>
+              {/* Aqui você poderia buscar e renderizar as informações da resposta */}
+            </div>
+          ))}
+        </CardContent>
+
+        <Separator className="my-2" />
+
+        <CardFooter className="flex flex-row justify-between items-center">
+          <div className="flex flex-row items-center gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              className="gap-1"
+              onClick={handleLike}
+            >
+              {liked ? (
+                <HeartSolid className="text-primary h-5 md:h-4 w-5 md:w-4" />
+              ) : (
+                <HeartBrokenSolid className="h-5 md:h-4 w-5 md:w-4" />
+              )}
+              {likeCount}
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setIsReply(true)}
+            >
+              <MessageSolid className="mr-2 h-4 w-4" />
+              Responder
+            </Button>
+          </div>
+
+          <div className="flex flex-row items-center gap-2">
+            <MentionedUsers
+              _id={props._id}
+              content={props.content}
+              insertAt={props.insertAt}
+              userId={props.userId}
+              likeCount={props.likeCount}
+              likedBy={props.likedBy}
+              mentionedUsers={props.mentionedUsers}
+            />
+          </div>
+        </CardFooter>
+      </Card>
+
+      <p className="text-muted-foreground font-poppins text-xs mt-1">Exibir mais comentários</p>
+    </div>
   );
 };
