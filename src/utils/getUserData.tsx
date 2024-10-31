@@ -19,6 +19,7 @@ interface User {
   bio: string;
   password: string;
   genre: string;
+  isFollowing: boolean;
 }
 
 export function getUserData() {
@@ -40,6 +41,7 @@ export function getUserData() {
     password: "",
     banner: "",
     genre: "",
+    isFollowing: false,
   });
 
   useEffect(() => {

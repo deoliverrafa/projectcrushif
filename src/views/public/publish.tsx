@@ -31,20 +31,16 @@ import { getUserData } from "../../utils/getUserData";
 import {
   IncognitoSolid,
   LabelSolid,
-  At,
   ImageSolid,
   EarthSolid,
 } from "@mynaui/icons-react";
 
 interface CardData {
-  nickname: string;
-  email: string;
-  campus: string;
-  references: string;
   content: string;
   isAnonymous: boolean;
   photoURL?: string;
   userPhotoUrl?: string;
+  mentionedUsers: string[];
 }
 
 const LogoLayout = () => {
@@ -67,27 +63,35 @@ const PublishLayout = () => {
   const [step, setStep] = React.useState(1);
 
   const [cardData, setCardData] = React.useState<CardData>({
-    nickname: "",
-    email: "",
-    campus: "",
-    references: "",
     content: "",
     isAnonymous: false,
+    mentionedUsers: [],
   });
 
   const [selectedFile, setSelectedFile] = React.useState<File | null>(null);
 
-  function handleIsAnonymous() {
+  const handleIsAnonymous = () => {
     setAnonymous(!isAnonymous);
-  }
+  };
 
-  function handleChangeData(e: React.ChangeEvent<HTMLInputElement>) {
+  const handleChangeData = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setCardData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  }
+
+    if (name === "content") {
+      const mentionedUsers =
+        value.match(/@(\w+)/g)?.map((user) => user.slice(1)) || [];
+      setCardData((prevData) => ({
+        ...prevData,
+        [name]: value,
+        mentionedUsers: mentionedUsers,
+      }));
+    } else {
+      setCardData((prevData) => ({
+        ...prevData,
+        [name]: value,
+      }));
+    }
+  };
 
   function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     if (e.target.files && e.target.files[0]) {
@@ -107,9 +111,6 @@ const PublishLayout = () => {
     if (userData) {
       setCardData((prevData) => ({
         ...prevData,
-        nickname: userData.nickname,
-        email: userData.email,
-        campus: userData.campus,
         isAnonymous: isAnonymous,
       }));
     }
@@ -147,16 +148,12 @@ const PublishLayout = () => {
     e.preventDefault();
 
     const formData = new FormData();
-    formData.append("nickname", cardData.nickname);
-    formData.append("email", cardData.email);
-    formData.append("campus", cardData.campus);
     formData.append("content", cardData.content || "");
-    formData.append(
-      "references",
-      cardData.references ? cardData.references : ""
-    );
-    formData.append("avatar", userData?.avatar ? userData.avatar : "");
     formData.append("isAnonymous", isAnonymous.toString());
+
+    if (cardData.mentionedUsers.length > 0) {
+      formData.append("mentionedUsers", JSON.stringify(cardData.mentionedUsers));
+    }
 
     if (selectedFile) {
       formData.append("photo", selectedFile);
@@ -186,6 +183,7 @@ const PublishLayout = () => {
       console.error("Error:", error);
     }
   }
+
   return (
     <>
       <Card className="hidden md:flex flex-col w-5/6 max-w-sm">
@@ -213,17 +211,6 @@ const PublishLayout = () => {
           </div>
 
           <div className={`${step === 3 ? null : "hidden"}`}>
-            <Badge variant={"outline"}>
-              <At className="text-warning" />
-            </Badge>
-            <CardTitle className="tracking-wider">Marcações</CardTitle>
-
-            <CardDescription className="tracking-wide">
-              Adicione uma #hashtag, @usuário, ou marque alguém na publicação.
-            </CardDescription>
-          </div>
-
-          <div className={`${step === 4 ? null : "hidden"}`}>
             <Badge variant={"outline"}>
               <ImageSolid className="text-primary" />
             </Badge>
@@ -278,22 +265,6 @@ const PublishLayout = () => {
                 step === 3 ? null : "hidden"
               } grid items-center gap-1.5 w-full max-w-sm`}
             >
-              <Label htmlFor="references">Marcações</Label>
-              <Input
-                type="text"
-                key="references"
-                placeholder="Adicione uma marcação"
-                name="references"
-                id="references"
-                onChange={handleChangeData}
-              />
-            </div>
-
-            <div
-              className={`${
-                step === 4 ? null : "hidden"
-              } grid items-center gap-1.5 w-full max-w-sm`}
-            >
               <Label htmlFor="inputFoto">Upload</Label>
               <Input
                 type="file"
@@ -320,15 +291,7 @@ const PublishLayout = () => {
             <div className="flex flex-row items-center w-full">
               <Progress
                 value={
-                  step === 1
-                    ? 10
-                    : step === 2
-                    ? 33
-                    : step === 3
-                    ? 66
-                    : step === 4
-                    ? 100
-                    : null
+                  step === 1 ? 10 : step === 2 ? 33 : step === 3 ? 66 : null
                 }
                 className="w-full"
               />
@@ -336,7 +299,7 @@ const PublishLayout = () => {
 
             <div
               className={`${
-                step === 4 ? null : "hidden"
+                step === 3 ? null : "hidden"
               } flex flex-row justify-center items-center my-2`}
             >
               <Button type="submit" className="w-full">
@@ -347,7 +310,7 @@ const PublishLayout = () => {
 
           <div
             className={`${
-              step === 4 ? "hidden" : null
+              step === 3 ? "hidden" : null
             } flex flex-row justify-center items-center my-2`}
           >
             <Button className="w-full" onClick={handleNextStep}>
@@ -418,20 +381,6 @@ const PublishLayout = () => {
 
                 <div className={`${step === 3 ? null : "hidden"} space-y-1.5`}>
                   <Badge variant={"outline"}>
-                    <At className="text-warning" />
-                  </Badge>
-                  <DialogTitle className="tracking-wider">
-                    Marcações
-                  </DialogTitle>
-
-                  <DialogDescription className="tracking-wide">
-                    Adicione uma #hashtag, @usuário, ou marque alguém na
-                    publicação.
-                  </DialogDescription>
-                </div>
-
-                <div className={`${step === 4 ? null : "hidden"} space-y-1.5`}>
-                  <Badge variant={"outline"}>
                     <ImageSolid className="text-primary" />
                   </Badge>
                   <DialogTitle className="tracking-wider">Upload</DialogTitle>
@@ -485,23 +434,6 @@ const PublishLayout = () => {
                     step === 3 ? null : "hidden"
                   } grid items-center gap-1.5 m-2 w-full`}
                 >
-                  <Label htmlFor="references">Marcações</Label>
-                  <Input
-                    type="text"
-                    key="references"
-                    placeholder="Adicione uma marcação"
-                    className="w-11/12"
-                    name="references"
-                    id="references"
-                    onChange={handleChangeData}
-                  />
-                </div>
-
-                <div
-                  className={`${
-                    step === 4 ? null : "hidden"
-                  } grid items-center gap-1.5 m-2 w-full`}
-                >
                   <Label htmlFor="inputFoto">Upload</Label>
                   <Input
                     type="file"
@@ -515,15 +447,7 @@ const PublishLayout = () => {
                 <div className="flex flex-row items-center w-full">
                   <Progress
                     value={
-                      step === 1
-                        ? 10
-                        : step === 2
-                        ? 33
-                        : step === 3
-                        ? 66
-                        : step === 4
-                        ? 100
-                        : null
+                      step === 1 ? 10 : step === 2 ? 33 : step === 3 ? 66 : null
                     }
                     className="w-full"
                   />
@@ -531,7 +455,7 @@ const PublishLayout = () => {
 
                 <div
                   className={`${
-                    step === 4 ? null : "hidden"
+                    step === 3 ? null : "hidden"
                   } flex flex-row justify-center items-center m-2`}
                 >
                   <Button type="submit" className="w-full">
@@ -542,7 +466,7 @@ const PublishLayout = () => {
 
               <div
                 className={`${
-                  step === 4 ? "hidden" : null
+                  step === 3 ? "hidden" : null
                 } flex flex-row justify-center items-center m-2`}
               >
                 <Button className="w-full" onClick={handleNextStep}>

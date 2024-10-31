@@ -4,7 +4,8 @@ import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import axios from "axios";
 
-import SearchUserCard from "./user-card";
+import { MentionedUsers } from "./mentionedUsers";
+
 import {
   Card,
   CardContent,
@@ -15,17 +16,8 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Separator } from "./ui/separator";
 import { Button } from "./ui/button";
-import { ScrollArea } from "./ui/scroll-area";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "./ui/dialog";
 
 import {
-  At,
   HeartBrokenSolid,
   HeartSolid,
   HeartWavesSolid,
@@ -58,7 +50,6 @@ export const Comment: React.FC<Comment> = (props) => {
   const [showHeart, setShowHeart] = React.useState(false);
   const [showFullComment, setShowFullComment] = React.useState(false);
   const [viewingUser, setViewingUser] = React.useState<User | null>(null);
-  const [mentionedUsers, setMentionedUsers] = React.useState<User[]>([]);
 
   const toggleComment = () => {
     setShowFullComment(!showFullComment);
@@ -71,10 +62,6 @@ export const Comment: React.FC<Comment> = (props) => {
       try {
         const userData = await getUserDataById(props.userId);
         setViewingUser(userData);
-        const mentionedUserData = await Promise.all(
-          props.mentionedUsers.map(getUserDataById) // Busca dados de todos os usuários mencionados
-        );
-        setMentionedUsers(mentionedUserData);
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
@@ -105,6 +92,49 @@ export const Comment: React.FC<Comment> = (props) => {
 
     setShowHeart(true);
     setTimeout(() => setShowHeart(false), 500);
+  };
+
+  const [replies, setReplies] = React.useState<string[]>([]);
+
+  const [newReply, setNewReply] = React.useState(""); 
+
+  const handleReply = async () => {
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_BASE_URL}${
+          import.meta.env.VITE_COMMENT_REPLY
+        }`,
+        {
+          token: localStorage.getItem("token"),
+          content: newReply,
+          commentId: props._id,
+          userId: localStorage.getItem("userId"),
+        }
+      );
+      setReplies([...replies, response.data.replyId]); 
+      setNewReply(""); 
+    } catch (error) {
+      console.error("Erro ao enviar resposta:", error);
+    }
+  };
+
+  const highlightMentionsAndHashtags = (text: string) => {
+    const regex = /([@#][\w-]+)/g;
+    const parts = text.split(regex);
+
+    return parts.map((part, index) => {
+      if (part.match(regex)) {
+        return (
+          <span
+            key={index}
+            className="text-primary font-semibold md:font-medium"
+          >
+            {part}
+          </span>
+        );
+      }
+      return part;
+    });
   };
 
   return (
@@ -152,9 +182,9 @@ export const Comment: React.FC<Comment> = (props) => {
             {viewingUser?.nickname}:{" "}
           </span>
           {showFullComment ? (
-            <>{props.content}</>
+            <>{highlightMentionsAndHashtags(props.content)}</>
           ) : (
-            `${props.content.substring(0, 50)}`
+            highlightMentionsAndHashtags(props.content.substring(0, 50))
           )}
           {props.content.length > 50 && (
             <span
@@ -171,6 +201,22 @@ export const Comment: React.FC<Comment> = (props) => {
             <HeartSolid className="animate-ping text-primary h-20 w-20" />
           </div>
         )}
+
+        <input
+          type="text"
+          value={newReply}
+          onChange={(e) => setNewReply(e.target.value)}
+          placeholder="Responder..."
+        />
+        <Button onClick={handleReply}>Responder</Button>
+
+        {replies.map((replyId) => (
+          <div key={replyId}>
+            <p>Resposta ID: {replyId}</p>
+            <p></p>
+            {/* Aqui você poderia buscar e renderizar as informações da resposta */}
+          </div>
+        ))}
       </CardContent>
 
       <Separator className="my-2" />
@@ -197,32 +243,15 @@ export const Comment: React.FC<Comment> = (props) => {
         </div>
 
         <div className="flex flex-row items-center gap-2">
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button variant="outline" size="icon">
-                <At className="h-5 w-5" />
-              </Button>
-            </DialogTrigger>
-
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>Marcações</DialogTitle>
-              </DialogHeader>
-
-              <ScrollArea className="h-72 w-full rounded-md">
-                {mentionedUsers.map((user) => (
-                  <SearchUserCard
-                    key={user._id}
-                    avatar={user.avatar}
-                    nickname={user.nickname}
-                    type={user.type}
-                    _id={user._id}
-                    following={user.isFollowing}
-                  />
-                ))}
-              </ScrollArea>
-            </DialogContent>
-          </Dialog>
+          <MentionedUsers
+            _id={props._id}
+            content={props.content}
+            insertAt={props.insertAt}
+            userId={props.userId}
+            likeCount={props.likeCount}
+            likedBy={props.likedBy}
+            mentionedUsers={props.mentionedUsers}
+          />
         </div>
       </CardFooter>
     </Card>

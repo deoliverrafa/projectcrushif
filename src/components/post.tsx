@@ -1,9 +1,10 @@
 import * as React from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import { formatDistanceToNow, parseISO } from "date-fns";
+import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
+import { MentionedUsers } from "./mentionedUsers.tsx";
 import { Comment } from "./comment.tsx";
 
 import {
@@ -57,7 +58,6 @@ import {
   BookmarkSolid,
   BookmarkCheckSolid,
   MessageSolid,
-  ChatMessagesSolid,
   UserPlusSolid,
   ShareSolid,
   UserCircleSolid,
@@ -76,22 +76,17 @@ import { getUserData } from "../utils/getUserData.tsx";
 import { getUserDataById } from "../utils/getUserDataById.tsx";
 
 interface CardProps {
-  className?: string;
-  userId?: string;
-  _id?: string;
-  nickname: string;
-  email: string;
-  campus: string;
-  references: string;
+  userId: string;
+  _id: string;
   content: string;
   isAnonymous: boolean;
-  photoURL?: string;
-  userAvatar?: string;
-  insertAt?: string;
-  id?: string;
+  photoURL: string;
+  insertAt: Date;
+  id: string;
   likeCount: number;
   commentCount: number;
-  likedBy: String[];
+  likedBy: string[];
+  mentionedUsers: string[];
 }
 
 interface User {
@@ -109,6 +104,7 @@ interface User {
   curso: string;
   type: string;
   bio: string;
+  isFollowing: boolean;
 }
 
 export const CardPost = (props: CardProps) => {
@@ -199,8 +195,12 @@ export const CardPost = (props: CardProps) => {
 
   React.useEffect(() => {
     if (props.insertAt) {
-      const parsedDate = parseISO(props.insertAt);
-      setFormattedData(formatDistanceToNow(parsedDate, { locale: ptBR }));
+      setFormattedData(
+        formatDistanceToNow(new Date(props.insertAt), {
+          addSuffix: true,
+          locale: ptBR,
+        })
+      );
     }
   }, [props.userId, props.insertAt]);
 
@@ -335,6 +335,25 @@ export const CardPost = (props: CardProps) => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, [hasMore, loading]);
+
+  const highlightMentionsAndHashtags = (text: string) => {
+    const regex = /([@#][\w-]+)/g;
+    const parts = text.split(regex);
+
+    return parts.map((part, index) => {
+      if (part.match(regex)) {
+        return (
+          <span
+            key={index}
+            className="text-primary font-semibold md:font-medium"
+          >
+            {part}
+          </span>
+        );
+      }
+      return part;
+    });
+  };
 
   return (
     <>
@@ -541,6 +560,8 @@ export const CardPost = (props: CardProps) => {
               </Carousel>
             )}
 
+            <p>{props.mentionedUsers ? null : "error"}</p>
+
             {showHeart && (
               <div className="absolute inset-0 flex items-center justify-center">
                 <HeartSolid className="animate-ping text-primary h-20 w-20" />
@@ -559,28 +580,13 @@ export const CardPost = (props: CardProps) => {
                   {!props.isAnonymous ? viewingUser?.nickname : "anônimo"}:{" "}
                 </span>
                 {showFullContent ? (
-                  <>
-                    {props.content}
-                    {props.references && (
-                      <div>
-                        <a
-                          key={props._id}
-                          className="cursor-pointer font-poppins tracking-tight font-normal md:font-light text-primary text-md md:text-sm"
-                          id={props._id}
-                        >
-                          {props.references}
-                        </a>
-                      </div>
-                    )}
-                  </>
+                  <>{highlightMentionsAndHashtags(props.content)}</>
                 ) : (
-                  `${props.content.substring(0, 50)}${
-                    props.references ? "" : ""
-                  }`
+                  highlightMentionsAndHashtags(props.content.substring(0, 50))
                 )}
-                {(props.content.length > 50 || props.references) && (
+                {props.content.length > 50 && (
                   <span
-                    className="text-muted-foreground tracking-thight font-normal md:font-light cursor-pointer"
+                    className="text-muted-foreground tracking-tight font-normal md:font-light cursor-pointer"
                     onClick={toggleContent}
                   >
                     {showFullContent ? " ...ver menos" : " ...ver mais"}
@@ -592,7 +598,7 @@ export const CardPost = (props: CardProps) => {
 
           <Link to={`/likedByPost/${props._id}`}>
             <CardDescription className="cursor-pointer font-normal md:font-light tracking-tight text-md md:text-sm">
-              ver todas as {likeCount} curtidas
+              ver todas as curtidas
             </CardDescription>
           </Link>
         </CardContent>
@@ -603,43 +609,47 @@ export const CardPost = (props: CardProps) => {
           {formattedData && (
             <div className="flex flex-row justify-between items-center w-full">
               <div className="flex flex-row space-x-2">
-                <Button variant={"outline"} size={"icon"} onClick={handleLike}>
+                <Button
+                  className="gap-1"
+                  variant={"outline"}
+                  size={"sm"}
+                  onClick={handleLike}
+                >
                   {liked ? (
                     <HeartSolid className="text-primary h-5 md:h-4 w-5 md:w-4" />
                   ) : (
                     <HeartBrokenSolid className="h-5 md:h-4 w-5 md:w-4" />
                   )}
+                  {likeCount}
                 </Button>
 
                 <Drawer>
                   <DrawerTrigger asChild>
                     <Button
                       variant={"outline"}
-                      size={"icon"}
+                      className="gap-1"
+                      size={"sm"}
                       onClick={() => {
                         fetchComments();
                       }}
                     >
                       <MessageSolid className="h-5 md:h-4 w-5 md:w-4" />
+                      {commentCount}
                     </Button>
                   </DrawerTrigger>
 
                   <DrawerContent>
                     <div className="mx-auto w-full max-w-sm">
                       <ScrollArea className="h-72 w-full rounded-md">
-                        {comments.map((comment) => {
-                          const dataUser = commentUserData[comment.userId];
-                          if (!dataUser) {
-                            return (
-                              <div className="flex flex-row items-center">
-                                <SpinnerSolid className="animate-spin mr-2 h-5 w-5" />
-                                <p className="text-muted-foreground text-sm">
-                                  Carregando...
-                                </p>
-                              </div>
-                            );
-                          } else {
-                            return (
+                        {comments.length === 0 ? (
+                          <DrawerDescription className="mt-6">
+                            Nenhum comentário disponível. Seja o primeiro a
+                            comentar
+                          </DrawerDescription>
+                        ) : (
+                          comments.map((comment) => {
+                            const dataUser = commentUserData[comment.userId];
+                            return dataUser ? (
                               <Comment
                                 key={comment._id}
                                 _id={comment._id}
@@ -650,28 +660,37 @@ export const CardPost = (props: CardProps) => {
                                 likedBy={comment.likedBy}
                                 mentionedUsers={comment.mentionedUsers}
                               />
+                            ) : (
+                              <div
+                                key={comment._id}
+                                className="flex flex-row justify-center items-center"
+                              >
+                                <SpinnerSolid className="animate-spin mr-2 h-5 w-5" />
+                                <p className="text-muted-foreground text-sm">
+                                  Carregando...
+                                </p>
+                              </div>
                             );
-                          }
-                        })}
+                          })
+                        )}
                       </ScrollArea>
 
                       <DrawerFooter>
                         <div className="flex flex-col w-full">
-                          {errorMessage ? (
+                          {errorMessage && (
                             <DrawerDescription className="text-danger text-xs md:text-xs">
                               {errorMessage}
                             </DrawerDescription>
-                          ) : null}
+                          )}
 
                           <div className="flex flex-row justify-between items-center gap-1 w-full">
                             <Avatar className="shadow-lg border-2 border-secondary">
                               <AvatarFallback>
-                                {dataUser.nickname}
+                                {dataUser?.nickname[0]}
                               </AvatarFallback>
-
                               <AvatarImage
                                 className="object-cover"
-                                src={dataUser.avatar}
+                                src={dataUser?.avatar}
                               />
                             </Avatar>
 
@@ -683,12 +702,11 @@ export const CardPost = (props: CardProps) => {
                             >
                               <Input
                                 type="text"
-                                placeholder="Adicione um coméntario"
+                                placeholder="Adicione um comentário"
                                 value={comment}
                                 onInput={handleCommentChange}
                               />
 
-                              {/* Confirmador do comentário */}
                               <Button
                                 className="rounded"
                                 variant={"outline"}
@@ -707,11 +725,16 @@ export const CardPost = (props: CardProps) => {
 
               <div className="flex flex-row">
                 <div className="flex flex-row items-center space-x-1">
-                  <div className="flex flex-row items-center space-x-1">
-                    <ChatMessagesSolid className="h-5 md:h-4 w-5 md:w-4" />
-                    <CardDescription className="font-normal md:font-light tracking-tight text-md md:text-sm">
-                      {commentCount} coméntarios
-                    </CardDescription>
+                  <div className="flex flex-row items-center gap-2">
+                    <MentionedUsers
+                      _id={props._id}
+                      content={props.content}
+                      insertAt={props.insertAt}
+                      userId={props.userId}
+                      likeCount={props.likeCount}
+                      likedBy={props.likedBy}
+                      mentionedUsers={props.mentionedUsers}
+                    />
                   </div>
                 </div>
               </div>
@@ -745,7 +768,7 @@ export const CardPost = (props: CardProps) => {
 
           {formattedData && (
             <CardDescription className="text-md md:text-sm font-normal md:font-light tracking-tight">
-              há {formattedData} atrás
+              {formattedData} atrás
             </CardDescription>
           )}
         </CardFooter>

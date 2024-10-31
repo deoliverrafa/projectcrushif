@@ -2,49 +2,46 @@ import * as React from "react";
 import { useParams } from "react-router-dom";
 
 import LoadingPage from "./loading";
-
 import { NavBarReturn } from "../../components/navbar";
 import { CardPost } from "../../components/post";
 
 interface Post {
   className?: string;
-  userId?: string;
-  _id?: string;
-  nickname: string;
-  email: string;
-  campus: string;
-  references: string;
+  userId: string;
+  _id: string;
   content: string;
   isAnonymous: boolean;
-  photoURL?: string;
-  userAvatar?: string;
-  insertAt?: string;
+  photoURL: string;
+  insertAt: Date;
   id?: string;
   likeCount: number;
-  likedBy: String[];
+  likedBy: string[];
   commentCount: number;
+  mentionedUsers: string[];
 }
-
+  
 import { getPostDataById } from "../../utils/getPostDataById";
 
 const PostLayout = () => {
   const { id } = useParams<string>();
   const [viewingPost, setViewingPost] = React.useState<Post | null>(null);
+  const postId = id || "";
 
   React.useEffect(() => {
     const fetchViewingPostData = async () => {
-      try {
-        const data = await getPostDataById(id);
-        setViewingPost(data);
-      } catch (error) {
-        console.error("Error fetching viewing post data:", error);
+      
+      if (postId) {
+        try {
+          const data = await getPostDataById(postId);
+          setViewingPost(data);
+        } catch (error) {
+          console.error("Error fetching viewing post data:", error);
+        }
       }
     };
 
-    if (id) {
-      fetchViewingPostData();
-    }
-  }, [id]);
+    fetchViewingPostData(); 
+  }, [postId]);
 
   if (!viewingPost) {
     return <LoadingPage />;
@@ -53,22 +50,18 @@ const PostLayout = () => {
   return (
     <React.Fragment>
       <CardPost
-        key={id}
-        _id={id}
+        key={postId}
+        _id={postId}
         id={viewingPost.userId}
-        campus={viewingPost.campus}
         content={viewingPost.content}
-        email={viewingPost.email}
         isAnonymous={viewingPost.isAnonymous}
-        nickname={viewingPost.nickname}
-        references={viewingPost.references}
-        userAvatar={viewingPost.userAvatar}
         photoURL={viewingPost.photoURL}
         userId={viewingPost.userId}
         insertAt={viewingPost.insertAt}
         likeCount={viewingPost.likeCount}
         likedBy={viewingPost.likedBy}
         commentCount={viewingPost.commentCount}
+        mentionedUsers={viewingPost.mentionedUsers}
       />
     </React.Fragment>
   );

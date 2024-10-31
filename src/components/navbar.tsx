@@ -97,17 +97,18 @@ const Profile = ({ nickname, avatar, type }: profile) => {
         <div className="grid gap-4 p-2">
           <Link to={`/profile/${userData._id}`}>
             <Card className="w-full">
-              <div className="flex flex-row justify-between items-center space-x-2 h-full p-4">
-                <div className="flex flex-row items-center space-x-1">
+              <div className="flex flex-row justify-between items-center h-full p-4">
+                <div className="flex flex-row items-center gap-2">
                   <Avatar className="shadow-lg border-2 border-secondary">
                     <AvatarFallback>{nickname}</AvatarFallback>
                     <AvatarImage className="object-cover" src={avatar} />
                   </Avatar>
-                  <CardTitle className="font-semibold md:font-medium text-md md:text-sm tracking-tight">
-                    {nickname ? `${nickname}` : "indisponível"}
-                  </CardTitle>
 
-                  <div>
+                  <div className="flex flex-row items-center gap-1">
+                    <CardTitle className="font-semibold md:font-medium text-md md:text-sm tracking-tight">
+                      {nickname ? `${nickname}` : "indisponível"}
+                    </CardTitle>
+
                     <HeartWavesSolid
                       className={`${
                         type === "Plus"

@@ -18,20 +18,15 @@ const localAvatarPath = localStorage.getItem("avatar") ?? "";
 
 interface CardProps {
   _id: string;
-  nickname: string;
-  email: string;
-  campus: string;
-  references: string;
   content: string;
   isAnonymous: boolean;
   photoURL: string;
-  userAvatar: string;
-  insertAt: string;
+  insertAt: Date;
   userId: string;
-  type: string;
   likeCount: number;
   commentCount: number;
-  likedBy: String[];
+  likedBy: string[];
+  mentionedUsers: string[];
 }
 
 interface userData {
@@ -147,19 +142,15 @@ export default function HomePage() {
                 key={post._id}
                 _id={post._id}
                 id={post.userId}
-                campus={post.campus}
                 content={post.content}
-                email={post.email}
                 isAnonymous={post.isAnonymous}
-                nickname={post.nickname}
-                references={post.references}
-                userAvatar={post.userAvatar}
                 photoURL={post.photoURL}
                 userId={post.userId}
                 insertAt={post.insertAt}
                 likeCount={post.likeCount}
                 likedBy={post.likedBy}
                 commentCount={post.commentCount}
+                mentionedUsers={post.mentionedUsers}
               />
             ))}
 
