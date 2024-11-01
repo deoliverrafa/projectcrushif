@@ -162,7 +162,7 @@ const Profile = ({ nickname, avatar, type }: profile) => {
             </Link>
 
             <Link
-              to=""
+              to="/saved"
               className="flex flex-row justify-between items-center p-3"
             >
               <div className="flex flex-row items-center gap-2">

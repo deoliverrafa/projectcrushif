@@ -1,5 +1,4 @@
 import * as React from "react";
-import { Toaster } from "sonner";
 
 import { HexaThemeProvider } from "./components/ui/theme.tsx";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
@@ -19,6 +18,7 @@ const NotificationsPage = React.lazy(
 
 const PublishPage = React.lazy(() => import("./views/public/publish.tsx"));
 const PostPage = React.lazy(() => import("./views/public/post.tsx"));
+const SavedPage = React.lazy(() => import("./views/public/saved.tsx"));
 const LikedByPostPage = React.lazy(
   () => import("./views/public/likedByPost.tsx")
 );
@@ -52,8 +52,6 @@ const App = () => {
     <>
       <HexaThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
         <React.Suspense fallback={<LoadingPage />}>
-          <Toaster richColors position="top-right" />
-          
           <Router>
             <Routes>
               <Route path="/" element={<HomePage />} />
@@ -65,6 +63,7 @@ const App = () => {
 
               <Route path="/publish" element={<PublishPage />} />
               <Route path="/post/:id" element={<PostPage />} />
+              <Route path="/saved" element={<SavedPage />} />
               <Route path="/likedByPost/:id" element={<LikedByPostPage />} />
 
               <Route path="/profile/:id" element={<ProfilePage />} />

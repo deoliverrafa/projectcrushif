@@ -1,6 +1,4 @@
 import * as React from "react";
-import { useNavigate } from "react-router-dom";
-import { toast } from "sonner";
 
 import SearchUserCard from "./user-card";
 
@@ -38,7 +36,6 @@ interface User {
 }
 
 export const MentionedUsers: React.FC<Comment> = (props) => {
-  const navigate = useNavigate();
   const [mentionedUsers, setMentionedUsers] = React.useState<User[]>([]);
   const [isLoading, setIsLoading] = React.useState<boolean>(true);
 
@@ -55,32 +52,6 @@ export const MentionedUsers: React.FC<Comment> = (props) => {
         setIsLoading(false);
       }
     };
-
-    const userId = localStorage.getItem("userId");
-    const notifiedMentionIds = JSON.parse(
-      localStorage.getItem("notifiedMentions") || "[]"
-    );
-
-    if (
-      userId &&
-      props.mentionedUsers.includes(userId) &&
-      !notifiedMentionIds.includes(props._id)
-    ) {
-      notifiedMentionIds.push(props._id);
-      localStorage.setItem(
-        "notifiedMentions",
-        JSON.stringify(notifiedMentionIds)
-      );
-
-      toast.info("Você foi mencionado em uma publicação!", {
-        action: {
-          label: "Ver postagem",
-          onClick: () => {
-            navigate(`/post/${props._id}`);
-          },
-        },
-      });
-    }
 
     if (props.userId) {
       fetchUserData();
