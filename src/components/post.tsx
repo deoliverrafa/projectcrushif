@@ -216,41 +216,38 @@ export const CardPost = (props: CardProps) => {
   const handleCommentSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      await axios
-        .post(
-          `${import.meta.env.VITE_API_BASE_URL}${
-            import.meta.env.VITE_POST_COMMENT
-          }`,
-          {
-            content: comment,
-            token: localStorage.getItem("token"),
-            postId: props._id,
-            userId: localStorage.getItem("userId"),
-          }
-        )
-        .then((response) => {
-          if (response.data.posted) {
-            const newComment = {
-              _id: response.data.commentId,
-              content: comment || "",
-              insertAt: new Date(),
-              userId: localStorage.getItem("userId") || "",
-              likeCount: 0,
-              likedBy: [],
-              mentionedUsers: [],
-            };
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_BASE_URL}${
+          import.meta.env.VITE_POST_COMMENT
+        }`,
+        {
+          content: comment,
+          token: localStorage.getItem("token"),
+          postId: props._id,
+          userId: localStorage.getItem("userId"),
+        }
+      );
 
-            setComments((prevComments) => [newComment, ...prevComments]);
-            setCommentCount(commentCount + 1);
+      if (response.data.posted) {
+        const newComment = {
+          _id: response.data.commentId,
+          content: comment || "",
+          insertAt: new Date(),
+          userId: localStorage.getItem("userId") || "",
+          likeCount: 0,
+          likedBy: [],
+          mentionedUsers: [],
+          replies: [],
+        };
 
-            setComment("");
-          }
-        })
-        .catch((error: any) => {
-          setErrorMessage(error.response.data.message || "Erro ao comentar");
-        });
+        // Adiciona o novo comentário imediatamente ao estado
+        setComments((prevComments) => [newComment, ...prevComments]);
+        setCommentCount((prevCount) => prevCount + 1);
+        setComment(""); // Limpa o campo de comentário
+      }
     } catch (error: any) {
       console.log("Erro ao postar comentário", error);
+      setErrorMessage(error.response?.data?.message || "Erro ao comentar");
     }
   };
 
@@ -267,6 +264,7 @@ export const CardPost = (props: CardProps) => {
     likeCount: number;
     likedBy: string[];
     mentionedUsers: string[];
+    replies: string[];
   }
 
   const [comments, setComments] = React.useState<Comment[]>([]);
@@ -302,13 +300,13 @@ export const CardPost = (props: CardProps) => {
         { params: { skip, limit } }
       );
 
-      const newComments = response.data.comments;
-      newComments.forEach((comment: Comment) => {
-        fetchUserData(comment.userId);
-      });
+      const newComments: Comment[] = response.data.comments; // Supondo que `Comment` seja seu tipo de comentário
+      await Promise.all(
+        newComments.map((comment: Comment) => fetchUserData(comment.userId)) // Aqui você define o tipo
+      );
 
       setComments((prevComments) => [...prevComments, ...newComments]);
-      setSkip(skip + limit);
+      setSkip((prevSkip) => prevSkip + limit);
       if (newComments.length < limit) {
         setHasMore(false);
       }
@@ -642,7 +640,7 @@ export const CardPost = (props: CardProps) => {
                     <div className="mx-auto w-full max-w-sm">
                       <ScrollArea className="h-72 w-full rounded-md">
                         {comments.length === 0 ? (
-                          <DrawerDescription className="mt-6">
+                          <DrawerDescription className="text-center mt-6">
                             Nenhum comentário disponível. Seja o primeiro a
                             comentar
                           </DrawerDescription>
@@ -659,6 +657,7 @@ export const CardPost = (props: CardProps) => {
                                 likeCount={comment.likeCount}
                                 likedBy={comment.likedBy}
                                 mentionedUsers={comment.mentionedUsers}
+                                replies={comment.replies}
                               />
                             ) : (
                               <div

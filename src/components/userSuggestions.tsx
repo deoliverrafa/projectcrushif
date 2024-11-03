@@ -69,7 +69,7 @@ export const UserSuggestions = () => {
         </CardDescription>
       )}
 
-      <ScrollArea className="w-full whitespace-nowrap rounded-md border">
+      <ScrollArea className="w-full border-none whitespace-nowrap rounded-md border">
         <div className="flex w-max space-x-4 p-4">
           {suggestedUsers.map(
             (user) =>

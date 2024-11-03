@@ -119,14 +119,14 @@ const SavedPage = () => {
               <CardTitle>Sem publicações curtidas</CardTitle>
 
               <CardDescription>
-                Você ainda não tem nenhum post salvo.
+                Você ainda não curtiu nenhuma publicação.
               </CardDescription>
             </CardHeader>
             <CardContent>
               <CardDescription>
                 Explore novos conteúdos e curta as publicações que mais chamarem
                 sua atenção! Suas curtidas aparecerão aqui para fácil acesso.
-                Comece agora e salve suas postagens favoritas!
+                Comece agora!
               </CardDescription>
             </CardContent>
 

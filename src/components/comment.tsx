@@ -28,6 +28,7 @@ import {
 
 import { getUserDataById } from "../utils/getUserDataById";
 import { getUserData } from "../utils/getUserData";
+import { getReplyById } from "../utils/getReplyById";
 
 interface Comment {
   _id: string;
@@ -37,6 +38,7 @@ interface Comment {
   likeCount: number;
   likedBy: string[];
   mentionedUsers: string[];
+  replies: string[];
 }
 
 interface User {
@@ -47,14 +49,13 @@ interface User {
   isFollowing: boolean;
 }
 
-export const Comment: React.FC<Comment> = (props) => {
-  const dataUser: User = getUserData();
+const ReplyComment: React.FC<Comment> = (props) => {
+  const [viewingUser, setViewingUser] = React.useState<User | null>(null);
 
   const [liked, setLiked] = React.useState(false);
   const [likeCount, setLikeCount] = React.useState(props.likeCount);
   const [showHeart, setShowHeart] = React.useState(false);
   const [showFullComment, setShowFullComment] = React.useState(false);
-  const [viewingUser, setViewingUser] = React.useState<User | null>(null);
 
   const toggleComment = () => {
     setShowFullComment(!showFullComment);
@@ -72,10 +73,8 @@ export const Comment: React.FC<Comment> = (props) => {
       }
     };
 
-    if (props.userId) {
-      fetchUserData();
-    }
-  }, [props.userId, props.likedBy, props.mentionedUsers]);
+    fetchUserData();
+  }, [props.userId, props.likedBy]);
 
   const handleLike = async () => {
     const newLiked = !liked;
@@ -99,11 +98,221 @@ export const Comment: React.FC<Comment> = (props) => {
     setTimeout(() => setShowHeart(false), 500);
   };
 
-  const [isReply, setIsReply] = React.useState<boolean>(false);
-  const [replies, setReplies] = React.useState<string[]>([]);
-  const [newReply, setNewReply] = React.useState("");
+  const highlightMentionsAndHashtags = (text: string) => {
+    const regex = /([@#][\w-]+)/g;
+    const parts = text.split(regex);
 
-  const handleReply = async () => {
+    return parts.map((part, index) => {
+      if (part.match(regex)) {
+        return (
+          <span
+            key={index}
+            className="text-primary font-semibold md:font-medium"
+          >
+            {part}
+          </span>
+        );
+      }
+      return part;
+    });
+  };
+
+  return (
+    <React.Fragment>
+      <div className="flex flex-col justify-end items-end mb-2">
+        <Card key={props._id} className="w-5/6 max-w-md">
+          <Link to={`/profile/${props.userId}`}>
+            <CardHeader className="flex flex-row items-center space-x-4 p-4">
+              <Avatar className="h-10 w-10 border-2 border-secondary">
+                <AvatarFallback>{viewingUser?.nickname[0]}</AvatarFallback>
+                <AvatarImage
+                  className="object-cover"
+                  src={viewingUser?.avatar}
+                  alt={viewingUser?.nickname}
+                />
+              </Avatar>
+              <div className="flex flex-col">
+                <div className="flex items-center gap-1">
+                  <CardDescription className="font-semibold md:font-semibold">
+                    {viewingUser?.nickname}
+                  </CardDescription>
+                  <HeartWavesSolid
+                    className={`${
+                      viewingUser?.type === "Plus"
+                        ? "text-info"
+                        : viewingUser?.type === "Admin"
+                        ? "text-danger"
+                        : viewingUser?.type === "verified"
+                        ? "text-success"
+                        : "hidden"
+                    } h-3.5 w-3.5`}
+                  />
+                </div>
+                <CardDescription className="text-xs md:text-xs">
+                  {formatDistanceToNow(new Date(props.insertAt), {
+                    addSuffix: true,
+                    locale: ptBR,
+                  })}
+                </CardDescription>
+              </div>
+            </CardHeader>
+          </Link>
+
+          <CardContent className="relative pb-0">
+            <CardDescription className="text-foreground font-normal md:font-light tracking-tight text-md md:text-sm">
+              <span className="font-semibold md:font-medium">
+                {viewingUser?.nickname}:{" "}
+              </span>
+              {showFullComment ? (
+                <>{highlightMentionsAndHashtags(props.content)}</>
+              ) : (
+                highlightMentionsAndHashtags(props.content.substring(0, 50))
+              )}
+              {props.content.length > 50 && (
+                <span
+                  className="text-muted-foreground tracking-tight font-normal md:font-light cursor-pointer"
+                  onClick={toggleComment}
+                >
+                  {showFullComment ? " ...ver menos" : " ...ver mais"}
+                </span>
+              )}
+            </CardDescription>
+
+            {showHeart && (
+              <div className="absolute inset-0 flex items-center justify-center">
+                <HeartSolid className="animate-ping text-primary h-20 w-20" />
+              </div>
+            )}
+          </CardContent>
+
+          <Separator className="my-2" />
+
+          <CardFooter className="flex flex-row justify-between items-center">
+            <div className="flex flex-row items-center gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                className="gap-1"
+                onClick={handleLike}
+              >
+                {liked ? (
+                  <HeartSolid className="text-primary h-5 md:h-4 w-5 md:w-4" />
+                ) : (
+                  <HeartBrokenSolid className="h-5 md:h-4 w-5 md:w-4" />
+                )}
+                {likeCount}
+              </Button>
+            </div>
+
+            <div className="flex flex-row items-center gap-2">
+              <MentionedUsers
+                _id={props._id}
+                content={props.content}
+                insertAt={props.insertAt}
+                userId={props.userId}
+                likeCount={props.likeCount}
+                likedBy={props.likedBy}
+                mentionedUsers={props.mentionedUsers}
+              />
+            </div>
+          </CardFooter>
+        </Card>
+      </div>
+    </React.Fragment>
+  );
+};
+
+export const Comment: React.FC<Comment> = (props) => {
+  const dataUser: User = getUserData();
+
+  const [liked, setLiked] = React.useState(false);
+  const [likeCount, setLikeCount] = React.useState(props.likeCount);
+  const [showHeart, setShowHeart] = React.useState(false);
+  const [showFullComment, setShowFullComment] = React.useState(false);
+  const [viewingUser, setViewingUser] = React.useState<User | null>(null);
+  const [viewingReplies, setViewingReplies] = React.useState<Comment[]>([]);
+
+  const [isHidden, setIsHidden] = React.useState(true);
+  const [loading, setLoading] = React.useState(false);
+
+  const toggleComment = () => {
+    setShowFullComment(!showFullComment);
+  };
+
+  React.useEffect(() => {
+    setLiked(props.likedBy.includes(localStorage.getItem("userId") || ""));
+
+    const fetchUserData = async () => {
+      try {
+        const userData = await getUserDataById(props.userId);
+        setViewingUser(userData);
+      } catch (error) {
+        console.error("Erro ao buscar dados do usuário:", error);
+      }
+    };
+
+    fetchUserData();
+  }, [props.userId, props.likedBy]);
+
+  const fetchRepliesData = async () => {
+    setLoading(true);
+    try {
+      if (Array.isArray(props.replies) && props.replies.length > 0) {
+        const fetchedReplies = await Promise.all(
+          props.replies
+            .filter((replyId) => replyId)
+            .map(async (replyId) => {
+              const replyData = await getReplyById(replyId);
+              return replyData && replyData._id ? replyData : null;
+            })
+        );
+
+        const validReplies = fetchedReplies.filter((reply) => reply !== null);
+        setViewingReplies(validReplies);
+      }
+    } catch (error) {
+      console.error("Erro ao buscar dados das respostas:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  React.useEffect(() => {
+    fetchRepliesData();
+  }, [props.replies]);
+
+  const handleLike = async () => {
+    const newLiked = !liked;
+    setLiked(newLiked);
+
+    try {
+      await axios.post(
+        `${import.meta.env.VITE_API_BASE_URL}${
+          newLiked
+            ? import.meta.env.VITE_COMMENT_LIKE
+            : import.meta.env.VITE_COMMENT_UNLIKE
+        }`,
+        { token: localStorage.getItem("token"), commentId: props._id }
+      );
+      setLikeCount(newLiked ? likeCount + 1 : likeCount - 1);
+    } catch (error) {
+      console.error("Error updating like:", error);
+    }
+
+    setShowHeart(true);
+    setTimeout(() => setShowHeart(false), 500);
+  };
+
+  const [replyText, setReplyText] = React.useState("");
+  const [isReply, setIsReply] = React.useState<boolean>(false);
+
+  const handleReplyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
+    setReplyText(value);
+  };
+
+  const handleReplySubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     try {
       const response = await axios.post(
         `${import.meta.env.VITE_API_BASE_URL}${
@@ -111,16 +320,25 @@ export const Comment: React.FC<Comment> = (props) => {
         }`,
         {
           token: localStorage.getItem("token"),
-          content: newReply,
+          content: replyText,
           commentId: props._id,
           userId: localStorage.getItem("userId"),
         }
       );
-      setReplies([...replies, response.data.replyId]);
-      setNewReply("");
-    } catch (error) {
+
+      const newReply = response.data.comment;
+
+      setViewingReplies((prevReplies) => [...prevReplies, newReply]);
+      setReplyText("");
+      window.location.href = "/";
+    } catch (error: any) {
       console.error("Erro ao enviar resposta:", error);
     }
+  };
+
+  const handleReplyToUser = (nickname: string) => {
+    setReplyText(`@${nickname} `);
+    setIsReply(!isReply);
   };
 
   const highlightMentionsAndHashtags = (text: string) => {
@@ -215,75 +433,114 @@ export const Comment: React.FC<Comment> = (props) => {
                 <AvatarImage className="object-cover" src={dataUser?.avatar} />
               </Avatar>
 
-              <Input
-                type="text"
-                placeholder="Responder um comentário"
-                value={newReply}
-                onChange={(e) => setNewReply(e.target.value)}
-              />
-
-              <Button
-                className="rounded"
-                variant={"outline"}
-                size={"icon"}
-                onClick={handleReply}
+              <form
+                action=""
+                method="POST"
+                onSubmit={handleReplySubmit}
+                className="flex flex-row justify-between gap-1 w-full"
               >
-                <FatCornerUpRightSolid className="h-5 w-5" />
-              </Button>
+                <Input
+                  type="text"
+                  placeholder="Adicione um coméntario"
+                  value={replyText}
+                  onInput={handleReplyChange}
+                />
+
+                <Button className="rounded" variant={"outline"} size={"icon"}>
+                  <FatCornerUpRightSolid className="h-5 w-5" />
+                </Button>
+              </form>
             </div>
           ) : null}
-
-          {replies.map((replyId) => (
-            <div key={replyId}>
-              <p>Resposta ID: {replyId}</p>
-              <p></p>
-              {/* Aqui você poderia buscar e renderizar as informações da resposta */}
-            </div>
-          ))}
         </CardContent>
 
         <Separator className="my-2" />
 
-        <CardFooter className="flex flex-row justify-between items-center">
-          <div className="flex flex-row items-center gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              className="gap-1"
-              onClick={handleLike}
-            >
-              {liked ? (
-                <HeartSolid className="text-primary h-5 md:h-4 w-5 md:w-4" />
-              ) : (
-                <HeartBrokenSolid className="h-5 md:h-4 w-5 md:w-4" />
-              )}
-              {likeCount}
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setIsReply(true)}
-            >
-              <MessageSolid className="mr-2 h-4 w-4" />
-              Responder
-            </Button>
-          </div>
+        <CardFooter className="flex flex-row justify-between items-center pb-4">
+          <div className="flex flex-col items-center w-full">
+            <div className="flex flex-row justify-between items-center w-full">
+              <div className="flex flex-row items-center gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="gap-1"
+                  onClick={handleLike}
+                >
+                  {liked ? (
+                    <HeartSolid className="text-primary h-5 md:h-4 w-5 md:w-4" />
+                  ) : (
+                    <HeartBrokenSolid className="h-5 md:h-4 w-5 md:w-4" />
+                  )}
+                  {likeCount}
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => handleReplyToUser(viewingUser?.nickname || "")}
+                >
+                  <MessageSolid className="mr-2 h-4 w-4" />
+                  {isReply ? "Cancelar" : "Responder"}
+                </Button>
+              </div>
 
-          <div className="flex flex-row items-center gap-2">
-            <MentionedUsers
-              _id={props._id}
-              content={props.content}
-              insertAt={props.insertAt}
-              userId={props.userId}
-              likeCount={props.likeCount}
-              likedBy={props.likedBy}
-              mentionedUsers={props.mentionedUsers}
-            />
+              <div className="flex flex-row items-center gap-2">
+                <MentionedUsers
+                  _id={props._id}
+                  content={props.content}
+                  insertAt={props.insertAt}
+                  userId={props.userId}
+                  likeCount={props.likeCount}
+                  likedBy={props.likedBy}
+                  mentionedUsers={props.mentionedUsers}
+                />
+              </div>
+            </div>
+
+            <div className="flex flex-row justify-start items-start mt-4">
+              {viewingReplies.length > 0 && isHidden && (
+                <p
+                  className="cursor-pointer text-muted-foreground font-poppins text-xs"
+                  onClick={() => setIsHidden(!isHidden)}
+                >
+                  Exibir mais {viewingReplies.length} comentários
+                </p>
+              )}
+
+              {!isHidden && (
+                <p
+                  className="cursor-pointer text-muted-foreground font-poppins text-xs"
+                  onClick={() => setIsHidden(true)}
+                >
+                  Ocultar comentários
+                </p>
+              )}
+            </div>
           </div>
         </CardFooter>
       </Card>
 
-      <p className="text-muted-foreground font-poppins text-xs mt-1">Exibir mais comentários</p>
+      {!isHidden && viewingReplies.length > 0 && (
+        <div className="mt-2 w-full">
+          {viewingReplies.map(
+            (reply) =>
+              reply &&
+              reply._id && (
+                <ReplyComment
+                  key={reply._id}
+                  _id={reply._id}
+                  content={reply.content}
+                  insertAt={reply.insertAt}
+                  userId={reply.userId}
+                  likeCount={reply.likeCount}
+                  likedBy={reply.likedBy}
+                  mentionedUsers={reply.mentionedUsers}
+                  replies={reply.replies}
+                />
+              )
+          )}
+        </div>
+      )}
+      {loading && <p>Carregando respostas...</p>}
     </div>
   );
 };
