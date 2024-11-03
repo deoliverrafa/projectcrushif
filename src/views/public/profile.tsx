@@ -47,7 +47,6 @@ import {
   TooltipTrigger,
   TooltipProvider,
 } from "../../components/ui/tooltip.tsx";
-import { ScrollArea } from "../../components/ui/scroll-area.tsx";
 
 import { getUserData } from "../../utils/getUserData.tsx";
 import { getUserDataById } from "../../utils/getUserDataById.tsx";
@@ -69,7 +68,24 @@ import {
   EditOneSolid,
   Ban,
   FlagOneSolid,
+  SpinnerSolid,
 } from "@mynaui/icons-react";
+import { CardPost } from "../../components/post.tsx";
+
+interface Post {
+  className?: string;
+  userId: string;
+  _id: string;
+  content: string;
+  isAnonymous: boolean;
+  photoURL: string;
+  insertAt: Date;
+  id?: string;
+  likeCount: number;
+  likedBy: string[];
+  commentCount: number;
+  mentionedUsers: string[];
+}
 
 interface User {
   userName: string;
@@ -99,6 +115,13 @@ const ProfileLayout = () => {
 
   const [liked, setLiked] = React.useState(false);
   const [likeCount, setLikeCount] = React.useState(0);
+
+  const [skip, setSkip] = React.useState(0);
+  const [limit] = React.useState(5);
+  const [hasMorePosts, setHasMorePosts] = React.useState(true);
+  const [posts, setPosts] = React.useState<Post[]>([]);
+
+  const [loading, setLoading] = React.useState(false);
 
   const inputRef = React.useRef<HTMLInputElement>(null);
 
@@ -132,6 +155,7 @@ const ProfileLayout = () => {
           setLiked(true);
         }
         setLikeCount(data.likeCount);
+        await fetchPosts(data._id);
       } catch (error) {
         console.error("Error fetching viewing user data:", error);
       }
@@ -141,6 +165,46 @@ const ProfileLayout = () => {
       fetchViewingUserData();
     }
   }, [id, userId]);
+
+  const fetchPosts = async (userId: string) => {
+    try {
+      setLoading(true);
+      const response = await axios.get(
+        `${import.meta.env.VITE_API_BASE_URL}${
+          import.meta.env.VITE_POST_GET_USER
+        }${userId}/${skip}/${limit}`
+      );
+
+      if (response.data.posts.length > 0) {
+        setPosts((prevPosts) => [...prevPosts, ...response.data.posts]);
+        setSkip((prevSkip) => prevSkip + limit);
+        setHasMorePosts(true);
+      } else {
+        setHasMorePosts(false);
+      }
+    } catch (error) {
+      console.error("Erro ao buscar postagens:", error);
+      setHasMorePosts(false);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  React.useEffect(() => {
+    const handleScroll = () => {
+      if (
+        window.innerHeight + document.documentElement.scrollTop >=
+        document.documentElement.offsetHeight - 10 // Modificado para -10
+      ) {
+        if (!loading && hasMorePosts) {
+          fetchPosts(viewingUser?._id || "");
+        }
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [loading, hasMorePosts, viewingUser]);
 
   const handleLike = () => {
     const newLiked = !liked;
@@ -174,7 +238,7 @@ const ProfileLayout = () => {
 
   return (
     <>
-      <Card className="mt-2 w-full md:w-6/12">
+      <Card className="select-none mt-2 w-full md:w-6/12">
         <div className="relative w-full h-40">
           <img
             src={
@@ -423,7 +487,7 @@ const ProfileLayout = () => {
 
             <Badge variant={"outline"} className="text-warning gap-1">
               <FolderHeartSolid className="h-3 w-3" />
-              Postagens: 0
+              Postagens: {posts.length}
             </Badge>
 
             <Badge
@@ -443,7 +507,7 @@ const ProfileLayout = () => {
             </Badge>
           </div>
 
-          <ScrollArea className="w-full rounded-md">
+          {posts.length === 0 ? (
             <div className="flex flex-col items-center space-y-4">
               <FolderSlashSolid className="h-20 w-20" />
 
@@ -451,7 +515,36 @@ const ProfileLayout = () => {
                 Usuário {viewingUser.nickname} não possui nenhuma publicação
               </CardDescription>
             </div>
-          </ScrollArea>
+          ) : (
+            <>
+              <div className="flex flex-col items-center w-full">
+                {posts.map((post) => (
+                  <CardPost
+                    classNames="w-full md:w-full"
+                    key={post._id}
+                    userId={post.userId}
+                    _id={post._id}
+                    content={post.content}
+                    isAnonymous={post.isAnonymous}
+                    photoURL={post.photoURL}
+                    insertAt={post.insertAt}
+                    id={post.userId}
+                    likeCount={post.likeCount}
+                    commentCount={post.commentCount}
+                    likedBy={post.likedBy}
+                    mentionedUsers={post.mentionedUsers}
+                  />
+                ))}
+              </div>
+
+              {loading ? (
+                <div className="flex flex-row items-center">
+                  <SpinnerSolid className="animate-spin text-primary mr-2 h-5 w-5" />
+                  <p className="text-primary text-sm">Carregando...</p>
+                </div>
+              ) : null}
+            </>
+          )}
         </CardFooter>
       </Card>
 

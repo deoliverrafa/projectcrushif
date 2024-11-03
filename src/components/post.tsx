@@ -76,6 +76,7 @@ import { getUserData } from "../utils/getUserData.tsx";
 import { getUserDataById } from "../utils/getUserDataById.tsx";
 
 interface CardProps {
+  classNames?: string;
   userId: string;
   _id: string;
   content: string;
@@ -355,7 +356,7 @@ export const CardPost = (props: CardProps) => {
 
   return (
     <>
-      <Card className="select-none my-2 w-full md:w-5/12">
+      <Card className={`select-none my-2 w-full md:w-5/12 ${props.classNames}`}>
         <CardHeader className="flex flex-row justify-between items-center">
           {!props.isAnonymous ? (
             <Link to={`/profile/${props.id}`} className="flex space-x-2">

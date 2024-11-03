@@ -1,4 +1,6 @@
+import * as React from "react";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 import { NavBarReturn } from "../../components/navbar.tsx";
 import { ThemeToggle } from "../../components/ui/theme.tsx";
@@ -16,11 +18,23 @@ import {
   AvatarFallback,
   AvatarImage,
 } from "../../components/ui/avatar.tsx";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "../../components/ui/dialog.tsx";
+import { Label } from "../../components/ui/label.tsx";
+import { Input } from "../../components/ui/input.tsx";
 
 import {
   LogoutSolid,
   TrashOneSolid,
   HeartWavesSolid,
+  XSolid,
 } from "@mynaui/icons-react";
 
 import { getUserData } from "../../utils/getUserData.tsx";
@@ -39,8 +53,33 @@ const SettingsLayout = ({
   userData: UserData;
   logOutHandle: () => void;
 }) => {
+  const [error, setError] = React.useState("");
+
+  const [password, setPassword] = React.useState<string>("");
+
+  const deleteAccount = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.delete(
+        `${import.meta.env.VITE_API_BASE_URL}${
+          import.meta.env.VITE_USER_DELETE_ACCOUNT
+        }`,
+        {
+          data: { password, token },
+        }
+      );
+      alert(response.data.message);
+      logOutHandle();
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error("Erro ao deletar a conta:", error.message);
+        return setError("Erro ao deletar a conta");
+      }
+    }
+  };
+
   return (
-    <>
+    <React.Fragment>
       <Card className="my-2 w-11/12 max-w-[768px]">
         <CardHeader>
           <h1 className="font-poppins font-semibold tracking-widest text-xl">
@@ -72,7 +111,9 @@ const SettingsLayout = ({
 
             <div className="flex flex-col">
               <div className="flex flex-row items-center space-x-1">
-                <CardTitle className="font-semibold md:font-medium text-md md:text-sm tracking-tight">{userData.nickname}</CardTitle>
+                <CardTitle className="font-semibold md:font-medium text-md md:text-sm tracking-tight">
+                  {userData.nickname}
+                </CardTitle>
                 <HeartWavesSolid
                   className={`${
                     userData?.type === "Plus"
@@ -101,13 +142,50 @@ const SettingsLayout = ({
               Deslogar
             </Button>
           </Link>
-          <Button variant={"danger"}>
-            <TrashOneSolid className="mr-2 h-5 w-5" />
-            Deletar conta
-          </Button>
+
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button variant={"danger"}>
+                <TrashOneSolid className="mr-2 h-5 w-5" />
+                Deletar conta
+              </Button>
+            </DialogTrigger>
+
+            <DialogContent>
+              <DialogHeader className="space-y-0.5">
+                <DialogTitle>Excluir conta</DialogTitle>
+
+                <DialogDescription>
+                  Deseja excluir sua conta de usuário?
+                </DialogDescription>
+              </DialogHeader>
+
+              <div className="flex flex-col gap-1 w-full">
+                <Label htmlFor="password">Senha atual</Label>
+                <Input
+                  type="password"
+                  id="password"
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+
+                {error ? (
+                  <DialogDescription className="text-danger flex flex-row items-center gap-2">
+                    <XSolid className="h-4 w-4" />
+                    {error}
+                  </DialogDescription>
+                ) : null}
+              </div>
+
+              <DialogFooter>
+                <Button variant={"danger"} onClick={deleteAccount}>
+                  Deletar
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
         </CardFooter>
       </Card>
-    </>
+    </React.Fragment>
   );
 };
 

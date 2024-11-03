@@ -156,8 +156,8 @@ export default function HomePage() {
 
             {loading && (
               <div className="flex flex-row items-center">
-                <SpinnerSolid className="animate-spin mr-2 h-5 w-5" />
-                <p className="text-muted-foreground text-sm">Carregando...</p>
+                <SpinnerSolid className="animate-spin text-primary mr-2 h-5 w-5" />
+                <p className="text-primary text-sm">Carregando...</p>
               </div>
             )}
           </main>
