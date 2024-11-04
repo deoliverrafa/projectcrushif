@@ -472,7 +472,7 @@ export const NavBar = (props: userData) => {
           Pesquisar
         </NavbarItem>
         <NavbarItem
-          href="/match"
+          href="/crush"
           activeClassName="text-primary"
           hoverClassName="text-primary/70"
         >

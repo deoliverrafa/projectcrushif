@@ -107,7 +107,7 @@ const ReplyComment: React.FC<Comment> = (props) => {
         return (
           <span
             key={index}
-            className="text-primary font-semibold md:font-medium"
+            className="text-primary font-medium md:font-normal"
           >
             {part}
           </span>
@@ -350,7 +350,7 @@ export const Comment: React.FC<Comment> = (props) => {
         return (
           <span
             key={index}
-            className="text-primary font-semibold md:font-medium"
+            className="text-primary font-medium md:font-normal"
           >
             {part}
           </span>

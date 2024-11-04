@@ -135,7 +135,7 @@ export const BottomBar = () => {
         Pesquisar
       </BottombarItem>
 
-      <BottombarItem to="/match">
+      <BottombarItem to="/crush">
         <FireSolid />
         Crush
       </BottombarItem>

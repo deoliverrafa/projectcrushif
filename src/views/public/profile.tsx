@@ -476,7 +476,7 @@ const ProfileLayout = () => {
 
         <Separator />
 
-        <CardFooter className="flex flex-col space-y-2 w-full">
+        <CardFooter className="flex flex-col space-y-2 px-0 w-full">
           <div className="flex flex-row justify-around items-center my-4 w-full">
             <Link to={`/likedBy/${viewingUser._id}`}>
               <Badge variant={"outline"} className="text-primary gap-1">

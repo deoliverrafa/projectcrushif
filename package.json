@@ -34,6 +34,7 @@
     "crushifto": "file:",
     "date-fns": "^3.6.0",
     "embla-carousel-react": "^8.2.0",
+    "framer-motion": "^11.11.11",
     "lodash": "^4.17.21",
     "lucide-react": "^0.408.0",
     "next-themes": "^0.3.0",

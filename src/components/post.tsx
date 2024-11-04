@@ -118,6 +118,7 @@ export const CardPost = (props: CardProps) => {
   const [liked, setLiked] = React.useState(false);
   const [likeCount, setLikeCount] = React.useState(props.likeCount);
   const [showHeart, setShowHeart] = React.useState(false);
+  const [animateClick, setAnimateClick] = React.useState(false);
   const [favorited, setFavorited] = React.useState(false);
   const [showFavorited, setShowFavorited] = React.useState(false);
 
@@ -137,6 +138,7 @@ export const CardPost = (props: CardProps) => {
     const newLiked = !liked;
 
     setLiked(newLiked);
+    setAnimateClick(true);
 
     if (newLiked) {
       axios.post(
@@ -155,7 +157,10 @@ export const CardPost = (props: CardProps) => {
     }
 
     setShowHeart(true);
-    setTimeout(() => setShowHeart(false), 500);
+    setTimeout(() => {
+      setShowHeart(false);
+      setAnimateClick(false);
+    }, 500);
   };
 
   const handleFavorite = () => {
@@ -344,7 +349,7 @@ export const CardPost = (props: CardProps) => {
         return (
           <span
             key={index}
-            className="text-primary font-semibold md:font-medium"
+            className="text-primary font-medium md:font-normal"
           >
             {part}
           </span>
@@ -597,7 +602,7 @@ export const CardPost = (props: CardProps) => {
 
           <Link to={`/likedByPost/${props._id}`}>
             <CardDescription className="cursor-pointer font-normal md:font-light tracking-tight text-md md:text-sm">
-              ver todas as curtidas
+              ver todas as {likeCount} curtidas
             </CardDescription>
           </Link>
         </CardContent>
@@ -610,14 +615,22 @@ export const CardPost = (props: CardProps) => {
               <div className="flex flex-row space-x-2">
                 <Button
                   className="gap-1"
-                  variant={"outline"}
-                  size={"sm"}
+                  variant="outline"
+                  size="sm"
                   onClick={handleLike}
                 >
                   {liked ? (
-                    <HeartSolid className="text-primary h-5 md:h-4 w-5 md:w-4" />
+                    <HeartSolid
+                      className={`${
+                        animateClick ? "animate-click" : ""
+                      } text-primary h-5 md:h-4 w-5 md:w-4`}
+                    />
                   ) : (
-                    <HeartBrokenSolid className="h-5 md:h-4 w-5 md:w-4" />
+                    <HeartBrokenSolid
+                      className={`${
+                        animateClick ? "animate-click" : ""
+                      } h-5 md:h-4 w-5 md:w-4`}
+                    />
                   )}
                   {likeCount}
                 </Button>
