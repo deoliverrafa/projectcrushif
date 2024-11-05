@@ -15,6 +15,8 @@ import { Button } from "./ui/button";
 
 import { HeartWavesSolid, XSolid } from "@mynaui/icons-react";
 
+import UserIcon from "../../public/images/user.png"
+
 interface User {
   _id: string;
   nickname: string;
@@ -95,7 +97,7 @@ export const UserSuggestions = () => {
                         <AvatarFallback>{user.nickname}</AvatarFallback>
                         <AvatarImage
                           className="object-cover"
-                          src={user.avatar}
+                          src={user.avatar ? user.avatar : UserIcon}
                         />
                       </Avatar>
                     </CardHeader>

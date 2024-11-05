@@ -1,5 +1,4 @@
 import * as React from "react";
-import { Link } from "react-router-dom";
 import axios from "axios";
 import { debounce } from "lodash";
 
@@ -10,13 +9,11 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
 } from "../../components/ui/card";
-import { Button } from "../../components/ui/button";
 
 import { SpinnerSolid } from "@mynaui/icons-react";
+
+import NoHaveArt from "../../../public/images/no_have_art.png";
 
 interface CardProps {
   _id: string;
@@ -115,26 +112,14 @@ const SavedPage = () => {
       <main className="w-full h-full flex flex-col justify-center items-center">
         {savedPosts.length === 0 && !loading ? (
           <Card className="mt-2 w-full md:w-6/12">
-            <CardHeader className="space-y-0">
-              <CardTitle>Sem publicações curtidas</CardTitle>
-
-              <CardDescription>
-                Você ainda não curtiu nenhuma publicação.
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <CardDescription>
-                Explore novos conteúdos e curta as publicações que mais chamarem
-                sua atenção! Suas curtidas aparecerão aqui para fácil acesso.
-                Comece agora!
-              </CardDescription>
+            <CardContent className="flex flex-col justify-center items-center space-y-2 w-full">
+              <img
+                src={NoHaveArt}
+                className="h-32 md:h-[300px] w-32 md:w-[300px]"
+                alt="404"
+              />
+              <CardDescription>Sem publicações curtidas</CardDescription>
             </CardContent>
-
-            <CardFooter>
-              <Link to={"/"}>
-                <Button variant={"secondary"}>Voltar para inicio</Button>
-              </Link>
-            </CardFooter>
           </Card>
         ) : (
           <SavedLayout savedPosts={savedPosts} />

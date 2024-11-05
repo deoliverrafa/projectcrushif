@@ -17,6 +17,8 @@ import {
 } from "../../components/ui/card.tsx";
 import { ScrollArea } from "../../components/ui/scroll-area.tsx";
 
+import NotFoundArt from "../../../public/images/not_found_art.png"
+
 import { getUserData } from "../../utils/getUserData.tsx";
 import { getStatusUser } from "../../utils/getStatusUser.tsx";
 
@@ -186,6 +188,10 @@ const SearchLayout = () => {
                 })
               ) : noResults ? (
                 <div className="flex flex-col justify-center items-center space-y-2 w-full">
+                  <img
+                    src={NotFoundArt}
+                    className="h-32 md:h-[300px] w-32 md:w-[300px]"
+                  />
                   <CardDescription>Nenhum usuário encontrado</CardDescription>
                 </div>
               ) : (

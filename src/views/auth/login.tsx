@@ -26,14 +26,14 @@ import { Badge } from "../../components/ui/badge.tsx";
 
 import { FireSolid, XSolid, SpinnerSolid } from "@mynaui/icons-react";
 
-import logo from "../../../public/images/logo/logo.png";
+import LoginArt from "../../../public/images/login_art.png";
 
 const LogoLayout = () => {
   return (
     <div className="flex flex-col justify-center items-center">
-      <img src={logo} className="h-32 md:h-[300px] w-32 md:w-[300px]" />
-      <h1 className="text-primary font-recursive font-bold md:font-semibold uppercase tracking-widest text-2xl md:text-5xl">
-        CrushIF
+      <img src={LoginArt} className="h-32 md:h-[300px] w-32 md:w-[300px]" />
+      <h1 className="text-primary font-cookie text-2xl md:text-5xl">
+        Crushif
       </h1>
     </div>
   );

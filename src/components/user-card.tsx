@@ -7,6 +7,7 @@ import { Card, CardTitle } from "./ui/card.js";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar.js";
 
 import { HeartWavesSolid } from "@mynaui/icons-react";
+import UserIcon from "../../public/images/user.png"
 
 interface SearchUserCard {
   avatar: string;
@@ -67,7 +68,7 @@ export default function SearchUserCard(props: SearchUserCard) {
         <Link to={`/profile/${props._id}`} className="flex space-x-2 h-full">
           <Avatar className="shadow-lg border-2 border-secondary">
             <AvatarFallback>{props?.nickname}</AvatarFallback>
-            <AvatarImage className="object-cover" src={props?.avatar} />
+            <AvatarImage className="object-cover" src={props?.avatar ? props?.avatar : UserIcon} />
           </Avatar>
           <div className="flex flex-row items-center gap-1">
             <CardTitle className="font-semibold md:font-medium text-md md:text-sm tracking-tight">

@@ -26,7 +26,7 @@ import { Badge } from "../../components/ui/badge";
 
 import { FireSolid, SpinnerSolid, XSolid } from "@mynaui/icons-react";
 
-import logo from "../../../public/images/logo/logo.png";
+import RegisterArt from "../../../public/images/register_art.png";
 
 interface UserDataRegister {
   nickname: string;
@@ -40,10 +40,10 @@ interface UserDataRegister {
 
 const LogoLayout = () => {
   return (
-    <div className="flex flex-col justify-center items-center">
-      <img src={logo} className="h-32 md:h-[300px] w-32 md:w-[300px]" />
-      <h1 className="text-primary font-recursive font-bold md:font-semibold uppercase tracking-widest text-2xl md:text-5xl">
-        CrushIF
+    <div className="flex flex-col justify-center items-center gap-4">
+      <img src={RegisterArt} className="h-32 md:h-[300px] w-32 md:w-[300px]" />
+      <h1 className="text-primary font-cookie text-2xl md:text-5xl">
+        Crushif
       </h1>
     </div>
   );

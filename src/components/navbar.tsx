@@ -42,6 +42,9 @@ import {
   ChevronLeft,
 } from "@mynaui/icons-react";
 
+import Logo from "../../public/images/logo/logo.png";
+import UserIcon from "../../public/images/user.png"
+
 import { getUserData } from "../utils/getUserData.tsx";
 
 interface profile {
@@ -79,7 +82,7 @@ const Profile = ({ nickname, avatar, type }: profile) => {
     <Sheet>
       <SheetTrigger asChild>
         <Avatar className="shadow-lg border-2 border-secondary h-8 w-8">
-          <AvatarImage className="object-cover" src={avatar} />
+          <AvatarImage className="object-cover" src={avatar ? avatar : UserIcon} />
           <AvatarFallback>{nickname}</AvatarFallback>
         </Avatar>
       </SheetTrigger>
@@ -101,7 +104,7 @@ const Profile = ({ nickname, avatar, type }: profile) => {
                 <div className="flex flex-row items-center gap-2">
                   <Avatar className="shadow-lg border-2 border-secondary">
                     <AvatarFallback>{nickname}</AvatarFallback>
-                    <AvatarImage className="object-cover" src={avatar} />
+                    <AvatarImage className="object-cover" src={avatar ? avatar : UserIcon} />
                   </Avatar>
 
                   <div className="flex flex-row items-center gap-1">
@@ -408,11 +411,13 @@ export const NavBar = (props: userData) => {
         <Dropdown>
           <DropdownTrigger>
             <NavbarBrand
-              className="text-primary font-cookie font-medium md:font-medium text-[2rem]"
+              className="text-primary font-cookie font-medium md:font-medium text-[2rem] gap-4"
               href={""}
             >
-              <FireSolid />
-              Crushif
+              <div className="flex flex-row items-center gap-0.5">
+                <img className="h-8 w-8" src={Logo} alt="logo" />
+                Crushif
+              </div>
               <ChevronDown className="text-muted-foreground" />
             </NavbarBrand>
           </DropdownTrigger>

@@ -2,6 +2,7 @@ import * as React from "react";
 import { useParams } from "react-router-dom";
 
 import LoadingPage from "./loading";
+
 import { NavBarReturn } from "../../components/navbar";
 import { CardPost } from "../../components/post";
 

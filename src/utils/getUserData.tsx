@@ -18,7 +18,7 @@ interface User {
   type: string;
   bio: string;
   password: string;
-  genre: string;
+  gender: string;
   isFollowing: boolean;
 }
 
@@ -40,7 +40,7 @@ export function getUserData() {
     bio: "",
     password: "",
     banner: "",
-    genre: "",
+    gender: "",
     isFollowing: false,
   });
 

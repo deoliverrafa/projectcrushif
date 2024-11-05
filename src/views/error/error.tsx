@@ -3,13 +3,13 @@ import { Link } from "react-router-dom";
 
 import { Button } from "../../components/ui/button";
 
+import Art404 from "../../../public/images/404_art.png"
+
 const ErrorPage = () => {
   return (
     <React.Fragment>
       <main className="flex flex-col justify-center items-center gap-1 h-screen w-full">
-        <p className="text-muted-foreground font-poppins font-bold md:font-semibold text-lg md:text-xl">
-          404
-        </p>
+        <img src={Art404} className="h-32 md:h-[300px] w-32 md:w-[300px]" alt="404" />
 
         <h1 className="font-poppins font-bold md:font-semibold text-2xl md:text-3xl">
           Página não encontrada

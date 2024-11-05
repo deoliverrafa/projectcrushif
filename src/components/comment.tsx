@@ -26,6 +26,8 @@ import {
   MessageSolid,
 } from "@mynaui/icons-react";
 
+import UserIcon from "../../public/images/user.png"
+
 import { getUserDataById } from "../utils/getUserDataById";
 import { getUserData } from "../utils/getUserData";
 import { getReplyById } from "../utils/getReplyById";
@@ -127,7 +129,7 @@ const ReplyComment: React.FC<Comment> = (props) => {
                 <AvatarFallback>{viewingUser?.nickname[0]}</AvatarFallback>
                 <AvatarImage
                   className="object-cover"
-                  src={viewingUser?.avatar}
+                  src={viewingUser?.avatar ? viewingUser?.avatar : UserIcon}
                   alt={viewingUser?.nickname}
                 />
               </Avatar>
@@ -369,7 +371,7 @@ export const Comment: React.FC<Comment> = (props) => {
               <AvatarFallback>{viewingUser?.nickname[0]}</AvatarFallback>
               <AvatarImage
                 className="object-cover"
-                src={viewingUser?.avatar}
+                src={viewingUser?.avatar ? viewingUser?.avatar : UserIcon}
                 alt={viewingUser?.nickname}
               />
             </Avatar>
@@ -430,7 +432,7 @@ export const Comment: React.FC<Comment> = (props) => {
             <div className="flex flex-row justify-between gap-1 mt-4 w-full">
               <Avatar className="shadow-lg border-2 border-secondary">
                 <AvatarFallback>{dataUser?.nickname[0]}</AvatarFallback>
-                <AvatarImage className="object-cover" src={dataUser?.avatar} />
+                <AvatarImage className="object-cover" src={viewingUser?.avatar ? viewingUser?.avatar : UserIcon} />
               </Avatar>
 
               <form

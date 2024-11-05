@@ -7,6 +7,7 @@ import { NavBarReturn } from "../../components/navbar.tsx";
 import LoadingPage from "../../views/public/loading.tsx";
 
 import { UserSuggestions } from "../../components/userSuggestions.tsx";
+import { CardPost } from "../../components/post.tsx";
 
 import {
   Card,
@@ -70,7 +71,8 @@ import {
   FlagOneSolid,
   SpinnerSolid,
 } from "@mynaui/icons-react";
-import { CardPost } from "../../components/post.tsx";
+
+import UserIcon from "../../../public/images/user.png"
 
 interface Post {
   className?: string;
@@ -253,7 +255,7 @@ const ProfileLayout = () => {
           <div className="absolute bottom-[-30px] left-4">
             <Avatar className="h-20 w-20 shadow-lg border-4 border-secondary rounded-full">
               <AvatarFallback>{viewingUser.nickname}</AvatarFallback>
-              <AvatarImage className="object-cover" src={viewingUser.avatar} />
+              <AvatarImage className="object-cover" src={viewingUser.avatar ? viewingUser.avatar : UserIcon} />
             </Avatar>
           </div>
         </div>

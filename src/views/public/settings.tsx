@@ -7,6 +7,7 @@ import { ThemeToggle } from "../../components/ui/theme.tsx";
 import {
   Card,
   CardContent,
+  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
@@ -29,6 +30,8 @@ import {
 } from "../../components/ui/dialog.tsx";
 import { Label } from "../../components/ui/label.tsx";
 import { Input } from "../../components/ui/input.tsx";
+
+import UserIcon from "../../../public/images/user.png"
 
 import {
   LogoutSolid,
@@ -89,7 +92,7 @@ const SettingsLayout = ({
         <Separator className="mb-5" />
         <CardContent>
           <div className="flex flex-row justify-between items-center">
-            <p className="font-inter font-medium tracking-wider">Tema:</p>
+            <CardDescription>Tema:</CardDescription>
             <ThemeToggle />
           </div>
         </CardContent>
@@ -104,9 +107,9 @@ const SettingsLayout = ({
         <Separator className="mb-5" />
         <CardContent>
           <div className="flex flex-row items-center space-x-2">
-            <Avatar>
+            <Avatar className="border-2 border-border">
               <AvatarFallback>{userData.nickname}</AvatarFallback>
-              <AvatarImage className="object-cover" src={userData.avatar} />
+              <AvatarImage className="object-cover" src={userData.avatar ? userData.avatar : UserIcon} />
             </Avatar>
 
             <div className="flex flex-col">

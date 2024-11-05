@@ -29,6 +29,8 @@ import {
   FemaleSolid,
 } from "@mynaui/icons-react";
 
+import UserIcon from "../../../public/images/user.png"
+
 import { getUserDataById } from "../../utils/getUserDataById";
 
 interface User {
@@ -45,7 +47,7 @@ interface User {
   type: string;
   insertAt: string;
   bio: string;
-  genre: string;
+  gender: string;
 }
 
 const AboutLayout = () => {
@@ -85,7 +87,7 @@ const AboutLayout = () => {
             <AvatarFallback>
               {viewingUser?.nickname?.slice(0, 3) || "N/A"}{" "}
             </AvatarFallback>
-            <AvatarImage className="object-cover" src={viewingUser?.avatar} />
+            <AvatarImage className="object-cover" src={viewingUser?.avatar ? viewingUser?.avatar : UserIcon} />
           </Avatar>
 
           <div className="flex flex-row items-center gap-1">
@@ -193,7 +195,7 @@ const AboutLayout = () => {
           </div>
 
           <div className="flex flex-row items-center gap-1">
-            {viewingUser?.genre === "Feminino" ? (
+            {viewingUser?.gender === "Feminino" ? (
               <FemaleSolid />
             ) : (
               <MaleSolid />
@@ -204,8 +206,8 @@ const AboutLayout = () => {
                 Gênero
               </CardDescription>
               <CardDescription className="text-xs md:text-xs">
-              {viewingUser?.genre
-                  ? `${viewingUser?.genre}`
+              {viewingUser?.gender
+                  ? `${viewingUser?.gender}`
                   : "indisponível"}
               </CardDescription>
             </div>

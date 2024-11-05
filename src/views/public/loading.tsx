@@ -1,19 +1,23 @@
 import * as React from "react";
 
-import logo from "../../../public/images/logo/logo.png";
+import Logo from "../../../public/images/logo/logo.png";
 
 const LoadingPage = () => {
   return (
     <React.Fragment>
       <main className="flex flex-col justify-center items-center h-screen w-full">
-        <div className="flex flex-col items-center">
-          <img src={logo} className="h-32 md:h-[300px] w-32 md:w-[300px]" />
-          <h1 className="text-primary font-cookie font-medium text-[3rem]">
-            Crushif
-          </h1>
+        <div className="flex flex-col items-center gap-2">
+          <img
+            src={Logo}
+            className="h-28 md:h-[200px] w-32 md:w-[200px]"
+          />
 
-          <p className="font-semibold">by Hexa inc.</p>
-          <p className="font-semibold">v1.0.0</p>
+          <div className="flex flex-col items-center">
+            <p className="font-poppins font-semibold md:font-medium">
+              by Hexa inc.
+            </p>
+            <p className="font-poppins font-semibold md:font-medium">v1.0.0</p>
+          </div>
         </div>
       </main>
     </React.Fragment>

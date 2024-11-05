@@ -64,6 +64,8 @@ import {
   CalendarSolid,
 } from "@mynaui/icons-react";
 
+import UserIcon from "../../../public/images/user.png"
+
 import { getUserData } from "../../utils/getUserData.tsx";
 import { isValidImage } from "../../controllers/avatarUpdate";
 import { IFs, CURSOs } from "../../utils/infoIFs.ts";
@@ -81,7 +83,7 @@ interface User {
   curso: string;
   type: string;
   password: string;
-  genre: string;
+  gender: string;
   bio: string;
   birthdaydata: string;
 }
@@ -90,7 +92,7 @@ interface userData {
   user: User;
 }
 
-const GENREs = ["Masculino", "Feminino"];
+const GENDERs = ["Masculino", "Feminino"];
 
 const EditProfileLayout = (props: userData) => {
   const [userId] = React.useState<string | null>(
@@ -117,7 +119,7 @@ const EditProfileLayout = (props: userData) => {
     props.user?.birthdaydata || ""
   );
 
-  const [genre, setGenre] = React.useState(props.user?.genre || "");
+  const [gender, setGender] = React.useState(props.user?.gender || "");
 
   const [bio, setBio] = React.useState(props.user?.bio || "");
 
@@ -135,7 +137,7 @@ const EditProfileLayout = (props: userData) => {
     setEmail(props.user.email);
     setPassword(props.user.password);
     setBirthdaydata(props.user.birthdaydata);
-    setGenre(props.user.genre);
+    setGender(props.user.gender);
     setBio(props.user.bio);
   }, [props.user]);
 
@@ -283,15 +285,15 @@ const EditProfileLayout = (props: userData) => {
     }
   };
 
-  const handleChangeGenre = async () => {
+  const handleChangeGender = async () => {
     try {
       setDataErrorMessage("");
       setDataSuccessMessage("");
 
       const formData = new FormData();
-      formData.append("genre", genre);
+      formData.append("gender", gender);
 
-      const endpoint = import.meta.env.VITE_CHANGE_GENRE;
+      const endpoint = import.meta.env.VITE_CHANGE_GENDER;
 
       const response = await axios.post(
         `${import.meta.env.VITE_API_BASE_URL}${endpoint}${localStorage.getItem(
@@ -476,7 +478,7 @@ const EditProfileLayout = (props: userData) => {
               <AvatarFallback>{nickname}</AvatarFallback>
               <AvatarImage
                 className="object-cover"
-                src={responseAvatar ? responseAvatar : props.user.avatar}
+                src={responseAvatar ? responseAvatar : props.user.avatar ? props.user.avatar : UserIcon}
               />
             </Avatar>
           </div>
@@ -590,15 +592,15 @@ const EditProfileLayout = (props: userData) => {
                   </Button>
                 )}
 
-                {selectedData === "genre" ? null : (
+                {selectedData === "gender" ? null : (
                   <Button
                     variant={"ghost"}
                     className="justify-start w-full"
                     onClick={() => {
-                      handleSelectedData("genre");
+                      handleSelectedData("gender");
                     }}
                   >
-                    {props.user.genre === "Feminino" ? (
+                    {props.user.gender === "Feminino" ? (
                       <FemaleSolid className="h-5 md:h-4 w-5 md:w-4 mr-2" />
                     ) : (
                       <MaleSolid className="h-5 md:h-4 w-5 md:w-4 mr-2" />
@@ -774,20 +776,20 @@ const EditProfileLayout = (props: userData) => {
           </CardContent>
         )}
 
-        {selectedData === "genre" && (
+        {selectedData === "gender" && (
           <CardContent className="mt-4 space-y-6">
             <div className="flex flex-col gap-1 w-full">
-              <Label htmlFor="genre">Gênero</Label>
+              <Label htmlFor="gender">Gênero</Label>
 
-              <Select onValueChange={(value) => setGenre(value)} value={genre}>
+              <Select onValueChange={(value) => setGender(value)} value={gender}>
                 <SelectTrigger className="w-full">
                   <SelectValue placeholder="Escolha seu gênero" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectGroup>
-                    {GENREs.map((genre, index) => (
-                      <SelectItem key={index} value={genre}>
-                        {genre}
+                    {GENDERs.map((gender, index) => (
+                      <SelectItem key={index} value={gender}>
+                        {gender}
                       </SelectItem>
                     ))}
                   </SelectGroup>
@@ -898,9 +900,9 @@ const EditProfileLayout = (props: userData) => {
             </Button>
           )}
 
-          {selectedData === "genre" && (
+          {selectedData === "gender" && (
             <Button
-              onClick={handleChangeGenre}
+              onClick={handleChangeGender}
               disabled={loading}
               variant={"success"}
             >

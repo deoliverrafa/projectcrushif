@@ -24,16 +24,16 @@ import { Progress } from "../../components/ui/progress";
 import { Switch } from "../../components/ui/switch";
 import { Badge } from "../../components/ui/badge";
 
-import logo from "../../../public/images/logo/logo.png";
-
-import { getUserData } from "../../utils/getUserData";
-
 import {
   IncognitoSolid,
   LabelSolid,
   ImageSolid,
   EarthSolid,
 } from "@mynaui/icons-react";
+
+import PostingArt from "../../../public/images/posting_art.png" 
+
+import { getUserData } from "../../utils/getUserData";
 
 interface CardData {
   content: string;
@@ -45,9 +45,9 @@ interface CardData {
 
 const LogoLayout = () => {
   return (
-    <div className="hidden md:flex flex-col justify-center items-center">
-      <img src={logo} className="h-32 md:h-[300px] w-32 md:w-[300px]" />
-      <h1 className="text-primary font-cookie font-medium text-[3rem]">
+    <div className="flex flex-col justify-center items-center">
+      <img src={PostingArt} className="h-32 md:h-[300px] w-32 md:w-[300px]" />
+      <h1 className="text-primary font-cookie text-2xl md:text-5xl">
         Crushif
       </h1>
     </div>

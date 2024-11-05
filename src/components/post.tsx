@@ -72,6 +72,9 @@ import {
   SpinnerSolid,
 } from "@mynaui/icons-react";
 
+import AnonymousIcon from "../../public/images/anonymous.png";
+import UserIcon from "../../public/images/user.png"
+
 import { getUserData } from "../utils/getUserData.tsx";
 import { getUserDataById } from "../utils/getUserDataById.tsx";
 
@@ -372,7 +375,7 @@ export const CardPost = (props: CardProps) => {
 
                 <AvatarImage
                   className="object-cover"
-                  src={!props.isAnonymous ? viewingUser?.avatar : ""}
+                  src={!props.isAnonymous ? viewingUser?.avatar : UserIcon}
                 />
               </Avatar>
               <div className="flex flex-col items-start justify-center space-y-1">
@@ -410,7 +413,7 @@ export const CardPost = (props: CardProps) => {
                   src={
                     !props.isAnonymous
                       ? viewingUser?.avatar
-                      : "https://i.postimg.cc/L87Rk9Bq/incognito-1.png"
+                      : AnonymousIcon
                   }
                 />
               </Avatar>
@@ -703,7 +706,7 @@ export const CardPost = (props: CardProps) => {
                               </AvatarFallback>
                               <AvatarImage
                                 className="object-cover"
-                                src={dataUser?.avatar}
+                                src={dataUser?.avatar ? dataUser?.avatar : UserIcon}
                               />
                             </Avatar>
 
@@ -758,7 +761,7 @@ export const CardPost = (props: CardProps) => {
             <Avatar className="shadow-lg border-2 border-secondary">
               <AvatarFallback>{dataUser.nickname}</AvatarFallback>
 
-              <AvatarImage className="object-cover" src={dataUser.avatar} />
+              <AvatarImage className="object-cover" src={dataUser.avatar ? dataUser.avatar : UserIcon} />
             </Avatar>
             <form
               action=""
