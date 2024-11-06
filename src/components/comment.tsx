@@ -435,7 +435,7 @@ export const Comment: React.FC<Comment> = (props) => {
                 <AvatarFallback>{dataUser?.nickname[0]}</AvatarFallback>
                 <AvatarImage
                   className="object-cover"
-                  src={viewingUser?.avatar ? viewingUser?.avatar : UserIcon}
+                  src={dataUser?.avatar ? dataUser?.avatar : UserIcon}
                 />
               </Avatar>
 

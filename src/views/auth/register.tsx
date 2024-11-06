@@ -41,10 +41,7 @@ interface UserDataRegister {
 const LogoLayout = () => {
   return (
     <div className="flex flex-col justify-center items-center gap-4">
-      <img src={RegisterArt} className="h-32 md:h-[300px] w-32 md:w-[300px]" />
-      <h1 className="text-primary font-cookie text-2xl md:text-5xl">
-        Crushif
-      </h1>
+      <img src={RegisterArt} className="h-52 md:h-[300px] w-52 md:w-[300px]" />
     </div>
   );
 };
