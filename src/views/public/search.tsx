@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { debounce } from "lodash";
 import axios from "axios";
 
-import SearchUserCard from "../../components/user-card.tsx";
+import { SearchUserCard } from "../../components/user-card.tsx";
 import { UserSuggestions } from "../../components/userSuggestions.tsx";
 
 import { BottomBar } from "../../components/bottombar.tsx";

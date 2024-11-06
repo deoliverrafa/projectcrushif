@@ -73,7 +73,8 @@ import {
 } from "@mynaui/icons-react";
 
 import AnonymousIcon from "../../public/images/anonymous.png";
-import UserIcon from "../../public/images/user.png"
+import UserIcon from "../../public/images/user.png";
+import NotFoundArt from "../../public/images/not_found_art.png"
 
 // import { getUserData } from "../utils/getUserData.tsx";
 import { getUserDataById } from "../utils/getUserDataById.tsx";
@@ -337,10 +338,7 @@ export const CardPost = (props: CardProps) => {
     return parts.map((part, index) => {
       if (part.match(regex)) {
         return (
-          <span
-            key={index}
-            className="text-primary font-medium md:font-normal"
-          >
+          <span key={index} className="text-primary font-medium md:font-normal">
             {part}
           </span>
         );
@@ -396,11 +394,7 @@ export const CardPost = (props: CardProps) => {
 
                 <AvatarImage
                   className="object-cover"
-                  src={
-                    !props.isAnonymous
-                      ? viewingUser?.avatar
-                      : AnonymousIcon
-                  }
+                  src={!props.isAnonymous ? viewingUser?.avatar : AnonymousIcon}
                 />
               </Avatar>
               <div className="flex flex-col items-start justify-center space-y-1">
@@ -641,10 +635,16 @@ export const CardPost = (props: CardProps) => {
                     <div className="mx-auto w-full max-w-sm">
                       <ScrollArea className="h-72 w-full rounded-md">
                         {comments.length === 0 ? (
-                          <DrawerDescription className="text-center mt-6">
-                            Nenhum comentário disponível. Seja o primeiro a
-                            comentar
-                          </DrawerDescription>
+                          <div className="flex flex-col justify-center items-center space-y-2 w-full">
+                            <img
+                              src={NotFoundArt}
+                              className="h-32 md:h-[200px] w-32 md:w-[200px]"
+                            />
+                            <DrawerDescription className="text-center mt-6">
+                              Nenhum comentário disponível. Seja o primeiro a
+                              comentar
+                            </DrawerDescription>
+                          </div>
                         ) : (
                           comments.map((comment) => {
                             const dataUser = commentUserData[comment.userId];
@@ -690,7 +690,9 @@ export const CardPost = (props: CardProps) => {
                               </AvatarFallback>
                               <AvatarImage
                                 className="object-cover"
-                                src={dataUser?.avatar ? dataUser?.avatar : UserIcon}
+                                src={
+                                  dataUser?.avatar ? dataUser?.avatar : UserIcon
+                                }
                               />
                             </Avatar>
 
@@ -745,7 +747,7 @@ export const CardPost = (props: CardProps) => {
             <Avatar className="shadow-lg border-2 border-secondary">
               <AvatarFallback>{dataUser?.nickname}</AvatarFallback>
 
-              <AvatarImage className="object-cover" src={dataUser?.avatar ? dataUser.avatar : UserIcon} />
+              <AvatarImage className="object-cover" src={dataUser.avatar ? dataUser.avatar : UserIcon} />
             </Avatar>
             <form
               action=""

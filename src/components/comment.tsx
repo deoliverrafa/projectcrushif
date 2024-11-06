@@ -26,7 +26,7 @@ import {
   MessageSolid,
 } from "@mynaui/icons-react";
 
-import UserIcon from "../../public/images/user.png"
+import UserIcon from "../../public/images/user.png";
 
 import { getUserDataById } from "../utils/getUserDataById";
 import { getUserData } from "../utils/getUserData";
@@ -107,10 +107,7 @@ const ReplyComment: React.FC<Comment> = (props) => {
     return parts.map((part, index) => {
       if (part.match(regex)) {
         return (
-          <span
-            key={index}
-            className="text-primary font-medium md:font-normal"
-          >
+          <span key={index} className="text-primary font-medium md:font-normal">
             {part}
           </span>
         );
@@ -230,6 +227,8 @@ export const Comment: React.FC<Comment> = (props) => {
   const [liked, setLiked] = React.useState(false);
   const [likeCount, setLikeCount] = React.useState(props.likeCount);
   const [showHeart, setShowHeart] = React.useState(false);
+  const [animateClick, setAnimateClick] = React.useState(false);
+
   const [showFullComment, setShowFullComment] = React.useState(false);
   const [viewingUser, setViewingUser] = React.useState<User | null>(null);
   const [viewingReplies, setViewingReplies] = React.useState<Comment[]>([]);
@@ -285,7 +284,9 @@ export const Comment: React.FC<Comment> = (props) => {
 
   const handleLike = async () => {
     const newLiked = !liked;
+
     setLiked(newLiked);
+    setAnimateClick(true);
 
     try {
       await axios.post(
@@ -302,7 +303,10 @@ export const Comment: React.FC<Comment> = (props) => {
     }
 
     setShowHeart(true);
-    setTimeout(() => setShowHeart(false), 500);
+    setTimeout(() => {
+      setShowHeart(false);
+      setAnimateClick(false);
+    }, 500);
   };
 
   const [replyText, setReplyText] = React.useState("");
@@ -350,10 +354,7 @@ export const Comment: React.FC<Comment> = (props) => {
     return parts.map((part, index) => {
       if (part.match(regex)) {
         return (
-          <span
-            key={index}
-            className="text-primary font-medium md:font-normal"
-          >
+          <span key={index} className="text-primary font-medium md:font-normal">
             {part}
           </span>
         );
@@ -432,7 +433,10 @@ export const Comment: React.FC<Comment> = (props) => {
             <div className="flex flex-row justify-between gap-1 mt-4 w-full">
               <Avatar className="shadow-lg border-2 border-secondary">
                 <AvatarFallback>{dataUser?.nickname[0]}</AvatarFallback>
-                <AvatarImage className="object-cover" src={viewingUser?.avatar ? viewingUser?.avatar : UserIcon} />
+                <AvatarImage
+                  className="object-cover"
+                  src={dataUser?.avatar ? dataUser?.avatar : UserIcon}
+                />
               </Avatar>
 
               <form
@@ -469,9 +473,15 @@ export const Comment: React.FC<Comment> = (props) => {
                   onClick={handleLike}
                 >
                   {liked ? (
-                    <HeartSolid className="text-primary h-5 md:h-4 w-5 md:w-4" />
+                    <HeartSolid
+                      className={`${
+                        animateClick ? "animate-click" : ""
+                      } text-primary h-5 md:h-4 w-5 md:w-4`}
+                    />
                   ) : (
-                    <HeartBrokenSolid className="h-5 md:h-4 w-5 md:w-4" />
+                    <HeartBrokenSolid className={`${
+                      animateClick ? "animate-click" : ""
+                    } h-5 md:h-4 w-5 md:w-4`} />
                   )}
                   {likeCount}
                 </Button>
