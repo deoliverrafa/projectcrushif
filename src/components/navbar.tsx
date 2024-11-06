@@ -46,6 +46,7 @@ import Logo from "../../public/images/logo/logo.png";
 import UserIcon from "../../public/images/user.png"
 
 import { getUserData } from "../utils/getUserData.tsx";
+import decodeToken from "../utils/decodeToken.tsx";
 
 interface profile {
   nickname: string;
@@ -72,7 +73,9 @@ interface NavbarProps extends React.HTMLAttributes<HTMLElement> {
 }
 
 const Profile = ({ nickname, avatar, type }: profile) => {
-  const userData = getUserData();
+  // const userData = getUserData();
+  const decodedObj = decodeToken(localStorage.getItem('token') ?? '')
+  const userData = decodedObj?.user
 
   function logOutHandle() {
     localStorage.setItem("token", "null");
@@ -98,7 +101,7 @@ const Profile = ({ nickname, avatar, type }: profile) => {
         </SheetHeader>
 
         <div className="grid gap-4 p-2">
-          <Link to={`/profile/${userData._id}`}>
+          <Link to={`/profile/${userData?._id}`}>
             <Card className="w-full">
               <div className="flex flex-row justify-between items-center h-full p-4">
                 <div className="flex flex-row items-center gap-2">
@@ -113,15 +116,14 @@ const Profile = ({ nickname, avatar, type }: profile) => {
                     </CardTitle>
 
                     <HeartWavesSolid
-                      className={`${
-                        type === "Plus"
+                      className={`${type === "Plus"
                           ? "text-info"
                           : type === "Admin"
-                          ? "text-danger"
-                          : type === "verified"
-                          ? "text-success"
-                          : "hidden"
-                      } h-3.5 w-3.5`}
+                            ? "text-danger"
+                            : type === "verified"
+                              ? "text-success"
+                              : "hidden"
+                        } h-3.5 w-3.5`}
                     />
                   </div>
                 </div>
@@ -315,12 +317,10 @@ const NavbarItem: React.FC<NavbarItemProps> = ({
     const radius = diameter / 2;
 
     circle.style.width = circle.style.height = `${diameter}px`;
-    circle.style.left = `${
-      event.clientX - button.getBoundingClientRect().left - radius
-    }px`;
-    circle.style.top = `${
-      event.clientY - button.getBoundingClientRect().top - radius
-    }px`;
+    circle.style.left = `${event.clientX - button.getBoundingClientRect().left - radius
+      }px`;
+    circle.style.top = `${event.clientY - button.getBoundingClientRect().top - radius
+      }px`;
     circle.style.position = "absolute";
     circle.style.backgroundColor = "rgba(255, 255, 255, 0.6)";
     circle.style.borderRadius = "50%";

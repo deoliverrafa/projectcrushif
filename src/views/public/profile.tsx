@@ -49,7 +49,7 @@ import {
   TooltipProvider,
 } from "../../components/ui/tooltip.tsx";
 
-import { getUserData } from "../../utils/getUserData.tsx";
+// import { getUserData } from "../../utils/getUserData.tsx";
 import { getUserDataById } from "../../utils/getUserDataById.tsx";
 import { getStatusUser } from "../../utils/getStatusUser.tsx";
 
@@ -73,6 +73,8 @@ import {
 } from "@mynaui/icons-react";
 
 import UserIcon from "../../../public/images/user.png"
+import { User } from "../../interfaces/userInterface.ts";
+import decodeToken from "../../utils/decodeToken.tsx";
 
 interface Post {
   className?: string;
@@ -89,26 +91,13 @@ interface Post {
   mentionedUsers: string[];
 }
 
-interface User {
-  userName: string;
-  _id: string;
-  nickname: string;
-  email: string;
-  campus: string;
-  avatar: string;
-  banner: string;
-  birthdaydata: string;
-  Nfollowers: number;
-  Nfollowing: number;
-  curso: string;
-  type: string;
-  status: string;
-  likeCount: number;
-  likedBy: String[];
-}
+
 
 const ProfileLayout = () => {
-  const currentUser = getUserData();
+  // const currentUser = getUserData();
+  const decodedObj = decodeToken(localStorage.getItem('token') ?? '')
+  const currentUser = decodedObj?.user
+
   const [viewingUser, setViewingUser] = React.useState<User | null>(null);
   const { id } = useParams<string>();
   const [userId] = React.useState<string | null>(
@@ -244,8 +233,8 @@ const ProfileLayout = () => {
         <div className="relative w-full h-40">
           <img
             src={
-              viewingUser.banner
-                ? viewingUser.banner
+              viewingUser?.banner
+                ? viewingUser?.banner
                 : "https://img.freepik.com/fotos-premium/fundo-abstrato-da-lua-em-cores-esteticas-generative-ai_888418-6857.jpg?w=996"
             }
             alt="Banner"
@@ -495,17 +484,17 @@ const ProfileLayout = () => {
             <Badge
               variant={"outline"}
               className={`${
-                viewingUser.status === "online"
+                viewingUser?.status === "online"
                   ? "text-success"
                   : "text-secondary"
               } gap-1`}
             >
-              {viewingUser.status === "online" ? (
+              {viewingUser?.status === "online" ? (
                 <span className="bg-success rounded-full h-2 w-2"></span>
               ) : (
                 <span className="bg-secondary rounded-full h-2 w-2"></span>
               )}
-              {viewingUser.status}
+              {viewingUser?.status}
             </Badge>
           </div>
 

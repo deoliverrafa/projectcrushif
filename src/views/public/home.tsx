@@ -13,6 +13,7 @@ import { CardPost } from "../../components/post.tsx";
 import { PlusSolid, SpinnerSolid } from "@mynaui/icons-react";
 
 import { getStatusUser } from "../../utils/getStatusUser.tsx";
+import { User } from "../../interfaces/userInterface.ts";
 
 const localAvatarPath = localStorage.getItem("avatar") ?? "";
 
@@ -29,17 +30,10 @@ interface CardProps {
   mentionedUsers: string[];
 }
 
-interface userData {
-  _id: string;
-  nickname: string;
-  email: string;
-  campus: string;
-  avatar: string;
-  following: string[];
-}
+
 
 export default function HomePage() {
-  const [userData, setUserData] = React.useState<userData | null>(null);
+  const [userData, setUserData] = React.useState<User | null>(null);
   const [finishedPosts, setFinishedPosts] = React.useState(false);
   const [posts, setPosts] = React.useState<CardProps[]>([]);
   const [skip, setSkip] = React.useState(0);
