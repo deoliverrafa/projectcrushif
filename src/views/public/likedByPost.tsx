@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import LoadingPage from "./loading";
 
 import { NavBarReturn } from "../../components/navbar";
-import SearchUserCard from "../../components/user-card";
+import { SearchUserCard } from "../../components/user-card";
 
 import { Card, CardContent } from "../../components/ui/card";
 import { getPostDataById } from "../../utils/getPostDataById";

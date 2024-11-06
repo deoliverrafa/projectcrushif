@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 
 import { NavBar } from "../../components/navbar";
 import { BottomBar } from "../../components/bottombar";
+import { UserCard } from "../../components/user-card";
 
 import {
   Card,
@@ -53,6 +54,7 @@ const CrushLayout = () => {
   const [users, setUsers] = React.useState<User[]>([]);
 
   const [allUsers, setAllUsers] = React.useState<User[]>([]);
+  const [likedByUsers, setLikedByUsers] = React.useState<User[]>([]);
   const [genderFilter, setGenderFilter] = React.useState<string>(
     localStorage.getItem("genderFilter") || "Todos"
   );
@@ -60,6 +62,9 @@ const CrushLayout = () => {
   const [direction, setDirection] = React.useState<"left" | "right" | null>(
     null
   );
+
+  const [animateClick, setAnimateClick] = React.useState(false);
+  const [animateRefuse, setAnimateRefuse] = React.useState(false);
 
   const currentUser = users[currentIndex];
 
@@ -109,6 +114,58 @@ const CrushLayout = () => {
     setCurrentIndex(0);
   };
 
+  const likeUser = async (likedUserId: string) => {
+    try {
+      await axios.post(
+        `${import.meta.env.VITE_API_BASE_URL}${
+          import.meta.env.VITE_CRUSH_LIKE
+        }`,
+        {
+          userId: userData?._id,
+          likedUserId,
+        }
+      );
+
+      setAnimateClick(true);
+
+      setTimeout(() => {
+        setAnimateClick(false);
+      }, 500);
+
+      handleSwipe("right");
+    } catch (error) {
+      console.error("Erro ao curtir o usuário:", error);
+    }
+  };
+
+  const rejectUser = () => {
+    setAnimateRefuse(true);
+
+    setTimeout(() => {
+      setAnimateRefuse(false);
+    }, 500);
+
+    handleSwipe("left");
+  };
+
+  const fetchLikedByUsers = async () => {
+    try {
+      const response = await axios.get(
+        `${import.meta.env.VITE_API_BASE_URL}${
+          import.meta.env.VITE_CRUSH_LIKE
+        }`,
+        {
+          params: {
+            userId: userData?._id,
+          },
+        }
+      );
+      setLikedByUsers(response.data);
+    } catch (error) {
+      console.error("Erro ao buscar usuários que curtiram:", error);
+    }
+  };
+
   React.useEffect(() => {
     if (userData?._id) {
       fetchUsers();
@@ -120,14 +177,22 @@ const CrushLayout = () => {
       <div className="bg-card flex flex-row justify-center items-center mt-2 w-full">
         <ScrollArea className="w-96 whitespace-nowrap rounded-md">
           <div className="flex w-max gap-2 p-4">
-            <Button
-              variant={"outline"}
-              className="text-primary gap-1"
-              size={"sm"}
-            >
-              <HeartSolid className="h-5 md:h-4 w-5 md:w-4" />
-              Curtiram você
-            </Button>
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button
+                  variant={"outline"}
+                  className="text-primary gap-1"
+                  size={"sm"}
+                >
+                  <HeartSolid className="h-5 md:h-4 w-5 md:w-4" />
+                  Curtiram você
+                </Button>
+              </DialogTrigger>
+
+              <DialogContent>
+                <UserCard />
+              </DialogContent>
+            </Dialog>
 
             <Button
               variant={"outline"}
@@ -161,19 +226,28 @@ const CrushLayout = () => {
                 <RadioGroup value={genderFilter} onValueChange={applyFilter}>
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="Todos" id="r1" />
-                    <Label className="cursor-pointer" htmlFor="r1">
+                    <Label
+                      className="font-medium md:font-normal cursor-pointer"
+                      htmlFor="r1"
+                    >
                       Todos
                     </Label>
                   </div>
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="Masculino" id="r2" />
-                    <Label className="cursor-pointer" htmlFor="r2">
+                    <Label
+                      className="font-medium md:font-normal cursor-pointer"
+                      htmlFor="r2"
+                    >
                       Homem
                     </Label>
                   </div>
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="Feminino" id="r3" />
-                    <Label className="cursor-pointer" htmlFor="r3">
+                    <Label
+                      className="font-medium md:font-normal cursor-pointer"
+                      htmlFor="r3"
+                    >
                       Mulher
                     </Label>
                   </div>
@@ -224,16 +298,21 @@ const CrushLayout = () => {
                         <Button
                           variant="outline"
                           size="icon"
-                          className="bg-primary-foreground h-12 md:h-12 w-12 md:w-12 hover:bg-primary-foreground/90 rounded-full"
-                          onClick={() => handleSwipe("left")}
+                          className={`${
+                            animateRefuse ? "animate-click" : ""
+                          } bg-primary-foreground h-12 md:h-12 w-12 md:w-12 hover:bg-primary-foreground/90 rounded-full`}
+                          onClick={rejectUser}
                         >
                           <XSolid className="text-primary md:h-8 md:w-8" />
                         </Button>
+
                         <Button
                           variant="outline"
                           size="icon"
-                          className="bg-primary hover:bg-primary/90 h-12 md:h-12 w-12 md:w-12 rounded-full"
-                          onClick={() => handleSwipe("right")}
+                          className={`${
+                            animateClick ? "animate-click" : ""
+                          } bg-primary hover:bg-primary/90 h-12 md:h-12 w-12 md:w-12 rounded-full`}
+                          onClick={() => likeUser(currentUser._id)}
                         >
                           <HeartSolid className="text-primary-foreground md:h-8 md:w-8" />
                         </Button>

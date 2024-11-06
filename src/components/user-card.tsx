@@ -7,9 +7,9 @@ import { Card, CardTitle } from "./ui/card.js";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar.js";
 
 import { HeartWavesSolid } from "@mynaui/icons-react";
-import UserIcon from "../../public/images/user.png"
+import UserIcon from "../../public/images/user.png";
 
-interface SearchUserCard {
+interface User {
   avatar: string;
   nickname: string;
   type: string;
@@ -17,7 +17,7 @@ interface SearchUserCard {
   following: boolean;
 }
 
-export default function SearchUserCard(props: SearchUserCard) {
+export const SearchUserCard = (props: User) => {
   const [formData] = React.useState({
     unfollowId: props._id,
     userFollowId: props._id,
@@ -68,7 +68,10 @@ export default function SearchUserCard(props: SearchUserCard) {
         <Link to={`/profile/${props._id}`} className="flex space-x-2 h-full">
           <Avatar className="shadow-lg border-2 border-secondary">
             <AvatarFallback>{props?.nickname}</AvatarFallback>
-            <AvatarImage className="object-cover" src={props?.avatar ? props?.avatar : UserIcon} />
+            <AvatarImage
+              className="object-cover"
+              src={props?.avatar ? props?.avatar : UserIcon}
+            />
           </Avatar>
           <div className="flex flex-row items-center gap-1">
             <CardTitle className="font-semibold md:font-medium text-md md:text-sm tracking-tight">
@@ -98,4 +101,44 @@ export default function SearchUserCard(props: SearchUserCard) {
       </div>
     </Card>
   );
-}
+};
+
+export const UserCard = (props: User) => {
+  return (
+    <React.Fragment>
+      <Link to={`/profile/${props._id}`} className="flex space-x-2 h-full">
+        <Card className="my-2 w-full">
+          <div className="flex flex-row justify-between items-center p-4">
+            <Avatar className="shadow-lg border-2 border-secondary">
+              <AvatarFallback>{props?.nickname}</AvatarFallback>
+              <AvatarImage
+                className="object-cover"
+                src={props?.avatar ? props?.avatar : UserIcon}
+              />
+            </Avatar>
+            <div className="flex flex-row items-center gap-1">
+              <CardTitle className="font-semibold md:font-medium text-md md:text-sm tracking-tight">
+                {props.nickname ? `${props.nickname}` : "indisponível"}
+              </CardTitle>
+
+              <div>
+                <HeartWavesSolid
+                  className={`${
+                    props?.type === "Plus"
+                      ? "text-info"
+                      : props?.type === "Admin"
+                      ? "text-danger"
+                      : props?.type === "verified"
+                      ? "text-success"
+                      : "hidden"
+                  } h-3.5 w-3.5`}
+                />
+              </div>
+            </div>
+            <Button type="button"></Button>
+          </div>
+        </Card>
+      </Link>
+    </React.Fragment>
+  );
+};

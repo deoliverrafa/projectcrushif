@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import SearchUserCard from "./user-card";
+import { SearchUserCard } from "./user-card";
 
 import {
   Dialog,
