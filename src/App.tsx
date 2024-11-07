@@ -34,6 +34,7 @@ const LikedByPage = React.lazy(() => import("./views/public/likedBy.tsx"));
 
 const LoginPage = React.lazy(() => import("./views/auth/login.tsx"));
 const RegisterPage = React.lazy(() => import("./views/auth/register.tsx"));
+const VerifyPage = React.lazy(() => import("./views/auth/verify.tsx"));
 const TermsPage = React.lazy(() => import("./views/auth/terms.tsx"));
 
 const App = () => {
@@ -74,6 +75,7 @@ const App = () => {
 
               <Route path="/auth/login" element={<LoginPage />} />
               <Route path="/auth/register" element={<RegisterPage />} />
+              <Route path="/auth/verify" element={<VerifyPage />} />
               <Route path="/auth/terms" element={<TermsPage />} />
 
               <Route path="*" element={<ErrorPage />} />

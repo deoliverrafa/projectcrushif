@@ -74,13 +74,12 @@ import {
 
 import AnonymousIcon from "../../public/images/anonymous.png";
 import UserIcon from "../../public/images/user.png";
-import NotFoundArt from "../../public/images/not_found_art.png"
+import NotFoundArt from "../../public/images/not_found_art.png";
 
 // import { getUserData } from "../utils/getUserData.tsx";
 import { getUserDataById } from "../utils/getUserDataById.tsx";
 import decodeToken from "../utils/decodeToken.tsx";
 import { User } from "../interfaces/userInterface.ts";
-
 
 interface CardProps {
   classNames?: string;
@@ -97,11 +96,10 @@ interface CardProps {
   mentionedUsers: string[];
 }
 
-
 export const CardPost = (props: CardProps) => {
-  const decodedObj = decodeToken(localStorage.getItem('token') ?? '')
-  const dataUser = decodedObj?.user
-  
+  const decodedObj = decodeToken(localStorage.getItem("token") ?? "");
+  const dataUser = decodedObj?.user;
+
   const [viewingUser, setViewingUser] = React.useState<User | undefined>(
     undefined
   );
@@ -140,7 +138,8 @@ export const CardPost = (props: CardProps) => {
       setLikeCount(likeCount + 1);
     } else {
       axios.post(
-        `${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_POST_UNLIKE
+        `${import.meta.env.VITE_API_BASE_URL}${
+          import.meta.env.VITE_POST_UNLIKE
         }`,
         { token: localStorage.getItem("token"), postId: props._id }
       );
@@ -214,7 +213,8 @@ export const CardPost = (props: CardProps) => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        `${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_POST_COMMENT
+        `${import.meta.env.VITE_API_BASE_URL}${
+          import.meta.env.VITE_POST_COMMENT
         }`,
         {
           content: comment,
@@ -290,7 +290,8 @@ export const CardPost = (props: CardProps) => {
     setLoading(true);
     try {
       const response = await axios.get(
-        `${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_POST_GETCOMMENTS
+        `${import.meta.env.VITE_API_BASE_URL}${
+          import.meta.env.VITE_POST_GETCOMMENTS
         }${localStorage.getItem("token")}/${props._id}`,
         { params: { skip, limit } }
       );
@@ -316,7 +317,7 @@ export const CardPost = (props: CardProps) => {
   const handleScroll = () => {
     if (
       window.innerHeight + document.documentElement.scrollTop ===
-      document.documentElement.offsetHeight &&
+        document.documentElement.offsetHeight &&
       hasMore &&
       !loading
     ) {
@@ -370,14 +371,15 @@ export const CardPost = (props: CardProps) => {
                   </div>
                   <div>
                     <HeartWavesSolid
-                      className={`${viewingUser?.type === "Plus"
-                        ? "text-info"
-                        : viewingUser?.type === "Admin"
+                      className={`${
+                        viewingUser?.type === "Plus"
+                          ? "text-info"
+                          : viewingUser?.type === "Admin"
                           ? "text-danger"
                           : viewingUser?.type === "verified"
-                            ? "text-success"
-                            : "hidden"
-                        } h-4 w-4`}
+                          ? "text-success"
+                          : "hidden"
+                      } h-4 w-4`}
                     />
                   </div>
                 </div>
@@ -602,13 +604,15 @@ export const CardPost = (props: CardProps) => {
                 >
                   {liked ? (
                     <HeartSolid
-                      className={`${animateClick ? "animate-click" : ""
-                        } text-primary h-5 md:h-4 w-5 md:w-4`}
+                      className={`${
+                        animateClick ? "animate-click" : ""
+                      } text-primary h-5 md:h-4 w-5 md:w-4`}
                     />
                   ) : (
                     <HeartBrokenSolid
-                      className={`${animateClick ? "animate-click" : ""
-                        } h-5 md:h-4 w-5 md:w-4`}
+                      className={`${
+                        animateClick ? "animate-click" : ""
+                      } h-5 md:h-4 w-5 md:w-4`}
                     />
                   )}
                   {likeCount}
@@ -725,17 +729,19 @@ export const CardPost = (props: CardProps) => {
 
               <div className="flex flex-row">
                 <div className="flex flex-row items-center space-x-1">
-                  <div className="flex flex-row items-center gap-2">
-                    <MentionedUsers
-                      _id={props._id}
-                      content={props.content}
-                      insertAt={props.insertAt}
-                      userId={props.userId}
-                      likeCount={props.likeCount}
-                      likedBy={props.likedBy}
-                      mentionedUsers={props.mentionedUsers}
-                    />
-                  </div>
+                  {props.mentionedUsers.length > 0 && (
+                    <div className="flex flex-row items-center gap-2">
+                      <MentionedUsers
+                        _id={props._id}
+                        content={props.content}
+                        insertAt={props.insertAt}
+                        userId={props.userId}
+                        likeCount={props.likeCount}
+                        likedBy={props.likedBy}
+                        mentionedUsers={props.mentionedUsers}
+                      />
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -745,7 +751,10 @@ export const CardPost = (props: CardProps) => {
             <Avatar className="shadow-lg border-2 border-secondary">
               <AvatarFallback>{dataUser?.nickname}</AvatarFallback>
 
-              <AvatarImage className="object-cover" src={dataUser?.avatar ? dataUser.avatar : UserIcon} />
+              <AvatarImage
+                className="object-cover"
+                src={dataUser?.avatar ? dataUser.avatar : UserIcon}
+              />
             </Avatar>
             <form
               action=""

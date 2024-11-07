@@ -84,9 +84,10 @@ const ReplyComment: React.FC<Comment> = (props) => {
 
     try {
       await axios.post(
-        `${import.meta.env.VITE_API_BASE_URL}${newLiked
-          ? import.meta.env.VITE_COMMENT_LIKE
-          : import.meta.env.VITE_COMMENT_UNLIKE
+        `${import.meta.env.VITE_API_BASE_URL}${
+          newLiked
+            ? import.meta.env.VITE_COMMENT_LIKE
+            : import.meta.env.VITE_COMMENT_UNLIKE
         }`,
         { token: localStorage.getItem("token"), commentId: props._id }
       );
@@ -118,7 +119,7 @@ const ReplyComment: React.FC<Comment> = (props) => {
   return (
     <React.Fragment>
       <div className="flex flex-col justify-end items-end mb-2">
-        <Card key={props._id} className="w-5/6 max-w-md">
+        <Card key={props._id} className="w-11/12 max-w-md">
           <Link to={`/profile/${props.userId}`}>
             <CardHeader className="flex flex-row items-center space-x-4 p-4">
               <Avatar className="h-10 w-10 border-2 border-secondary">
@@ -135,14 +136,15 @@ const ReplyComment: React.FC<Comment> = (props) => {
                     {viewingUser?.nickname}
                   </CardDescription>
                   <HeartWavesSolid
-                    className={`${viewingUser?.type === "Plus"
+                    className={`${
+                      viewingUser?.type === "Plus"
                         ? "text-info"
                         : viewingUser?.type === "Admin"
-                          ? "text-danger"
-                          : viewingUser?.type === "verified"
-                            ? "text-success"
-                            : "hidden"
-                      } h-3.5 w-3.5`}
+                        ? "text-danger"
+                        : viewingUser?.type === "verified"
+                        ? "text-success"
+                        : "hidden"
+                    } h-3.5 w-3.5`}
                   />
                 </div>
                 <CardDescription className="text-xs md:text-xs">
@@ -201,17 +203,19 @@ const ReplyComment: React.FC<Comment> = (props) => {
               </Button>
             </div>
 
-            <div className="flex flex-row items-center gap-2">
-              <MentionedUsers
-                _id={props._id}
-                content={props.content}
-                insertAt={props.insertAt}
-                userId={props.userId}
-                likeCount={props.likeCount}
-                likedBy={props.likedBy}
-                mentionedUsers={props.mentionedUsers}
-              />
-            </div>
+            {props.mentionedUsers.length > 0 && (
+              <div className="flex flex-row items-center gap-2">
+                <MentionedUsers
+                  _id={props._id}
+                  content={props.content}
+                  insertAt={props.insertAt}
+                  userId={props.userId}
+                  likeCount={props.likeCount}
+                  likedBy={props.likedBy}
+                  mentionedUsers={props.mentionedUsers}
+                />
+              </div>
+            )}
           </CardFooter>
         </Card>
       </div>
@@ -220,7 +224,7 @@ const ReplyComment: React.FC<Comment> = (props) => {
 };
 
 export const Comment: React.FC<Comment> = (props) => {
-  const decodedObject = decodeToken(localStorage.getItem('token') ?? '');
+  const decodedObject = decodeToken(localStorage.getItem("token") ?? "");
   const dataUser = decodedObject?.user;
 
   const [liked, setLiked] = React.useState(false);
@@ -289,9 +293,10 @@ export const Comment: React.FC<Comment> = (props) => {
 
     try {
       await axios.post(
-        `${import.meta.env.VITE_API_BASE_URL}${newLiked
-          ? import.meta.env.VITE_COMMENT_LIKE
-          : import.meta.env.VITE_COMMENT_UNLIKE
+        `${import.meta.env.VITE_API_BASE_URL}${
+          newLiked
+            ? import.meta.env.VITE_COMMENT_LIKE
+            : import.meta.env.VITE_COMMENT_UNLIKE
         }`,
         { token: localStorage.getItem("token"), commentId: props._id }
       );
@@ -319,7 +324,8 @@ export const Comment: React.FC<Comment> = (props) => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        `${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_COMMENT_REPLY
+        `${import.meta.env.VITE_API_BASE_URL}${
+          import.meta.env.VITE_COMMENT_REPLY
         }`,
         {
           token: localStorage.getItem("token"),
@@ -379,14 +385,15 @@ export const Comment: React.FC<Comment> = (props) => {
                   {viewingUser?.nickname}
                 </CardDescription>
                 <HeartWavesSolid
-                  className={`${viewingUser?.type === "Plus"
+                  className={`${
+                    viewingUser?.type === "Plus"
                       ? "text-info"
                       : viewingUser?.type === "Admin"
-                        ? "text-danger"
-                        : viewingUser?.type === "verified"
-                          ? "text-success"
-                          : "hidden"
-                    } h-3.5 w-3.5`}
+                      ? "text-danger"
+                      : viewingUser?.type === "verified"
+                      ? "text-success"
+                      : "hidden"
+                  } h-3.5 w-3.5`}
                 />
               </div>
               <CardDescription className="text-xs md:text-xs">
@@ -470,12 +477,16 @@ export const Comment: React.FC<Comment> = (props) => {
                 >
                   {liked ? (
                     <HeartSolid
-                      className={`${animateClick ? "animate-click" : ""
-                        } text-primary h-5 md:h-4 w-5 md:w-4`}
+                      className={`${
+                        animateClick ? "animate-click" : ""
+                      } text-primary h-5 md:h-4 w-5 md:w-4`}
                     />
                   ) : (
-                    <HeartBrokenSolid className={`${animateClick ? "animate-click" : ""
-                      } h-5 md:h-4 w-5 md:w-4`} />
+                    <HeartBrokenSolid
+                      className={`${
+                        animateClick ? "animate-click" : ""
+                      } h-5 md:h-4 w-5 md:w-4`}
+                    />
                   )}
                   {likeCount}
                 </Button>
@@ -489,17 +500,19 @@ export const Comment: React.FC<Comment> = (props) => {
                 </Button>
               </div>
 
-              <div className="flex flex-row items-center gap-2">
-                <MentionedUsers
-                  _id={props._id}
-                  content={props.content}
-                  insertAt={props.insertAt}
-                  userId={props.userId}
-                  likeCount={props.likeCount}
-                  likedBy={props.likedBy}
-                  mentionedUsers={props.mentionedUsers}
-                />
-              </div>
+              {props.mentionedUsers.length > 0 && (
+                <div className="flex flex-row items-center gap-2">
+                  <MentionedUsers
+                    _id={props._id}
+                    content={props.content}
+                    insertAt={props.insertAt}
+                    userId={props.userId}
+                    likeCount={props.likeCount}
+                    likedBy={props.likedBy}
+                    mentionedUsers={props.mentionedUsers}
+                  />
+                </div>
+              )}
             </div>
 
             <div className="flex flex-row justify-start items-start mt-4">
@@ -531,17 +544,18 @@ export const Comment: React.FC<Comment> = (props) => {
             (reply) =>
               reply &&
               reply._id && (
-                <ReplyComment
-                  key={reply._id}
-                  _id={reply._id}
-                  content={reply.content}
-                  insertAt={reply.insertAt}
-                  userId={reply.userId}
-                  likeCount={reply.likeCount}
-                  likedBy={reply.likedBy}
-                  mentionedUsers={reply.mentionedUsers}
-                  replies={reply.replies}
-                />
+                <div className="reply-container">
+                  <ReplyComment
+                    _id={reply._id}
+                    content={reply.content}
+                    insertAt={reply.insertAt}
+                    userId={reply.userId}
+                    likeCount={reply.likeCount}
+                    likedBy={reply.likedBy}
+                    mentionedUsers={reply.mentionedUsers}
+                    replies={reply.replies}
+                  />
+                </div>
               )
           )}
         </div>
