@@ -629,8 +629,8 @@ export const CardPost = (props: CardProps) => {
                     </Button>
                   </DrawerTrigger>
 
-                  <DrawerContent className="">
-                    <div className="mx-auto w-3/6">
+                  <DrawerContent>
+                    <div className="w-full max-w-sm mx-auto">
                       <ScrollArea className="h-72 w-full rounded-md">
                         {comments.length === 0 ? (
                           <div className="flex flex-col justify-center items-center space-y-2 w-full">

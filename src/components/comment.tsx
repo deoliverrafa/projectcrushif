@@ -361,8 +361,8 @@ export const Comment: React.FC<Comment> = (props) => {
   };
 
   return (
-    <div className="flex flex-col justify-start items-start my-2">
-      <Card key={props._id} className="w-5/6">
+    <div className="flex flex-col items-center my-2">
+      <Card key={props._id} className="w-full max-w-md">
         <Link to={`/profile/${props.userId}`}>
           <CardHeader className="flex flex-row items-center space-x-4 p-4">
             <Avatar className="h-10 w-10 border-2 border-secondary">
