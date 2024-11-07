@@ -99,8 +99,6 @@ interface CardProps {
 
 
 export const CardPost = (props: CardProps) => {
-
-  // const dataUser: User = getUserData();
   const decodedObj = decodeToken(localStorage.getItem('token') ?? '')
   const dataUser = decodedObj?.user
   
@@ -631,8 +629,8 @@ export const CardPost = (props: CardProps) => {
                     </Button>
                   </DrawerTrigger>
 
-                  <DrawerContent>
-                    <div className="mx-auto w-full max-w-sm">
+                  <DrawerContent className="">
+                    <div className="mx-auto w-3/6">
                       <ScrollArea className="h-72 w-full rounded-md">
                         {comments.length === 0 ? (
                           <div className="flex flex-col justify-center items-center space-y-2 w-full">
@@ -747,7 +745,7 @@ export const CardPost = (props: CardProps) => {
             <Avatar className="shadow-lg border-2 border-secondary">
               <AvatarFallback>{dataUser?.nickname}</AvatarFallback>
 
-              <AvatarImage className="object-cover" src={dataUser.avatar ? dataUser.avatar : UserIcon} />
+              <AvatarImage className="object-cover" src={dataUser?.avatar ? dataUser.avatar : UserIcon} />
             </Avatar>
             <form
               action=""

@@ -41,6 +41,7 @@ import SelfieIcon from "../../../public/images/selfie_art.png";
 import NotFoundArt from "../../../public/images/not_found_art.png";
 
 import { getUserData } from "../../utils/getUserData";
+import decodeToken from "../../utils/decodeToken";
 
 interface User {
   _id: string;
@@ -53,7 +54,11 @@ interface User {
 }
 
 const CrushLayout = () => {
-  const userData = getUserData();
+  const decodedObj = decodeToken(localStorage.getItem('token') ?? '')
+  const userData = decodedObj?.user
+  
+  console.log(userData);
+  
   const [users, setUsers] = React.useState<User[]>([]);
 
   const [allUsers, setAllUsers] = React.useState<User[]>([]);
@@ -62,7 +67,8 @@ const CrushLayout = () => {
   const [genderFilter, setGenderFilter] = React.useState<string>(
     localStorage.getItem("genderFilter") || "Todos"
   );
-
+  console.log(users);
+  
   const [dragging, setDragging] = React.useState(false);
   const [xOffset, setXOffset] = React.useState(0);
   const [currentIndex, setCurrentIndex] = React.useState(0);
@@ -183,7 +189,7 @@ const CrushLayout = () => {
         `${import.meta.env.VITE_API_BASE_URL}${
           import.meta.env.VITE_CRUSH_LIKED
         }`,
-        { userId: userData._id }
+        { userId: userData?._id }
       );
 
       const uniqueLikedByUsers = Array.from(
@@ -202,7 +208,7 @@ const CrushLayout = () => {
 
     if (matchUser) {
       const storedMatches = JSON.parse(
-        localStorage.getItem(`matchesUsers_${userData._id}`) || "[]"
+        localStorage.getItem(`matchesUsers_${userData?._id}`) || "[]"
       );
 
       if (!storedMatches.some((user: User) => user._id === matchUser._id)) {
@@ -210,7 +216,7 @@ const CrushLayout = () => {
 
         setMatchesUsers(updatedMatches);
         localStorage.setItem(
-          `matchesUsers_${userData._id}`,
+          `matchesUsers_${userData?._id}`,
           JSON.stringify(updatedMatches)
         );
       }
@@ -219,7 +225,7 @@ const CrushLayout = () => {
 
   const checkForMatches = (likedByList: User[]) => {
     const storedMatches = JSON.parse(
-      localStorage.getItem(`matchesUsers_${userData._id}`) || "[]"
+      localStorage.getItem(`matchesUsers_${userData?._id}`) || "[]"
     );
 
     const matchedUsers = likedByList.filter((user) =>
@@ -238,7 +244,7 @@ const CrushLayout = () => {
 
     setMatchesUsers(updatedMatches);
     localStorage.setItem(
-      `matchesUsers_${userData._id}`,
+      `matchesUsers_${userData?._id}`,
       JSON.stringify(updatedMatches)
     );
   };
@@ -248,7 +254,7 @@ const CrushLayout = () => {
       fetchUsers();
       fetchLikedByUsers();
     }
-  }, [userData]);
+  }, [localStorage.getItem('token')]);
 
   return (
     <React.Fragment>

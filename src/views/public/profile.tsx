@@ -94,7 +94,7 @@ interface Post {
 
 
 const ProfileLayout = () => {
-  // const currentUser = getUserData();
+  
   const decodedObj = decodeToken(localStorage.getItem('token') ?? '')
   const currentUser = decodedObj?.user
 

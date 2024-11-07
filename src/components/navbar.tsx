@@ -45,7 +45,6 @@ import {
 import Logo from "../../public/images/logo/logo.png";
 import UserIcon from "../../public/images/user.png"
 
-import { getUserData } from "../utils/getUserData.tsx";
 import decodeToken from "../utils/decodeToken.tsx";
 
 interface profile {
@@ -63,7 +62,7 @@ interface User {
 }
 
 interface userData {
-  user: User | null;
+  user: User | undefined | null;
   className?: string;
   avatarPath?: string;
 }
@@ -73,7 +72,6 @@ interface NavbarProps extends React.HTMLAttributes<HTMLElement> {
 }
 
 const Profile = ({ nickname, avatar, type }: profile) => {
-  // const userData = getUserData();
   const decodedObj = decodeToken(localStorage.getItem('token') ?? '')
   const userData = decodedObj?.user
 
@@ -403,7 +401,8 @@ const NavbarBrand: React.FC<NavbarBrandProps> = ({
 NavbarBrand.displayName = "NavbarBrand";
 
 export const NavBar = (props: userData) => {
-  const userData = getUserData();
+  const decodedObj = decodeToken(localStorage.getItem('token') ?? '')
+  const userData = decodedObj?.user
 
   return (
     <Navbar>
@@ -514,7 +513,7 @@ export const NavBar = (props: userData) => {
           <Profile
             nickname={props.user?.nickname ? props.user.nickname : ""}
             avatar={props.avatarPath ? props.avatarPath : ""}
-            type={userData.type ? userData.type : ""}
+            type={userData?.type ? userData.type : ""}
           />
         </NavbarItem>
       </NavbarContent>

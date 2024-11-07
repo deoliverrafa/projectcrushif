@@ -19,8 +19,8 @@ import { ScrollArea } from "../../components/ui/scroll-area.tsx";
 
 import NotFoundArt from "../../../public/images/not_found_art.png"
 
-import { getUserData } from "../../utils/getUserData.tsx";
 import { getStatusUser } from "../../utils/getStatusUser.tsx";
+import decodeToken from "../../utils/decodeToken.tsx";
 
 interface User {
   nickname: string;
@@ -32,7 +32,9 @@ interface User {
 }
 
 const SearchLayout = () => {
-  const userData = getUserData();
+  const decodedObj = decodeToken(localStorage.getItem('token') ?? '')
+  const userData = decodedObj?.user
+  
   const [userId] = React.useState<string | null>(
     localStorage.getItem("userId")
   );
@@ -169,7 +171,7 @@ const SearchLayout = () => {
             <div className="p-4">
               {queryResponse.length > 0 ? (
                 queryResponse.map((user: User) => {
-                  const isFollowing = userData.following.some(
+                  const isFollowing = userData?.following.some(
                     (followingId) => followingId === user._id
                   );
 
@@ -209,10 +211,11 @@ const SearchLayout = () => {
 };
 
 const SearchPage = () => {
-  const userData = getUserData();
+  const decodedObj = decodeToken(localStorage.getItem('token') ?? '')
+  const userData = decodedObj?.user
   return (
     <>
-      <NavBar user={userData} avatarPath={userData.avatar} />
+      <NavBar user={userData} avatarPath={userData?.avatar} />
 
       <main className="flex flex-col justify-center items-center py-2 h-full w-full">
         <SearchLayout />

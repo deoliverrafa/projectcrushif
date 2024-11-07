@@ -33,8 +33,6 @@ import {
 
 import PostingArt from "../../../public/images/posting_art.png" 
 
-import { getUserData } from "../../utils/getUserData";
-
 interface CardData {
   content: string;
   isAnonymous: boolean;
@@ -52,7 +50,7 @@ const LogoLayout = () => {
 };
 
 const PublishLayout = () => {
-  const userData = getUserData();
+
 
   const [isAnonymous, setAnonymous] = React.useState<boolean>(false);
   const [errorMessage, setErrorMessage] = React.useState("");
@@ -103,15 +101,6 @@ const PublishLayout = () => {
   const handleNextStep = () => {
     setStep((prevCount) => prevCount + 1);
   };
-
-  React.useEffect(() => {
-    if (userData) {
-      setCardData((prevData) => ({
-        ...prevData,
-        isAnonymous: isAnonymous,
-      }));
-    }
-  }, [userData]);
 
   React.useEffect(() => {
     setCardData((prevData) => ({
@@ -288,7 +277,7 @@ const PublishLayout = () => {
             <div className="flex flex-row items-center w-full">
               <Progress
                 value={
-                  step === 1 ? 10 : step === 2 ? 33 : step === 3 ? 66 : null
+                  step === 1 ? 10 : step === 2 ? 66 : step === 3 ? 100 : null
                 }
                 className="w-full"
               />
@@ -444,7 +433,7 @@ const PublishLayout = () => {
                 <div className="flex flex-row items-center w-full">
                   <Progress
                     value={
-                      step === 1 ? 10 : step === 2 ? 33 : step === 3 ? 66 : null
+                      step === 1 ? 30 : step === 2 ? 49 : step === 3 ? 100 : null
                     }
                     className="w-full"
                   />
