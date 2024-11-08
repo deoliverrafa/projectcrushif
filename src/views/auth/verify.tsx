@@ -9,7 +9,7 @@ import {
   CardTitle,
 } from "../../components/ui/card";
 
-import { EnvelopeOpenSolid } from "@mynaui/icons-react";
+import { Envelope } from "@mynaui/icons-react";
 
 import LoginArt from "../../../public/images/login_art.png";
 
@@ -26,13 +26,13 @@ const VerifyLayout = () => {
     <React.Fragment>
       <Card className="max-w-sm">
         <CardHeader className="flex flex-col items-center">
-          <EnvelopeOpenSolid className="text-primary h-20 w-20" />
+          <Envelope className="text-primary h-20 w-20" />
           <CardTitle className="text-primary">Verifique seu e-mail</CardTitle>
         </CardHeader>
         <CardContent>
           <CardDescription>
-            Para completar o processo e acessar todos os recursos,
-            <span className="text-primary"> verifique seu e-mail</span> e
+            Para completar o processo e acessar todos os recursos,{" "}
+            <span className="text-primary">verifique seu e-mail</span> e
             confirme seu endereço. Isso ajuda a garantir a segurança da sua
             conta e melhorar sua experiência!
           </CardDescription>
@@ -40,8 +40,12 @@ const VerifyLayout = () => {
 
         <CardFooter>
           <CardDescription>
-            Está com problemas para verificar seu e-mail? Entre em contato conosco pelo e-mail <span className="cursor-pointer underline text-primary">support@crushif.com</span> para
-            mais orientações.
+            Está com problemas para verificar seu e-mail? Entre em contato
+            conosco pelo e-mail{" "}
+            <span className="cursor-pointer underline text-primary">
+              support@crushif.com
+            </span>{" "}
+            para mais orientações.
           </CardDescription>
         </CardFooter>
       </Card>
