@@ -6,7 +6,10 @@ import LoadingPage from "./loading";
 import { NavBarReturn } from "../../components/navbar";
 import { SearchUserCard } from "../../components/user-card";
 
-import { Card, CardContent } from "../../components/ui/card";
+import { Card, CardContent, CardDescription } from "../../components/ui/card";
+
+import NoHaveArt from "../../../public/images/no_have_art.png";
+
 import { getUserDataById } from "../../utils/getUserDataById";
 import { getStatusUser } from "../../utils/getStatusUser";
 
@@ -67,23 +70,27 @@ const LikedByLayout = () => {
     <React.Fragment>
       <Card className="select-none mt-2 w-full md:w-6/12">
         <CardContent>
-          <p className="font-poppins font-medium md:font-normal text-md md:text-sm text-muted-foreground mt-6">
-            Curtiram:
-          </p>
-
           {likedUsers.length > 0 ? (
             likedUsers.map((user) => (
               <SearchUserCard
                 key={user._id}
                 avatar={user.avatar}
                 nickname={user.nickname}
+                userName={user.userName}
                 type={user.type}
                 _id={user._id}
                 following={user.following}
               />
             ))
           ) : (
-            <p>Nenhum usuário curtiu esta postagem.</p>
+            <div className="flex flex-col justify-center items-center space-y-2 w-full">
+              <img
+                src={NoHaveArt}
+                className="h-32 md:h-[300px] w-32 md:w-[300px]"
+                alt="404"
+              />
+              <CardDescription>Nenhum usuário curtiu esse perfil</CardDescription>
+            </div>
           )}
         </CardContent>
       </Card>

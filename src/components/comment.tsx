@@ -56,6 +56,7 @@ const ReplyComment: React.FC<Comment> = (props) => {
 
   const [liked, setLiked] = React.useState(false);
   const [likeCount, setLikeCount] = React.useState(props.likeCount);
+  const [animateClick, setAnimateClick] = React.useState(false);
   const [showHeart, setShowHeart] = React.useState(false);
   const [showFullComment, setShowFullComment] = React.useState(false);
 
@@ -81,6 +82,7 @@ const ReplyComment: React.FC<Comment> = (props) => {
   const handleLike = async () => {
     const newLiked = !liked;
     setLiked(newLiked);
+    setAnimateClick(true);
 
     try {
       await axios.post(
@@ -97,7 +99,10 @@ const ReplyComment: React.FC<Comment> = (props) => {
     }
 
     setShowHeart(true);
-    setTimeout(() => setShowHeart(false), 500);
+    setTimeout(() => {
+      setShowHeart(false);
+      setAnimateClick(false);
+    }, 500);
   };
 
   const highlightMentionsAndHashtags = (text: string) => {
@@ -195,9 +200,17 @@ const ReplyComment: React.FC<Comment> = (props) => {
                 onClick={handleLike}
               >
                 {liked ? (
-                  <HeartSolid className="text-primary h-5 md:h-4 w-5 md:w-4" />
+                  <HeartSolid
+                    className={`${
+                      animateClick ? "animate-click" : ""
+                    } text-primary h-5 md:h-4 w-5 md:w-4`}
+                  />
                 ) : (
-                  <HeartBrokenSolid className="h-5 md:h-4 w-5 md:w-4" />
+                  <HeartBrokenSolid
+                    className={`${
+                      animateClick ? "animate-click" : ""
+                    } h-5 md:h-4 w-5 md:w-4`}
+                  />
                 )}
                 {likeCount}
               </Button>

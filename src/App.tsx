@@ -30,6 +30,8 @@ const AboutPage = React.lazy(() => import("./views/public/about.tsx"));
 const EditProfilePage = React.lazy(
   () => import("./views/public/edit-profile.tsx")
 );
+const FollowingPage = React.lazy(() => import("./views/public/following.tsx"));
+const FollowersPage = React.lazy(() => import("./views/public/followers.tsx"));
 const LikedByPage = React.lazy(() => import("./views/public/likedBy.tsx"));
 
 const LoginPage = React.lazy(() => import("./views/auth/login.tsx"));
@@ -72,6 +74,8 @@ const App = () => {
               <Route path="/profile/edit" element={<EditProfilePage />} />
               <Route path="/about/:id" element={<AboutPage />} />
               <Route path="/notifications" element={<NotificationsPage />} />
+              <Route path="/following/:id" element={<FollowingPage />} />
+              <Route path="/followers/:id" element={<FollowersPage />} />
               <Route path="/likedBy/:id" element={<LikedByPage />} />
 
               <Route path="/auth/login" element={<LoginPage />} />

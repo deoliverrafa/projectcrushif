@@ -83,6 +83,7 @@ const LikedByPostLayout = () => {
                 key={user._id}
                 avatar={user.avatar}
                 nickname={user.nickname}
+                userName={user.userName}
                 type={user.type}
                 _id={user._id}
                 following={user.following}
