@@ -93,7 +93,7 @@ export const UserSuggestions = () => {
                     key={user._id}
                   >
                     <CardHeader>
-                      <Avatar className="h-16 w-16 shadow-lg border-2 border-secondary rounded-full">
+                      <Avatar className="h-16 w-16 shadow-lg border-2 border-border rounded-full">
                         <AvatarFallback>{user.nickname}</AvatarFallback>
                         <AvatarImage
                           className="object-cover"

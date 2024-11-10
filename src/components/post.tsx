@@ -352,7 +352,7 @@ export const CardPost = (props: CardProps) => {
         <CardHeader className="flex flex-row justify-between items-center">
           {!props.isAnonymous ? (
             <Link to={`/profile/${props.id}`} className="flex space-x-2">
-              <Avatar className="shadow-lg border-2 border-secondary">
+              <Avatar className="shadow-lg border-2 border-border">
                 <AvatarFallback>
                   {!props.isAnonymous ? viewingUser?.nickname : ""}
                 </AvatarFallback>
@@ -387,7 +387,7 @@ export const CardPost = (props: CardProps) => {
             </Link>
           ) : (
             <div className="flex space-x-2">
-              <Avatar className="shadow-lg border-2 border-secondary">
+              <Avatar className="shadow-lg border-2 border-border">
                 <AvatarFallback>
                   {!props.isAnonymous ? viewingUser?.nickname : "Anônimo"}
                 </AvatarFallback>
@@ -686,7 +686,7 @@ export const CardPost = (props: CardProps) => {
                           )}
 
                           <div className="flex flex-row justify-between items-center gap-1 w-full">
-                            <Avatar className="shadow-lg border-2 border-secondary">
+                            <Avatar className="shadow-lg border-2 border-border">
                               <AvatarFallback>
                                 {dataUser?.nickname[0]}
                               </AvatarFallback>
@@ -748,7 +748,7 @@ export const CardPost = (props: CardProps) => {
           )}
 
           <div className="flex flex-row justify-between items-center gap-1 w-full">
-            <Avatar className="shadow-lg border-2 border-secondary">
+            <Avatar className="shadow-lg border-2 border-border">
               <AvatarFallback>{dataUser?.nickname}</AvatarFallback>
 
               <AvatarImage

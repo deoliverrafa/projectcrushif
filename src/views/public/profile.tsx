@@ -239,7 +239,7 @@ const ProfileLayout = () => {
           />
 
           <div className="absolute bottom-[-30px] left-4">
-            <Avatar className="h-20 w-20 shadow-lg border-4 border-secondary rounded-full">
+            <Avatar className="h-20 w-20 shadow-lg border-4 border-border rounded-full">
               <AvatarFallback>{viewingUser.nickname}</AvatarFallback>
               <AvatarImage
                 className="object-cover"

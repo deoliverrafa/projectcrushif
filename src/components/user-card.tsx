@@ -6,10 +6,7 @@ import { Button } from "./ui/button.js";
 import { Card, CardDescription, CardTitle } from "./ui/card.js";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar.js";
 
-import {
-  ChevronRight,
-  HeartWavesSolid,
-} from "@mynaui/icons-react";
+import { ChevronRight, HeartWavesSolid } from "@mynaui/icons-react";
 
 import UserIcon from "../../public/images/user.png";
 
@@ -22,6 +19,7 @@ interface User {
   link?: string;
   following?: boolean;
   description?: string;
+  status?: string;
   onClick?: () => void;
 }
 
@@ -74,7 +72,7 @@ export const SearchUserCard = (props: User) => {
     <Card className="my-2 w-full">
       <div className="flex flex-row justify-between items-center p-4">
         <Link to={`/profile/${props._id}`} className="flex space-x-2 h-full">
-          <Avatar className="shadow-lg border-2 border-secondary">
+          <Avatar className="shadow-lg border-2 border-border">
             <AvatarFallback>{props?.nickname}</AvatarFallback>
             <AvatarImage
               className="object-cover"
@@ -129,7 +127,7 @@ export const UserCard = (props: User) => {
         <Card className="my-2 w-full">
           <div className="flex flex-row justify-between items-center p-4 w-full">
             <div className="flex flex-row items-center gap-1">
-              <Avatar className="shadow-lg border-2 border-secondary">
+              <Avatar className="shadow-lg border-2 border-border">
                 <AvatarFallback>{props?.userName}</AvatarFallback>
                 <AvatarImage
                   className="object-cover"
@@ -141,6 +139,60 @@ export const UserCard = (props: User) => {
                 <div className="flex flex-row items-center gap-1">
                   <CardTitle className="font-semibold md:font-medium text-md md:text-sm tracking-tight truncate max-w-[120px]">
                     {props.userName ? `${props.userName}` : "indisponível"}
+                  </CardTitle>
+
+                  <HeartWavesSolid
+                    className={`${
+                      props?.type === "Plus"
+                        ? "text-info"
+                        : props?.type === "Admin"
+                        ? "text-danger"
+                        : props?.type === "verified"
+                        ? "text-success"
+                        : "hidden"
+                    } h-3.5 w-3.5`}
+                  />
+                </div>
+
+                <CardDescription className="text-xs md:text-xs">
+                  {props.description ? props.description : null}
+                </CardDescription>
+              </div>
+            </div>
+
+            <Button variant="outline" size="icon" onClick={props.onClick}>
+              <ChevronRight />
+            </Button>
+          </div>
+        </Card>
+      </Link>
+    </React.Fragment>
+  );
+};
+
+export const ChatUserCard = (props: User) => {
+  return (
+    <React.Fragment>
+      <Link to={`/message/${props._id}`}>
+        <Card className="my-2 w-full">
+          <div className="flex flex-row justify-between items-center p-4 w-full">
+            <div className="flex flex-row items-center gap-1">
+              <div className="relative">
+                <Avatar className="shadow-lg border-2 border-border">
+                  <AvatarFallback>{props?.userName}</AvatarFallback>
+                  <AvatarImage
+                    className="object-cover"
+                    src={props?.avatar ? props?.avatar : UserIcon}
+                  />
+                </Avatar>
+
+                <span className={`border border-border h-2.5 w-2.5 bottom-0 right-1 rounded-full text-xs ${props.status === "online" ? "bg-success" : "bg-secondary"} absolute`}></span>
+              </div>
+
+              <div className="flex flex-col items-start">
+                <div className="flex flex-row items-center gap-1">
+                  <CardTitle className="font-semibold md:font-medium text-md md:text-sm tracking-tight truncate max-w-[120px]">
+                    {props.nickname ? `${props.nickname}` : "indisponível"}
                   </CardTitle>
 
                   <HeartWavesSolid

@@ -167,7 +167,7 @@ const SearchLayout = () => {
         )}
 
         {queryResponse.length > 0 || suggestedUsers.length > 0 ? (
-          <ScrollArea className="h-76 md:h-96 w-full rounded-md">
+          <ScrollArea className="h-96 w-full rounded-md">
             <div className="p-4">
               {queryResponse.length > 0 ? (
                 queryResponse.map((user: User) => {

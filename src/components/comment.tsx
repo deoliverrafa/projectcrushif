@@ -127,7 +127,7 @@ const ReplyComment: React.FC<Comment> = (props) => {
         <Card key={props._id} className="w-11/12 max-w-md">
           <Link to={`/profile/${props.userId}`}>
             <CardHeader className="flex flex-row items-center space-x-4 p-4">
-              <Avatar className="h-10 w-10 border-2 border-secondary">
+              <Avatar className="h-10 w-10 border-2 border-border">
                 <AvatarFallback>{viewingUser?.nickname[0]}</AvatarFallback>
                 <AvatarImage
                   className="object-cover"
@@ -384,7 +384,7 @@ export const Comment: React.FC<Comment> = (props) => {
       <Card key={props._id} className="w-full max-w-md">
         <Link to={`/profile/${props.userId}`}>
           <CardHeader className="flex flex-row items-center space-x-4 p-4">
-            <Avatar className="h-10 w-10 border-2 border-secondary">
+            <Avatar className="h-10 w-10 border-2 border-border">
               <AvatarFallback>{viewingUser?.nickname[0]}</AvatarFallback>
               <AvatarImage
                 className="object-cover"
@@ -447,7 +447,7 @@ export const Comment: React.FC<Comment> = (props) => {
 
           {isReply ? (
             <div className="flex flex-row justify-between gap-1 mt-4 w-full">
-              <Avatar className="shadow-lg border-2 border-secondary">
+              <Avatar className="shadow-lg border-2 border-border">
                 <AvatarFallback>{dataUser?.nickname[0]}</AvatarFallback>
                 <AvatarImage
                   className="object-cover"
