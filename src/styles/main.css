@@ -16,3 +16,19 @@
 .dragging {
   background-color: rgba(0, 0, 0, 0.1);
 }
+
+.reply-container {
+  position: relative;
+}
+
+.reply-container::before {
+  content: '';
+  position: absolute;
+  top: 10px; 
+  left: 10px;
+  width: 10px; 
+  height: 100px;
+  border-top: 2px solid hsl(var(--border));
+  border-right: 2px solid hsl(var(--border));
+  transform: rotate(180deg);
+}

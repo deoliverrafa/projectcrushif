@@ -72,9 +72,8 @@ import {
   SpinnerSolid,
 } from "@mynaui/icons-react";
 
-import UserIcon from "../../../public/images/user.png"
+import UserIcon from "../../../public/images/user.png";
 import { User } from "../../interfaces/userInterface.ts";
-import decodeToken from "../../utils/decodeToken.tsx";
 import { toggleFollow } from "../../utils/followUtils.tsx";
 import { getUserData } from "../../utils/getUserData.tsx";
 
@@ -92,8 +91,6 @@ interface Post {
   commentCount: number;
   mentionedUsers: string[];
 }
-
-
 
 const ProfileLayout = () => {
   const currentUser = getUserData()
@@ -273,9 +270,12 @@ const ProfileLayout = () => {
           />
 
           <div className="absolute bottom-[-30px] left-4">
-            <Avatar className="h-20 w-20 shadow-lg border-4 border-secondary rounded-full">
+            <Avatar className="h-20 w-20 shadow-lg border-4 border-border rounded-full">
               <AvatarFallback>{viewingUser.nickname}</AvatarFallback>
-              <AvatarImage className="object-cover" src={viewingUser.avatar ? viewingUser.avatar : UserIcon} />
+              <AvatarImage
+                className="object-cover"
+                src={viewingUser.avatar ? viewingUser.avatar : UserIcon}
+              />
             </Avatar>
           </div>
         </div>
@@ -414,19 +414,25 @@ const ProfileLayout = () => {
 
         <CardContent className="space-y-6">
           <div className="flex flex-row justify-evenly items-center">
-            <div className="flex flex-col items-center">
-              <CardTitle>{NFollowing}</CardTitle>
+            <Link
+              to={`/followers/${viewingUser._id}`}
+              className="flex flex-col items-center"
+            >
+              <CardTitle>{viewingUser.Nfollowers}</CardTitle>
 
               <CardDescription>Seguidores</CardDescription>
-            </div>
+            </Link>
 
             <Separator className="h-10" orientation="vertical" />
 
-            <div className="flex flex-col items-center">
+            <Link
+              to={`/following/${viewingUser._id}`}
+              className="flex flex-col items-center"
+            >
               <CardTitle>{viewingUser.Nfollowing}</CardTitle>
 
               <CardDescription>Seguindo</CardDescription>
-            </div>
+            </Link>
           </div>
 
           <div className="flex flex-row justify-center items-center space-x-1">

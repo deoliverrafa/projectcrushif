@@ -98,20 +98,20 @@ export const UserSuggestions = () => {
                       <XSolid className="h-5 md:h-4 w-5 md:w-4" />
                     </Button>
 
-                    <Link
-                      className="flex flex-col items-center"
-                      to={`/profile/${user._id}`}
-                      key={user._id}
-                    >
-                      <CardHeader>
-                        <Avatar className="h-16 w-16 shadow-lg border-2 border-secondary rounded-full">
-                          <AvatarFallback>{user.nickname}</AvatarFallback>
-                          <AvatarImage
-                            className="object-cover"
-                            src={user.avatar ? user.avatar : UserIcon}
-                          />
-                        </Avatar>
-                      </CardHeader>
+                  <Link
+                    className="flex flex-col items-center"
+                    to={`/profile/${user._id}`}
+                    key={user._id}
+                  >
+                    <CardHeader>
+                      <Avatar className="h-16 w-16 shadow-lg border-2 border-secondary rounded-full">
+                        <AvatarFallback>{user.nickname}</AvatarFallback>
+                        <AvatarImage
+                          className="object-cover"
+                          src={user.avatar ? user.avatar : UserIcon}
+                        />
+                      </Avatar>
+                    </CardHeader>
 
                       <CardContent className="flex flex-col items-center w-16">
                         <div className="flex flex-row items-center gap-0.5">

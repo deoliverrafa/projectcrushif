@@ -282,7 +282,7 @@ const CrushLayout = () => {
                 <div className="mx-auto w-full max-w-sm">
                   {matchesUsers.length > 0 ? (
                     <DrawerHeader className="mx-auto">
-                      <DrawerTitle>Você tem um crush!</DrawerTitle>
+                      <DrawerTitle>Você tem um crush</DrawerTitle>
                       <DrawerDescription>
                         Estes são os usuários que demonstraram interesse em
                         você! Mande mensagem para iniciar uma

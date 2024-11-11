@@ -82,7 +82,7 @@ const Profile = ({ nickname, avatar, type }: profile) => {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Avatar className="shadow-lg border-2 border-secondary h-8 w-8">
+        <Avatar className="shadow-lg border-2 border-border h-8 w-8">
           <AvatarImage className="object-cover" src={avatar ? avatar : UserIcon} />
           <AvatarFallback>{nickname}</AvatarFallback>
         </Avatar>
@@ -103,7 +103,7 @@ const Profile = ({ nickname, avatar, type }: profile) => {
             <Card className="w-full">
               <div className="flex flex-row justify-between items-center h-full p-4">
                 <div className="flex flex-row items-center gap-2">
-                  <Avatar className="shadow-lg border-2 border-secondary">
+                  <Avatar className="shadow-lg border-2 border-border">
                     <AvatarFallback>{nickname}</AvatarFallback>
                     <AvatarImage className="object-cover" src={avatar ? avatar : UserIcon} />
                   </Avatar>
@@ -497,7 +497,7 @@ export const NavBar = (props: userData) => {
       <NavbarContent>
         <div className="relative">
           <NavbarItem
-            href="/notifications"
+            href="/messages"
             activeClassName="text-primary"
             hoverClassName="text-primary/70"
           >

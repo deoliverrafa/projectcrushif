@@ -5,12 +5,7 @@ import { Button } from "./ui/button.js";
 import { Card, CardDescription, CardTitle } from "./ui/card.js";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar.js";
 
-import {
-  CheckSolid,
-  ChevronRight,
-  HeartSolid,
-  HeartWavesSolid,
-} from "@mynaui/icons-react";
+import { ChevronRight, HeartWavesSolid } from "@mynaui/icons-react";
 
 import UserIcon from "../../public/images/user.png";
 import { toggleFollow } from "../utils/followUtils.js";
@@ -24,6 +19,7 @@ interface User {
   link?: string;
   following?: boolean;
   description?: string;
+  status?: string;
   onClick?: () => void;
 }
 
@@ -47,19 +43,19 @@ export const SearchUserCard = (props: User) => {
     <Card className="my-2 w-full">
       <div className="flex flex-row justify-between items-center p-4">
         <Link to={`/profile/${props._id}`} className="flex space-x-2 h-full">
-          <Avatar className="shadow-lg border-2 border-secondary">
+          <Avatar className="shadow-lg border-2 border-border">
             <AvatarFallback>{props?.nickname}</AvatarFallback>
             <AvatarImage
               className="object-cover"
               src={props?.avatar ? props?.avatar : UserIcon}
             />
           </Avatar>
-          <div className="flex flex-row items-center gap-1">
-            <CardTitle className="font-semibold md:font-medium text-md md:text-sm tracking-tight">
-              {props.nickname ? `${props.nickname}` : "indisponível"}
-            </CardTitle>
+          <div className="flex flex-col items-start">
+            <div className="flex flex-row items-center gap-1">
+              <CardTitle className="font-semibold md:font-medium text-md md:text-sm tracking-tight truncate max-w-[120px]">
+                {props.nickname ? `${props.nickname}` : "indisponível"}
+              </CardTitle>
 
-            <div>
               <HeartWavesSolid
                 className={`${props?.type === "Plus"
                     ? "text-info"
@@ -71,8 +67,19 @@ export const SearchUserCard = (props: User) => {
                   } h-3.5 w-3.5`}
               />
             </div>
+
+            <CardDescription
+              className={`text-xs md:text-xs ${
+                userId === props._id
+                  ? "truncate max-w-[220px]"
+                  : "truncate max-w-[120px]"
+              }`}
+            >
+              {props.userName ? props.userName : "indisponível"}
+            </CardDescription>
           </div>
         </Link>
+
         {userId === props._id ? null : (
           <Button type="button" onClick={handleFollowToggle}>
             {followedUser ? "Seguindo" : "Seguir"}
@@ -83,22 +90,14 @@ export const SearchUserCard = (props: User) => {
   );
 };
 
-export const CrushUserCard = (props: User) => {
-  const [isHeart, setIsHeart] = React.useState(false);
-  const [animateClick, setAnimateClick] = React.useState(false);
-
-  const handleIconClick = () => {
-    setIsHeart((prev) => !prev);
-    setAnimateClick((prev) => !prev);
-  };
-
+export const UserCard = (props: User) => {
   return (
     <React.Fragment>
-      <Card className="my-2 w-full">
-        <div className="flex flex-row justify-between items-center p-4 w-full">
-          <Link to={`/profile/${props._id}`}>
+      <Link to={`${props.link}${props._id}`}>
+        <Card className="my-2 w-full">
+          <div className="flex flex-row justify-between items-center p-4 w-full">
             <div className="flex flex-row items-center gap-1">
-              <Avatar className="shadow-lg border-2 border-secondary">
+              <Avatar className="shadow-lg border-2 border-border">
                 <AvatarFallback>{props?.userName}</AvatarFallback>
                 <AvatarImage
                   className="object-cover"
@@ -129,56 +128,40 @@ export const CrushUserCard = (props: User) => {
                 </CardDescription>
               </div>
             </div>
-          </Link>
 
-          <div className="flex flex-row items-center gap-2">
-
-
-            <Button
-              className="text-success"
-              variant="outline"
-              size="icon"
-              onClick={props.onClick}
-            >
-              {isHeart ? (
-                <HeartSolid
-                  className={`${animateClick ? "animate-click" : ""
-                    } text-primary`}
-                />
-              ) : (
-                <CheckSolid
-                  className={`${animateClick ? "animate-click" : ""
-                    } text-success`}
-                  onClick={handleIconClick}
-                />
-              )}
+            <Button variant="outline" size="icon" onClick={props.onClick}>
+              <ChevronRight />
             </Button>
           </div>
-        </div>
-      </Card>
+        </Card>
+      </Link>
     </React.Fragment>
   );
 };
 
-export const UserCard = (props: User) => {
+export const ChatUserCard = (props: User) => {
   return (
     <React.Fragment>
-      <Link to={`${props.link}${props._id}`}>
+      <Link to={`/message/${props._id}`}>
         <Card className="my-2 w-full">
           <div className="flex flex-row justify-between items-center p-4 w-full">
             <div className="flex flex-row items-center gap-1">
-              <Avatar className="shadow-lg border-2 border-secondary">
-                <AvatarFallback>{props?.userName}</AvatarFallback>
-                <AvatarImage
-                  className="object-cover"
-                  src={props?.avatar ? props?.avatar : UserIcon}
-                />
-              </Avatar>
+              <div className="relative">
+                <Avatar className="shadow-lg border-2 border-border">
+                  <AvatarFallback>{props?.userName}</AvatarFallback>
+                  <AvatarImage
+                    className="object-cover"
+                    src={props?.avatar ? props?.avatar : UserIcon}
+                  />
+                </Avatar>
+
+                <span className={`border border-border h-2.5 w-2.5 bottom-0 right-1 rounded-full text-xs ${props.status === "online" ? "bg-success" : "bg-secondary"} absolute`}></span>
+              </div>
 
               <div className="flex flex-col items-start">
                 <div className="flex flex-row items-center gap-1">
                   <CardTitle className="font-semibold md:font-medium text-md md:text-sm tracking-tight truncate max-w-[120px]">
-                    {props.userName ? `${props.userName}` : "indisponível"}
+                    {props.nickname ? `${props.nickname}` : "indisponível"}
                   </CardTitle>
 
                   <HeartWavesSolid

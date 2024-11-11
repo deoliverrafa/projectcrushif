@@ -87,7 +87,7 @@ export const RegisterLayout = () => {
       );
 
       if (response.data.isRegistered) {
-        window.location.href = "/";
+        window.location.href = "/auth/verify";
       }
     } catch (error: any) {
       const messageError = error.response.data.message;
