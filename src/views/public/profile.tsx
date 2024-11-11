@@ -418,7 +418,7 @@ const ProfileLayout = () => {
               to={`/followers/${viewingUser._id}`}
               className="flex flex-col items-center"
             >
-              <CardTitle>{viewingUser.Nfollowers}</CardTitle>
+              <CardTitle>{NFollowing}</CardTitle>
 
               <CardDescription>Seguidores</CardDescription>
             </Link>
@@ -497,7 +497,7 @@ const ProfileLayout = () => {
 
           <div className="flex flex-col gap-1">
             <CardDescription>Sugestões para você</CardDescription>
-            <UserSuggestions />
+            <UserSuggestions removeUserId={viewingUser._id}/>
           </div>
         </CardContent>
 

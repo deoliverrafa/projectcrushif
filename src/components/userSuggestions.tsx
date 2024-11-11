@@ -19,8 +19,11 @@ import UserIcon from "../../public/images/user.png"
 import { toggleFollow } from "../utils/followUtils";
 import { User } from "../interfaces/userInterface";
 
+interface UserSuggestions{
+  removeUserId: string
+}
 
-export const UserSuggestions = () => {
+export const UserSuggestions = (props: UserSuggestions) => {
   const [suggestedUsers, setSuggestedUsers] = useState<User[]>([]);
   const [error, setError] = useState<string | null>(null);
   const token = localStorage.getItem("token");
@@ -51,6 +54,10 @@ export const UserSuggestions = () => {
       setError("Token não encontrado");
     }
   }, [token]);
+
+  useEffect(() => {
+    hideUser(props.removeUserId)
+  }, [props.removeUserId]);
 
   const hideUser = (userId: string) => {
     setHiddenUsers((prev) => ({ ...prev, [userId]: true }));
