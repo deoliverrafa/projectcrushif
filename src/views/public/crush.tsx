@@ -57,8 +57,6 @@ const CrushLayout = () => {
   const decodedObj = decodeToken(localStorage.getItem('token') ?? '')
   const userData = decodedObj?.user
   
-  console.log(userData);
-  
   const [users, setUsers] = React.useState<User[]>([]);
 
   const [allUsers, setAllUsers] = React.useState<User[]>([]);
@@ -67,7 +65,6 @@ const CrushLayout = () => {
   const [genderFilter, setGenderFilter] = React.useState<string>(
     localStorage.getItem("genderFilter") || "Todos"
   );
-  console.log(users);
   
   const [dragging, setDragging] = React.useState(false);
   const [xOffset, setXOffset] = React.useState(0);

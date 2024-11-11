@@ -27,7 +27,8 @@ export const UserSuggestions = (props: UserSuggestions) => {
   const [suggestedUsers, setSuggestedUsers] = useState<User[]>([]);
   const [error, setError] = useState<string | null>(null);
   const token = localStorage.getItem("token");
-
+  
+  
   const [hiddenUsers, setHiddenUsers] = useState<{ [key: string]: boolean }>(
     {}
   );
@@ -38,7 +39,7 @@ export const UserSuggestions = (props: UserSuggestions) => {
         `${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_USER_SUGGESTIONS
         }${token}`
       );
-
+      
       setSuggestedUsers(response.data.suggestions);
       setError(null);
     } catch (error: any) {
