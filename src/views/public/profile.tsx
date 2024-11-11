@@ -75,6 +75,8 @@ import {
 import UserIcon from "../../../public/images/user.png"
 import { User } from "../../interfaces/userInterface.ts";
 import decodeToken from "../../utils/decodeToken.tsx";
+import { toggleFollow } from "../../utils/followUtils.tsx";
+import { getUserData } from "../../utils/getUserData.tsx";
 
 interface Post {
   className?: string;
@@ -94,14 +96,11 @@ interface Post {
 
 
 const ProfileLayout = () => {
-  
-  const decodedObj = decodeToken(localStorage.getItem('token') ?? '')
-  const currentUser = decodedObj?.user
-
-  const [viewingUser, setViewingUser] = React.useState<User | null>(null);
+  const currentUser = getUserData()
+  const [viewingUser, setViewingUser] = React.useState<User | undefined>(undefined);
   const { id } = useParams<string>();
-  const [userId] = React.useState<string | null>(
-    localStorage.getItem("userId")
+  const [userId] = React.useState<string>(
+    localStorage.getItem("userId") ?? ""
   );
 
   const [liked, setLiked] = React.useState(false);
@@ -161,8 +160,7 @@ const ProfileLayout = () => {
     try {
       setLoading(true);
       const response = await axios.get(
-        `${import.meta.env.VITE_API_BASE_URL}${
-          import.meta.env.VITE_POST_GET_USER
+        `${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_POST_GET_USER
         }${userId}/${skip}/${limit}`
       );
 
@@ -210,8 +208,7 @@ const ProfileLayout = () => {
       setLikeCount(likeCount + 1);
     } else {
       axios.post(
-        `${import.meta.env.VITE_API_BASE_URL}${
-          import.meta.env.VITE_USER_UNLIKE
+        `${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_USER_UNLIKE
         }`,
         { token: localStorage.getItem("token"), userId: viewingUser?._id }
       );
@@ -221,12 +218,46 @@ const ProfileLayout = () => {
 
   getStatusUser(userId);
 
+
+  // Follow Logic
+  const token = localStorage.getItem("token");
+
+  const [followedUser, setFollowedUser] = React.useState<boolean>(false);
+  const [NFollowing, setNFollowing] = React.useState(0)  
+  
+
+  React.useEffect(() => {
+    if (userId && viewingUser?.followers) {
+      setFollowedUser(viewingUser.followers.includes(userId));
+      setNFollowing(viewingUser.Nfollowers)
+    }
+  }, [userId, viewingUser?.followers]);
+
+  const handleFollowToggle = () => {
+    if (token) {
+      toggleFollow({
+        userId: viewingUser?._id,
+        token,
+        followed: followedUser,
+        setFollowedUser,
+      }).then((response: any) => {
+        
+        if (response.data.unfollowed) {
+          setNFollowing(NFollowing - 1);
+        } else {
+          setNFollowing(NFollowing + 1);
+        }
+
+      });
+
+    }
+  };
+
   if (!currentUser || !viewingUser) {
     return <LoadingPage />;
   }
 
   const isOwnProfile = currentUser._id === viewingUser._id;
-
   return (
     <>
       <Card className="select-none mt-2 w-full md:w-6/12">
@@ -263,15 +294,14 @@ const ProfileLayout = () => {
                   ? `@${viewingUser.nickname}`
                   : "indisponível"}
                 <HeartWavesSolid
-                  className={`${
-                    viewingUser?.type === "Plus"
-                      ? "text-info"
-                      : viewingUser?.type === "Admin"
+                  className={`${viewingUser?.type === "Plus"
+                    ? "text-info"
+                    : viewingUser?.type === "Admin"
                       ? "text-danger"
                       : viewingUser?.type === "verified"
-                      ? "text-success"
-                      : "hidden"
-                  } ml-1 h-3.5 w-3.5`}
+                        ? "text-success"
+                        : "hidden"
+                    } ml-1 h-3.5 w-3.5`}
                 />
               </Badge>
             </div>
@@ -318,9 +348,9 @@ const ProfileLayout = () => {
 
               <div className="py-5 space-y-2 mx-auto w-full max-w-sm">
                 {!isOwnProfile && (
-                  <Button variant={"ghost"} className="justify-start w-full">
+                  <Button variant={"ghost"} className="justify-start w-full" onClick={handleFollowToggle}>
                     <UserPlusSolid className="h-5 md:h-4 w-5 md:w-4 mr-2" />
-                    Seguir
+                    {followedUser ? 'Seguindo' : 'Seguir'}
                   </Button>
                 )}
 
@@ -385,7 +415,7 @@ const ProfileLayout = () => {
         <CardContent className="space-y-6">
           <div className="flex flex-row justify-evenly items-center">
             <div className="flex flex-col items-center">
-              <CardTitle>{viewingUser.Nfollowers}</CardTitle>
+              <CardTitle>{NFollowing}</CardTitle>
 
               <CardDescription>Seguidores</CardDescription>
             </div>
@@ -412,8 +442,8 @@ const ProfileLayout = () => {
             )}
 
             {!isOwnProfile && (
-              <Button variant={"outline"} className="w-full">
-                Seguir
+              <Button variant={"outline"} className="w-full" onClick={handleFollowToggle}>
+                {followedUser ? 'Seguindo' : 'Seguir'}
               </Button>
             )}
 
@@ -483,11 +513,10 @@ const ProfileLayout = () => {
 
             <Badge
               variant={"outline"}
-              className={`${
-                viewingUser?.status === "online"
-                  ? "text-success"
-                  : "text-secondary"
-              } gap-1`}
+              className={`${viewingUser?.status === "online"
+                ? "text-success"
+                : "text-secondary"
+                } gap-1`}
             >
               {viewingUser?.status === "online" ? (
                 <span className="bg-success rounded-full h-2 w-2"></span>

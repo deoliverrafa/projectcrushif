@@ -21,6 +21,7 @@ import NotFoundArt from "../../../public/images/not_found_art.png"
 
 import { getStatusUser } from "../../utils/getStatusUser.tsx";
 import decodeToken from "../../utils/decodeToken.tsx";
+import { getUserData } from "../../utils/getUserData.tsx";
 
 interface User {
   nickname: string;
@@ -32,8 +33,7 @@ interface User {
 }
 
 const SearchLayout = () => {
-  const decodedObj = decodeToken(localStorage.getItem('token') ?? '')
-  const userData = decodedObj?.user
+  const userData = getUserData();
   
   const [userId] = React.useState<string | null>(
     localStorage.getItem("userId")
@@ -47,7 +47,7 @@ const SearchLayout = () => {
   const [queryResponse, setQueryResponse] = useState<User[]>([]);
   const [suggestedUsers, setSuggestedUsers] = useState<User[]>([]);
   const [noResults, setNoResults] = useState(false);
-
+  
   const fetchSuggestedUsers = useCallback(() => {
     axios
       .post(
@@ -174,7 +174,6 @@ const SearchLayout = () => {
                   const isFollowing = userData?.following.some(
                     (followingId) => followingId === user._id
                   );
-
                   return (
                     <>
                       <SearchUserCard

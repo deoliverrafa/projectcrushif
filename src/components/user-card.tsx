@@ -1,5 +1,4 @@
 import * as React from "react";
-import axios from "axios";
 import { Link } from "react-router-dom";
 
 import { Button } from "./ui/button.js";
@@ -14,6 +13,7 @@ import {
 } from "@mynaui/icons-react";
 
 import UserIcon from "../../public/images/user.png";
+import { toggleFollow } from "../utils/followUtils.js";
 
 interface User {
   avatar: string;
@@ -28,47 +28,18 @@ interface User {
 }
 
 export const SearchUserCard = (props: User) => {
-  const [formData] = React.useState({
-    unfollowId: props._id,
-    userFollowId: props._id,
-    token: localStorage.getItem("token"),
-  });
-
-  const [userId] = React.useState<string | null>(
-    localStorage.getItem("userId")
-  );
-
-  const [followedUser, setFollowedUser] = React.useState(props.following);
+  const [followedUser, setFollowedUser] = React.useState<boolean>(props.following ?? false);
+  const token = localStorage.getItem("token");
+  const userId = localStorage.getItem("userId");
 
   const handleFollowToggle = () => {
-    if (followedUser) {
-      axios
-        .put(
-          `${import.meta.env.VITE_API_BASE_URL}${
-            import.meta.env.VITE_UNFOLLOW_USER
-          }`,
-          formData
-        )
-        .then((response) => {
-          setFollowedUser(response.data.followed);
-        })
-        .catch((error: any) => {
-          console.log(error);
-        });
-    } else {
-      axios
-        .put(
-          `${import.meta.env.VITE_API_BASE_URL}${
-            import.meta.env.VITE_FOLLOW_USER
-          }`,
-          formData
-        )
-        .then((response) => {
-          setFollowedUser(response.data.followed);
-        })
-        .catch((error: any) => {
-          console.log(error);
-        });
+    if (token) {
+      toggleFollow({
+        userId: props._id,
+        token,
+        followed: followedUser,
+        setFollowedUser,
+      });
     }
   };
 
@@ -90,15 +61,14 @@ export const SearchUserCard = (props: User) => {
 
             <div>
               <HeartWavesSolid
-                className={`${
-                  props?.type === "Plus"
+                className={`${props?.type === "Plus"
                     ? "text-info"
                     : props?.type === "Admin"
-                    ? "text-danger"
-                    : props?.type === "verified"
-                    ? "text-success"
-                    : "hidden"
-                } h-3.5 w-3.5`}
+                      ? "text-danger"
+                      : props?.type === "verified"
+                        ? "text-success"
+                        : "hidden"
+                  } h-3.5 w-3.5`}
               />
             </div>
           </div>
@@ -143,15 +113,14 @@ export const CrushUserCard = (props: User) => {
                   </CardTitle>
 
                   <HeartWavesSolid
-                    className={`${
-                      props?.type === "Plus"
+                    className={`${props?.type === "Plus"
                         ? "text-info"
                         : props?.type === "Admin"
-                        ? "text-danger"
-                        : props?.type === "verified"
-                        ? "text-success"
-                        : "hidden"
-                    } h-3.5 w-3.5`}
+                          ? "text-danger"
+                          : props?.type === "verified"
+                            ? "text-success"
+                            : "hidden"
+                      } h-3.5 w-3.5`}
                   />
                 </div>
 
@@ -163,7 +132,7 @@ export const CrushUserCard = (props: User) => {
           </Link>
 
           <div className="flex flex-row items-center gap-2">
-            
+
 
             <Button
               className="text-success"
@@ -173,15 +142,13 @@ export const CrushUserCard = (props: User) => {
             >
               {isHeart ? (
                 <HeartSolid
-                  className={`${
-                    animateClick ? "animate-click" : ""
-                  } text-primary`}
+                  className={`${animateClick ? "animate-click" : ""
+                    } text-primary`}
                 />
               ) : (
                 <CheckSolid
-                  className={`${
-                    animateClick ? "animate-click" : ""
-                  } text-success`}
+                  className={`${animateClick ? "animate-click" : ""
+                    } text-success`}
                   onClick={handleIconClick}
                 />
               )}
@@ -215,15 +182,14 @@ export const UserCard = (props: User) => {
                   </CardTitle>
 
                   <HeartWavesSolid
-                    className={`${
-                      props?.type === "Plus"
+                    className={`${props?.type === "Plus"
                         ? "text-info"
                         : props?.type === "Admin"
-                        ? "text-danger"
-                        : props?.type === "verified"
-                        ? "text-success"
-                        : "hidden"
-                    } h-3.5 w-3.5`}
+                          ? "text-danger"
+                          : props?.type === "verified"
+                            ? "text-success"
+                            : "hidden"
+                      } h-3.5 w-3.5`}
                   />
                 </div>
 
