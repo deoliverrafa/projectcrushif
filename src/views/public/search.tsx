@@ -199,7 +199,7 @@ const SearchLayout = () => {
               ) : (
                 <div className="flex flex-col gap-1">
                   <CardDescription>Sugestões para você</CardDescription>
-                  <UserSuggestions />
+                  <UserSuggestions removeUserId={userData._id} />
                 </div>
               )}
             </div>
