@@ -31,7 +31,10 @@ import axios from "axios"; // Importando o Axios
 import { getUserDataById } from "../../utils/getUserDataById";
 import { User } from "../../interfaces/userInterface";
 
-const socket = io(`${import.meta.env.VITE_API_BASE_URL}`); // URL DO SERVIDOR
+const socket = io(`${import.meta.env.VITE_API_BASE_URL}`, {
+  transports: ['polling'],
+  withCredentials: true
+}); // URL DO SERVIDOR
 
 interface Message {
   _id?: string;
