@@ -51,7 +51,6 @@ const MessagesLayout = () => {
       <Card className="select-none mt-2 w-full md:w-6/12">
         <CardContent>
           {followingUsers.map((user) => {
-            console.log(user.status)
             return(
               <ChatUserCard 
               avatar={user.avatar} 
