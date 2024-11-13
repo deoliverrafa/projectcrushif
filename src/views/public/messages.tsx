@@ -4,13 +4,64 @@ import { NavBarReturn } from "../../components/navbar";
 import { ChatUserCard } from "../../components/user-card";
 
 import { Card, CardContent } from "../../components/ui/card";
+import { User } from "../../interfaces/userInterface";
+import axios from "axios";
+import LoadingPage from "./loading";
 
 const MessagesLayout = () => {
+
+  const [followingUsers, setFollowingUsers] = React.useState<User[]>([]);
+  const userId = localStorage.getItem("userId")
+  const [loading, setLoading] = React.useState(false);
+
+  React.useEffect(() => {
+    const fetchFollowingUsers = async () => {
+      try {
+        setLoading(true);
+        const response = await axios.get(
+          `${import.meta.env.VITE_API_BASE_URL}${
+            import.meta.env.VITE_FOLLOWING_USER
+          }${userId}`
+        );
+
+        if (response.data.following) {
+          setFollowingUsers(response.data.following);
+        }
+      } catch (error) {
+        console.error(
+          "Erro ao buscar usuários que estão sendo seguidos:",
+          error
+        );
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (userId) {
+      fetchFollowingUsers();
+    }
+  }, [userId]);
+  
+  if (loading) {
+    return <LoadingPage />;
+  }
+
   return (
     <React.Fragment>
       <Card className="select-none mt-2 w-full md:w-6/12">
         <CardContent>
-          <ChatUserCard
+          {followingUsers.map((user) => {
+            return(
+              <ChatUserCard 
+              avatar={user.avatar} 
+              type={user.type}
+              status={user.status}
+              _id={user._id}
+              nickname={user.nickname}
+              />
+            )
+          })}
+          {/* <ChatUserCard
             avatar={
               "http://res.cloudinary.com/dt6gk5vtg/image/upload/v1717360121/avatar/dlvyzeecstit3hcodt86.jpg"
             }
@@ -41,7 +92,7 @@ const MessagesLayout = () => {
             _id={"664a4e1f1a3d34fb59e6ca88"}
             nickname={"BabyShark"}
             description="toque para conversar"
-          />
+          /> */}
         </CardContent>
       </Card>
     </React.Fragment>
