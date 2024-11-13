@@ -32,6 +32,7 @@ import { User } from "../../interfaces/userInterface";
 
 const socket = io(`wss://crush-api.vercel.app`, {
   transports: ["websocket"],
+  withCredentials: true,
 }); // URL DO SERVIDOR
 
 interface Message {
