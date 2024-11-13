@@ -109,7 +109,7 @@ const MessageLayout = () => {
       socket.off('newMessage');
       socket.off('messageRead');
     };
-  }, [activeChatUserId]);
+  }, [activeChatUserId, id]);
 
   // Enviar mensagem
   const sendMessage = async () => {
