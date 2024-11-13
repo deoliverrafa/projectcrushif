@@ -42,8 +42,7 @@ import {
   ChevronLeft,
 } from "@mynaui/icons-react";
 
-import Logo from "../../public/images/logo/logo.png";
-import UserIcon from "../../public/images/user.png"
+import UserIcon from "../../public/images/user.png";
 
 import decodeToken from "../utils/decodeToken.tsx";
 
@@ -72,8 +71,8 @@ interface NavbarProps extends React.HTMLAttributes<HTMLElement> {
 }
 
 const Profile = ({ nickname, avatar, type }: profile) => {
-  const decodedObj = decodeToken(localStorage.getItem('token') ?? '')
-  const userData = decodedObj?.user
+  const decodedObj = decodeToken(localStorage.getItem("token") ?? "");
+  const userData = decodedObj?.user;
 
   function logOutHandle() {
     localStorage.setItem("token", "null");
@@ -83,7 +82,10 @@ const Profile = ({ nickname, avatar, type }: profile) => {
     <Sheet>
       <SheetTrigger asChild>
         <Avatar className="shadow-lg border-2 border-border h-8 w-8">
-          <AvatarImage className="object-cover" src={avatar ? avatar : UserIcon} />
+          <AvatarImage
+            className="object-cover"
+            src={avatar ? avatar : UserIcon}
+          />
           <AvatarFallback>{nickname}</AvatarFallback>
         </Avatar>
       </SheetTrigger>
@@ -105,7 +107,10 @@ const Profile = ({ nickname, avatar, type }: profile) => {
                 <div className="flex flex-row items-center gap-2">
                   <Avatar className="shadow-lg border-2 border-border">
                     <AvatarFallback>{nickname}</AvatarFallback>
-                    <AvatarImage className="object-cover" src={avatar ? avatar : UserIcon} />
+                    <AvatarImage
+                      className="object-cover"
+                      src={avatar ? avatar : UserIcon}
+                    />
                   </Avatar>
 
                   <div className="flex flex-row items-center gap-1">
@@ -114,14 +119,15 @@ const Profile = ({ nickname, avatar, type }: profile) => {
                     </CardTitle>
 
                     <HeartWavesSolid
-                      className={`${type === "Plus"
+                      className={`${
+                        type === "Plus"
                           ? "text-info"
                           : type === "Admin"
-                            ? "text-danger"
-                            : type === "verified"
-                              ? "text-success"
-                              : "hidden"
-                        } h-3.5 w-3.5`}
+                          ? "text-danger"
+                          : type === "verified"
+                          ? "text-success"
+                          : "hidden"
+                      } h-3.5 w-3.5`}
                     />
                   </div>
                 </div>
@@ -315,10 +321,12 @@ const NavbarItem: React.FC<NavbarItemProps> = ({
     const radius = diameter / 2;
 
     circle.style.width = circle.style.height = `${diameter}px`;
-    circle.style.left = `${event.clientX - button.getBoundingClientRect().left - radius
-      }px`;
-    circle.style.top = `${event.clientY - button.getBoundingClientRect().top - radius
-      }px`;
+    circle.style.left = `${
+      event.clientX - button.getBoundingClientRect().left - radius
+    }px`;
+    circle.style.top = `${
+      event.clientY - button.getBoundingClientRect().top - radius
+    }px`;
     circle.style.position = "absolute";
     circle.style.backgroundColor = "rgba(255, 255, 255, 0.6)";
     circle.style.borderRadius = "50%";
@@ -401,8 +409,8 @@ const NavbarBrand: React.FC<NavbarBrandProps> = ({
 NavbarBrand.displayName = "NavbarBrand";
 
 export const NavBar = (props: userData) => {
-  const decodedObj = decodeToken(localStorage.getItem('token') ?? '')
-  const userData = decodedObj?.user
+  const decodedObj = decodeToken(localStorage.getItem("token") ?? "");
+  const userData = decodedObj?.user;
 
   return (
     <Navbar>
@@ -410,13 +418,10 @@ export const NavBar = (props: userData) => {
         <Dropdown>
           <DropdownTrigger>
             <NavbarBrand
-              className="text-primary font-cookie font-medium md:font-medium text-[2rem] gap-4"
+              className="text-primary font-cookie font-medium md:font-medium text-[2rem] gap-2 md:ms-2"
               href={""}
             >
-              <div className="flex flex-row items-center gap-0.5">
-                <img className="h-8 w-8" src={Logo} alt="logo" />
-                Crushif
-              </div>
+              Crushif
               <ChevronDown className="text-muted-foreground" />
             </NavbarBrand>
           </DropdownTrigger>
@@ -503,10 +508,6 @@ export const NavBar = (props: userData) => {
           >
             <SendSolid className="h-6 w-6" />
           </NavbarItem>
-
-          <span className="flex flex-row justify-center items-center h-4 md:h-3.5 w-4 md:w-3.5 rounded-full text-xs bg-primary absolute top-0 right-1 md:right-0">
-            0
-          </span>
         </div>
 
         <NavbarItem href={""}>

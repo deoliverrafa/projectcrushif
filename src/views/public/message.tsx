@@ -21,7 +21,6 @@ import { Button } from "../../components/ui/button";
 import {
   ChevronRight,
   FatCornerUpRightSolid,
-  PlusSolid,
   UserSolid,
 } from "@mynaui/icons-react";
 import { Input } from "../../components/ui/input";
@@ -238,11 +237,8 @@ const MessageLayout = () => {
               onChange={(e) => setNewMessage(e.target.value)}
               onKeyDown={handleKeyDown} // Atalho para enviar com Enter
             />
-            <Button onClick={sendMessage} variant={"outline"} size={"icon"}>
+            <Button className="rounded" onClick={sendMessage} variant={"outline"} size={"icon"}>
               <FatCornerUpRightSolid className="h-5 w-5" />
-            </Button>
-            <Button variant={"outline"} size={"icon"}>
-              <PlusSolid />
             </Button>
           </CardFooter>
         </CardContent>
