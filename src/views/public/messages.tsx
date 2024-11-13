@@ -59,6 +59,7 @@ const MessagesLayout = () => {
               status={user.status}
               _id={user._id}
               nickname={user.nickname}
+              description="toque para conversar"
               />
             )
           })}
