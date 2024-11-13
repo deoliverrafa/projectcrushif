@@ -30,7 +30,7 @@ import axios from "axios"; // Importando o Axios
 import { getUserDataById } from "../../utils/getUserDataById";
 import { User } from "../../interfaces/userInterface";
 
-const socket = io(`wss://crush-api.vercel.app`, {
+const socket = io(`https://crush-api.vercel.app`, {
   transports: ["websocket"],
   withCredentials: true,
 }); // URL DO SERVIDOR
