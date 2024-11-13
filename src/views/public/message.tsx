@@ -31,7 +31,7 @@ import { getUserDataById } from "../../utils/getUserDataById";
 import { User } from "../../interfaces/userInterface";
 
 const socket = io(`${import.meta.env.VITE_API_BASE_URL}`, {
-  transports: ["polling"],
+  transports: ["polling", "websocket"],
   withCredentials: true,
 }); // URL DO SERVIDOR
 
@@ -74,9 +74,9 @@ const MessageLayout = () => {
     const fetchMessages = async () => {
       try {
         const response = await axios.get(
-          `${
-            import.meta.env.VITE_API_BASE_URL
-          }/messages/${currentUserId}/${activeChatUserId}`
+          `${import.meta.env.VITE_API_BASE_URL
+          }/messages/${currentUserId}/${activeChatUserId}`,
+          { withCredentials: true }
         );
         setMessages(response.data);
       } catch (error) {
@@ -147,7 +147,8 @@ const MessageLayout = () => {
         {
           senderId: currentUserId,
           receiverId: activeChatUserId,
-        }
+        },
+        {withCredentials: true}
       );
     } catch (error) {
       console.error("Erro ao marcar mensagens como lidas", error);
@@ -188,11 +189,10 @@ const MessageLayout = () => {
                   <AvatarImage src={chatUser?.avatar} />
                 </Avatar>
                 <span
-                  className={`border border-border h-2.5 w-2.5 bottom-0 right-1 rounded-full text-xs ${
-                    chatUser?.status === "online"
+                  className={`border border-border h-2.5 w-2.5 bottom-0 right-1 rounded-full text-xs ${chatUser?.status === "online"
                       ? "bg-success"
                       : "bg-secondary"
-                  } absolute`}
+                    } absolute`}
                 ></span>
               </div>
               <div className="flex flex-col">
