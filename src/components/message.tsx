@@ -10,6 +10,7 @@ interface Message {
   insertAt: string;
   type: "sent" | "received";
   status: "sent" | "received" | "read";
+  isSender: boolean
 }
 
 const getStatusIcon = (status: Message["status"]) => {
@@ -28,12 +29,12 @@ export const MessageReceived = (props: Message) => {
     <React.Fragment>
       <div
         className={`flex ${
-          props.type === "sent" ? "justify-end" : "justify-start"
+          props.isSender ? "justify-end" : "justify-start"
         } mb-4`}
       >
         <div
           className={`max-w-[70%] p-3 rounded-lg ${
-            props.type === "sent" ? "bg-info text-info-foreground" : "bg-card border border-border"
+            props.isSender ? "bg-info text-info-foreground" : "bg-card border border-border"
           }`}
         >
           <p>{props.content}</p>
@@ -44,7 +45,7 @@ export const MessageReceived = (props: Message) => {
                 locale: ptBR,
               })}
             </span>
-            {props.type === "sent" && getStatusIcon(props.status)}
+            {props.isSender && getStatusIcon(props.status)}
           </div>
         </div>
       </div>
