@@ -32,8 +32,8 @@ import { getUserDataById } from "../../utils/getUserDataById";
 import { User } from "../../interfaces/userInterface";
 
 const socket = io(`${import.meta.env.VITE_API_BASE_URL}`, {
-  transports: ['polling'],
-  withCredentials: true
+  transports: ["polling"],
+  withCredentials: true,
 }); // URL DO SERVIDOR
 
 interface Message {
@@ -48,9 +48,9 @@ interface Message {
 
 const MessageLayout = () => {
   const { id } = useParams<string>();
-  const [chatUser, setChatUser] = React.useState<User>()
+  const [chatUser, setChatUser] = React.useState<User>();
   const [messages, setMessages] = React.useState<Message[]>([]);
-  const [currentUserId] = React.useState(localStorage.getItem('userId'));
+  const [currentUserId] = React.useState(localStorage.getItem("userId"));
   const [activeChatUserId] = React.useState(id);
   const [newMessage, setNewMessage] = React.useState("");
 
@@ -67,11 +67,18 @@ const MessageLayout = () => {
 
   // Buscando mensagens entre os dois usuários quando o chat for iniciado
   React.useEffect(() => {
-    socket.emit('joinRoom', { senderId: currentUserId, receiverId: activeChatUserId });
+    socket.emit("joinRoom", {
+      senderId: currentUserId,
+      receiverId: activeChatUserId,
+    });
 
     const fetchMessages = async () => {
       try {
-        const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/messages/${currentUserId}/${activeChatUserId}`);
+        const response = await axios.get(
+          `${
+            import.meta.env.VITE_API_BASE_URL
+          }/messages/${currentUserId}/${activeChatUserId}`
+        );
         setMessages(response.data);
       } catch (error) {
         console.error("Erro ao buscar mensagens", error);
@@ -79,11 +86,10 @@ const MessageLayout = () => {
     };
 
     fetchMessages();
-    markMessagesAsRead()
   }, [currentUserId, activeChatUserId]);
 
   React.useEffect(() => {
-    socket.on('newMessage', (message) => {
+    socket.on("newMessage", (message) => {
       // Verifica se a mensagem já existe no estado
       setMessages((prevMessages) => {
         if (!prevMessages.some((msg) => msg._id === message._id)) {
@@ -92,25 +98,25 @@ const MessageLayout = () => {
         return prevMessages;
       });
       return () => {
-        socket.off('newMessage');
-      }
+        socket.off("newMessage");
+      };
     });
 
-    socket.on('messageRead', (messageId) => {
+    socket.on("messageRead", (messageId) => {
       setMessages((prevMessages) =>
         prevMessages.map((msg) =>
-          msg._id === messageId ? { ...msg, status: 'read' } : msg
+          msg._id === messageId ? { ...msg, status: "read" } : msg
         )
       );
     });
 
-    socket.emit('register', currentUserId);
+    socket.emit("register", currentUserId);
 
-    socket.emit('joinChatRoom', currentUserId, chatUser?._id)
+    socket.emit("joinChatRoom", currentUserId, chatUser?._id);
 
     return () => {
-      socket.off('newMessage');
-      socket.off('messageRead');
+      socket.off("newMessage");
+      socket.off("messageRead");
     };
   }, [chatUser]);
 
@@ -126,13 +132,9 @@ const MessageLayout = () => {
     };
 
     try {
-      socket.emit('sendMessage', message);
+      socket.emit("sendMessage", message);
 
-      setMessages((prevMessages) => [
-        ...prevMessages,
-        message
-      ]);
-      setNewMessage('');
+      setNewMessage("");
     } catch (error) {
       console.error("Erro ao enviar mensagem", error);
     }
@@ -141,10 +143,13 @@ const MessageLayout = () => {
   // Marcar mensagens como "lidas"
   const markMessagesAsRead = async () => {
     try {
-      await axios.post(`${import.meta.env.VITE_API_BASE_URL}/messages/markAsRead`, {
-        senderId: currentUserId,
-        receiverId: activeChatUserId,
-      });
+      await axios.post(
+        `${import.meta.env.VITE_API_BASE_URL}/messages/markAsRead`,
+        {
+          senderId: currentUserId,
+          receiverId: activeChatUserId,
+        }
+      );
     } catch (error) {
       console.error("Erro ao marcar mensagens como lidas", error);
     }
@@ -158,25 +163,45 @@ const MessageLayout = () => {
     }
   };
 
+  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    const scrollHeight = e.currentTarget.scrollHeight;
+    const scrollTop = e.currentTarget.scrollTop;
+    const clientHeight = e.currentTarget.clientHeight;
+
+    // Se o usuário chegou ao final, marque as mensagens como lidas
+    if (scrollHeight - scrollTop === clientHeight) {
+      markMessagesAsRead();
+    }
+  };
+
   return (
     <React.Fragment>
       <Card className="select-none mt-2 w-full md:w-6/12">
         <CardContent>
-          <CardHeader className="flex flex-row justify-between items-center">
-            <Link to={`/profile/${activeChatUserId}`} className="flex flex-row items-center gap-2">
+          <CardHeader className="flex flex-row justify-between items-center px-0 md:px-6">
+            <Link
+              to={`/profile/${activeChatUserId}`}
+              className="flex flex-row items-center gap-2"
+            >
               <div className="relative">
                 <Avatar className="shadow-lg border-2 border-border">
-                  <AvatarFallback>{"User"}</AvatarFallback>
+                  <AvatarFallback>{chatUser?.nickname}</AvatarFallback>
                   <AvatarImage src={chatUser?.avatar} />
                 </Avatar>
-                <span className="border border-border h-2.5 w-2.5 bottom-0 right-1 rounded-full bg-success absolute"></span>
+                <span
+                  className={`border border-border h-2.5 w-2.5 bottom-0 right-1 rounded-full text-xs ${
+                    chatUser?.status === "online"
+                      ? "bg-success"
+                      : "bg-secondary"
+                  } absolute`}
+                ></span>
               </div>
               <div className="flex flex-col">
                 <CardTitle className="font-semibold md:font-medium text-md tracking-tight truncate max-w-[120px]">
                   {chatUser?.nickname}
                 </CardTitle>
                 <CardDescription className="text-xs truncate max-w-[120px]">
-                  {chatUser?.campus}
+                  {chatUser?.userName}
                 </CardDescription>
               </div>
               <ChevronRight />
@@ -188,7 +213,10 @@ const MessageLayout = () => {
             </Link>
           </CardHeader>
 
-          <ScrollArea className="h-96 w-full rounded-md">
+          <ScrollArea
+            className="h-96 w-full rounded-md"
+            onScroll={handleScroll}
+          >
             {messages.map((message) => (
               <MessageReceived
                 _id={message._id ?? ""}
@@ -202,7 +230,7 @@ const MessageLayout = () => {
             ))}
           </ScrollArea>
 
-          <CardFooter className="flex flex-row justify-between gap-1 w-full">
+          <CardFooter className="flex flex-row justify-between gap-1 px-0 md:px-6 w-full">
             <Input
               type="text"
               placeholder="Adicione uma mensagem"
