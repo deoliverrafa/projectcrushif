@@ -31,7 +31,7 @@ import { getUserDataById } from "../../utils/getUserDataById";
 import { User } from "../../interfaces/userInterface";
 
 const socket = io(`${import.meta.env.VITE_API_BASE_URL}`, {
-  transports: ["polling"],
+  transports: ["websocket"],
   withCredentials: true,
 }); // URL DO SERVIDOR
 
