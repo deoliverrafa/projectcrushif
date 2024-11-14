@@ -463,7 +463,7 @@ const ProfileLayout = () => {
               <Tooltip>
                 <TooltipTrigger>
                   {!isOwnProfile && (
-                    <Link to={`message/${viewingUser._id}`}>
+                    <Link to={`/message/${viewingUser._id}`}>
                       <Button
                         variant={"outline"}
                         className="rounded"
