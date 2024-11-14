@@ -93,12 +93,12 @@ interface Post {
 }
 
 const ProfileLayout = () => {
-  const currentUser = getUserData()
-  const [viewingUser, setViewingUser] = React.useState<User | undefined>(undefined);
-  const { id } = useParams<string>();
-  const [userId] = React.useState<string>(
-    localStorage.getItem("userId") ?? ""
+  const currentUser = getUserData();
+  const [viewingUser, setViewingUser] = React.useState<User | undefined>(
+    undefined
   );
+  const { id } = useParams<string>();
+  const [userId] = React.useState<string>(localStorage.getItem("userId") ?? "");
 
   const [liked, setLiked] = React.useState(false);
   const [likeCount, setLikeCount] = React.useState(0);
@@ -157,7 +157,8 @@ const ProfileLayout = () => {
     try {
       setLoading(true);
       const response = await axios.get(
-        `${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_POST_GET_USER
+        `${import.meta.env.VITE_API_BASE_URL}${
+          import.meta.env.VITE_POST_GET_USER
         }${userId}/${skip}/${limit}`
       );
 
@@ -205,7 +206,8 @@ const ProfileLayout = () => {
       setLikeCount(likeCount + 1);
     } else {
       axios.post(
-        `${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_USER_UNLIKE
+        `${import.meta.env.VITE_API_BASE_URL}${
+          import.meta.env.VITE_USER_UNLIKE
         }`,
         { token: localStorage.getItem("token"), userId: viewingUser?._id }
       );
@@ -215,18 +217,16 @@ const ProfileLayout = () => {
 
   getStatusUser(userId);
 
-
   // Follow Logic
   const token = localStorage.getItem("token");
 
   const [followedUser, setFollowedUser] = React.useState<boolean>(false);
-  const [NFollowing, setNFollowing] = React.useState(0)  
-  
+  const [NFollowing, setNFollowing] = React.useState(0);
 
   React.useEffect(() => {
     if (userId && viewingUser?.followers) {
       setFollowedUser(viewingUser.followers.includes(userId));
-      setNFollowing(viewingUser.Nfollowers)
+      setNFollowing(viewingUser.Nfollowers);
     }
   }, [userId, viewingUser?.followers]);
 
@@ -238,15 +238,12 @@ const ProfileLayout = () => {
         followed: followedUser,
         setFollowedUser,
       }).then((response: any) => {
-        
         if (response.data.unfollowed) {
           setNFollowing(NFollowing - 1);
         } else {
           setNFollowing(NFollowing + 1);
         }
-
       });
-
     }
   };
 
@@ -294,14 +291,15 @@ const ProfileLayout = () => {
                   ? `@${viewingUser.nickname}`
                   : "indisponível"}
                 <HeartWavesSolid
-                  className={`${viewingUser?.type === "Plus"
-                    ? "text-info"
-                    : viewingUser?.type === "Admin"
+                  className={`${
+                    viewingUser?.type === "Plus"
+                      ? "text-info"
+                      : viewingUser?.type === "Admin"
                       ? "text-danger"
                       : viewingUser?.type === "verified"
-                        ? "text-success"
-                        : "hidden"
-                    } ml-1 h-3.5 w-3.5`}
+                      ? "text-success"
+                      : "hidden"
+                  } ml-1 h-3.5 w-3.5`}
                 />
               </Badge>
             </div>
@@ -348,9 +346,13 @@ const ProfileLayout = () => {
 
               <div className="py-5 space-y-2 mx-auto w-full max-w-sm">
                 {!isOwnProfile && (
-                  <Button variant={"ghost"} className="justify-start w-full" onClick={handleFollowToggle}>
+                  <Button
+                    variant={"ghost"}
+                    className="justify-start w-full"
+                    onClick={handleFollowToggle}
+                  >
                     <UserPlusSolid className="h-5 md:h-4 w-5 md:w-4 mr-2" />
-                    {followedUser ? 'Seguindo' : 'Seguir'}
+                    {followedUser ? "Seguindo" : "Seguir"}
                   </Button>
                 )}
 
@@ -448,8 +450,12 @@ const ProfileLayout = () => {
             )}
 
             {!isOwnProfile && (
-              <Button variant={"outline"} className="w-full" onClick={handleFollowToggle}>
-                {followedUser ? 'Seguindo' : 'Seguir'}
+              <Button
+                variant={"outline"}
+                className="w-full"
+                onClick={handleFollowToggle}
+              >
+                {followedUser ? "Seguindo" : "Seguir"}
               </Button>
             )}
 
@@ -457,13 +463,15 @@ const ProfileLayout = () => {
               <Tooltip>
                 <TooltipTrigger>
                   {!isOwnProfile && (
-                    <Button
-                      variant={"outline"}
-                      className="rounded"
-                      size={"icon"}
-                    >
-                      <MessageSolid className="h-5 w-5" />
-                    </Button>
+                    <Link to={`message/${viewingUser._id}`}>
+                      <Button
+                        variant={"outline"}
+                        className="rounded"
+                        size={"icon"}
+                      >
+                        <MessageSolid className="h-5 w-5" />
+                      </Button>
+                    </Link>
                   )}
                 </TooltipTrigger>
 
@@ -497,7 +505,7 @@ const ProfileLayout = () => {
 
           <div className="flex flex-col gap-1">
             <CardDescription>Sugestões para você</CardDescription>
-            <UserSuggestions removeUserId={viewingUser._id}/>
+            <UserSuggestions removeUserId={viewingUser._id} />
           </div>
         </CardContent>
 
@@ -519,10 +527,11 @@ const ProfileLayout = () => {
 
             <Badge
               variant={"outline"}
-              className={`${viewingUser?.status === "online"
-                ? "text-success"
-                : "text-secondary"
-                } gap-1`}
+              className={`${
+                viewingUser?.status === "online"
+                  ? "text-success"
+                  : "text-secondary"
+              } gap-1`}
             >
               {viewingUser?.status === "online" ? (
                 <span className="bg-success rounded-full h-2 w-2"></span>
