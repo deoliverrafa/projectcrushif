@@ -260,7 +260,7 @@ const Navbar: React.FC<NavbarProps> = ({ className, children, ...props }) => {
   return (
     <nav
       className={cn(
-        "border border-border rounded-full transition-transform duration-300 select-none bg-card shadow flex flex-row justify-between items-center sticky top-1 inset-x-0 translate-y-0 md:translate-y-0/2 px-4 md:px-2 py-0 w-full md:w-4/6 md:mx-auto z-20",
+        "border border-border rounded-b-3xl transition-transform duration-300 select-none bg-card shadow flex flex-row justify-between items-center sticky top-0 inset-x-0 translate-y-0 md:translate-y-0/2 px-4 md:px-2 py-0 w-full md:w-4/6 md:mx-auto z-20",
         isVisible ? "translate-y-0" : "-translate-y-full",
         className
       )}
@@ -358,10 +358,10 @@ const NavbarItem: React.FC<NavbarItemProps> = ({
     <NavLink
       className={({ isActive }) =>
         cn(
-          "rounded-md font-semibold flex flex-row items-center relative gap-1 overflow-hidden px-4 md:px-2 py-2 md:py-1 text-md md:text-sm",
+          "font-semibold flex flex-row items-center relative gap-1 overflow-hidden px-4 md:px-2 py-2 md:py-1 text-md md:text-sm",
           isActive
-            ? "text-primary rounded-full bg-primary/30 animate-clickBounce"
-            : "text-muted-foreground",
+            ? "text-primary animate-clickBounce border-t border-primary"
+            : "text-muted-foreground/70",
           "hover:text-primary/70",
           className
         )
@@ -512,7 +512,7 @@ export const NavBar = (props: userData) => {
           </NavbarItem>
         </div>
 
-        <NavbarItem className="bg-primary/0" href={""}>
+        <NavbarItem className="border-0" href={""}>
           <Profile
             nickname={props.user?.nickname ? props.user.nickname : ""}
             avatar={props.avatarPath ? props.avatarPath : ""}

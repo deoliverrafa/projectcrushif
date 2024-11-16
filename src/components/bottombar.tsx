@@ -35,7 +35,7 @@ const Bottombar = React.forwardRef<HTMLDivElement, BottombarProps>(
       <div
         ref={ref}
         className={cn(
-          "border border-border rounded-full transition-transform duration-300 bg-background shadow flex flex-row justify-around items-center fixed bottom-1 inset-x-0 px-2 md:px-1 py-1 w-full z-20",
+          "border border-border rounded-t-3xl transition-transform duration-300 bg-background shadow flex flex-row justify-around items-center fixed bottom-0 inset-x-0 px-2 md:px-1 py-1 w-full z-20",
           isVisible ? "translate-y-0" : "translate-y-full",
           className
         )}
@@ -104,10 +104,10 @@ export const BottombarItem: React.FC<BottombarItemProps> = ({
     <NavLink
       className={({ isActive }) =>
         cn(
-          "rounded-md flex flex-col items-center relative font-bold md:font-semibold text-md md:text-sm px-4 md:px-2 py-1 md:py-0.5 gap-1 overflow-hidden",
+          "flex flex-col items-center relative font-bold md:font-semibold text-md md:text-sm px-4 md:px-2 py-1 md:py-0.5 gap-1 overflow-hidden",
           isActive
-            ? "text-primary rounded-full bg-primary/30 animate-clickBounce"
-            : "text-muted-foreground",
+            ? "text-primary animate-clickBounce border-b border-primary"
+            : "text-muted-foreground/70",
           "hover:text-primary/70",
           className
         )

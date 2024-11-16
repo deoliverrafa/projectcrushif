@@ -366,7 +366,7 @@ export const CardPost = (props: CardProps) => {
 
   return (
     <>
-      <Card className={`select-none my-2 w-full md:w-5/12 ${props.classNames}`}>
+      <Card className={`select-none my-2 w-full md:w-6/12 ${props.classNames}`}>
         <CardHeader className="flex flex-row justify-between items-center">
           {!props.isAnonymous ? (
             <Link to={`/profile/${props.id}`} className="flex space-x-2">
@@ -556,11 +556,11 @@ export const CardPost = (props: CardProps) => {
         <CardContent className="relative pb-0">
           <div className="flex flex-col items-center justify-center">
             {props.photoURL && (
-              <Carousel className="flex flex-col items-center my-2 relative h-[450px] w-full">
+              <Carousel className="flex flex-col items-center my-2 relative h-[500px] w-full">
                 <CarouselContent>
                   <CarouselItem>
                     <img
-                      className="rounded-lg object-cover h-[450px] w-full"
+                      className="rounded-lg object-cover h-[500px] w-full"
                       src={props.photoURL}
                       alt="Imagem Post"
                     />
