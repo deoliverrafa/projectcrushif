@@ -80,6 +80,7 @@ import NotFoundArt from "../../public/images/not_found_art.png";
 import { getUserDataById } from "../utils/getUserDataById.tsx";
 import decodeToken from "../utils/decodeToken.tsx";
 import { User } from "../interfaces/userInterface.ts";
+import { toggleFollow } from "../utils/followUtils.js";
 
 interface CardProps {
   classNames?: string;
@@ -89,6 +90,7 @@ interface CardProps {
   isAnonymous: boolean;
   photoURL: string;
   insertAt: Date;
+  following?: boolean;
   id: string;
   likeCount: number;
   commentCount: number;
@@ -98,6 +100,7 @@ interface CardProps {
 
 export const CardPost = (props: CardProps) => {
   const decodedObj = decodeToken(localStorage.getItem("token") ?? "");
+  const token = localStorage.getItem("token");
   const dataUser = decodedObj?.user;
 
   const [viewingUser, setViewingUser] = React.useState<User | undefined>(
@@ -111,6 +114,10 @@ export const CardPost = (props: CardProps) => {
   const [animateClick, setAnimateClick] = React.useState(false);
   const [favorited, setFavorited] = React.useState(false);
   const [showFavorited, setShowFavorited] = React.useState(false);
+
+  const [followedUser, setFollowedUser] = React.useState<boolean>(
+    props.following ?? false
+  );
 
   const [showFullContent, setShowFullContent] = React.useState(false);
 
@@ -199,6 +206,17 @@ export const CardPost = (props: CardProps) => {
       );
     }
   }, [props.userId, props.insertAt]);
+
+  const handleFollowToggle = () => {
+    if (token) {
+      toggleFollow({
+        userId: props._id,
+        token,
+        followed: followedUser,
+        setFollowedUser,
+      });
+    }
+  };
 
   // Lógica para comentar
   const [comment, setComment] = React.useState<string | undefined>(undefined);
@@ -362,6 +380,7 @@ export const CardPost = (props: CardProps) => {
                   src={!props.isAnonymous ? viewingUser?.avatar : UserIcon}
                 />
               </Avatar>
+
               <div className="flex flex-col items-start justify-center space-y-1">
                 <div className="flex flex-row items-center space-x-1">
                   <div>
@@ -397,6 +416,7 @@ export const CardPost = (props: CardProps) => {
                   src={!props.isAnonymous ? viewingUser?.avatar : AnonymousIcon}
                 />
               </Avatar>
+
               <div className="flex flex-col items-start justify-center space-y-1">
                 <div className="flex flex-row items-center space-x-1">
                   <div>
@@ -455,9 +475,13 @@ export const CardPost = (props: CardProps) => {
 
               <div className="py-5 space-y-2 mx-auto w-full max-w-sm">
                 {props.isAnonymous || props.id === dataUser?._id ? null : (
-                  <Button variant={"ghost"} className="justify-start w-full">
+                  <Button
+                    variant={"ghost"}
+                    className="justify-start w-full"
+                    onClick={handleFollowToggle}
+                  >
                     <UserPlusSolid className="h-5 md:h-4 w-5 md:w-4 mr-2" />
-                    Seguir
+                    {followedUser ? "Seguindo" : "Seguir"}
                   </Button>
                 )}
 
@@ -532,18 +556,18 @@ export const CardPost = (props: CardProps) => {
         <CardContent className="relative pb-0">
           <div className="flex flex-col items-center justify-center">
             {props.photoURL && (
-              <Carousel className="flex flex-col items-center my-2 relative">
+              <Carousel className="flex flex-col items-center my-2 relative h-[450px] w-full">
                 <CarouselContent>
                   <CarouselItem>
                     <img
-                      className="rounded-lg object-cover w-full"
+                      className="rounded-lg object-cover h-[450px] w-full"
                       src={props.photoURL}
                       alt="Imagem Post"
                     />
                   </CarouselItem>
                 </CarouselContent>
-                <CarouselPrevious className="left-4" />
-                <CarouselNext className="right-4" />
+                <CarouselPrevious className="hidden left-4" />
+                <CarouselNext className="hidden right-4" />
               </Carousel>
             )}
 

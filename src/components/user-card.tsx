@@ -24,7 +24,9 @@ interface User {
 }
 
 export const SearchUserCard = (props: User) => {
-  const [followedUser, setFollowedUser] = React.useState<boolean>(props.following ?? false);
+  const [followedUser, setFollowedUser] = React.useState<boolean>(
+    props.following ?? false
+  );
   const token = localStorage.getItem("token");
   const userId = localStorage.getItem("userId");
 
@@ -43,13 +45,22 @@ export const SearchUserCard = (props: User) => {
     <Card className="my-2 w-full">
       <div className="flex flex-row justify-between items-center p-4">
         <Link to={`/profile/${props._id}`} className="flex space-x-2 h-full">
-          <Avatar className="shadow-lg border-2 border-border">
-            <AvatarFallback>{props?.nickname}</AvatarFallback>
-            <AvatarImage
-              className="object-cover"
-              src={props?.avatar ? props?.avatar : UserIcon}
-            />
-          </Avatar>
+          <div className="relative">
+            <Avatar className="shadow-lg border-2 border-border">
+              <AvatarFallback>{props?.userName}</AvatarFallback>
+              <AvatarImage
+                className="object-cover"
+                src={props?.avatar ? props?.avatar : UserIcon}
+              />
+            </Avatar>
+
+            <span
+              className={`border border-border h-2.5 w-2.5 bottom-0 right-1 rounded-full text-xs ${
+                props.status === "online" ? "bg-success" : "bg-secondary"
+              } absolute`}
+            ></span>
+          </div>
+
           <div className="flex flex-col items-start">
             <div className="flex flex-row items-center gap-1">
               <CardTitle className="font-semibold md:font-medium text-md md:text-sm tracking-tight truncate max-w-[120px]">
@@ -57,14 +68,15 @@ export const SearchUserCard = (props: User) => {
               </CardTitle>
 
               <HeartWavesSolid
-                className={`${props?.type === "Plus"
+                className={`${
+                  props?.type === "Plus"
                     ? "text-info"
                     : props?.type === "Admin"
-                      ? "text-danger"
-                      : props?.type === "verified"
-                        ? "text-success"
-                        : "hidden"
-                  } h-3.5 w-3.5`}
+                    ? "text-danger"
+                    : props?.type === "verified"
+                    ? "text-success"
+                    : "hidden"
+                } h-3.5 w-3.5`}
               />
             </div>
 
@@ -81,7 +93,11 @@ export const SearchUserCard = (props: User) => {
         </Link>
 
         {userId === props._id ? null : (
-          <Button type="button" onClick={handleFollowToggle}>
+          <Button
+            variant={followedUser ? "secondary" : "default"}
+            type="button"
+            onClick={handleFollowToggle}
+          >
             {followedUser ? "Seguindo" : "Seguir"}
           </Button>
         )}
@@ -97,13 +113,21 @@ export const UserCard = (props: User) => {
         <Card className="my-2 w-full">
           <div className="flex flex-row justify-between items-center p-4 w-full">
             <div className="flex flex-row items-center gap-1">
-              <Avatar className="shadow-lg border-2 border-border">
-                <AvatarFallback>{props?.userName}</AvatarFallback>
-                <AvatarImage
-                  className="object-cover"
-                  src={props?.avatar ? props?.avatar : UserIcon}
-                />
-              </Avatar>
+              <div className="relative">
+                <Avatar className="shadow-lg border-2 border-border">
+                  <AvatarFallback>{props?.userName}</AvatarFallback>
+                  <AvatarImage
+                    className="object-cover"
+                    src={props?.avatar ? props?.avatar : UserIcon}
+                  />
+                </Avatar>
+
+                <span
+                  className={`border border-border h-2.5 w-2.5 bottom-0 right-1 rounded-full text-xs ${
+                    props.status === "online" ? "bg-success" : "bg-secondary"
+                  } absolute`}
+                ></span>
+              </div>
 
               <div className="flex flex-col items-start">
                 <div className="flex flex-row items-center gap-1">
@@ -112,14 +136,15 @@ export const UserCard = (props: User) => {
                   </CardTitle>
 
                   <HeartWavesSolid
-                    className={`${props?.type === "Plus"
+                    className={`${
+                      props?.type === "Plus"
                         ? "text-info"
                         : props?.type === "Admin"
-                          ? "text-danger"
-                          : props?.type === "verified"
-                            ? "text-success"
-                            : "hidden"
-                      } h-3.5 w-3.5`}
+                        ? "text-danger"
+                        : props?.type === "verified"
+                        ? "text-success"
+                        : "hidden"
+                    } h-3.5 w-3.5`}
                   />
                 </div>
 
@@ -155,7 +180,11 @@ export const ChatUserCard = (props: User) => {
                   />
                 </Avatar>
 
-                <span className={`border border-border h-2.5 w-2.5 bottom-0 right-1 rounded-full text-xs ${props.status === "online" ? "bg-success" : "bg-secondary"} absolute`}></span>
+                <span
+                  className={`border border-border h-2.5 w-2.5 bottom-0 right-1 rounded-full text-xs ${
+                    props.status === "online" ? "bg-success" : "bg-secondary"
+                  } absolute`}
+                ></span>
               </div>
 
               <div className="flex flex-col items-start">
@@ -165,14 +194,15 @@ export const ChatUserCard = (props: User) => {
                   </CardTitle>
 
                   <HeartWavesSolid
-                    className={`${props?.type === "Plus"
+                    className={`${
+                      props?.type === "Plus"
                         ? "text-info"
                         : props?.type === "Admin"
-                          ? "text-danger"
-                          : props?.type === "verified"
-                            ? "text-success"
-                            : "hidden"
-                      } h-3.5 w-3.5`}
+                        ? "text-danger"
+                        : props?.type === "verified"
+                        ? "text-success"
+                        : "hidden"
+                    } h-3.5 w-3.5`}
                   />
                 </div>
 

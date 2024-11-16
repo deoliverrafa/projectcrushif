@@ -51,6 +51,7 @@ interface User {
   campus: string;
   gender: string;
   type: string;
+  status: string;
 }
 
 const CrushLayout = () => {
@@ -298,6 +299,7 @@ const CrushLayout = () => {
                             avatar={user.avatar || ""}
                             userName={user.userName}
                             type={user.type}
+                            status={user.status}
                             description="toque para conversar"
                           />
                         ))

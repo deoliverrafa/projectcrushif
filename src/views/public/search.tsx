@@ -30,6 +30,7 @@ interface User {
   type: string;
   _id: string;
   isFollowing: boolean;
+  status: string;
 }
 
 const SearchLayout = () => {
@@ -184,6 +185,7 @@ const SearchLayout = () => {
                         _id={user._id}
                         following={isFollowing}
                         key={user._id}
+                        status={user.status}
                       />
                     </>
                   );
