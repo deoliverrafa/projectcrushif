@@ -54,9 +54,9 @@ interface User {
 }
 
 const CrushLayout = () => {
-  const decodedObj = decodeToken(localStorage.getItem('token') ?? '')
-  const userData = decodedObj?.user
-  
+  const decodedObj = decodeToken(localStorage.getItem("token") ?? "");
+  const userData = decodedObj?.user;
+
   const [users, setUsers] = React.useState<User[]>([]);
 
   const [allUsers, setAllUsers] = React.useState<User[]>([]);
@@ -65,7 +65,7 @@ const CrushLayout = () => {
   const [genderFilter, setGenderFilter] = React.useState<string>(
     localStorage.getItem("genderFilter") || "Todos"
   );
-  
+
   const [dragging, setDragging] = React.useState(false);
   const [xOffset, setXOffset] = React.useState(0);
   const [currentIndex, setCurrentIndex] = React.useState(0);
@@ -251,7 +251,7 @@ const CrushLayout = () => {
       fetchUsers();
       fetchLikedByUsers();
     }
-  }, [localStorage.getItem('token')]);
+  }, [localStorage.getItem("token")]);
 
   return (
     <React.Fragment>
@@ -282,8 +282,7 @@ const CrushLayout = () => {
                       <DrawerTitle>Você tem um crush</DrawerTitle>
                       <DrawerDescription>
                         Estes são os usuários que demonstraram interesse em
-                        você! Mande mensagem para iniciar uma
-                        conexão.
+                        você! Mande mensagem para iniciar uma conexão.
                       </DrawerDescription>
                     </DrawerHeader>
                   ) : null}
@@ -399,11 +398,15 @@ const CrushLayout = () => {
                   cursor: "grab",
                   x: xOffset,
                 }}
-                dragElastic={0.2}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ x: direction === "left" ? -300 : 300, opacity: 0 }}
-                transition={{ type: "spring", stiffness: 200, damping: 20 }}
+                dragElastic={0.4}
+                initial={{ opacity: 0, y: 100 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{
+                  x: direction === "left" ? -300 : 300,
+                  opacity: 0,
+                  y: 100,
+                }}
+                transition={{ duration: 0.6, ease: "easeOut" }}
               >
                 <Card className="overflow-hidden">
                   <CardContent className="p-0">
