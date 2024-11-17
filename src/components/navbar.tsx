@@ -526,7 +526,7 @@ export const NavBar = (props: userData) => {
 
 interface NavBarReturnProps {
   title: string;
-  menu: React.ReactNode
+  menu?: React.ReactNode
 }
 
 export const NavBarReturn = (props: NavBarReturnProps) => {
