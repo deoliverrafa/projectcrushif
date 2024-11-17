@@ -526,6 +526,7 @@ export const NavBar = (props: userData) => {
 
 interface NavBarReturnProps {
   title: string;
+  menu: React.ReactNode
 }
 
 export const NavBarReturn = (props: NavBarReturnProps) => {
@@ -534,15 +535,31 @@ export const NavBarReturn = (props: NavBarReturnProps) => {
   return (
     <>
       <Navbar>
-        <NavbarContent>
+        <NavbarContent className="gap-2">
           <Button
-            variant={"ghost"}
-            className="text-primary"
+            variant={"outline"}
+            size={"icon"}
+            className="text-muted-foreground hover:text-primary/70"
             onClick={() => navigate(-1)}
           >
-            <ChevronLeft className="mr-1" />
-            {props.title}
+            <ChevronLeft />
           </Button>
+        </NavbarContent>
+        
+        <NavbarContent className="text-muted-foreground font-poppins font-semibold md:font-medium">
+          {props.title}
+        </NavbarContent>
+        
+        <NavbarContent>
+          {props.menu && (
+            <Button
+              variant={"outline"}
+              size={"icon"}
+              className="text-muted-foreground hover:text-primary/70"
+            >
+              {props.menu}
+            </Button>
+          )}
         </NavbarContent>
       </Navbar>
     </>
