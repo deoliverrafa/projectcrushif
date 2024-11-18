@@ -240,7 +240,6 @@ const MessageLayout = () => {
               onKeyDown={handleKeyDown} // Atalho para enviar com Enter
             />
             <Button
-              className="rounded"
               onClick={sendMessage}
               variant={"outline"}
               size={"icon"}

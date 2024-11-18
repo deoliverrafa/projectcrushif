@@ -86,10 +86,9 @@ const ReplyComment: React.FC<Comment> = (props) => {
 
     try {
       await axios.post(
-        `${import.meta.env.VITE_API_BASE_URL}${
-          newLiked
-            ? import.meta.env.VITE_COMMENT_LIKE
-            : import.meta.env.VITE_COMMENT_UNLIKE
+        `${import.meta.env.VITE_API_BASE_URL}${newLiked
+          ? import.meta.env.VITE_COMMENT_LIKE
+          : import.meta.env.VITE_COMMENT_UNLIKE
         }`,
         { token: localStorage.getItem("token"), commentId: props._id }
       );
@@ -103,6 +102,11 @@ const ReplyComment: React.FC<Comment> = (props) => {
       setShowHeart(false);
       setAnimateClick(false);
     }, 500);
+  };
+
+  const handleDoubleLike = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    handleLike();
   };
 
   const highlightMentionsAndHashtags = (text: string) => {
@@ -124,7 +128,7 @@ const ReplyComment: React.FC<Comment> = (props) => {
   return (
     <React.Fragment>
       <div className="flex flex-col justify-end items-end mb-2">
-        <Card key={props._id} className="w-11/12 max-w-md">
+        <Card key={props._id} className="w-11/12 max-w-md" onDoubleClick={handleDoubleLike}>
           <Link to={`/profile/${props.userId}`}>
             <CardHeader className="flex flex-row items-center space-x-4 p-4">
               <Avatar className="h-10 w-10 border-2 border-border">
@@ -141,15 +145,14 @@ const ReplyComment: React.FC<Comment> = (props) => {
                     {viewingUser?.nickname}
                   </CardDescription>
                   <HeartWavesSolid
-                    className={`${
-                      viewingUser?.type === "Plus"
-                        ? "text-info"
-                        : viewingUser?.type === "Admin"
+                    className={`${viewingUser?.type === "Plus"
+                      ? "text-info"
+                      : viewingUser?.type === "Admin"
                         ? "text-danger"
                         : viewingUser?.type === "verified"
-                        ? "text-success"
-                        : "hidden"
-                    } h-3.5 w-3.5`}
+                          ? "text-success"
+                          : "hidden"
+                      } h-3.5 w-3.5`}
                   />
                 </div>
                 <CardDescription className="text-xs md:text-xs">
@@ -201,15 +204,13 @@ const ReplyComment: React.FC<Comment> = (props) => {
               >
                 {liked ? (
                   <HeartSolid
-                    className={`${
-                      animateClick ? "animate-click" : ""
-                    } text-primary h-5 md:h-4 w-5 md:w-4`}
+                    className={`${animateClick ? "animate-click" : ""
+                      } text-primary h-5 md:h-4 w-5 md:w-4`}
                   />
                 ) : (
                   <HeartBrokenSolid
-                    className={`${
-                      animateClick ? "animate-click" : ""
-                    } h-5 md:h-4 w-5 md:w-4`}
+                    className={`${animateClick ? "animate-click" : ""
+                      } h-5 md:h-4 w-5 md:w-4`}
                   />
                 )}
                 {likeCount}
@@ -306,10 +307,9 @@ export const Comment: React.FC<Comment> = (props) => {
 
     try {
       await axios.post(
-        `${import.meta.env.VITE_API_BASE_URL}${
-          newLiked
-            ? import.meta.env.VITE_COMMENT_LIKE
-            : import.meta.env.VITE_COMMENT_UNLIKE
+        `${import.meta.env.VITE_API_BASE_URL}${newLiked
+          ? import.meta.env.VITE_COMMENT_LIKE
+          : import.meta.env.VITE_COMMENT_UNLIKE
         }`,
         { token: localStorage.getItem("token"), commentId: props._id }
       );
@@ -325,6 +325,11 @@ export const Comment: React.FC<Comment> = (props) => {
     }, 500);
   };
 
+  const handleDoubleLike = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    handleLike();
+  };
+
   const [replyText, setReplyText] = React.useState("");
   const [isReply, setIsReply] = React.useState<boolean>(false);
 
@@ -337,8 +342,7 @@ export const Comment: React.FC<Comment> = (props) => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        `${import.meta.env.VITE_API_BASE_URL}${
-          import.meta.env.VITE_COMMENT_REPLY
+        `${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_COMMENT_REPLY
         }`,
         {
           token: localStorage.getItem("token"),
@@ -381,7 +385,7 @@ export const Comment: React.FC<Comment> = (props) => {
 
   return (
     <div className="flex flex-col items-center my-2">
-      <Card key={props._id} className="w-full max-w-md">
+      <Card key={props._id} className="w-full max-w-md" onDoubleClick={handleDoubleLike}>
         <Link to={`/profile/${props.userId}`}>
           <CardHeader className="flex flex-row items-center space-x-4 p-4">
             <Avatar className="h-10 w-10 border-2 border-border">
@@ -398,15 +402,14 @@ export const Comment: React.FC<Comment> = (props) => {
                   {viewingUser?.nickname}
                 </CardDescription>
                 <HeartWavesSolid
-                  className={`${
-                    viewingUser?.type === "Plus"
-                      ? "text-info"
-                      : viewingUser?.type === "Admin"
+                  className={`${viewingUser?.type === "Plus"
+                    ? "text-info"
+                    : viewingUser?.type === "Admin"
                       ? "text-danger"
                       : viewingUser?.type === "verified"
-                      ? "text-success"
-                      : "hidden"
-                  } h-3.5 w-3.5`}
+                        ? "text-success"
+                        : "hidden"
+                    } h-3.5 w-3.5`}
                 />
               </div>
               <CardDescription className="text-xs md:text-xs">
@@ -468,7 +471,7 @@ export const Comment: React.FC<Comment> = (props) => {
                   onInput={handleReplyChange}
                 />
 
-                <Button className="rounded" variant={"outline"} size={"icon"}>
+                <Button variant={"outline"} size={"icon"}>
                   <FatCornerUpRightSolid className="h-5 w-5" />
                 </Button>
               </form>
@@ -490,15 +493,13 @@ export const Comment: React.FC<Comment> = (props) => {
                 >
                   {liked ? (
                     <HeartSolid
-                      className={`${
-                        animateClick ? "animate-click" : ""
-                      } text-primary h-5 md:h-4 w-5 md:w-4`}
+                      className={`${animateClick ? "animate-click" : ""
+                        } text-primary h-5 md:h-4 w-5 md:w-4`}
                     />
                   ) : (
                     <HeartBrokenSolid
-                      className={`${
-                        animateClick ? "animate-click" : ""
-                      } h-5 md:h-4 w-5 md:w-4`}
+                      className={`${animateClick ? "animate-click" : ""
+                        } h-5 md:h-4 w-5 md:w-4`}
                     />
                   )}
                   {likeCount}

@@ -37,13 +37,41 @@ const fabVariants = cva(
 
 interface FabProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof fabVariants> {
+  VariantProps<typeof fabVariants> {
   asChild?: boolean;
 }
 
 const Fab = React.forwardRef<HTMLButtonElement, FabProps>(
   ({ className, variant, placeholder, asChild = false, ...props }, ref) => {
+    const [isScrollingDown, setIsScrollingDown] = React.useState(false);
+    let lastScrollY = 0;
+
+    React.useEffect(() => {
+      const handleScroll = () => {
+        if (window.scrollY > lastScrollY && window.scrollY > 100) {
+          setIsScrollingDown(true);
+        } else {
+          setIsScrollingDown(false);
+        }
+        lastScrollY = window.scrollY;
+      };
+
+      window.addEventListener("scroll", handleScroll);
+      return () => {
+        window.removeEventListener("scroll", handleScroll);
+      };
+    }, []);
+
     const Comp = asChild ? Slot : "button";
+
+    const transitionClass =
+      placeholder === "topRight" || placeholder === "topLeft"
+        ? isScrollingDown
+          ? "-translate-y-full"
+          : "translate-y-0"
+        : isScrollingDown
+          ? "translate-y-full"
+          : "translate-y-0";
 
     const handleRipple = (event: React.MouseEvent<HTMLButtonElement>) => {
       const button = event.currentTarget;
@@ -53,12 +81,10 @@ const Fab = React.forwardRef<HTMLButtonElement, FabProps>(
       const radius = diameter / 2;
 
       circle.style.width = circle.style.height = `${diameter}px`;
-      circle.style.left = `${
-        event.clientX - button.getBoundingClientRect().left - radius
-      }px`;
-      circle.style.top = `${
-        event.clientY - button.getBoundingClientRect().top - radius
-      }px`;
+      circle.style.left = `${event.clientX - button.getBoundingClientRect().left - radius
+        }px`;
+      circle.style.top = `${event.clientY - button.getBoundingClientRect().top - radius
+        }px`;
       circle.style.position = "absolute";
       circle.style.backgroundColor = "rgba(255, 255, 255, 0.6)";
       circle.style.borderRadius = "50%";
@@ -90,7 +116,8 @@ const Fab = React.forwardRef<HTMLButtonElement, FabProps>(
       <Comp
         className={cn(
           fabVariants({ variant, placeholder, className }),
-          "overflow-hidden"
+          "overflow-hidden transition-transform duration-500",
+          transitionClass
         )}
         ref={ref}
         onClick={(e: React.MouseEvent<HTMLButtonElement>) => {

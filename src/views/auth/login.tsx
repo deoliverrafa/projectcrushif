@@ -13,14 +13,6 @@ import {
 import { Input } from "../../components/ui/input.tsx";
 import { Button } from "../../components/ui/button.tsx";
 import { Label } from "../../components/ui/label.tsx";
-import {
-  Dialog,
-  DialogTrigger,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-} from "../../components/ui/dialog";
 import { Separator } from "../../components/ui/separator.tsx";
 import { Badge } from "../../components/ui/badge.tsx";
 
@@ -31,7 +23,7 @@ import LoginArt from "../../../public/images/login_art.png";
 const LogoLayout = () => {
   return (
     <div className="flex flex-col justify-center items-center">
-      <img src={LoginArt} className="h-52 md:h-[300px] w-52 md:w-[300px]" />
+      <img src={LoginArt} className="hidden md:flex md:h-[300px] md:w-[300px]" />
     </div>
   );
 };
@@ -61,8 +53,7 @@ const LoginLayout = () => {
       setMessageError("");
 
       const response = await axios.post(
-        `${import.meta.env.VITE_API_BASE_URL}${
-          import.meta.env.VITE_LOGIN_ROUTE
+        `${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_LOGIN_ROUTE
         }`,
         formData
       );
@@ -83,7 +74,7 @@ const LoginLayout = () => {
 
   return (
     <>
-      <div className="hidden md:flex flex-col space-y-2">
+      <div className="flex flex-col justify-center items-center space-y-2 h-screen md:h-full">
         <Card className="max-w-sm">
           <CardHeader>
             <Badge className="w-fit" variant={"outline"}>
@@ -148,108 +139,6 @@ const LoginLayout = () => {
             </Link>
 
             <p className="text-center text-sm md:text-md">
-              Ao entrar, você concorda com os Termos e e Política de Privacidade
-              do{" "}
-              <Link
-                to="/auth/terms"
-                className="text-primary font-cookie font-medium text-xl"
-              >
-                Crushif
-              </Link>
-              .
-            </p>
-          </CardFooter>
-        </Card>
-      </div>
-
-      <div className="md:hidden flex justify-center items-center h-screen">
-        <Card className="flex flex-col w-5/6 max-w-sm">
-          <CardHeader>
-            <Badge className="w-fit" variant={"outline"}>
-              <FireSolid className="text-primary" />
-            </Badge>
-
-            <CardTitle className="tracking-wider">Login</CardTitle>
-            <CardDescription className="tracking-wide">
-              Faça login para ter acesso a plataforma!
-            </CardDescription>
-          </CardHeader>
-
-          <CardContent>
-            <Dialog>
-              <DialogTrigger className="w-full" asChild>
-                <Button className="w-full">Entrar</Button>
-              </DialogTrigger>
-
-              <DialogContent>
-                <DialogHeader>
-                  <div className="flex flex-col items-center space-y-1.5">
-                    <Badge className="w-fit" variant={"outline"}>
-                      <FireSolid className="text-primary" />
-                    </Badge>
-                    <DialogTitle className="tracking-wider">Login</DialogTitle>
-                  </div>
-
-                  <DialogDescription className="tracking-wide">
-                    Faça login para ter acesso a plataforma!
-                  </DialogDescription>
-                </DialogHeader>
-
-                <form
-                  className="flex flex-col relative px-4 py-6 space-y-5"
-                  onSubmit={handleSubmit}
-                >
-                  <div className="space-y-2">
-                    <Label htmlFor="nickname">Usuário</Label>
-                    <Input
-                      type="text"
-                      placeholder="Nome do usuário"
-                      name="nickname"
-                      id="nickname"
-                      onChange={handleChange}
-                      value={formData.nickname}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="password">Senha</Label>
-                    <Input
-                      type="password"
-                      placeholder="Informe sua senha"
-                      name="password"
-                      id="password"
-                      onChange={handleChange}
-                      value={formData.password}
-                    />
-                  </div>
-
-                  {messageError ? (
-                    <CardDescription className="text-danger flex flex-row items-center gap-2">
-                      <XSolid className="h-4 w-4" />
-                      {messageError}
-                    </CardDescription>
-                  ) : null}
-
-                  <Button disabled={clickedButton} type="submit">
-                    {clickedButton ? (
-                      <SpinnerSolid className="animate-spin mr-2 h-5 w-5" />
-                    ) : null}
-                    Entrar
-                  </Button>
-                </form>
-              </DialogContent>
-            </Dialog>
-          </CardContent>
-
-          <Separator className="mb-5" />
-
-          <CardFooter className="flex flex-col space-y-2">
-            <Link to="/auth/register" className="w-full">
-              <Button className=" w-full" variant={"outline"}>
-                Registre-se
-              </Button>
-            </Link>
-
-            <p className="font-poppins text-wrap text-center text-sm">
               Ao entrar, você concorda com os Termos e e Política de Privacidade
               do{" "}
               <Link

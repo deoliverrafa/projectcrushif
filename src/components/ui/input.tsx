@@ -1,14 +1,14 @@
 import * as React from "react";
 import { cn } from "./../../lib/utils";
 
-import { 
+import {
   EyeSlashSolid,
   EyeSolid,
   XCircleSolid
 } from "@mynaui/icons-react";
 
 export interface InputProps
-  extends React.InputHTMLAttributes<HTMLInputElement> {}
+  extends React.InputHTMLAttributes<HTMLInputElement> { }
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
   ({ className, type = "text", value, onChange, ...props }, ref) => {
@@ -73,7 +73,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
     };
 
     return (
-      <div className="relative w-full">
+      <div className="relative flex flex-row items-center w-full">
         {type === "file" ? (
           <>
             <div
@@ -96,7 +96,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             </div>
             <input
               type="file"
-              className="hidden" 
+              className="hidden"
               ref={fileInputRef}
               onChange={handleFileChange}
               {...props}
@@ -114,7 +114,8 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
                 }
               }}
               className={cn(
-                "flex h-10 md:h-9 w-full rounded-3xl border border-input bg-transparent font-poppins font-medium md:font-normal px-3 py-1 text-md md:text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50",
+                "flex h-10 md:h-9 w-11/12 rounded-s-3xl border border-input bg-transparent font-poppins font-medium md:font-normal px-3 py-1 text-md md:text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50",
+                !inputValue && type !== "file" && type !== "password" ? "w-full rounded-3xl" : "",
                 className
               )}
               ref={ref}
@@ -127,7 +128,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           <button
             type="button"
             onClick={togglePasswordVisibility}
-            className="absolute inset-y-0 right-0 px-2 text-sm text-muted-foreground"
+            className="border-y border-e rounded-e-3xl h-10 md:h-9 px-2 text-muted-foreground"
           >
             {inputType === "password" ? (
               <EyeSolid className="h-5 w-5" />
@@ -141,7 +142,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           <button
             type="button"
             onClick={clearInput}
-            className="absolute inset-y-0 right-0 px-2 text-sm text-muted-foreground"
+            className={`${inputValue ? "border-y border-e rounded-e-3xl h-10 md:h-9 px-2" : ""} text-muted-foreground`}
           >
             <XCircleSolid className="h-5 w-5" />
           </button>

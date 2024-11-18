@@ -38,7 +38,6 @@ import {
   NotificationSolid,
   LogoutSolid,
   EditOneSolid,
-  LightningSolid,
   ChevronLeft,
 } from "@mynaui/icons-react";
 
@@ -119,20 +118,21 @@ const Profile = ({ nickname, avatar, type }: profile) => {
                     </CardTitle>
 
                     <HeartWavesSolid
-                      className={`${
-                        type === "Plus"
-                          ? "text-info"
-                          : type === "Admin"
+                      className={`${type === "Plus"
+                        ? "text-info"
+                        : type === "Admin"
                           ? "text-danger"
                           : type === "verified"
-                          ? "text-success"
-                          : "hidden"
-                      } h-3.5 w-3.5`}
+                            ? "text-success"
+                            : "hidden"
+                        } h-3.5 w-3.5`}
                     />
                   </div>
                 </div>
 
-                <ChevronRight />
+                <Button variant={"outline"} size={"icon"}>
+                  <ChevronRight />
+                </Button>
               </div>
             </Card>
           </Link>
@@ -140,13 +140,13 @@ const Profile = ({ nickname, avatar, type }: profile) => {
           <Separator />
 
           <Card className="flex flex-col p-2 space-y-2 w-full">
-            <SheetDescription className="font-semibold md:font-medium">
+            <SheetDescription className="font-semibold md:font-medium ms-2 mt-2">
               Experiência do usuário
             </SheetDescription>
 
             <Link
               to=""
-              className="flex flex-row justify-between items-center p-3"
+              className="flex flex-row justify-between items-center px-3 py-1.5"
             >
               <div className="flex flex-row items-center gap-2">
                 <NotificationSolid />
@@ -154,25 +154,15 @@ const Profile = ({ nickname, avatar, type }: profile) => {
                   Notificações
                 </p>
               </div>
-              <ChevronRight />
-            </Link>
 
-            <Link
-              to=""
-              className="flex flex-row justify-between items-center p-3"
-            >
-              <div className="flex flex-row items-center gap-2">
-                <LightningSolid />
-                <p className="font-poppins font-semibold md:font-medium text-md md:text-sm tracking-tight">
-                  Upgrade
-                </p>
-              </div>
-              <ChevronRight />
+              <Button variant={"outline"} size={"icon"}>
+                <ChevronRight />
+              </Button>
             </Link>
 
             <Link
               to="/saved"
-              className="flex flex-row justify-between items-center p-3"
+              className="flex flex-row justify-between items-center px-3 py-1.5"
             >
               <div className="flex flex-row items-center gap-2">
                 <HeartSolid />
@@ -180,12 +170,15 @@ const Profile = ({ nickname, avatar, type }: profile) => {
                   Salvos
                 </p>
               </div>
-              <ChevronRight />
+
+              <Button variant={"outline"} size={"icon"}>
+                <ChevronRight />
+              </Button>
             </Link>
 
             <Link
               to=""
-              className="flex flex-row justify-between items-center p-3"
+              className="flex flex-row justify-between items-center px-3 py-1.5"
             >
               <div className="flex flex-row items-center gap-2">
                 <BookmarkSolid />
@@ -193,20 +186,23 @@ const Profile = ({ nickname, avatar, type }: profile) => {
                   Favoritos
                 </p>
               </div>
-              <ChevronRight />
+
+              <Button variant={"outline"} size={"icon"}>
+                <ChevronRight />
+              </Button>
             </Link>
           </Card>
 
           <Separator />
 
           <Card className="flex flex-col p-2 space-y-2 w-full">
-            <SheetDescription className="font-semibold md:font-medium">
+            <SheetDescription className="font-semibold md:font-medium ms-2 mt-2">
               Conta do usuário
             </SheetDescription>
 
             <Link
               to="/profile/edit"
-              className="flex flex-row justify-between items-center p-3"
+              className="flex flex-row justify-between items-center px-3 py-1.5"
             >
               <div className="flex flex-row items-center gap-2">
                 <EditOneSolid />
@@ -214,12 +210,15 @@ const Profile = ({ nickname, avatar, type }: profile) => {
                   Editar
                 </p>
               </div>
-              <ChevronRight />
+
+              <Button variant={"outline"} size={"icon"}>
+                <ChevronRight />
+              </Button>
             </Link>
 
             <Link
               to="/auth/login"
-              className="flex flex-row justify-between items-center p-3"
+              className="flex flex-row justify-between items-center px-3 py-1.5"
               onClick={logOutHandle}
             >
               <div className="flex flex-row items-center gap-2">
@@ -228,7 +227,10 @@ const Profile = ({ nickname, avatar, type }: profile) => {
                   Sair
                 </p>
               </div>
-              <ChevronRight className="text-danger" />
+
+              <Button className="text-danger border-danger" variant={"outline"} size={"icon"}>
+                <ChevronRight />
+              </Button>
             </Link>
           </Card>
         </div>
@@ -321,12 +323,10 @@ const NavbarItem: React.FC<NavbarItemProps> = ({
     const radius = diameter / 2;
 
     circle.style.width = circle.style.height = `${diameter}px`;
-    circle.style.left = `${
-      event.clientX - button.getBoundingClientRect().left - radius
-    }px`;
-    circle.style.top = `${
-      event.clientY - button.getBoundingClientRect().top - radius
-    }px`;
+    circle.style.left = `${event.clientX - button.getBoundingClientRect().left - radius
+      }px`;
+    circle.style.top = `${event.clientY - button.getBoundingClientRect().top - radius
+      }px`;
     circle.style.position = "absolute";
     circle.style.backgroundColor = "rgba(255, 255, 255, 0.6)";
     circle.style.borderRadius = "50%";
@@ -429,36 +429,32 @@ export const NavBar = (props: userData) => {
           </DropdownTrigger>
 
           <DropdownContent className="select-none">
-            <DropdownLabel className="text-sm text-muted-foreground font-semibold md:font-medium">
+            <DropdownLabel className="text-xs md:text-xs text-muted-foreground font-medium md:font-normal">
               Menu
             </DropdownLabel>
 
             <Link
               to={"/settings"}
-              className="flex flex-row justify-between items-center p-2"
+              className="flex flex-row justify-between items-center"
             >
-              <DropdownItem className="flex flex-row items-center gap-2">
-                <CogFourSolid />
-                <p className="font-poppins font-semibold md:font-medium text-lg md:text-md tracking-tight">
+              <DropdownItem className="focus:text-primary/70 w-full cursor-pointer flex flex-row items-center gap-1">
+                <CogFourSolid className="h-5 w-5"/>
+                <p className="font-poppins font-semibold md:font-medium">
                   Configurações
                 </p>
               </DropdownItem>
-
-              <ChevronRight />
             </Link>
 
             <Link
               to={"/support"}
-              className="flex flex-row justify-between items-center p-2"
+              className="flex flex-row justify-between items-center"
             >
-              <DropdownItem className="flex flex-row items-center gap-2">
-                <QuestionCircleSolid />
-                <p className="font-poppins font-semibold md:font-medium text-lg md:text-md tracking-tight">
+              <DropdownItem className="focus:text-primary/70 w-full cursor-pointer flex flex-row items-center gap-1">
+                <QuestionCircleSolid className="h-5 w-5" />
+                <p className="font-poppins font-semibold md:font-medium">
                   Suporte
                 </p>
               </DropdownItem>
-
-              <ChevronRight />
             </Link>
           </DropdownContent>
         </Dropdown>
@@ -539,17 +535,17 @@ export const NavBarReturn = (props: NavBarReturnProps) => {
           <Button
             variant={"outline"}
             size={"icon"}
-            className="text-muted-foreground hover:text-primary/70"
+            className="text-muted-foreground hover:text-primary/70 hover:border-primary/70"
             onClick={() => navigate(-1)}
           >
             <ChevronLeft />
           </Button>
         </NavbarContent>
-        
+
         <NavbarContent className="text-muted-foreground font-poppins font-semibold md:font-medium">
           {props.title}
         </NavbarContent>
-        
+
         <NavbarContent>
           {props.menu && (
             <Button

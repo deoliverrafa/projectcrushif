@@ -145,8 +145,7 @@ export const CardPost = (props: CardProps) => {
       setLikeCount(likeCount + 1);
     } else {
       axios.post(
-        `${import.meta.env.VITE_API_BASE_URL}${
-          import.meta.env.VITE_POST_UNLIKE
+        `${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_POST_UNLIKE
         }`,
         { token: localStorage.getItem("token"), postId: props._id }
       );
@@ -158,6 +157,11 @@ export const CardPost = (props: CardProps) => {
       setShowHeart(false);
       setAnimateClick(false);
     }, 500);
+  };
+
+  const handleDoubleLike = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    handleLike();
   };
 
   const handleFavorite = () => {
@@ -231,8 +235,7 @@ export const CardPost = (props: CardProps) => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        `${import.meta.env.VITE_API_BASE_URL}${
-          import.meta.env.VITE_POST_COMMENT
+        `${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_POST_COMMENT
         }`,
         {
           content: comment,
@@ -308,8 +311,7 @@ export const CardPost = (props: CardProps) => {
     setLoading(true);
     try {
       const response = await axios.get(
-        `${import.meta.env.VITE_API_BASE_URL}${
-          import.meta.env.VITE_POST_GETCOMMENTS
+        `${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_POST_GETCOMMENTS
         }${localStorage.getItem("token")}/${props._id}`,
         { params: { skip, limit } }
       );
@@ -335,7 +337,7 @@ export const CardPost = (props: CardProps) => {
   const handleScroll = () => {
     if (
       window.innerHeight + document.documentElement.scrollTop ===
-        document.documentElement.offsetHeight &&
+      document.documentElement.offsetHeight &&
       hasMore &&
       !loading
     ) {
@@ -366,7 +368,8 @@ export const CardPost = (props: CardProps) => {
 
   return (
     <>
-      <Card className={`select-none my-2 w-full md:w-6/12 ${props.classNames}`}>
+      <Card className={`select-none my-2 w-full md:w-6/12 ${props.classNames}`} onDoubleClick={handleDoubleLike}
+      >
         <CardHeader className="flex flex-row justify-between items-center">
           {!props.isAnonymous ? (
             <Link to={`/profile/${props.id}`} className="flex space-x-2">
@@ -390,15 +393,14 @@ export const CardPost = (props: CardProps) => {
                   </div>
                   <div>
                     <HeartWavesSolid
-                      className={`${
-                        viewingUser?.type === "Plus"
-                          ? "text-info"
-                          : viewingUser?.type === "Admin"
+                      className={`${viewingUser?.type === "Plus"
+                        ? "text-info"
+                        : viewingUser?.type === "Admin"
                           ? "text-danger"
                           : viewingUser?.type === "verified"
-                          ? "text-success"
-                          : "hidden"
-                      } h-4 w-4`}
+                            ? "text-success"
+                            : "hidden"
+                        } h-4 w-4`}
                     />
                   </div>
                 </div>
@@ -607,11 +609,13 @@ export const CardPost = (props: CardProps) => {
             </div>
           </div>
 
-          <Link to={`/likedByPost/${props._id}`}>
-            <CardDescription className="cursor-pointer font-normal md:font-light tracking-tight text-md md:text-sm">
-              ver todas as {likeCount} curtidas
-            </CardDescription>
-          </Link>
+          <div className="flex justify-start w-fit">
+            <Link to={`/likedByPost/${props._id}`} className="w-fit">
+              <CardDescription className="font-normal md:font-light tracking-tight text-md md:text-sm w-fit">
+                ver todas as {likeCount} curtidas
+              </CardDescription>
+            </Link>
+          </div>
         </CardContent>
 
         <Separator className="my-2" />
@@ -628,15 +632,13 @@ export const CardPost = (props: CardProps) => {
                 >
                   {liked ? (
                     <HeartSolid
-                      className={`${
-                        animateClick ? "animate-click" : ""
-                      } text-primary h-5 md:h-4 w-5 md:w-4`}
+                      className={`${animateClick ? "animate-click" : ""
+                        } text-primary h-5 md:h-4 w-5 md:w-4`}
                     />
                   ) : (
                     <HeartBrokenSolid
-                      className={`${
-                        animateClick ? "animate-click" : ""
-                      } h-5 md:h-4 w-5 md:w-4`}
+                      className={`${animateClick ? "animate-click" : ""
+                        } h-5 md:h-4 w-5 md:w-4`}
                     />
                   )}
                   {likeCount}
@@ -736,7 +738,6 @@ export const CardPost = (props: CardProps) => {
                               />
 
                               <Button
-                                className="rounded"
                                 variant={"outline"}
                                 size={"icon"}
                               >
@@ -793,7 +794,7 @@ export const CardPost = (props: CardProps) => {
                 onInput={handleCommentChange}
               />
 
-              <Button className="rounded" variant={"outline"} size={"icon"}>
+              <Button variant={"outline"} size={"icon"}>
                 <FatCornerUpRightSolid className="h-5 w-5" />
               </Button>
             </form>
