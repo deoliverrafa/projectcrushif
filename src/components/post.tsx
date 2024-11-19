@@ -401,7 +401,7 @@ export const CardPost = (props: CardProps) => {
 
   const ContextMenuWrapper: React.FC<ContextMenuWrapperProps> = ({ children, onLongPress }) => {
     const [isLongPress, setIsLongPress] = React.useState(false);
-    const timeoutRef = React.useRef<NodeJS.Timeout | null>(null);
+    const timeoutRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
 
     const handleMouseDown = React.useCallback(() => {
       timeoutRef.current = setTimeout(() => {

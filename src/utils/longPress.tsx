@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 
-function useLongPress(callback = () => {}, ms = 300) {
+function useLongPress(callback = () => { }, ms = 300) {
   const [isPressed, setIsPressed] = useState(false);
 
   const startPress = useCallback(() => {
@@ -12,7 +12,7 @@ function useLongPress(callback = () => {}, ms = 300) {
   }, []);
 
   useEffect(() => {
-    let timer: string | number | NodeJS.Timeout | undefined;
+    let timer: ReturnType<typeof setTimeout> | undefined;
     if (isPressed) {
       timer = setTimeout(() => {
         callback();
