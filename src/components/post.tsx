@@ -488,7 +488,7 @@ export const CardPost = (props: CardProps) => {
       <ContextMenuWrapper onLongPress={handleLongPress} {...longPressProps}>
         <Card
           className={`select-none my-2 w-full md:w-6/12 ${props.classNames}`}
-          onDoubleClick={handleDoubleLike}
+          onDoubleClick={handleLike}
         >
           <CardHeader className="flex flex-row justify-between items-center">
             {!props.isAnonymous ? (
