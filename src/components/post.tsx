@@ -160,11 +160,6 @@ export const CardPost = (props: CardProps) => {
     }, 500);
   };
 
-  const handleDoubleLike = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    handleLike();
-  };
-
   const handleFavorite = () => {
     setFavorited(!favorited);
     setShowFavorited(true);
