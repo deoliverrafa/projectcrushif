@@ -386,41 +386,44 @@ export const Comment: React.FC<Comment> = (props) => {
   return (
     <div className="flex flex-col items-center my-2">
       <Card key={props._id} className="w-full max-w-md" onDoubleClick={handleDoubleLike}>
-        <Link to={`/profile/${props.userId}`}>
-          <CardHeader className="flex flex-row items-center space-x-4 p-4">
-            <Avatar className="h-10 w-10 border-2 border-border">
-              <AvatarFallback>{viewingUser?.nickname[0]}</AvatarFallback>
-              <AvatarImage
-                className="object-cover"
-                src={viewingUser?.avatar ? viewingUser?.avatar : UserIcon}
-                alt={viewingUser?.nickname}
-              />
-            </Avatar>
-            <div className="flex flex-col">
-              <div className="flex items-center gap-1">
-                <CardDescription className="font-semibold md:font-semibold">
-                  {viewingUser?.nickname}
-                </CardDescription>
-                <HeartWavesSolid
-                  className={`${viewingUser?.type === "Plus"
-                    ? "text-info"
-                    : viewingUser?.type === "Admin"
-                      ? "text-danger"
-                      : viewingUser?.type === "verified"
-                        ? "text-success"
-                        : "hidden"
-                    } h-3.5 w-3.5`}
+        <div className="flex justify-start w-fit">
+          <Link to={`/profile/${props.userId}`}>
+            <CardHeader className="flex flex-row items-center space-x-4 p-4">
+              <Avatar className="h-10 w-10 border-2 border-border">
+                <AvatarFallback>{viewingUser?.nickname[0]}</AvatarFallback>
+                <AvatarImage
+                  className="object-cover"
+                  src={viewingUser?.avatar ? viewingUser?.avatar : UserIcon}
+                  alt={viewingUser?.nickname}
                 />
+              </Avatar>
+              <div className="flex flex-col">
+                <div className="flex items-center gap-1">
+                  <CardDescription className="font-semibold md:font-semibold">
+                    {viewingUser?.nickname}
+                  </CardDescription>
+                  <HeartWavesSolid
+                    className={`${viewingUser?.type === "Plus"
+                      ? "text-info"
+                      : viewingUser?.type === "Admin"
+                        ? "text-danger"
+                        : viewingUser?.type === "verified"
+                          ? "text-success"
+                          : "hidden"
+                      } h-3.5 w-3.5`}
+                  />
+                </div>
+                <CardDescription className="text-xs md:text-xs">
+                  {formatDistanceToNow(new Date(props.insertAt), {
+                    addSuffix: true,
+                    locale: ptBR,
+                  })}
+                </CardDescription>
               </div>
-              <CardDescription className="text-xs md:text-xs">
-                {formatDistanceToNow(new Date(props.insertAt), {
-                  addSuffix: true,
-                  locale: ptBR,
-                })}
-              </CardDescription>
-            </div>
-          </CardHeader>
-        </Link>
+            </CardHeader>
+          </Link>
+        </div>
+
 
         <CardContent className="relative pb-0">
           <CardDescription className="text-foreground font-normal md:font-light tracking-tight text-md md:text-sm">

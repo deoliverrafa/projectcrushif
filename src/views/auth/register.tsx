@@ -122,19 +122,6 @@ export const RegisterLayout = () => {
             >
               <div className="flex flex-col md:flex-row justify-between items-center space-y-5 md:space-y-0 md:space-x-2">
                 <div className="grid items-center gap-1.5 w-full max-w-sm">
-                  <Label htmlFor="nickname">Usuário <span className="text-xs">{nicknameLength}/12</span></Label>
-                  <Input
-                    type="text"
-                    placeholder="Nome do usuário"
-                    id="nickname"
-                    name="nickname"
-                    onChange={handleChange}
-                    value={formData.nickname}
-                    maxLength={12}
-                  />
-                </div>
-
-                <div className="grid items-center gap-1.5 w-full max-w-sm">
                   <Label htmlFor="userName">Nome Completo <span className="text-xs">{userNameLength}/72</span></Label>
                   <Input
                     type="text"
@@ -144,6 +131,19 @@ export const RegisterLayout = () => {
                     onChange={handleChange}
                     value={formData.userName}
                     maxLength={72}
+                  />
+                </div>
+
+                <div className="grid items-center gap-1.5 w-full max-w-sm">
+                  <Label htmlFor="nickname">Usuário <span className="text-xs">{nicknameLength}/12</span></Label>
+                  <Input
+                    type="text"
+                    placeholder="Nome do usuário"
+                    id="nickname"
+                    name="nickname"
+                    onChange={handleChange}
+                    value={formData.nickname}
+                    maxLength={12}
                   />
                 </div>
               </div>
