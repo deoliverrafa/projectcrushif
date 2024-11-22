@@ -146,7 +146,8 @@ export const CardPost = (props: CardProps) => {
       setLikeCount(likeCount + 1);
     } else {
       axios.post(
-        `${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_POST_UNLIKE
+        `${import.meta.env.VITE_API_BASE_URL}${
+          import.meta.env.VITE_POST_UNLIKE
         }`,
         { token: localStorage.getItem("token"), postId: props._id }
       );
@@ -231,7 +232,8 @@ export const CardPost = (props: CardProps) => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        `${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_POST_COMMENT
+        `${import.meta.env.VITE_API_BASE_URL}${
+          import.meta.env.VITE_POST_COMMENT
         }`,
         {
           content: comment,
@@ -307,7 +309,8 @@ export const CardPost = (props: CardProps) => {
     setLoading(true);
     try {
       const response = await axios.get(
-        `${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_POST_GETCOMMENTS
+        `${import.meta.env.VITE_API_BASE_URL}${
+          import.meta.env.VITE_POST_GETCOMMENTS
         }${localStorage.getItem("token")}/${props._id}`,
         { params: { skip, limit } }
       );
@@ -333,7 +336,7 @@ export const CardPost = (props: CardProps) => {
   const handleScroll = () => {
     if (
       window.innerHeight + document.documentElement.scrollTop ===
-      document.documentElement.offsetHeight &&
+        document.documentElement.offsetHeight &&
       hasMore &&
       !loading
     ) {
@@ -379,13 +382,13 @@ export const CardPost = (props: CardProps) => {
     };
 
     if (showComponent) {
-      document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener("mousedown", handleClickOutside);
     } else {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     }
 
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [showComponent]);
 
@@ -394,7 +397,10 @@ export const CardPost = (props: CardProps) => {
     onLongPress: () => void;
   }
 
-  const ContextMenuWrapper: React.FC<ContextMenuWrapperProps> = ({ children, onLongPress }) => {
+  const ContextMenuWrapper: React.FC<ContextMenuWrapperProps> = ({
+    children,
+    onLongPress,
+  }) => {
     const [isLongPress, setIsLongPress] = React.useState(false);
     const timeoutRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -411,7 +417,7 @@ export const CardPost = (props: CardProps) => {
       }
       setIsLongPress(false);
     }, [isLongPress]);
-
+    
     return (
       <ContextMenu>
         <ContextMenuTrigger
@@ -453,20 +459,15 @@ export const CardPost = (props: CardProps) => {
             Compartilhar
           </ContextMenuItem>
 
-
           {props.id !== dataUser?._id ? null : (
-            <ContextMenuItem
-              className="cursor-pointer text-danger focus:text-primary/70"
-            >
+            <ContextMenuItem className="cursor-pointer text-danger focus:text-primary/70">
               <TrashOneSolid className="h-4 w-4 mr-1" />
               Excluir
             </ContextMenuItem>
           )}
 
           {props.id === dataUser?._id ? null : (
-            <ContextMenuItem
-              className="cursor-pointer text-danger focus:text-primary/70"
-            >
+            <ContextMenuItem className="cursor-pointer text-danger focus:text-primary/70">
               <FlagOneSolid className="h-4 w-4 mr-1" />
               Reportar
             </ContextMenuItem>
@@ -508,14 +509,15 @@ export const CardPost = (props: CardProps) => {
                     </div>
                     <div>
                       <HeartWavesSolid
-                        className={`${viewingUser?.type === "Plus"
-                          ? "text-info"
-                          : viewingUser?.type === "Admin"
+                        className={`${
+                          viewingUser?.type === "Plus"
+                            ? "text-info"
+                            : viewingUser?.type === "Admin"
                             ? "text-danger"
                             : viewingUser?.type === "verified"
-                              ? "text-success"
-                              : "hidden"
-                          } h-4 w-4`}
+                            ? "text-success"
+                            : "hidden"
+                        } h-4 w-4`}
                       />
                     </div>
                   </div>
@@ -530,7 +532,9 @@ export const CardPost = (props: CardProps) => {
 
                   <AvatarImage
                     className="object-cover"
-                    src={!props.isAnonymous ? viewingUser?.avatar : AnonymousIcon}
+                    src={
+                      !props.isAnonymous ? viewingUser?.avatar : AnonymousIcon
+                    }
                   />
                 </Avatar>
 
@@ -624,13 +628,15 @@ export const CardPost = (props: CardProps) => {
                   >
                     {liked ? (
                       <HeartSolid
-                        className={`${animateClick ? "animate-click" : ""
-                          } text-primary h-5 md:h-4 w-5 md:w-4`}
+                        className={`${
+                          animateClick ? "animate-click" : ""
+                        } text-primary h-5 md:h-4 w-5 md:w-4`}
                       />
                     ) : (
                       <HeartBrokenSolid
-                        className={`${animateClick ? "animate-click" : ""
-                          } h-5 md:h-4 w-5 md:w-4`}
+                        className={`${
+                          animateClick ? "animate-click" : ""
+                        } h-5 md:h-4 w-5 md:w-4`}
                       />
                     )}
                     {likeCount}
@@ -712,7 +718,9 @@ export const CardPost = (props: CardProps) => {
                                 <AvatarImage
                                   className="object-cover"
                                   src={
-                                    dataUser?.avatar ? dataUser?.avatar : UserIcon
+                                    dataUser?.avatar
+                                      ? dataUser?.avatar
+                                      : UserIcon
                                   }
                                 />
                               </Avatar>
@@ -730,10 +738,7 @@ export const CardPost = (props: CardProps) => {
                                   onInput={handleCommentChange}
                                 />
 
-                                <Button
-                                  variant={"outline"}
-                                  size={"icon"}
-                                >
+                                <Button variant={"outline"} size={"icon"}>
                                   <FatCornerUpRightSolid className="h-5 w-5" />
                                 </Button>
                               </form>
@@ -757,6 +762,9 @@ export const CardPost = (props: CardProps) => {
                           likeCount={props.likeCount}
                           likedBy={props.likedBy}
                           mentionedUsers={props.mentionedUsers}
+                          isFollowing={
+                            props.following ? props.following : false
+                          }
                         />
                       </div>
                     )}

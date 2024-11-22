@@ -30,8 +30,6 @@ interface CardProps {
   mentionedUsers: string[];
 }
 
-
-
 export default function HomePage() {
   const [userData, setUserData] = React.useState<User | null>(null);
   const [finishedPosts, setFinishedPosts] = React.useState(false);
@@ -121,6 +119,7 @@ export default function HomePage() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [loading, limit, finishedPosts]);
 
+  
   return (
     <>
       {userData ? (
@@ -129,24 +128,28 @@ export default function HomePage() {
             user={userData}
             avatarPath={userData.avatar || localAvatarPath}
           />
-
           <main className="w-full h-full flex flex-col justify-center items-center">
-            {posts.map((post) => (
-              <CardPost
-                key={post._id}
-                _id={post._id}
-                id={post.userId}
-                content={post.content}
-                isAnonymous={post.isAnonymous}
-                photoURL={post.photoURL}
-                userId={post.userId}
-                insertAt={post.insertAt}
-                likeCount={post.likeCount}
-                likedBy={post.likedBy}
-                commentCount={post.commentCount}
-                mentionedUsers={post.mentionedUsers}
-              />
-            ))}
+            {posts.map((post) => {
+              const isFollowing = userData.following.includes(post.userId);
+
+              return (
+                <CardPost
+                  key={post._id}
+                  _id={post._id}
+                  id={post.userId}
+                  content={post.content}
+                  isAnonymous={post.isAnonymous}
+                  photoURL={post.photoURL}
+                  userId={post.userId}
+                  insertAt={post.insertAt}
+                  likeCount={post.likeCount}
+                  likedBy={post.likedBy}
+                  commentCount={post.commentCount}
+                  mentionedUsers={post.mentionedUsers}
+                  following={isFollowing}
+                />
+              );
+            })}
 
             {loading && (
               <div className="flex flex-row items-center">

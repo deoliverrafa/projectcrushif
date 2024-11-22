@@ -23,6 +23,7 @@ interface Comment {
   insertAt: Date;
   userId: string;
   likeCount: number;
+  isFollowing: boolean
   likedBy: string[];
   mentionedUsers: string[];
 }
@@ -39,6 +40,7 @@ export const MentionedUsers: React.FC<Comment> = (props) => {
   const [mentionedUsers, setMentionedUsers] = React.useState<User[]>([]);
   const [isLoading, setIsLoading] = React.useState<boolean>(true);
 
+  
   React.useEffect(() => {
     const fetchUserData = async () => {
       try {
@@ -58,6 +60,8 @@ export const MentionedUsers: React.FC<Comment> = (props) => {
     }
   }, [props.userId, props.likedBy, props.mentionedUsers]);
 
+  
+  
   return (
     <React.Fragment>
       <Dialog>
@@ -86,7 +90,7 @@ export const MentionedUsers: React.FC<Comment> = (props) => {
                   nickname={user.nickname}
                   type={user.type}
                   _id={user._id}
-                  following={user.isFollowing}
+                  following={props.isFollowing}
                 />
               ))}
             </ScrollArea>
