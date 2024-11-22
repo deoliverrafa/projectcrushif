@@ -314,13 +314,13 @@ export const CardPost = (props: CardProps) => {
         }${localStorage.getItem("token")}/${props._id}`,
         { params: { skip, limit } }
       );
-      if (response.data.comments) {
-        setDrawerIsOpen(true);
-      }
+
       const newComments: Comment[] = response.data.comments; // Supondo que `Comment` seja seu tipo de comentário
       await Promise.all(
         newComments.map((comment: Comment) => fetchUserData(comment.userId)) // Aqui você define o tipo
-      );
+      ).finally(() => {
+        setDrawerIsOpen(true)
+      });
 
       setComments((prevComments) => [...prevComments, ...newComments]);
       setSkip((prevSkip) => prevSkip + limit);
@@ -419,7 +419,7 @@ export const CardPost = (props: CardProps) => {
       }
       setIsLongPress(false);
     }, [isLongPress]);
-    
+
     return (
       <ContextMenu>
         <ContextMenuTrigger
@@ -644,7 +644,7 @@ export const CardPost = (props: CardProps) => {
                     {likeCount}
                   </Button>
 
-                  <Drawer open={drawerIsOpen} onOpenChange={setDrawerIsOpen}>
+                  <Drawer open={drawerIsOpen} onOpenChange={() => {setDrawerIsOpen(false)}}>
                     <DrawerTrigger asChild>
                       <Button
                         variant={"outline"}
