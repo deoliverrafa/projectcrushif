@@ -119,7 +119,7 @@ export default function HomePage() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [loading, limit, finishedPosts]);
 
-  
+
   return (
     <>
       {userData ? (

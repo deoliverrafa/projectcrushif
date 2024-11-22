@@ -23,7 +23,7 @@ interface Comment {
   insertAt: Date;
   userId: string;
   likeCount: number;
-  isFollowing: boolean
+  isFollowing?: boolean
   likedBy: string[];
   mentionedUsers: string[];
 }
