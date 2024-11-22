@@ -69,7 +69,6 @@ import {
   CheckSquareOneSolid,
   HeartWavesSolid,
   FatCornerUpRightSolid,
-  SpinnerSolid,
 } from "@mynaui/icons-react";
 
 import AnonymousIcon from "../../public/images/anonymous.png";
@@ -307,6 +306,7 @@ export const CardPost = (props: CardProps) => {
 
   const fetchComments = async () => {
     setLoading(true);
+    setDrawerIsOpen(true);
     try {
       const response = await axios.get(
         `${import.meta.env.VITE_API_BASE_URL}${
@@ -314,13 +314,10 @@ export const CardPost = (props: CardProps) => {
         }${localStorage.getItem("token")}/${props._id}`,
         { params: { skip, limit } }
       );
-
       const newComments: Comment[] = response.data.comments; // Supondo que `Comment` seja seu tipo de comentário
       await Promise.all(
         newComments.map((comment: Comment) => fetchUserData(comment.userId)) // Aqui você define o tipo
-      ).finally(() => {
-        setDrawerIsOpen(true)
-      });
+      );
 
       setComments((prevComments) => [...prevComments, ...newComments]);
       setSkip((prevSkip) => prevSkip + limit);
@@ -644,7 +641,7 @@ export const CardPost = (props: CardProps) => {
                     {likeCount}
                   </Button>
 
-                  <Drawer open={drawerIsOpen} onOpenChange={() => {setDrawerIsOpen(false)}}>
+                  <Drawer open={drawerIsOpen} onOpenChange={setDrawerIsOpen}>
                     <DrawerTrigger asChild>
                       <Button
                         variant={"outline"}
@@ -662,7 +659,69 @@ export const CardPost = (props: CardProps) => {
                     <DrawerContent>
                       <div className="w-full max-w-sm mx-auto">
                         <ScrollArea className="h-72 w-full rounded-md">
-                          {comments.length === 0 ? (
+                          {loading ? (
+                            // Skeleton enquanto os comentários estão carregando
+                            <div className="flex flex-col items-center my-2">
+                              {[...Array(3)].map((_, index) => (
+                                <Card key={index} className="w-full max-w-md">
+                                  <div className="flex justify-start w-fit">
+                                    <CardHeader className="flex flex-row items-center space-x-4 p-4">
+                                      <span className="bg-muted-foreground rounded-full animate-pulse h-10 w-10"></span>
+
+                                      <div className="flex flex-col gap-0.5">
+                                        <div className="flex items-center gap-1">
+                                          <span className="bg-muted-foreground rounded animate-pulse h-3 w-10"></span>
+                                        </div>
+                                        <span className="bg-muted-foreground rounded animate-pulse h-2 w-14"></span>
+                                      </div>
+                                    </CardHeader>
+                                  </div>
+
+                                  <CardContent className="relative pb-0 gap-1 flex flex-row items-center">
+                                    <div className="bg-muted-foreground rounded animate-pulse h-3 w-8"></div>
+                                    <div className="bg-muted-foreground rounded animate-pulse h-3 w-28"></div>
+                                  </CardContent>
+
+                                  <Separator className="my-2" />
+
+                                  <CardFooter className="flex flex-row justify-between items-center pb-4">
+                                    <div className="flex flex-col items-center w-full">
+                                      <div className="flex flex-row justify-between items-center w-full">
+                                        <div className="flex flex-row items-center gap-2">
+                                          <Button variant="outline" size="sm">
+                                            <span className="bg-muted-foreground rounded animate-pulse h-3 w-8"></span>
+                                          </Button>
+
+                                          <Button variant="outline" size="sm">
+                                            <span className="bg-muted-foreground rounded animate-pulse h-3 w-14"></span>
+                                          </Button>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </CardFooter>
+                                </Card>
+                              ))}
+                            </div>
+                          ) : comments.length > 0 ? (
+                            comments.map((comment) => {
+                              const dataUser = commentUserData[comment.userId];
+                              return (
+                                dataUser && (
+                                  <Comment
+                                    key={comment._id}
+                                    _id={comment._id}
+                                    content={comment.content}
+                                    insertAt={comment.insertAt}
+                                    userId={comment.userId}
+                                    likeCount={comment.likeCount}
+                                    likedBy={comment.likedBy}
+                                    mentionedUsers={comment.mentionedUsers}
+                                    replies={comment.replies}
+                                  />
+                                )
+                              );
+                            })
+                          ) : (
                             <div className="flex flex-col justify-center items-center space-y-2 w-full">
                               <img
                                 src={NotFoundArt}
@@ -673,33 +732,6 @@ export const CardPost = (props: CardProps) => {
                                 comentar
                               </DrawerDescription>
                             </div>
-                          ) : (
-                            comments.map((comment) => {
-                              const dataUser = commentUserData[comment.userId];
-                              return dataUser ? (
-                                <Comment
-                                  key={comment._id}
-                                  _id={comment._id}
-                                  content={comment.content}
-                                  insertAt={comment.insertAt}
-                                  userId={comment.userId}
-                                  likeCount={comment.likeCount}
-                                  likedBy={comment.likedBy}
-                                  mentionedUsers={comment.mentionedUsers}
-                                  replies={comment.replies}
-                                />
-                              ) : (
-                                <div
-                                  key={comment._id}
-                                  className="flex flex-row justify-center items-center"
-                                >
-                                  <SpinnerSolid className="animate-spin mr-2 h-5 w-5" />
-                                  <p className="text-muted-foreground text-sm">
-                                    Carregando...
-                                  </p>
-                                </div>
-                              );
-                            })
                           )}
                         </ScrollArea>
 

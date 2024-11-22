@@ -227,6 +227,7 @@ const ReplyComment: React.FC<Comment> = (props) => {
                   likeCount={props.likeCount}
                   likedBy={props.likedBy}
                   mentionedUsers={props.mentionedUsers}
+
                 />
               </div>
             )}
