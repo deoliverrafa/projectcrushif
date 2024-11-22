@@ -429,7 +429,7 @@ export const NavBar = (props: userData) => {
           </DropdownTrigger>
 
           <DropdownContent className="select-none">
-            <DropdownLabel className="text-xs md:text-xs text-muted-foreground font-medium md:font-normal">
+            <DropdownLabel>
               Menu
             </DropdownLabel>
 
