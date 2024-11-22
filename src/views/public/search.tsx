@@ -132,7 +132,7 @@ const SearchLayout = () => {
     >
       <Card className="w-full md:w-6/12">
         <CardHeader>
-          <CardTitle className="text-primary uppercase tracking-widest text-2xl md:text-5xl">
+          <CardTitle className="text-foreground uppercase text-2xl md:text-5xl">
             Pesquisar
           </CardTitle>
         </CardHeader>
@@ -151,15 +151,22 @@ const SearchLayout = () => {
             </div>
           </div>
         </CardContent>
+      </Card>
+        
+      <Card className="w-full md:w-6/12 mt-2">
         {queryResponse.length > 0 && (
           <p className="font-poppins font-medium md:font-normal tracking-wide text-md md:text-sm text-muted-foreground">
             {queryResponse.length === 1 ? (
-              <div className="flex flex-row items-center ml-4">
-                <CardDescription>Resultado</CardDescription>
+              <div className="flex flex-row justify-between items-center">
+                <CardDescription className="text-foreground ml-4 mt-4 uppercase">Resultado</CardDescription>
+                
+                <CardDescription className="mr-4 mt-4 text-xs md:text-xs">{queryResponse.length} resultado</CardDescription>
               </div>
             ) : queryResponse.length > 1 ? (
-              <div className="flex flex-row items-center ml-4">
-                <CardDescription>Resultados</CardDescription>
+              <div className="flex flex-row justify-between items-center">
+                <CardDescription className="text-foreground ml-4 mt-4 uppercase">Resultados</CardDescription>
+                
+                <CardDescription className="mr-4 mt-4 text-xs md:text-xs">{queryResponse.length} resultados</CardDescription>
               </div>
             ) : (
               ""
@@ -200,7 +207,7 @@ const SearchLayout = () => {
                 </div>
               ) : (
                 <div className="flex flex-col gap-1">
-                  <CardDescription>Sugestões para você</CardDescription>
+                  <CardDescription className="text-foreground uppercase">Sugestões para você</CardDescription>
                   <UserSuggestions removeUserId={userData._id} />
                 </div>
               )}

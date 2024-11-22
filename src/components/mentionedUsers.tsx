@@ -3,13 +3,13 @@ import * as React from "react";
 import { SearchUserCard } from "./user-card";
 
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "./ui/dialog";
+  Drawer,
+  DrawerContent,
+  DrawerDescription,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "./ui/drawer";
 import { ScrollArea } from "./ui/scroll-area";
 import { Button } from "./ui/button";
 
@@ -64,17 +64,17 @@ export const MentionedUsers: React.FC<Comment> = (props) => {
   
   return (
     <React.Fragment>
-      <Dialog>
-        <DialogTrigger asChild>
+      <Drawer>
+        <DrawerTrigger asChild>
           <Button variant="outline" size="icon">
             <At className="h-5 w-5" />
           </Button>
-        </DialogTrigger>
+        </DrawerTrigger>
 
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Marcações</DialogTitle>
-          </DialogHeader>
+        <DrawerContent>
+          <DrawerHeader>
+            <DrawerTitle>Marcações</DrawerTitle>
+          </DrawerHeader>
 
           {isLoading ? (
             <div className="flex flex-row items-center">
@@ -95,10 +95,10 @@ export const MentionedUsers: React.FC<Comment> = (props) => {
               ))}
             </ScrollArea>
           ) : (
-            <DialogDescription>Nenhum usuário marcado</DialogDescription>
+            <DrawerDescription>Nenhum usuário marcado</DrawerDescription>
           )}
-        </DialogContent>
-      </Dialog>
+        </DrawerContent>
+      </Drawer>
     </React.Fragment>
   );
 };
