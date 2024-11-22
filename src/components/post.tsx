@@ -314,7 +314,9 @@ export const CardPost = (props: CardProps) => {
         }${localStorage.getItem("token")}/${props._id}`,
         { params: { skip, limit } }
       );
-
+      if (response.data.comments) {
+        setDrawerIsOpen(true);
+      }
       const newComments: Comment[] = response.data.comments; // Supondo que `Comment` seja seu tipo de comentário
       await Promise.all(
         newComments.map((comment: Comment) => fetchUserData(comment.userId)) // Aqui você define o tipo
@@ -650,7 +652,6 @@ export const CardPost = (props: CardProps) => {
                         size={"sm"}
                         onClick={() => {
                           fetchComments();
-                          setDrawerIsOpen(true);
                         }}
                       >
                         <MessageSolid className="h-5 md:h-4 w-5 md:w-4" />
