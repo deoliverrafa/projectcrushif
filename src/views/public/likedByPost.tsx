@@ -105,7 +105,6 @@ const LikedByPostLayout = () => {
             </div>
           ) : null}
 
-
           {filteredUsers.length > 0 ? (
             <div className="flex flex-row justify-between items-center">
               <CardDescription className="text-foreground mt-6 uppercase">Curtido por</CardDescription>
@@ -165,7 +164,7 @@ const MenuNavbar = () => {
             </div>
 
             <DrawerFooter>
-              <DrawerDescription className="text-xs md:text-xs text-center">
+              <DrawerDescription className="text-center">
                 Você está vendo as curtidas feitas pelos usuários na postagem feita no Crush IF.
               </DrawerDescription>
             </DrawerFooter>

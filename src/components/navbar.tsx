@@ -26,7 +26,6 @@ import {
   GridSolid,
   SearchSolid,
   FireSolid,
-  AcademicHatSolid,
   SendSolid,
   ChevronDown,
   CogFourSolid,
@@ -35,7 +34,6 @@ import {
   ChevronRight,
   HeartSolid,
   BookmarkSolid,
-  NotificationSolid,
   LogoutSolid,
   EditOneSolid,
   ChevronLeft,
@@ -143,22 +141,6 @@ const Profile = ({ nickname, avatar, type }: profile) => {
             <SheetDescription className="font-semibold md:font-medium ms-2 mt-2">
               Experiência do usuário
             </SheetDescription>
-
-            <Link
-              to=""
-              className="flex flex-row justify-between items-center px-3 py-1.5"
-            >
-              <div className="flex flex-row items-center gap-2">
-                <NotificationSolid />
-                <p className="font-poppins font-semibold md:font-medium text-md md:text-sm tracking-tight">
-                  Notificações
-                </p>
-              </div>
-
-              <Button variant={"outline"} size={"icon"}>
-                <ChevronRight />
-              </Button>
-            </Link>
 
             <Link
               to="/saved"
@@ -438,7 +420,7 @@ export const NavBar = (props: userData) => {
               className="flex flex-row justify-between items-center"
             >
               <DropdownItem className="focus:text-primary/70 w-full cursor-pointer flex flex-row items-center gap-1">
-                <CogFourSolid className="h-5 w-5"/>
+                <CogFourSolid className="h-5 w-5" />
                 <p className="font-poppins font-semibold md:font-medium">
                   Configurações
                 </p>
@@ -485,15 +467,6 @@ export const NavBar = (props: userData) => {
         >
           <FireSolid className="h-5 w-5" />
           Crush
-        </NavbarItem>
-
-        <NavbarItem
-          href="/events"
-          activeClassName="text-primary"
-          hoverClassName="text-primary/70"
-        >
-          <AcademicHatSolid className="h-5 w-5" />
-          Evêntos
         </NavbarItem>
       </NavbarContent>
 

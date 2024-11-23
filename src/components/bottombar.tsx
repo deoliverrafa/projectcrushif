@@ -6,7 +6,6 @@ import {
   GridSolid,
   SearchSolid,
   FireSolid,
-  AcademicHatSolid,
 } from "@mynaui/icons-react";
 
 interface BottombarProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -140,11 +139,6 @@ export const BottomBar = () => {
       <BottombarItem to="/crush">
         <FireSolid />
         Crush
-      </BottombarItem>
-
-      <BottombarItem to="/events">
-        <AcademicHatSolid />
-        Evêntos
       </BottombarItem>
     </Bottombar>
   );

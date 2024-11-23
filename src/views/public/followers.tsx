@@ -8,7 +8,13 @@ import { NavBarReturn } from "../../components/navbar";
 import { SearchUserCard } from "../../components/user-card";
 
 import { Card, CardContent, CardDescription } from "../../components/ui/card";
+import { Separator } from "../../components/ui/separator";
+import { Drawer, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle, DrawerTrigger } from "../../components/ui/drawer";
+import { Input } from "../../components/ui/input";
 
+import { InfoSolid } from "@mynaui/icons-react";
+
+import Logo from "../../../public/images/logo/logo.png";
 import NoHaveArt from "../../../public/images/no_have_art.png";
 
 interface User {
@@ -23,6 +29,8 @@ const FollowersLayout = () => {
   const { id } = useParams<string>();
 
   const [followersUsers, setFollowersUsers] = React.useState<User[]>([]);
+  const [filteredUsers, setFilteredUsers] = React.useState<User[]>([]);
+  const [searchQuery, setSearchQuery] = React.useState<string>("");
 
   const [loading, setLoading] = React.useState(false);
 
@@ -31,13 +39,13 @@ const FollowersLayout = () => {
       try {
         setLoading(true);
         const response = await axios.get(
-          `${import.meta.env.VITE_API_BASE_URL}${
-            import.meta.env.VITE_FOLLOWERS_USER
+          `${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_FOLLOWERS_USER
           }${id}`
         );
 
         if (response.data.followers) {
           setFollowersUsers(response.data.followers);
+          setFilteredUsers(response.data.followers);
         }
       } catch (error) {
         console.error(
@@ -54,6 +62,14 @@ const FollowersLayout = () => {
     }
   }, [id]);
 
+  React.useEffect(() => {
+    const filtered = followersUsers.filter((user) =>
+      user.nickname.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      user.userName.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+    setFilteredUsers(filtered);
+  }, [searchQuery, followersUsers]);
+
   if (loading) {
     return <LoadingPage />;
   }
@@ -62,8 +78,32 @@ const FollowersLayout = () => {
     <React.Fragment>
       <Card className="select-none mt-2 w-full md:w-6/12">
         <CardContent>
-          {followersUsers.length > 0 ? (
-            followersUsers.map((user) => (
+          {filteredUsers.length > 0 ? (
+            <div className="mt-6">
+              <Input
+                placeholder="Pesquisar"
+                name="query"
+                id="query"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+            </div>
+          ) : null}
+
+          {filteredUsers.length > 0 ? (
+            <div className="flex flex-row justify-between items-center">
+              <CardDescription className="text-foreground mt-6 uppercase">Seguidores</CardDescription>
+
+              <CardDescription className="mt-6 text-xs md:text-xs">{followersUsers.length} seguidores</CardDescription>
+            </div>
+          ) : null}
+
+          {filteredUsers.length > 0 ? (
+            <Separator className="my-2" />
+          ) : null}
+
+          {filteredUsers.length > 0 ? (
+            filteredUsers.map((user) => (
               <SearchUserCard
                 key={user._id}
                 avatar={user.avatar}
@@ -74,15 +114,13 @@ const FollowersLayout = () => {
               />
             ))
           ) : (
-            <div className="flex flex-col items-center space-y-2 w-full">
+            <div className="flex flex-col justify-center items-center space-y-2 w-full">
               <img
                 src={NoHaveArt}
                 className="h-32 md:h-[300px] w-32 md:w-[300px]"
-                alt="Nenhum"
+                alt="404"
               />
-              <CardDescription className="text-center">
-                Esté usuário não está sendo seguindo ninguém.
-              </CardDescription>
+              <CardDescription>Esté usuário não está sendo seguindo</CardDescription>
             </div>
           )}
         </CardContent>
@@ -91,10 +129,40 @@ const FollowersLayout = () => {
   );
 };
 
+const MenuNavbar = () => {
+  return (
+    <React.Fragment>
+      <Drawer>
+        <DrawerTrigger asChild>
+          <InfoSolid />
+        </DrawerTrigger>
+
+        <DrawerContent>
+          <div className="mx-auto w-full max-w-sm">
+            <DrawerHeader>
+              <DrawerTitle>Seguidores</DrawerTitle>
+            </DrawerHeader>
+
+            <div className="flex items-center justify-center p-4 pb-0">
+              <img className="h-20 w-20" src={Logo} alt="logo" />
+            </div>
+
+            <DrawerFooter>
+              <DrawerDescription className="text-center">
+                Você está vendo os seguidores do usuário no Crush IF.
+              </DrawerDescription>
+            </DrawerFooter>
+          </div>
+        </DrawerContent>
+      </Drawer>
+    </React.Fragment>
+  )
+}
+
 const FollowingPage = () => {
   return (
     <React.Fragment>
-      <NavBarReturn title="Seguidores" />
+      <NavBarReturn title="Seguidores" menu={<MenuNavbar />} />
       <main className="flex flex-col justify-center items-center h-full w-full">
         <FollowersLayout />
       </main>

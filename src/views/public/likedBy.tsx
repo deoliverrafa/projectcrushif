@@ -158,7 +158,7 @@ const MenuNavbar = () => {
             </div>
 
             <DrawerFooter>
-              <DrawerDescription className="text-xs md:text-xs text-center">
+              <DrawerDescription className="text-center">
                 Você está vendo as curtidas feitas pelos usuários no perfil do usuário do Crush IF.
               </DrawerDescription>
             </DrawerFooter>

@@ -40,7 +40,7 @@ export const MentionedUsers: React.FC<Comment> = (props) => {
   const [mentionedUsers, setMentionedUsers] = React.useState<User[]>([]);
   const [isLoading, setIsLoading] = React.useState<boolean>(true);
 
-  
+
   React.useEffect(() => {
     const fetchUserData = async () => {
       try {
@@ -60,8 +60,8 @@ export const MentionedUsers: React.FC<Comment> = (props) => {
     }
   }, [props.userId, props.likedBy, props.mentionedUsers]);
 
-  
-  
+
+
   return (
     <React.Fragment>
       <Drawer>
@@ -72,31 +72,33 @@ export const MentionedUsers: React.FC<Comment> = (props) => {
         </DrawerTrigger>
 
         <DrawerContent>
-          <DrawerHeader>
-            <DrawerTitle>Marcações</DrawerTitle>
-          </DrawerHeader>
+          <div className="mx-auto w-full max-w-sm">
+            <DrawerHeader>
+              <DrawerTitle>Marcações</DrawerTitle>
+            </DrawerHeader>
 
-          {isLoading ? (
-            <div className="flex flex-row items-center">
-              <SpinnerSolid className="animate-spin mr-2 h-5 w-5" />
-              <p className="text-muted-foreground text-sm">Carregando...</p>
-            </div>
-          ) : mentionedUsers.length > 0 ? (
-            <ScrollArea className="h-72 w-full rounded-md">
-              {mentionedUsers.map((user) => (
-                <SearchUserCard
-                  key={user._id}
-                  avatar={user.avatar}
-                  nickname={user.nickname}
-                  type={user.type}
-                  _id={user._id}
-                  following={props.isFollowing}
-                />
-              ))}
-            </ScrollArea>
-          ) : (
-            <DrawerDescription>Nenhum usuário marcado</DrawerDescription>
-          )}
+            {isLoading ? (
+              <div className="flex flex-row items-center">
+                <SpinnerSolid className="animate-spin mr-2 h-5 w-5" />
+                <p className="text-muted-foreground text-sm">Carregando...</p>
+              </div>
+            ) : mentionedUsers.length > 0 ? (
+              <ScrollArea className="h-72 w-full rounded-md">
+                {mentionedUsers.map((user) => (
+                  <SearchUserCard
+                    key={user._id}
+                    avatar={user.avatar}
+                    nickname={user.nickname}
+                    type={user.type}
+                    _id={user._id}
+                    following={props.isFollowing}
+                  />
+                ))}
+              </ScrollArea>
+            ) : (
+              <DrawerDescription>Nenhum usuário marcado</DrawerDescription>
+            )}
+          </div>
         </DrawerContent>
       </Drawer>
     </React.Fragment>
