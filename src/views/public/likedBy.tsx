@@ -7,7 +7,13 @@ import { NavBarReturn } from "../../components/navbar";
 import { SearchUserCard } from "../../components/user-card";
 
 import { Card, CardContent, CardDescription } from "../../components/ui/card";
+import { Separator } from "../../components/ui/separator";
+import { Drawer, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle, DrawerTrigger } from "../../components/ui/drawer";
+import { Input } from "../../components/ui/input";
 
+import { InfoSolid } from "@mynaui/icons-react";
+
+import Logo from "../../../public/images/logo/logo.png";
 import NoHaveArt from "../../../public/images/no_have_art.png";
 
 import { getUserDataById } from "../../utils/getUserDataById";
@@ -31,6 +37,8 @@ const LikedByLayout = () => {
   );
   const [viewingUser, setViewingUser] = React.useState<User | null>(null);
   const [likedUsers, setLikedUsers] = React.useState<User[]>([]);
+  const [filteredUsers, setFilteredUsers] = React.useState<User[]>([]);
+  const [searchQuery, setSearchQuery] = React.useState<string>("");
   const [loadingUsers, setLoadingUsers] = React.useState(true);
 
   React.useEffect(() => {
@@ -44,6 +52,7 @@ const LikedByLayout = () => {
         );
         const users = await Promise.all(usersPromises);
         setLikedUsers(users);
+        setFilteredUsers(users);
       } catch (error) {
         console.error("Error fetching viewing post data:", error);
       } finally {
@@ -55,6 +64,14 @@ const LikedByLayout = () => {
       fetchViewingUserData();
     }
   }, [id]);
+
+  React.useEffect(() => {
+    const filtered = likedUsers.filter((user) =>
+      user.nickname.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      user.userName.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+    setFilteredUsers(filtered);
+  }, [searchQuery, likedUsers]);
 
   getStatusUser(userId);
 
@@ -70,8 +87,32 @@ const LikedByLayout = () => {
     <React.Fragment>
       <Card className="select-none mt-2 w-full md:w-6/12">
         <CardContent>
-          {likedUsers.length > 0 ? (
-            likedUsers.map((user) => (
+          {filteredUsers.length > 0 ? (
+            <div className="mt-6">
+              <Input
+                placeholder="Pesquisar"
+                name="query"
+                id="query"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+            </div>
+          ) : null}
+
+          {filteredUsers.length > 0 ? (
+            <div className="flex flex-row justify-between items-center">
+              <CardDescription className="text-foreground mt-6 uppercase">Curtido por</CardDescription>
+
+              <CardDescription className="mt-6 text-xs md:text-xs">{likedUsers.length} curtidas</CardDescription>
+            </div>
+          ) : null}
+
+          {filteredUsers.length > 0 ? (
+            <Separator className="my-2" />
+          ) : null}
+
+          {filteredUsers.length > 0 ? (
+            filteredUsers.map((user) => (
               <SearchUserCard
                 key={user._id}
                 avatar={user.avatar}
@@ -98,10 +139,40 @@ const LikedByLayout = () => {
   );
 };
 
+const MenuNavbar = () => {
+  return (
+    <React.Fragment>
+      <Drawer>
+        <DrawerTrigger asChild>
+          <InfoSolid />
+        </DrawerTrigger>
+
+        <DrawerContent>
+          <div className="mx-auto w-full max-w-sm">
+            <DrawerHeader>
+              <DrawerTitle>Curtidas</DrawerTitle>
+            </DrawerHeader>
+
+            <div className="flex items-center justify-center p-4 pb-0">
+              <img className="h-20 w-20" src={Logo} alt="logo" />
+            </div>
+
+            <DrawerFooter>
+              <DrawerDescription className="text-xs md:text-xs text-center">
+                Você está vendo as curtidas feitas pelos usuários no perfil do usuário do Crush IF.
+              </DrawerDescription>
+            </DrawerFooter>
+          </div>
+        </DrawerContent>
+      </Drawer>
+    </React.Fragment>
+  )
+}
+
 const LikedByPage = () => {
   return (
     <React.Fragment>
-      <NavBarReturn title="Curtidas" />
+      <NavBarReturn title="Curtidas" menu={<MenuNavbar />} />
       <main className="flex flex-col justify-center items-center h-full w-full">
         <LikedByLayout />
       </main>
