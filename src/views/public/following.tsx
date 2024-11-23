@@ -74,98 +74,102 @@ const FollowingLayout = () => {
     return <LoadingPage />;
   }
 
+  const MenuNavbar = () => {
+    return (
+      <React.Fragment>
+        <Drawer>
+          <DrawerTrigger asChild>
+            <InfoSolid />
+          </DrawerTrigger>
+
+          <DrawerContent>
+            <div className="mx-auto w-full max-w-sm">
+              <DrawerHeader>
+                <DrawerTitle>Seguindo</DrawerTitle>
+              </DrawerHeader>
+
+              <div className="flex items-center  p-4 pb-0">
+                <img className="h-14 w-14" src={Logo} alt="logo" />
+                <DrawerDescription className="text-foreground">
+                  {filteredUsers.length} usuários sendo seguidos por esté perfil no Crush IF.
+                </DrawerDescription>
+              </div>
+
+              <DrawerFooter>
+                <DrawerDescription className="text-xs md:text-xs text-center">
+                  Você está vendo os usuários sendo seguidos por esté perfil no Crush IF.
+                </DrawerDescription>
+              </DrawerFooter>
+            </div>
+          </DrawerContent>
+        </Drawer>
+      </React.Fragment>
+    )
+  }
+
   return (
     <React.Fragment>
-      <Card className="select-none mt-2 w-full md:w-6/12">
-        <CardContent>
-          {filteredUsers.length > 0 ? (
-            <div className="mt-6">
-              <Input
-                placeholder="Pesquisar"
-                name="query"
-                id="query"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-            </div>
-          ) : null}
+      <NavBarReturn title="Seguindo" menu={<MenuNavbar />} />
 
-          {filteredUsers.length > 0 ? (
-            <div className="flex flex-row justify-between items-center">
-              <CardDescription className="text-foreground mt-6 uppercase">Seguindo</CardDescription>
+      <main className="flex flex-col justify-center items-center h-full w-full">
+        <Card className="select-none mt-2 w-full md:w-6/12">
+          <CardContent>
+            {filteredUsers.length > 0 ? (
+              <div className="mt-6">
+                <Input
+                  placeholder="Pesquisar"
+                  name="query"
+                  id="query"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                />
+              </div>
+            ) : null}
 
-              <CardDescription className="mt-6 text-xs md:text-xs">{followingUsers.length} seguindo</CardDescription>
-            </div>
-          ) : null}
+            {filteredUsers.length > 0 ? (
+              <div className="flex flex-row justify-between items-center">
+                <CardDescription className="text-foreground mt-6 uppercase">Seguindo</CardDescription>
 
-          {filteredUsers.length > 0 ? (
-            <Separator className="my-2" />
-          ) : null}
+                <CardDescription className="mt-6 text-xs md:text-xs">{followingUsers.length} seguindo</CardDescription>
+              </div>
+            ) : null}
 
-          {filteredUsers.length > 0 ? (
-            filteredUsers.map((user) => (
-              <SearchUserCard
-                key={user._id}
-                avatar={user.avatar}
-                type={user.type}
-                userName={user.userName}
-                nickname={user.nickname}
-                _id={user._id}
-              />
-            ))
-          ) : (
-            <div className="flex flex-col justify-center items-center space-y-2 w-full">
-              <img
-                src={NoHaveArt}
-                className="h-32 md:h-[300px] w-32 md:w-[300px]"
-                alt="404"
-              />
-              <CardDescription>Esté usuário não está seguindo</CardDescription>
-            </div>
-          )}
-        </CardContent>
-      </Card>
+            {filteredUsers.length > 0 ? (
+              <Separator className="my-2" />
+            ) : null}
+
+            {filteredUsers.length > 0 ? (
+              filteredUsers.map((user) => (
+                <SearchUserCard
+                  key={user._id}
+                  avatar={user.avatar}
+                  type={user.type}
+                  userName={user.userName}
+                  nickname={user.nickname}
+                  _id={user._id}
+                />
+              ))
+            ) : (
+              <div className="flex flex-col justify-center items-center space-y-2 w-full">
+                <img
+                  src={NoHaveArt}
+                  className="h-32 md:h-[300px] w-32 md:w-[300px]"
+                  alt="404"
+                />
+                <CardDescription>Esté usuário não está seguindo</CardDescription>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </main>
     </React.Fragment>
   );
 };
 
-const MenuNavbar = () => {
-  return (
-    <React.Fragment>
-      <Drawer>
-        <DrawerTrigger asChild>
-          <InfoSolid />
-        </DrawerTrigger>
-
-        <DrawerContent>
-          <div className="mx-auto w-full max-w-sm">
-            <DrawerHeader>
-              <DrawerTitle>Seguindo</DrawerTitle>
-            </DrawerHeader>
-
-            <div className="flex items-center justify-center p-4 pb-0">
-              <img className="h-20 w-20" src={Logo} alt="logo" />
-            </div>
-
-            <DrawerFooter>
-              <DrawerDescription className="text-center">
-                Você está vendo os usuários seguidos no Crush IF.
-              </DrawerDescription>
-            </DrawerFooter>
-          </div>
-        </DrawerContent>
-      </Drawer>
-    </React.Fragment>
-  )
-}
-
 const FollowingPage = () => {
   return (
     <React.Fragment>
-      <NavBarReturn title="Seguindo" menu={<MenuNavbar />} />
-      <main className="flex flex-col justify-center items-center h-full w-full">
-        <FollowingLayout />
-      </main>
+      <FollowingLayout />
     </React.Fragment>
   );
 };
