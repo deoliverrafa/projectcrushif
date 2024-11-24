@@ -635,6 +635,7 @@ export const CardPost = (props: CardProps) => {
                                       likedBy={comment.likedBy}
                                       mentionedUsers={comment.mentionedUsers}
                                       replies={comment.replies}
+                                      userData={dataUser}
                                     />
                                   )
                                 );

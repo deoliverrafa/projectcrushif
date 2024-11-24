@@ -31,6 +31,7 @@ import UserIcon from "../../public/images/user.png";
 import { getUserDataById } from "../utils/getUserDataById";
 import { getReplyById } from "../utils/getReplyById";
 import decodeToken from "../utils/decodeToken";
+import { User } from "../interfaces/userInterface";
 
 interface Comment {
   _id: string;
@@ -41,19 +42,11 @@ interface Comment {
   likedBy: string[];
   mentionedUsers: string[];
   replies: string[];
-}
-
-interface User {
-  _id: string;
-  nickname: string;
-  avatar: string;
-  type: string;
-  isFollowing: boolean;
+  userData: User;
 }
 
 const ReplyComment: React.FC<Comment> = (props) => {
   const [viewingUser, setViewingUser] = React.useState<User | null>(null);
-
   const [liked, setLiked] = React.useState(false);
   const [likeCount, setLikeCount] = React.useState(props.likeCount);
   const [animateClick, setAnimateClick] = React.useState(false);
@@ -86,9 +79,10 @@ const ReplyComment: React.FC<Comment> = (props) => {
 
     try {
       await axios.post(
-        `${import.meta.env.VITE_API_BASE_URL}${newLiked
-          ? import.meta.env.VITE_COMMENT_LIKE
-          : import.meta.env.VITE_COMMENT_UNLIKE
+        `${import.meta.env.VITE_API_BASE_URL}${
+          newLiked
+            ? import.meta.env.VITE_COMMENT_LIKE
+            : import.meta.env.VITE_COMMENT_UNLIKE
         }`,
         { token: localStorage.getItem("token"), commentId: props._id }
       );
@@ -128,7 +122,11 @@ const ReplyComment: React.FC<Comment> = (props) => {
   return (
     <React.Fragment>
       <div className="flex flex-col justify-end items-end mb-2">
-        <Card key={props._id} className="w-11/12 max-w-md" onDoubleClick={handleDoubleLike}>
+        <Card
+          key={props._id}
+          className="w-11/12 max-w-md"
+          onDoubleClick={handleDoubleLike}
+        >
           <Link to={`/profile/${props.userId}`}>
             <CardHeader className="flex flex-row items-center space-x-4 p-4">
               <Avatar className="h-10 w-10 border-2 border-border">
@@ -145,14 +143,15 @@ const ReplyComment: React.FC<Comment> = (props) => {
                     {viewingUser?.nickname}
                   </CardDescription>
                   <HeartWavesSolid
-                    className={`${viewingUser?.type === "Plus"
-                      ? "text-info"
-                      : viewingUser?.type === "Admin"
+                    className={`${
+                      viewingUser?.type === "Plus"
+                        ? "text-info"
+                        : viewingUser?.type === "Admin"
                         ? "text-danger"
                         : viewingUser?.type === "verified"
-                          ? "text-success"
-                          : "hidden"
-                      } h-3.5 w-3.5`}
+                        ? "text-success"
+                        : "hidden"
+                    } h-3.5 w-3.5`}
                   />
                 </div>
                 <CardDescription className="text-xs md:text-xs">
@@ -204,13 +203,15 @@ const ReplyComment: React.FC<Comment> = (props) => {
               >
                 {liked ? (
                   <HeartSolid
-                    className={`${animateClick ? "animate-click" : ""
-                      } text-primary h-5 md:h-4 w-5 md:w-4`}
+                    className={`${
+                      animateClick ? "animate-click" : ""
+                    } text-primary h-5 md:h-4 w-5 md:w-4`}
                   />
                 ) : (
                   <HeartBrokenSolid
-                    className={`${animateClick ? "animate-click" : ""
-                      } h-5 md:h-4 w-5 md:w-4`}
+                    className={`${
+                      animateClick ? "animate-click" : ""
+                    } h-5 md:h-4 w-5 md:w-4`}
                   />
                 )}
                 {likeCount}
@@ -227,7 +228,11 @@ const ReplyComment: React.FC<Comment> = (props) => {
                   likeCount={props.likeCount}
                   likedBy={props.likedBy}
                   mentionedUsers={props.mentionedUsers}
-
+                  followingMentionedUsers={props.mentionedUsers.map(
+                    (mentionedId) =>
+                      props.userData.following.includes(mentionedId)
+                  )}
+                  isFollowing={props.userData.following.includes(props.userId)}
                 />
               </div>
             )}
@@ -308,9 +313,10 @@ export const Comment: React.FC<Comment> = (props) => {
 
     try {
       await axios.post(
-        `${import.meta.env.VITE_API_BASE_URL}${newLiked
-          ? import.meta.env.VITE_COMMENT_LIKE
-          : import.meta.env.VITE_COMMENT_UNLIKE
+        `${import.meta.env.VITE_API_BASE_URL}${
+          newLiked
+            ? import.meta.env.VITE_COMMENT_LIKE
+            : import.meta.env.VITE_COMMENT_UNLIKE
         }`,
         { token: localStorage.getItem("token"), commentId: props._id }
       );
@@ -343,7 +349,8 @@ export const Comment: React.FC<Comment> = (props) => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        `${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_COMMENT_REPLY
+        `${import.meta.env.VITE_API_BASE_URL}${
+          import.meta.env.VITE_COMMENT_REPLY
         }`,
         {
           token: localStorage.getItem("token"),
@@ -386,7 +393,11 @@ export const Comment: React.FC<Comment> = (props) => {
 
   return (
     <div className="flex flex-col items-center my-2">
-      <Card key={props._id} className="w-full max-w-md" onDoubleClick={handleDoubleLike}>
+      <Card
+        key={props._id}
+        className="w-full max-w-md"
+        onDoubleClick={handleDoubleLike}
+      >
         <div className="flex justify-start w-fit">
           <Link to={`/profile/${props.userId}`}>
             <CardHeader className="flex flex-row items-center space-x-4 p-4">
@@ -404,14 +415,15 @@ export const Comment: React.FC<Comment> = (props) => {
                     {viewingUser?.nickname}
                   </CardDescription>
                   <HeartWavesSolid
-                    className={`${viewingUser?.type === "Plus"
-                      ? "text-info"
-                      : viewingUser?.type === "Admin"
+                    className={`${
+                      viewingUser?.type === "Plus"
+                        ? "text-info"
+                        : viewingUser?.type === "Admin"
                         ? "text-danger"
                         : viewingUser?.type === "verified"
-                          ? "text-success"
-                          : "hidden"
-                      } h-3.5 w-3.5`}
+                        ? "text-success"
+                        : "hidden"
+                    } h-3.5 w-3.5`}
                   />
                 </div>
                 <CardDescription className="text-xs md:text-xs">
@@ -424,7 +436,6 @@ export const Comment: React.FC<Comment> = (props) => {
             </CardHeader>
           </Link>
         </div>
-
 
         <CardContent className="relative pb-0">
           <CardDescription className="text-foreground font-normal md:font-light tracking-tight text-md md:text-sm">
@@ -497,13 +508,15 @@ export const Comment: React.FC<Comment> = (props) => {
                 >
                   {liked ? (
                     <HeartSolid
-                      className={`${animateClick ? "animate-click" : ""
-                        } text-primary h-5 md:h-4 w-5 md:w-4`}
+                      className={`${
+                        animateClick ? "animate-click" : ""
+                      } text-primary h-5 md:h-4 w-5 md:w-4`}
                     />
                   ) : (
                     <HeartBrokenSolid
-                      className={`${animateClick ? "animate-click" : ""
-                        } h-5 md:h-4 w-5 md:w-4`}
+                      className={`${
+                        animateClick ? "animate-click" : ""
+                      } h-5 md:h-4 w-5 md:w-4`}
                     />
                   )}
                   {likeCount}
@@ -528,6 +541,13 @@ export const Comment: React.FC<Comment> = (props) => {
                     likeCount={props.likeCount}
                     likedBy={props.likedBy}
                     mentionedUsers={props.mentionedUsers}
+                    followingMentionedUsers={props.mentionedUsers.map(
+                      (mentionedId) =>
+                        props.userData.following.includes(mentionedId)
+                    )}
+                    isFollowing={props.userData.following.includes(
+                      props.userId
+                    )}
                   />
                 </div>
               )}
@@ -572,6 +592,7 @@ export const Comment: React.FC<Comment> = (props) => {
                     likedBy={reply.likedBy}
                     mentionedUsers={reply.mentionedUsers}
                     replies={reply.replies}
+                    userData={props.userData}
                   />
                 </div>
               )
