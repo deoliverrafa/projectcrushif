@@ -87,7 +87,7 @@ interface CardProps {
   _id: string;
   content: string;
   isAnonymous: boolean;
-  photoURL: string;
+  photoURLs: string[];
   insertAt: Date;
   following?: boolean;
   id: string;
@@ -440,19 +440,22 @@ export const CardPost = (props: CardProps) => {
 
             <CardContent className="relative pb-0">
               <div className="flex flex-col items-center justify-center">
-                {props.photoURL && (
+                {props.photoURLs.length >= 1 && (
                   <Carousel className="flex flex-col items-center my-2 relative h-[500px] w-full">
                     <CarouselContent>
-                      <CarouselItem>
-                        <img
-                          className="rounded-lg object-cover h-[500px] w-full"
-                          src={props.photoURL}
-                          alt="Imagem Post"
-                        />
-                      </CarouselItem>
+                      {props.photoURLs.map((photo, index) => (
+                        <CarouselItem key={index}>
+                          <img
+                            className="rounded-lg object-cover h-[500px] w-full"
+                            src={photo}
+                            alt={`Imagem ${index + 1}`}
+                          />
+                        </CarouselItem>
+                      ))}
+
                     </CarouselContent>
-                    <CarouselPrevious className="hidden left-4" />
-                    <CarouselNext className="hidden right-4" />
+                    <CarouselPrevious className={`${props.photoURLs.length <= 1 ? "hidden" : ""} left-4`} />
+                    <CarouselNext className={`${props.photoURLs.length <= 1 ? "hidden" : ""} right-4`} />
                   </Carousel>
                 )}
 

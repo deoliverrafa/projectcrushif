@@ -12,7 +12,7 @@ interface Post {
   _id: string;
   content: string;
   isAnonymous: boolean;
-  photoURL: string;
+  photoURLs: string[];
   insertAt: Date;
   id?: string;
   likeCount: number;
@@ -56,7 +56,7 @@ const PostLayout = () => {
         id={viewingPost.userId}
         content={viewingPost.content}
         isAnonymous={viewingPost.isAnonymous}
-        photoURL={viewingPost.photoURL}
+        photoURLs={viewingPost.photoURLs}
         userId={viewingPost.userId}
         insertAt={viewingPost.insertAt}
         likeCount={viewingPost.likeCount}

@@ -46,7 +46,8 @@ const PublishLayout = () => {
     mentionedUsers: [],
   });
 
-  const [selectedFile, setSelectedFile] = React.useState<File | null>(null);
+  const [images, setImages] = React.useState<string[]>([]);
+  const [uploadedImages, setUploadedImages] = React.useState<File[]>([]);
 
   const handleIsAnonymous = () => {
     setAnonymous(!isAnonymous);
@@ -71,11 +72,28 @@ const PublishLayout = () => {
     }
   };
 
-  function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
-    if (e.target.files && e.target.files[0]) {
-      setSelectedFile(e.target.files[0]);
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      const files = Array.from(e.target.files);
+
+      const maxFiles = 5;
+      if (uploadedImages.length + files.length > maxFiles) {
+        setErrorMessage(`Você pode fazer upload de até ${maxFiles} imagens no total.`);
+        return;
+      }
+
+      const newImages = files.map((file) => URL.createObjectURL(file));
+      setUploadedImages((prev) => [...prev, ...files]);
+      setImages((prev) => [...prev, ...newImages]);
+      setErrorMessage(""); // Limpa a mensagem de erro, se existir
     }
-  }
+  };
+
+
+  const handleDeleteImage = (index: number) => {
+    setImages((prev) => prev.filter((_, i) => i !== index));
+    setUploadedImages((prev) => prev.filter((_, i) => i !== index));
+  };
 
   React.useEffect(() => {
     setCardData((prevData) => ({
@@ -85,17 +103,17 @@ const PublishLayout = () => {
   }, [isAnonymous]);
 
   React.useEffect(() => {
-    if (selectedFile) {
+    if (images && images instanceof File) {
       if (
-        selectedFile.type === "image/jpeg" ||
-        selectedFile.type === "image/png" ||
-        selectedFile.type === "image/gif"
+        images.type === "image/jpeg" ||
+        images.type === "image/png" ||
+        images.type === "image/gif"
       ) {
         setErrorMessage("");
-        const imageUrl = URL.createObjectURL(selectedFile);
+        const imageUrl = URL.createObjectURL(images);
         setCardData((prevData) => ({
           ...prevData,
-          photoURL: imageUrl,
+          photoURLs: imageUrl,
         }));
       } else {
         setErrorMessage(
@@ -103,7 +121,9 @@ const PublishLayout = () => {
         );
       }
     }
-  }, [selectedFile]);
+  }, [images]);
+
+
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -116,9 +136,10 @@ const PublishLayout = () => {
       formData.append("mentionedUsers", JSON.stringify(cardData.mentionedUsers));
     }
 
-    if (selectedFile) {
-      formData.append("photo", selectedFile);
-    }
+    // Adiciona cada arquivo ao FormData
+    uploadedImages.forEach((file) => {
+      formData.append("photos", file); // "photos" deve ser o campo aceito pelo backend
+    });
 
     try {
       const response = await fetch(
@@ -131,18 +152,22 @@ const PublishLayout = () => {
       );
 
       if (!response.ok) {
-        throw new Error("Network response was not ok");
+        throw new Error("Erro na resposta do servidor.");
       }
 
       const result = await response.json();
 
       if (result.posted) {
         window.location.href = "/";
+      } else {
+        setErrorMessage(result.message || "Falha ao postar. Tente novamente.");
       }
     } catch (error) {
-      console.error("Error:", error);
+      console.error("Erro:", error);
+      setErrorMessage("Ocorreu um erro ao enviar sua postagem.");
     }
   }
+
 
   const MenuNavbar = () => {
     return (
@@ -201,20 +226,21 @@ const PublishLayout = () => {
                 />
 
                 <div className="grid grid-cols-3 gap-4">
+                  {images.map((src, index) => (
+                    <Card className="relative w-fit h-fit group">
+                      <CardContent className="h-20 w-20 p-0">
+                        <img
+                          src={src}
+                          alt={`Uploaded ${index}`}
+                          className="object-cover h-20 w-20"
+                        />
+                      </CardContent>
 
-                  <Card className="relative w-fit h-fit group">
-                    <CardContent className="h-20 w-20 p-0">
-                      <img
-                        src={PostingArt}
-                        alt={"posting"}
-                        className="object-cover h-20 w-20"
-                      />
-                    </CardContent>
-
-                    <div className="cursor-pointer bg-danger text-white rounded-full absolute top-2 right-2 p-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                      <TrashOneSolid />
-                    </div>
-                  </Card>
+                      <div onClick={() => handleDeleteImage(index)} className="cursor-pointer bg-danger text-white rounded-full absolute top-2 right-2 p-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <TrashOneSolid />
+                      </div>
+                    </Card>
+                  ))}
                 </div>
               </CardHeader>
 

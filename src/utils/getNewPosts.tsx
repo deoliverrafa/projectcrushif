@@ -9,7 +9,7 @@ interface Posts {
     references: string
     content: string
     isAnonymous: string
-    photoURL: string
+    photoURLs: string[];
     likeCount: number
     likedBy: String[]
 }
