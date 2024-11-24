@@ -17,15 +17,25 @@ import {
 } from "../../components/ui/card.tsx";
 import { ScrollArea } from "../../components/ui/scroll-area.tsx";
 
-import NotFoundArt from "../../../public/images/not_found_art.png";
+import NotFoundArt from "../../../public/images/not_found_art.png"
 
 import { getStatusUser } from "../../utils/getStatusUser.tsx";
 import decodeToken from "../../utils/decodeToken.tsx";
 import { getUserData } from "../../utils/getUserData.tsx";
-import { User } from "../../interfaces/userInterface.ts";
+
+interface User {
+  nickname: string;
+  userName: string;
+  avatar: string;
+  type: string;
+  _id: string;
+  isFollowing: boolean;
+  status: string;
+}
 
 const SearchLayout = () => {
-
+  const userData = getUserData();
+  
   const [userId] = React.useState<string | null>(
     localStorage.getItem("userId")
   );
@@ -37,13 +47,13 @@ const SearchLayout = () => {
 
   const [queryResponse, setQueryResponse] = useState<User[]>([]);
   const [suggestedUsers, setSuggestedUsers] = useState<User[]>([]);
-  const [userData] = useState<User>(getUserData);
   const [noResults, setNoResults] = useState(false);
-
+  
   const fetchSuggestedUsers = useCallback(() => {
     axios
       .post(
-        `${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_SEARCH_PAGE_USER
+        `${import.meta.env.VITE_API_BASE_URL}${
+          import.meta.env.VITE_SEARCH_PAGE_USER
         }`,
         { nickname: "o", token: formData.token }
       )
@@ -63,7 +73,8 @@ const SearchLayout = () => {
     (nickname: string) => {
       axios
         .post(
-          `${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_SEARCH_PAGE_USER
+          `${import.meta.env.VITE_API_BASE_URL}${
+            import.meta.env.VITE_SEARCH_PAGE_USER
           }`,
           { nickname, token: formData.token }
         )
@@ -72,6 +83,7 @@ const SearchLayout = () => {
             ...user,
             isFollowing: user.isFollowing || false,
           }));
+
           setQueryResponse(users);
           setNoResults(users.length === 0);
         })
@@ -129,8 +141,9 @@ const SearchLayout = () => {
           <div className="flex flex-row justify-between items-center space-x-2 w-full">
             <div className="flex flex-col justify-center w-full">
               <Input
-                type="text"
+                type="search"
                 placeholder="Procure"
+                className="font-inter font-medium"
                 name="query"
                 id="query"
                 onChange={handleSearch}
@@ -139,20 +152,20 @@ const SearchLayout = () => {
           </div>
         </CardContent>
       </Card>
-
+        
       <Card className="w-full md:w-6/12 mt-2">
         {queryResponse.length > 0 && (
           <p className="font-poppins font-medium md:font-normal tracking-wide text-md md:text-sm text-muted-foreground">
             {queryResponse.length === 1 ? (
               <div className="flex flex-row justify-between items-center">
                 <CardDescription className="text-foreground ml-4 mt-4 uppercase">Resultado</CardDescription>
-
+                
                 <CardDescription className="mr-4 mt-4 text-xs md:text-xs">{queryResponse.length} resultado</CardDescription>
               </div>
             ) : queryResponse.length > 1 ? (
               <div className="flex flex-row justify-between items-center">
                 <CardDescription className="text-foreground ml-4 mt-4 uppercase">Resultados</CardDescription>
-
+                
                 <CardDescription className="mr-4 mt-4 text-xs md:text-xs">{queryResponse.length} resultados</CardDescription>
               </div>
             ) : (
@@ -207,8 +220,8 @@ const SearchLayout = () => {
 };
 
 const SearchPage = () => {
-  const decodedObj = decodeToken(localStorage.getItem("token") ?? "");
-  const userData = decodedObj?.user;
+  const decodedObj = decodeToken(localStorage.getItem('token') ?? '')
+  const userData = decodedObj?.user
   return (
     <>
       <NavBar user={userData} avatarPath={userData?.avatar} />
