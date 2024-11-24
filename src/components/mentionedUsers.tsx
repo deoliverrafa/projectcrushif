@@ -102,7 +102,7 @@ export const MentionedUsers: React.FC<Comment> = (props) => {
                     nickname={user.nickname}
                     type={user.type}
                     _id={user._id}
-                    following={props.followingMentionedUsers[index]}
+                    following={followingMentionedUsers[index]}
                     onFollowToggle={() => {toggleFollow}}
                   />
                 ))}
