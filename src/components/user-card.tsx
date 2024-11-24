@@ -21,6 +21,7 @@ interface User {
   description?: string;
   status?: string;
   onClick?: () => void;
+  onFollowToggle?: () => void;
 }
 
 export const SearchUserCard = (props: User) => {
@@ -38,8 +39,12 @@ export const SearchUserCard = (props: User) => {
         followed: followedUser,
         setFollowedUser,
       });
+      if (props.onFollowToggle) {
+        props.onFollowToggle();
+      }
     }
   };
+  
 
   return (
     <Card className="my-2 w-full">

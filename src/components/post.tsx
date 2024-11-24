@@ -75,11 +75,10 @@ import AnonymousIcon from "../../public/images/anonymous.png";
 import UserIcon from "../../public/images/user.png";
 import NotFoundArt from "../../public/images/not_found_art.png";
 
-// import { getUserData } from "../utils/getUserData.tsx";
-import { getUserDataById } from "../utils/getUserDataById.tsx";
-import decodeToken from "../utils/decodeToken.tsx";
 import { User } from "../interfaces/userInterface.ts";
 import { toggleFollow } from "../utils/followUtils.js";
+import { getUserData } from "../utils/getUserData.tsx";
+import { getUserDataById } from "../utils/getUserDataById.tsx";
 
 interface CardProps {
   classNames?: string;
@@ -95,12 +94,14 @@ interface CardProps {
   commentCount: number;
   likedBy: string[];
   mentionedUsers: string[];
+  followingMentionedUsers: boolean[];
+  userData: User;
 }
 
 export const CardPost = (props: CardProps) => {
-  const decodedObj = decodeToken(localStorage.getItem("token") ?? "");
+  // const decodedObj = decodeToken(localStorage.getItem("token") ?? "");
   const token = localStorage.getItem("token");
-  const dataUser = decodedObj?.user;
+  const dataUser = getUserData();
 
   const [viewingUser, setViewingUser] = React.useState<User | undefined>(
     undefined
@@ -144,7 +145,8 @@ export const CardPost = (props: CardProps) => {
       setLikeCount(likeCount + 1);
     } else {
       axios.post(
-        `${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_POST_UNLIKE
+        `${import.meta.env.VITE_API_BASE_URL}${
+          import.meta.env.VITE_POST_UNLIKE
         }`,
         { token: localStorage.getItem("token"), postId: props._id }
       );
@@ -234,7 +236,8 @@ export const CardPost = (props: CardProps) => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        `${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_POST_COMMENT
+        `${import.meta.env.VITE_API_BASE_URL}${
+          import.meta.env.VITE_POST_COMMENT
         }`,
         {
           content: comment,
@@ -310,13 +313,14 @@ export const CardPost = (props: CardProps) => {
     setLoading(true);
     try {
       const response = await axios.get(
-        `${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_POST_GETCOMMENTS
+        `${import.meta.env.VITE_API_BASE_URL}${
+          import.meta.env.VITE_POST_GETCOMMENTS
         }${localStorage.getItem("token")}/${props._id}`,
         { params: { skip, limit } }
       );
-      const newComments: Comment[] = response.data.comments; // Supondo que `Comment` seja seu tipo de comentário
+      const newComments: Comment[] = response.data.comments;
       await Promise.all(
-        newComments.map((comment: Comment) => fetchUserData(comment.userId)) // Aqui você define o tipo
+        newComments.map((comment: Comment) => fetchUserData(comment.userId))
       );
 
       setComments((prevComments) => [...prevComments, ...newComments]);
@@ -327,15 +331,18 @@ export const CardPost = (props: CardProps) => {
     } catch (error) {
       console.error("Erro ao buscar comentários:", error);
     } finally {
-      setLoading(false);
     }
   };
+
+  React.useEffect(() => {
+    setLoading(false);
+  }, [comments]);
 
   // Função para buscar comentários ao chegar no final deles
   const handleScroll = () => {
     if (
       window.innerHeight + document.documentElement.scrollTop ===
-      document.documentElement.offsetHeight &&
+        document.documentElement.offsetHeight &&
       hasMore &&
       !loading
     ) {
@@ -367,9 +374,7 @@ export const CardPost = (props: CardProps) => {
   return (
     <React.Fragment>
       <ContextMenu>
-        <ContextMenuTrigger
-          className="relative flex justify-center w-full"
-        >
+        <ContextMenuTrigger className="relative flex justify-center w-full">
           <Card
             className={`select-none my-2 w-full md:w-6/12 ${props.classNames}`}
             onDoubleClick={handleDoubleLike}
@@ -392,19 +397,22 @@ export const CardPost = (props: CardProps) => {
                     <div className="flex flex-row items-center space-x-1">
                       <div>
                         <CardTitle className="font-semibold md:font-medium text-lg md:text-md tracking-tight">
-                          {!props.isAnonymous ? viewingUser?.nickname : "Anônimo"}
+                          {!props.isAnonymous
+                            ? viewingUser?.nickname
+                            : "Anônimo"}
                         </CardTitle>
                       </div>
                       <div>
                         <HeartWavesSolid
-                          className={`${viewingUser?.type === "Plus"
-                            ? "text-info"
-                            : viewingUser?.type === "Admin"
+                          className={`${
+                            viewingUser?.type === "Plus"
+                              ? "text-info"
+                              : viewingUser?.type === "Admin"
                               ? "text-danger"
                               : viewingUser?.type === "verified"
-                                ? "text-success"
-                                : "hidden"
-                            } h-4 w-4`}
+                              ? "text-success"
+                              : "hidden"
+                          } h-4 w-4`}
                         />
                       </div>
                     </div>
@@ -429,7 +437,9 @@ export const CardPost = (props: CardProps) => {
                     <div className="flex flex-row items-center space-x-1">
                       <div>
                         <CardTitle className="font-semibold md:font-medium text-lg md:text-md tracking-tight">
-                          {!props.isAnonymous ? viewingUser?.nickname : "Anônimo"}
+                          {!props.isAnonymous
+                            ? viewingUser?.nickname
+                            : "Anônimo"}
                         </CardTitle>
                       </div>
                     </div>
@@ -478,7 +488,9 @@ export const CardPost = (props: CardProps) => {
                     {showFullContent ? (
                       <>{highlightMentionsAndHashtags(props.content)}</>
                     ) : (
-                      highlightMentionsAndHashtags(props.content.substring(0, 50))
+                      highlightMentionsAndHashtags(
+                        props.content.substring(0, 50)
+                      )
                     )}
                     {props.content.length > 50 && (
                       <span
@@ -515,13 +527,15 @@ export const CardPost = (props: CardProps) => {
                     >
                       {liked ? (
                         <HeartSolid
-                          className={`${animateClick ? "animate-click" : ""
-                            } text-primary h-5 md:h-4 w-5 md:w-4`}
+                          className={`${
+                            animateClick ? "animate-click" : ""
+                          } text-primary h-5 md:h-4 w-5 md:w-4`}
                         />
                       ) : (
                         <HeartBrokenSolid
-                          className={`${animateClick ? "animate-click" : ""
-                            } h-5 md:h-4 w-5 md:w-4`}
+                          className={`${
+                            animateClick ? "animate-click" : ""
+                          } h-5 md:h-4 w-5 md:w-4`}
                         />
                       )}
                       {likeCount}
@@ -549,7 +563,10 @@ export const CardPost = (props: CardProps) => {
                               // Skeleton enquanto os comentários estão carregando
                               <div className="flex flex-col items-center">
                                 {[...Array(3)].map((_, index) => (
-                                  <Card key={index} className="w-full max-w-md my-1">
+                                  <Card
+                                    key={index}
+                                    className="w-full max-w-md my-1"
+                                  >
                                     <div className="flex justify-start w-fit">
                                       <CardHeader className="flex flex-row items-center space-x-4 p-4">
                                         <span className="bg-muted-foreground rounded-full animate-pulse h-10 w-10"></span>
@@ -576,12 +593,20 @@ export const CardPost = (props: CardProps) => {
                                       <div className="flex flex-col items-center w-full">
                                         <div className="flex flex-row justify-between items-center w-full">
                                           <div className="flex flex-row items-center gap-2">
-                                            <Button className="gap-1" variant="outline" size="sm">
+                                            <Button
+                                              className="gap-1"
+                                              variant="outline"
+                                              size="sm"
+                                            >
                                               <span className="bg-muted-foreground rounded animate-pulse h-3.5 w-3.5"></span>
                                               <span className="bg-muted-foreground rounded animate-pulse h-2.5 w-8"></span>
                                             </Button>
 
-                                            <Button className="gap-1" variant="outline" size="sm">
+                                            <Button
+                                              className="gap-1"
+                                              variant="outline"
+                                              size="sm"
+                                            >
                                               <span className="bg-muted-foreground rounded animate-pulse h-3.5 w-3.5"></span>
                                               <span className="bg-muted-foreground rounded animate-pulse h-2.5 w-14"></span>
                                             </Button>
@@ -594,7 +619,8 @@ export const CardPost = (props: CardProps) => {
                               </div>
                             ) : comments.length > 0 ? (
                               comments.map((comment) => {
-                                const dataUser = commentUserData[comment.userId];
+                                const dataUser =
+                                  commentUserData[comment.userId];
                                 return (
                                   dataUser && (
                                     <Comment
@@ -618,8 +644,8 @@ export const CardPost = (props: CardProps) => {
                                   className="h-32 md:h-[200px] w-32 md:w-[200px]"
                                 />
                                 <DrawerDescription className="text-center mt-6">
-                                  Nenhum comentário disponível. Seja o primeiro a
-                                  comentar
+                                  Nenhum comentário disponível. Seja o primeiro
+                                  a comentar
                                 </DrawerDescription>
                               </div>
                             )}
@@ -675,7 +701,7 @@ export const CardPost = (props: CardProps) => {
 
                   <div className="flex flex-row">
                     <div className="flex flex-row items-center space-x-1">
-                      {props.mentionedUsers.length > 0 && (
+                      {
                         <div className="flex flex-row items-center gap-2">
                           <MentionedUsers
                             _id={props._id}
@@ -685,12 +711,10 @@ export const CardPost = (props: CardProps) => {
                             likeCount={props.likeCount}
                             likedBy={props.likedBy}
                             mentionedUsers={props.mentionedUsers}
-                            isFollowing={
-                              props.following ? props.following : false
-                            }
+                            followingMentionedUsers={props.followingMentionedUsers  }
                           />
                         </div>
-                      )}
+                      }
                     </div>
                   </div>
                 </div>

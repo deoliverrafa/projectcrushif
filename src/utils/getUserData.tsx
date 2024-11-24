@@ -20,6 +20,7 @@ interface User {
   password: string;
   gender: string;
   isFollowing: boolean;
+  status: string;
 }
 
 export function getUserData() {
@@ -42,6 +43,7 @@ export function getUserData() {
     banner: "",
     gender: "",
     isFollowing: false,
+    status: "indisponível"
   });
 
   useEffect(() => {

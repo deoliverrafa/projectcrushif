@@ -23,9 +23,10 @@ interface Comment {
   insertAt: Date;
   userId: string;
   likeCount: number;
-  isFollowing?: boolean
+  isFollowing?: boolean;
   likedBy: string[];
   mentionedUsers: string[];
+  followingMentionedUsers: boolean[];
 }
 
 interface User {
@@ -39,7 +40,10 @@ interface User {
 export const MentionedUsers: React.FC<Comment> = (props) => {
   const [mentionedUsers, setMentionedUsers] = React.useState<User[]>([]);
   const [isLoading, setIsLoading] = React.useState<boolean>(true);
-
+  const [followingMentionedUsers, setFollowingMentionedUsers] = React.useState<
+    boolean[]
+  >(props.followingMentionedUsers);
+  
   
   React.useEffect(() => {
     const fetchUserData = async () => {
@@ -54,14 +58,21 @@ export const MentionedUsers: React.FC<Comment> = (props) => {
         setIsLoading(false);
       }
     };
-
+    
     if (props.userId) {
       fetchUserData();
     }
-  }, [props.userId, props.likedBy, props.mentionedUsers]);
+  }, [props.userId, props.mentionedUsers]);
 
-  
-  
+  // NÂO SEI OQ ESSA PORAR FAZ
+  const toggleFollow = (index: number) => {
+    setFollowingMentionedUsers((prev) => {
+      const updated = [...prev];
+      updated[index] = !updated[index];
+      return updated;
+    });
+  };
+
   return (
     <React.Fragment>
       <Dialog>
@@ -83,16 +94,19 @@ export const MentionedUsers: React.FC<Comment> = (props) => {
             </div>
           ) : mentionedUsers.length > 0 ? (
             <ScrollArea className="h-72 w-full rounded-md">
-              {mentionedUsers.map((user) => (
-                <SearchUserCard
-                  key={user._id}
-                  avatar={user.avatar}
-                  nickname={user.nickname}
-                  type={user.type}
-                  _id={user._id}
-                  following={props.isFollowing}
-                />
-              ))}
+              {mentionedUsers.map((user, index) => {
+                return (
+                  <SearchUserCard
+                    key={user._id}
+                    avatar={user.avatar}
+                    nickname={user.nickname}
+                    type={user.type}
+                    _id={user._id}
+                    following={followingMentionedUsers[index]}
+                    onFollowToggle={() => toggleFollow(index)}
+                  />
+                );
+              })}
             </ScrollArea>
           ) : (
             <DialogDescription>Nenhum usuário marcado</DialogDescription>

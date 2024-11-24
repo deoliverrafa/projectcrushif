@@ -17,25 +17,14 @@ import {
 } from "../../components/ui/card.tsx";
 import { ScrollArea } from "../../components/ui/scroll-area.tsx";
 
-import NotFoundArt from "../../../public/images/not_found_art.png"
+import NotFoundArt from "../../../public/images/not_found_art.png";
 
 import { getStatusUser } from "../../utils/getStatusUser.tsx";
 import decodeToken from "../../utils/decodeToken.tsx";
 import { getUserData } from "../../utils/getUserData.tsx";
-
-interface User {
-  nickname: string;
-  userName: string;
-  avatar: string;
-  type: string;
-  _id: string;
-  isFollowing: boolean;
-  status: string;
-}
+import { User } from "../../interfaces/userInterface.ts";
 
 const SearchLayout = () => {
-  const userData = getUserData();
-  
   const [userId] = React.useState<string | null>(
     localStorage.getItem("userId")
   );
@@ -47,7 +36,9 @@ const SearchLayout = () => {
 
   const [queryResponse, setQueryResponse] = useState<User[]>([]);
   const [suggestedUsers, setSuggestedUsers] = useState<User[]>([]);
+  const [userData] = useState<User>(getUserData);
   const [noResults, setNoResults] = useState(false);
+
   
   const fetchSuggestedUsers = useCallback(() => {
     axios
@@ -83,7 +74,6 @@ const SearchLayout = () => {
             ...user,
             isFollowing: user.isFollowing || false,
           }));
-
           setQueryResponse(users);
           setNoResults(users.length === 0);
         })
@@ -213,8 +203,8 @@ const SearchLayout = () => {
 };
 
 const SearchPage = () => {
-  const decodedObj = decodeToken(localStorage.getItem('token') ?? '')
-  const userData = decodedObj?.user
+  const decodedObj = decodeToken(localStorage.getItem("token") ?? "");
+  const userData = decodedObj?.user;
   return (
     <>
       <NavBar user={userData} avatarPath={userData?.avatar} />
