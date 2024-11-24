@@ -25,6 +25,8 @@ import { getUserData } from "../../utils/getUserData.tsx";
 import { User } from "../../interfaces/userInterface.ts";
 
 const SearchLayout = () => {
+  const userData = getUserData();
+
   const [userId] = React.useState<string | null>(
     localStorage.getItem("userId")
   );
@@ -39,12 +41,10 @@ const SearchLayout = () => {
   const [userData] = useState<User>(getUserData);
   const [noResults, setNoResults] = useState(false);
 
-  
   const fetchSuggestedUsers = useCallback(() => {
     axios
       .post(
-        `${import.meta.env.VITE_API_BASE_URL}${
-          import.meta.env.VITE_SEARCH_PAGE_USER
+        `${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_SEARCH_PAGE_USER
         }`,
         { nickname: "o", token: formData.token }
       )
@@ -64,8 +64,7 @@ const SearchLayout = () => {
     (nickname: string) => {
       axios
         .post(
-          `${import.meta.env.VITE_API_BASE_URL}${
-            import.meta.env.VITE_SEARCH_PAGE_USER
+          `${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_SEARCH_PAGE_USER
           }`,
           { nickname, token: formData.token }
         )
@@ -122,7 +121,7 @@ const SearchLayout = () => {
     >
       <Card className="w-full md:w-6/12">
         <CardHeader>
-          <CardTitle className="text-primary uppercase tracking-widest text-2xl md:text-5xl">
+          <CardTitle className="text-foreground uppercase text-2xl md:text-5xl">
             Pesquisar
           </CardTitle>
         </CardHeader>
@@ -131,9 +130,8 @@ const SearchLayout = () => {
           <div className="flex flex-row justify-between items-center space-x-2 w-full">
             <div className="flex flex-col justify-center w-full">
               <Input
-                type="search"
+                type="text"
                 placeholder="Procure"
-                className="font-inter font-medium"
                 name="query"
                 id="query"
                 onChange={handleSearch}
@@ -141,15 +139,22 @@ const SearchLayout = () => {
             </div>
           </div>
         </CardContent>
+      </Card>
+
+      <Card className="w-full md:w-6/12 mt-2">
         {queryResponse.length > 0 && (
           <p className="font-poppins font-medium md:font-normal tracking-wide text-md md:text-sm text-muted-foreground">
             {queryResponse.length === 1 ? (
-              <div className="flex flex-row items-center ml-4">
-                <CardDescription>Resultado</CardDescription>
+              <div className="flex flex-row justify-between items-center">
+                <CardDescription className="text-foreground ml-4 mt-4 uppercase">Resultado</CardDescription>
+
+                <CardDescription className="mr-4 mt-4 text-xs md:text-xs">{queryResponse.length} resultado</CardDescription>
               </div>
             ) : queryResponse.length > 1 ? (
-              <div className="flex flex-row items-center ml-4">
-                <CardDescription>Resultados</CardDescription>
+              <div className="flex flex-row justify-between items-center">
+                <CardDescription className="text-foreground ml-4 mt-4 uppercase">Resultados</CardDescription>
+
+                <CardDescription className="mr-4 mt-4 text-xs md:text-xs">{queryResponse.length} resultados</CardDescription>
               </div>
             ) : (
               ""
@@ -190,7 +195,7 @@ const SearchLayout = () => {
                 </div>
               ) : (
                 <div className="flex flex-col gap-1">
-                  <CardDescription>Sugestões para você</CardDescription>
+                  <CardDescription className="text-foreground uppercase">Sugestões para você</CardDescription>
                   <UserSuggestions removeUserId={userData._id} />
                 </div>
               )}

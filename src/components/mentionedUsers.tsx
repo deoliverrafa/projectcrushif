@@ -3,13 +3,13 @@ import * as React from "react";
 import { SearchUserCard } from "./user-card";
 
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "./ui/dialog";
+  Drawer,
+  DrawerContent,
+  DrawerDescription,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "./ui/drawer";
 import { ScrollArea } from "./ui/scroll-area";
 import { Button } from "./ui/button";
 
@@ -75,44 +75,43 @@ export const MentionedUsers: React.FC<Comment> = (props) => {
 
   return (
     <React.Fragment>
-      <Dialog>
-        <DialogTrigger asChild>
+      <Drawer>
+        <DrawerTrigger asChild>
           <Button variant="outline" size="icon">
             <At className="h-5 w-5" />
           </Button>
-        </DialogTrigger>
+        </DrawerTrigger>
 
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Marcações</DialogTitle>
-          </DialogHeader>
+        <DrawerContent>
+          <div className="mx-auto w-full max-w-sm">
+            <DrawerHeader>
+              <DrawerTitle>Marcações</DrawerTitle>
+            </DrawerHeader>
 
-          {isLoading ? (
-            <div className="flex flex-row items-center">
-              <SpinnerSolid className="animate-spin mr-2 h-5 w-5" />
-              <p className="text-muted-foreground text-sm">Carregando...</p>
-            </div>
-          ) : mentionedUsers.length > 0 ? (
-            <ScrollArea className="h-72 w-full rounded-md">
-              {mentionedUsers.map((user, index) => {
-                return (
+            {isLoading ? (
+              <div className="flex flex-row items-center">
+                <SpinnerSolid className="animate-spin mr-2 h-5 w-5" />
+                <p className="text-muted-foreground text-sm">Carregando...</p>
+              </div>
+            ) : mentionedUsers.length > 0 ? (
+              <ScrollArea className="h-72 w-full rounded-md">
+                {mentionedUsers.map((user) => (
                   <SearchUserCard
                     key={user._id}
                     avatar={user.avatar}
                     nickname={user.nickname}
                     type={user.type}
                     _id={user._id}
-                    following={followingMentionedUsers[index]}
-                    onFollowToggle={() => toggleFollow(index)}
+                    following={props.isFollowing}
                   />
-                );
-              })}
-            </ScrollArea>
-          ) : (
-            <DialogDescription>Nenhum usuário marcado</DialogDescription>
-          )}
-        </DialogContent>
-      </Dialog>
+                ))}
+              </ScrollArea>
+            ) : (
+              <DrawerDescription>Nenhum usuário marcado</DrawerDescription>
+            )}
+          </div>
+        </DrawerContent>
+      </Drawer>
     </React.Fragment>
   );
 };

@@ -64,8 +64,7 @@ const SettingsLayout = ({
     try {
       const token = localStorage.getItem("token");
       const response = await axios.delete(
-        `${import.meta.env.VITE_API_BASE_URL}${
-          import.meta.env.VITE_USER_DELETE_ACCOUNT
+        `${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_USER_DELETE_ACCOUNT
         }`,
         {
           data: { password, token },
@@ -83,7 +82,7 @@ const SettingsLayout = ({
 
   return (
     <React.Fragment>
-      <Card className="my-2 w-11/12 max-w-[768px]">
+      <Card className="select-none my-2 w-full md:w-6/12">
         <CardHeader>
           <h1 className="font-poppins font-semibold tracking-widest text-xl">
             Geral
@@ -98,7 +97,7 @@ const SettingsLayout = ({
         </CardContent>
       </Card>
 
-      <Card className="my-2 w-11/12 max-w-[768px]">
+      <Card className="select-none my-2 w-full md:w-6/12">
         <CardHeader>
           <h1 className="font-poppins font-semibold tracking-widest text-xl">
             Conta
@@ -118,15 +117,14 @@ const SettingsLayout = ({
                   {userData.nickname}
                 </CardTitle>
                 <HeartWavesSolid
-                  className={`${
-                    userData?.type === "Plus"
+                  className={`${userData?.type === "Plus"
                       ? "text-info"
                       : userData?.type === "Admin"
-                      ? "text-danger"
-                      : userData?.type === "verified"
-                      ? "text-success"
-                      : "hidden"
-                  } h-3 w-3`}
+                        ? "text-danger"
+                        : userData?.type === "verified"
+                          ? "text-success"
+                          : "hidden"
+                    } h-3 w-3`}
                 />
               </div>
               <CardTitle className="font-normal md:font-light text-sm md:text-xs tracking-tight">

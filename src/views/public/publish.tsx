@@ -5,57 +5,40 @@ import {
   Card,
   CardContent,
   CardHeader,
-  CardTitle,
-  CardDescription,
 } from "../../components/ui/card";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogTrigger,
-  DialogTitle,
-  DialogHeader,
-} from "../../components/ui/dialog";
 
 import { Input } from "../../components/ui/input";
 import { Button } from "../../components/ui/button";
 import { Label } from "../../components/ui/label";
-import { Progress } from "../../components/ui/progress";
-import { Switch } from "../../components/ui/switch";
-import { Badge } from "../../components/ui/badge";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../../components/ui/tooltip";
 
 import {
   IncognitoSolid,
-  LabelSolid,
-  ImageSolid,
   EarthSolid,
+  TrashOneSolid,
 } from "@mynaui/icons-react";
 
-import PostingArt from "../../../public/images/posting_art.png" 
+import PostingArt from "../../../public/images/posting_art.png"
 
 interface CardData {
   content: string;
   isAnonymous: boolean;
-  photoURL?: string;
-  userPhotoUrl?: string;
+  photoURLs?: string;
+  userPhotoUrls?: string;
   mentionedUsers: string[];
 }
 
 const LogoLayout = () => {
   return (
     <div className="flex flex-col justify-center items-center">
-      <img src={PostingArt} className="h-52 md:h-[300px] w-52 md:w-[300px]" />
+      <img src={PostingArt} className="hidden md:flex md:h-[300px] md:w-[300px]" />
     </div>
   );
 };
 
 const PublishLayout = () => {
-
-
   const [isAnonymous, setAnonymous] = React.useState<boolean>(false);
   const [errorMessage, setErrorMessage] = React.useState("");
-
-  const [step, setStep] = React.useState(1);
 
   const [cardData, setCardData] = React.useState<CardData>({
     content: "",
@@ -63,7 +46,8 @@ const PublishLayout = () => {
     mentionedUsers: [],
   });
 
-  const [selectedFile, setSelectedFile] = React.useState<File | null>(null);
+  const [images, setImages] = React.useState<string[]>([]);
+  const [uploadedImages, setUploadedImages] = React.useState<File[]>([]);
 
   const handleIsAnonymous = () => {
     setAnonymous(!isAnonymous);
@@ -88,18 +72,27 @@ const PublishLayout = () => {
     }
   };
 
-  function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
-    if (e.target.files && e.target.files[0]) {
-      setSelectedFile(e.target.files[0]);
-    }
-  }
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      const files = Array.from(e.target.files);
 
-  const handlePreviousStep = () => {
-    setStep((prevCount) => prevCount - 1);
+      const maxFiles = 5;
+      if (uploadedImages.length + files.length > maxFiles) {
+        setErrorMessage(`Você pode fazer upload de até ${maxFiles} imagens no total.`);
+        return;
+      }
+
+      const newImages = files.map((file) => URL.createObjectURL(file));
+      setUploadedImages((prev) => [...prev, ...files]);
+      setImages((prev) => [...prev, ...newImages]);
+      setErrorMessage(""); // Limpa a mensagem de erro, se existir
+    }
   };
 
-  const handleNextStep = () => {
-    setStep((prevCount) => prevCount + 1);
+
+  const handleDeleteImage = (index: number) => {
+    setImages((prev) => prev.filter((_, i) => i !== index));
+    setUploadedImages((prev) => prev.filter((_, i) => i !== index));
   };
 
   React.useEffect(() => {
@@ -110,17 +103,17 @@ const PublishLayout = () => {
   }, [isAnonymous]);
 
   React.useEffect(() => {
-    if (selectedFile) {
+    if (images && images instanceof File) {
       if (
-        selectedFile.type === "image/jpeg" ||
-        selectedFile.type === "image/png" ||
-        selectedFile.type === "image/gif"
+        images.type === "image/jpeg" ||
+        images.type === "image/png" ||
+        images.type === "image/gif"
       ) {
         setErrorMessage("");
-        const imageUrl = URL.createObjectURL(selectedFile);
+        const imageUrl = URL.createObjectURL(images);
         setCardData((prevData) => ({
           ...prevData,
-          photoURL: imageUrl,
+          photoURLs: imageUrl,
         }));
       } else {
         setErrorMessage(
@@ -128,7 +121,9 @@ const PublishLayout = () => {
         );
       }
     }
-  }, [selectedFile]);
+  }, [images]);
+
+
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -141,14 +136,14 @@ const PublishLayout = () => {
       formData.append("mentionedUsers", JSON.stringify(cardData.mentionedUsers));
     }
 
-    if (selectedFile) {
-      formData.append("photo", selectedFile);
-    }
+    // Adiciona cada arquivo ao FormData
+    uploadedImages.forEach((file) => {
+      formData.append("photos", file); // "photos" deve ser o campo aceito pelo backend
+    });
 
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL}${
-          import.meta.env.VITE_POST_PUBLISH
+        `${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_POST_PUBLISH
         }${localStorage.getItem("token")}`,
         {
           method: "POST",
@@ -157,326 +152,129 @@ const PublishLayout = () => {
       );
 
       if (!response.ok) {
-        throw new Error("Network response was not ok");
+        throw new Error("Erro na resposta do servidor.");
       }
 
       const result = await response.json();
 
       if (result.posted) {
         window.location.href = "/";
+      } else {
+        setErrorMessage(result.message || "Falha ao postar. Tente novamente.");
       }
     } catch (error) {
-      console.error("Error:", error);
+      console.error("Erro:", error);
+      setErrorMessage("Ocorreu um erro ao enviar sua postagem.");
     }
+  }
+
+
+  const MenuNavbar = () => {
+    return (
+      <div onClick={handleIsAnonymous}>
+        {!isAnonymous ? (
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <EarthSolid />
+              </TooltipTrigger>
+
+              <TooltipContent>
+                <p>Público</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        ) : (
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <IncognitoSolid />
+              </TooltipTrigger>
+
+              <TooltipContent>
+                <p>Anônimo</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        )}
+      </div>
+    )
   }
 
   return (
     <>
-      <Card className="hidden md:flex flex-col w-5/6 max-w-sm">
-        <CardHeader>
-          <div className={`${step === 1 ? null : "hidden"}`}>
-            <Badge variant={"outline"}>
-              <IncognitoSolid className="text-foreground" />
-            </Badge>
-            <CardTitle className="tracking-wider">Anônimo/Usuário</CardTitle>
+      <NavBarReturn title="Publique" menu={<MenuNavbar />} />
 
-            <CardDescription className="tracking-wide">
-              Selecione o tipo de publicação: anônima ou pelo usuário.
-            </CardDescription>
-          </div>
+      <main className="select-none flex flex-col md:flex-row justify-around items-center h-svh w-full">
+        <LogoLayout />
 
-          <div className={`${step === 2 ? null : "hidden"}`}>
-            <Badge variant={"outline"}>
-              <LabelSolid className="text-success" />
-            </Badge>
-            <CardTitle className="tracking-wider">Descrição</CardTitle>
-
-            <CardDescription className="tracking-wide">
-              Insira o texto e uma breve descrição da publicação.
-            </CardDescription>
-          </div>
-
-          <div className={`${step === 3 ? null : "hidden"}`}>
-            <Badge variant={"outline"}>
-              <ImageSolid className="text-primary" />
-            </Badge>
-            <CardTitle className="tracking-wider">Upload</CardTitle>
-
-            <CardDescription className="tracking-wide">
-              Envie uma foto para ilustrar sua publicação, como de locais,
-              pessoas ou viagens.
-            </CardDescription>
-          </div>
-        </CardHeader>
-
-        <CardContent>
-          <form
-            onSubmit={handleSubmit}
-            className="flex flex-col relative space-y-2"
-          >
-            <div
-              className={`${
-                step === 1 ? null : "hidden"
-              } flex flex-row items-center space-x-2`}
+        <div className="flex flex-col justify-center items-center space-y-2 h-screen md:h-full">
+          <Card className="max-w-sm">
+            <form
+              onSubmit={handleSubmit}
+              className="flex flex-col relative space-y-2"
             >
-              <Label htmlFor="type">Tipo:</Label>
-              <div className="flex items-center space-x-2">
-                <Switch id="type" onClick={handleIsAnonymous} />
-                {!isAnonymous ? (
-                  <CardDescription>Público</CardDescription>
-                ) : (
-                  <CardDescription>Anônimo</CardDescription>
-                )}
-              </div>
-            </div>
+              <CardHeader>
+                <Label htmlFor="inputFoto">Upload</Label>
+                <Input
+                  type="file"
+                  multiple
+                  key="foto"
+                  name="foto"
+                  id="inputFoto"
+                  onChange={handleFileChange}
+                />
 
-            <div
-              className={`${
-                step === 2 ? null : "hidden"
-              } grid items-center gap-1.5 w-full max-w-sm`}
-            >
-              <Label htmlFor="content">Descrição</Label>
-              <Input
-                type="text"
-                key="content"
-                placeholder="Adicione uma descrição"
-                name="content"
-                id="content"
-                onChange={handleChangeData}
-              />
-            </div>
+                <div className="grid grid-cols-3 gap-4">
+                  {images.map((src, index) => (
+                    <Card className="relative w-fit h-fit group">
+                      <CardContent className="h-20 w-20 p-0">
+                        <img
+                          src={src}
+                          alt={`Uploaded ${index}`}
+                          className="object-cover h-20 w-20"
+                        />
+                      </CardContent>
 
-            <div
-              className={`${
-                step === 3 ? null : "hidden"
-              } grid items-center gap-1.5 w-full max-w-sm`}
-            >
-              <Label htmlFor="inputFoto">Upload</Label>
-              <Input
-                type="file"
-                key="foto"
-                name="foto"
-                id="inputFoto"
-                onChange={handleFileChange}
-              />
-            </div>
+                      <div onClick={() => handleDeleteImage(index)} className="cursor-pointer bg-danger text-white rounded-full absolute top-2 right-2 p-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <TrashOneSolid />
+                      </div>
+                    </Card>
+                  ))}
+                </div>
+              </CardHeader>
 
-            <div className="flex flex-row justify-center items-center">
-              <div className="my-3">
-                {errorMessage && (
-                  <div
-                    className="p-4 mb-4 text-sm text-danger rounded-lg bg-red-50 dark:bg-black dark:text-red-400"
-                    role="alert"
-                  >
-                    <span className="font-medium">Atenção!</span> {errorMessage}
-                  </div>
-                )}
-              </div>
-            </div>
+              <CardContent>
+                <Label htmlFor="content">Descrição</Label>
+                <Input
+                  type="text"
+                  key="content"
+                  placeholder="Adicione uma descrição"
+                  name="content"
+                  id="content"
+                  onChange={handleChangeData}
+                />
 
-            <div className="flex flex-row items-center w-full">
-              <Progress
-                value={
-                  step === 1 ? 10 : step === 2 ? 66 : step === 3 ? 100 : null
-                }
-                className="w-full"
-              />
-            </div>
-
-            <div
-              className={`${
-                step === 3 ? null : "hidden"
-              } flex flex-row justify-center items-center my-2`}
-            >
-              <Button type="submit" className="w-full">
-                Enviar
-              </Button>
-            </div>
-          </form>
-
-          <div
-            className={`${
-              step === 3 ? "hidden" : null
-            } flex flex-row justify-center items-center my-2`}
-          >
-            <Button className="w-full" onClick={handleNextStep}>
-              Próximo
-            </Button>
-          </div>
-
-          <div
-            className={`${
-              step === 1 ? "hidden" : null
-            } flex flex-row justify-center items-center my-2`}
-          >
-            <Button
-              className="w-full"
-              variant={"outline"}
-              onClick={handlePreviousStep}
-            >
-              Voltar
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
-
-      <Card className="flex flex-col md:hidden w-5/6 max-w-sm">
-        <CardHeader>
-          <Badge className="w-fit" variant={"outline"}>
-            <EarthSolid className="text-primary" />
-          </Badge>
-          <CardTitle className="tracking-wider">Publique</CardTitle>
-          <CardDescription className="tracking-wide">
-            Faça uma publicação anônima ou feita pelo usuário.
-          </CardDescription>
-        </CardHeader>
-
-        <CardContent>
-          <Dialog>
-            <DialogTrigger className="w-full" asChild>
-              <Button className="w-full">Publicar</Button>
-            </DialogTrigger>
-
-            <DialogContent>
-              <DialogHeader>
-                <div className={`${step === 1 ? null : "hidden"} space-y-1.5`}>
-                  <Badge variant={"outline"}>
-                    <IncognitoSolid className="text-foreground" />
-                  </Badge>
-                  <DialogTitle className="tracking-wider">
-                    Anônimo/Usuário
-                  </DialogTitle>
-
-                  <DialogDescription className="tracking-wide">
-                    Selecione o tipo de publicação: anônima ou pelo usuário.
-                  </DialogDescription>
+                <div className="my-3">
+                  {errorMessage && (
+                    <div
+                      className="p-4 mb-4 text-sm text-danger rounded-lg"
+                      role="alert"
+                    >
+                      <span className="font-medium">Atenção!</span> {errorMessage}
+                    </div>
+                  )}
                 </div>
 
-                <div className={`${step === 2 ? null : "hidden"} space-y-1.5`}>
-                  <Badge variant={"outline"}>
-                    <LabelSolid className="text-success" />
-                  </Badge>
-                  <DialogTitle className="tracking-wider">
-                    Descrição
-                  </DialogTitle>
 
-                  <DialogDescription className="tracking-wide">
-                    Insira o texto e uma breve descrição da publicação.
-                  </DialogDescription>
-                </div>
-
-                <div className={`${step === 3 ? null : "hidden"} space-y-1.5`}>
-                  <Badge variant={"outline"}>
-                    <ImageSolid className="text-primary" />
-                  </Badge>
-                  <DialogTitle className="tracking-wider">Upload</DialogTitle>
-
-                  <DialogDescription className="tracking-wide">
-                    Envie uma foto para ilustrar sua publicação, como de locais,
-                    pessoas ou viagens.
-                  </DialogDescription>
-                </div>
-              </DialogHeader>
-
-              <form
-                onSubmit={handleSubmit}
-                className="flex flex-col relative space-y-2 w-full"
-              >
-                <div
-                  className={`${
-                    step === 1 ? null : "hidden"
-                  } flex flex-row items-center m-2 space-x-2`}
-                >
-                  <Label htmlFor="type">Tipo:</Label>
-                  <div className="flex items-center space-x-2">
-                    <Switch id="type" onClick={handleIsAnonymous} />
-                    {!isAnonymous ? (
-                      <CardDescription>Público</CardDescription>
-                    ) : (
-                      <CardDescription>Anônimo</CardDescription>
-                    )}
-                  </div>
-                </div>
-
-                <div
-                  className={`${
-                    step === 2 ? null : "hidden"
-                  } grid items-center gap-1.5 m-2 w-full`}
-                >
-                  <Label htmlFor="content">Descrição</Label>
-                  <Input
-                    type="text"
-                    key="content"
-                    placeholder="Adicione uma descrição"
-                    className="w-11/12"
-                    name="content"
-                    id="content"
-                    onChange={handleChangeData}
-                  />
-                </div>
-
-                <div
-                  className={`${
-                    step === 3 ? null : "hidden"
-                  } grid items-center gap-1.5 m-2 w-full`}
-                >
-                  <Label htmlFor="inputFoto">Upload</Label>
-                  <Input
-                    type="file"
-                    key="foto"
-                    name="foto"
-                    id="inputFoto"
-                    onChange={handleFileChange}
-                  />
-                </div>
-
-                <div className="flex flex-row items-center w-full">
-                  <Progress
-                    value={
-                      step === 1 ? 30 : step === 2 ? 49 : step === 3 ? 100 : null
-                    }
-                    className="w-full"
-                  />
-                </div>
-
-                <div
-                  className={`${
-                    step === 3 ? null : "hidden"
-                  } flex flex-row justify-center items-center m-2`}
-                >
-                  <Button type="submit" className="w-full">
-                    Enviar
-                  </Button>
-                </div>
-              </form>
-
-              <div
-                className={`${
-                  step === 3 ? "hidden" : null
-                } flex flex-row justify-center items-center m-2`}
-              >
-                <Button className="w-full" onClick={handleNextStep}>
-                  Próximo
+                <Button type="submit" className="w-full">
+                  Enviar
                 </Button>
-              </div>
-
-              <div
-                className={`${
-                  step === 1 ? "hidden" : null
-                } flex flex-row justify-center items-center m-2`}
-              >
-                <Button
-                  className="w-full"
-                  variant={"outline"}
-                  onClick={handlePreviousStep}
-                >
-                  Voltar
-                </Button>
-              </div>
-            </DialogContent>
-          </Dialog>
-        </CardContent>
-      </Card>
+              </CardContent>
+            </form>
+          </Card>
+        </div>
+      </main>
     </>
   );
 };
@@ -484,12 +282,7 @@ const PublishLayout = () => {
 const PublishPage = () => {
   return (
     <>
-      <NavBarReturn title="Publique" />
-
-      <main className="select-none flex flex-col md:flex-row justify-around items-center h-svh w-full">
-        <LogoLayout />
-        <PublishLayout />
-      </main>
+      <PublishLayout />
     </>
   );
 };

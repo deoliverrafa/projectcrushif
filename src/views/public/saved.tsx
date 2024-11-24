@@ -19,7 +19,7 @@ interface CardProps {
   _id: string;
   content: string;
   isAnonymous: boolean;
-  photoURL: string;
+  photoURLs: string[];
   insertAt: Date;
   userId: string;
   likeCount: number;
@@ -38,7 +38,7 @@ const SavedLayout = ({ savedPosts }: { savedPosts: CardProps[] }) => {
           _id={post._id}
           content={post.content}
           isAnonymous={post.isAnonymous}
-          photoURL={post.photoURL}
+          photoURLs={post.photoURLs}
           insertAt={post.insertAt}
           likeCount={post.likeCount}
           commentCount={post.commentCount}

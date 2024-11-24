@@ -21,7 +21,7 @@ interface CardProps {
   _id: string;
   content: string;
   isAnonymous: boolean;
-  photoURL: string;
+  photoURLs: string[];
   insertAt: Date;
   userId: string;
   likeCount: number;
@@ -141,7 +141,7 @@ export default function HomePage() {
                   id={post.userId}
                   content={post.content}
                   isAnonymous={post.isAnonymous}
-                  photoURL={post.photoURL}
+                  photoURLs={post.photoURLs}
                   userId={post.userId}
                   insertAt={post.insertAt}
                   likeCount={post.likeCount}
