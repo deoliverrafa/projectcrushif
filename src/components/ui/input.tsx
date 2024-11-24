@@ -4,6 +4,7 @@ import { cn } from "./../../lib/utils";
 import {
   EyeSlashSolid,
   EyeSolid,
+  PlusSolid,
   XCircleSolid
 } from "@mynaui/icons-react";
 
@@ -90,7 +91,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
                 />
               ) : (
                 <div className="text-muted-foreground">
-                  Faça o upload aqui
+                  <PlusSolid className="h-8 w-8" />
                 </div>
               )}
             </div>

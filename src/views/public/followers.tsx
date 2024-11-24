@@ -88,7 +88,7 @@ const FollowersLayout = () => {
                 <DrawerTitle>Seguidores</DrawerTitle>
               </DrawerHeader>
 
-              <div className="flex items-center  p-4 pb-0">
+              <div className="flex items-center gap-2 p-4 pb-0">
                 <img className="h-14 w-14" src={Logo} alt="logo" />
                 <DrawerDescription className="text-foreground">
                   {filteredUsers.length} usuários seguindo esté perfil no Crush IF.
