@@ -95,14 +95,15 @@ export const MentionedUsers: React.FC<Comment> = (props) => {
               </div>
             ) : mentionedUsers.length > 0 ? (
               <ScrollArea className="h-72 w-full rounded-md">
-                {mentionedUsers.map((user) => (
+                {mentionedUsers.map((user, index) => (
                   <SearchUserCard
                     key={user._id}
                     avatar={user.avatar}
                     nickname={user.nickname}
                     type={user.type}
                     _id={user._id}
-                    following={props.isFollowing}
+                    following={props.followingMentionedUsers[index]}
+                    onFollowToggle={() => {toggleFollow}}
                   />
                 ))}
               </ScrollArea>

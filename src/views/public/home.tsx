@@ -133,7 +133,8 @@ export default function HomePage() {
               const isFollowing = post.mentionedUsers.map((mentionedId) =>
                 userData.following.includes(mentionedId)
               );
-              
+              const isFollowingUserPost = userData.following.includes(post.userId);
+
               return (
                 <CardPost
                   key={post._id}
@@ -149,7 +150,7 @@ export default function HomePage() {
                   commentCount={post.commentCount}
                   mentionedUsers={post.mentionedUsers}
                   followingMentionedUsers={isFollowing}
-                  userData={userData}
+                  isFollowingUserPost={isFollowingUserPost}
                 />
               );
             })}

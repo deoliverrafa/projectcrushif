@@ -95,7 +95,7 @@ interface CardProps {
   likedBy: string[];
   mentionedUsers: string[];
   followingMentionedUsers: boolean[];
-  userData: User;
+  isFollowingUserPost: boolean;
 }
 
 export const CardPost = (props: CardProps) => {
@@ -115,10 +115,10 @@ export const CardPost = (props: CardProps) => {
   const [favorited, setFavorited] = React.useState(false);
   const [showFavorited, setShowFavorited] = React.useState(false);
 
-  const [followedUser, setFollowedUser] = React.useState<boolean>(
-    props.following ?? false
-  );
-
+  const [followedUser, setFollowedUser] = React.useState<boolean>(props.isFollowingUserPost);
+  console.log(followedUser);
+  
+  
   const [showFullContent, setShowFullContent] = React.useState(false);
 
   const toggleContent = () => {
@@ -215,7 +215,7 @@ export const CardPost = (props: CardProps) => {
   const handleFollowToggle = () => {
     if (token) {
       toggleFollow({
-        userId: props._id,
+        userId: props.userId,
         token,
         followed: followedUser,
         setFollowedUser,

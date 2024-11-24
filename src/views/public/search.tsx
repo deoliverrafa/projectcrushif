@@ -25,7 +25,6 @@ import { getUserData } from "../../utils/getUserData.tsx";
 import { User } from "../../interfaces/userInterface.ts";
 
 const SearchLayout = () => {
-  const userData = getUserData();
 
   const [userId] = React.useState<string | null>(
     localStorage.getItem("userId")
