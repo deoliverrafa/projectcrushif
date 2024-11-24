@@ -8,7 +8,15 @@ import { SearchUserCard } from "../../components/user-card";
 
 import { Card, CardContent, CardDescription } from "../../components/ui/card";
 import { Separator } from "../../components/ui/separator";
-import { Drawer, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle, DrawerTrigger } from "../../components/ui/drawer";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "../../components/ui/drawer";
 import { Input } from "../../components/ui/input";
 
 import { InfoSolid } from "@mynaui/icons-react";
@@ -19,6 +27,7 @@ import NoHaveArt from "../../../public/images/no_have_art.png";
 import { getPostDataById } from "../../utils/getPostDataById";
 import { getUserDataById } from "../../utils/getUserDataById";
 import { getStatusUser } from "../../utils/getStatusUser";
+import { getUserData } from "../../utils/getUserData";
 
 interface Post {
   _id: string;
@@ -41,6 +50,8 @@ const LikedByPostLayout = () => {
   const [userId] = React.useState<string | null>(
     localStorage.getItem("userId")
   );
+  const userData = getUserData();
+
   const [viewingPost, setViewingPost] = React.useState<Post | null>(null);
   const [likedUsers, setLikedUsers] = React.useState<User[]>([]);
   const [filteredUsers, setFilteredUsers] = React.useState<User[]>([]);
@@ -72,9 +83,10 @@ const LikedByPostLayout = () => {
   }, [id]);
 
   React.useEffect(() => {
-    const filtered = likedUsers.filter((user) =>
-      user.nickname.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      user.userName.toLowerCase().includes(searchQuery.toLowerCase())
+    const filtered = likedUsers.filter(
+      (user) =>
+        user.nickname.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        user.userName.toLowerCase().includes(searchQuery.toLowerCase())
     );
     setFilteredUsers(filtered);
   }, [searchQuery, likedUsers]);
@@ -106,21 +118,23 @@ const LikedByPostLayout = () => {
               <div className="flex items-center gap-2 p-4 pb-0">
                 <img className="h-14 w-14" src={Logo} alt="logo" />
                 <DrawerDescription className="text-foreground">
-                  {filteredUsers.length} usuários curtiram está postagem no Crush IF.
+                  {filteredUsers.length} usuários curtiram está postagem no
+                  Crush IF.
                 </DrawerDescription>
               </div>
 
               <DrawerFooter>
                 <DrawerDescription className="text-xs md:text-xs text-center">
-                  Você está vendo os usuários que curtiram está postagem no Crush IF.
+                  Você está vendo os usuários que curtiram está postagem no
+                  Crush IF.
                 </DrawerDescription>
               </DrawerFooter>
             </div>
           </DrawerContent>
         </Drawer>
       </React.Fragment>
-    )
-  }
+    );
+  };
 
   return (
     <React.Fragment>
@@ -143,28 +157,33 @@ const LikedByPostLayout = () => {
 
             {filteredUsers.length > 0 ? (
               <div className="flex flex-row justify-between items-center">
-                <CardDescription className="text-foreground mt-6 uppercase">Curtido por</CardDescription>
+                <CardDescription className="text-foreground mt-6 uppercase">
+                  Curtido por
+                </CardDescription>
 
-                <CardDescription className="mt-6 text-xs md:text-xs">{likedUsers.length} curtidas</CardDescription>
+                <CardDescription className="mt-6 text-xs md:text-xs">
+                  {likedUsers.length} curtidas
+                </CardDescription>
               </div>
             ) : null}
 
-            {filteredUsers.length > 0 ? (
-              <Separator className="my-2" />
-            ) : null}
+            {filteredUsers.length > 0 ? <Separator className="my-2" /> : null}
 
             {filteredUsers.length > 0 ? (
-              filteredUsers.map((user) => (
-                <SearchUserCard
-                  key={user._id}
-                  avatar={user.avatar}
-                  nickname={user.nickname}
-                  userName={user.userName}
-                  type={user.type}
-                  _id={user._id}
-                  following={user.following}
-                />
-              ))
+              filteredUsers.map((user) => {
+                const following = userData.following.includes(user._id)
+                return (
+                  <SearchUserCard
+                    key={user._id}
+                    avatar={user.avatar}
+                    nickname={user.nickname}
+                    userName={user.userName}
+                    type={user.type}
+                    _id={user._id}
+                    following={following}
+                  />
+                );
+              })
             ) : (
               <div className="flex flex-col justify-center items-center space-y-2 w-full">
                 <img
@@ -172,13 +191,15 @@ const LikedByPostLayout = () => {
                   className="h-32 md:h-[300px] w-32 md:w-[300px]"
                   alt="404"
                 />
-                <CardDescription>Nenhum usuário curtiu esse perfil</CardDescription>
+                <CardDescription>
+                  Nenhum usuário curtiu esse perfil
+                </CardDescription>
               </div>
             )}
           </CardContent>
         </Card>
       </main>
-    </React.Fragment >
+    </React.Fragment>
   );
 };
 
