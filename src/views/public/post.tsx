@@ -20,17 +20,19 @@ interface Post {
   commentCount: number;
   mentionedUsers: string[];
 }
-  
+
 import { getPostDataById } from "../../utils/getPostDataById";
+import { getUserData } from "../../utils/getUserData";
+import axios from "axios";
 
 const PostLayout = () => {
   const { id } = useParams<string>();
   const [viewingPost, setViewingPost] = React.useState<Post | null>(null);
   const postId = id || "";
+  const userData = getUserData();
 
   React.useEffect(() => {
     const fetchViewingPostData = async () => {
-      
       if (postId) {
         try {
           const data = await getPostDataById(postId);
@@ -41,12 +43,31 @@ const PostLayout = () => {
       }
     };
 
-    fetchViewingPostData(); 
+    fetchViewingPostData();
   }, [postId]);
 
   if (!viewingPost) {
     return <LoadingPage />;
   }
+
+  const deletePostFromState = async (postId: string) => {
+    try {
+      const token = localStorage.getItem("token");
+      await axios.delete(
+        `${import.meta.env.VITE_API_BASE_URL}${
+          import.meta.env.VITE_POST_DELETE
+        }`,
+        { data: { postId, token } }
+      );
+    } catch (error) {
+      console.error("Erro ao excluir post:", error);
+    }
+  };
+
+  const followingMentionedUsers = viewingPost.mentionedUsers.map(
+    (mentionedId) => userData.following.includes(mentionedId)
+  );
+  const isFollowingUserPost = userData.following.includes(viewingPost.userId);
 
   return (
     <React.Fragment>
@@ -63,6 +84,9 @@ const PostLayout = () => {
         likedBy={viewingPost.likedBy}
         commentCount={viewingPost.commentCount}
         mentionedUsers={viewingPost.mentionedUsers}
+        followingMentionedUsers={followingMentionedUsers}
+        isFollowingUserPost={isFollowingUserPost}
+        onDelete={deletePostFromState}
       />
     </React.Fragment>
   );
