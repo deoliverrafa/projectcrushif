@@ -5,15 +5,12 @@ import { debounce } from "lodash";
 import { NavBarReturn } from "../../components/navbar";
 import { CardPost } from "../../components/post";
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-} from "../../components/ui/card";
+import { Card, CardContent, CardDescription } from "../../components/ui/card";
 
 import { SpinnerSolid } from "@mynaui/icons-react";
 
 import NoHaveArt from "../../../public/images/no_have_art.png";
+import { getUserData } from "../../utils/getUserData";
 
 interface CardProps {
   _id: string;
@@ -29,24 +26,57 @@ interface CardProps {
 }
 
 const SavedLayout = ({ savedPosts }: { savedPosts: CardProps[] }) => {
+  const userData = getUserData();
+
+  const [postsSaved, setPosts] = React.useState<CardProps[]>(savedPosts);
+
+  const deletePostFromState = async (postId: string) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.delete(
+        `${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_POST_DELETE}`,
+        { data: { postId, token } }
+      );
+
+      if (response.data.deleted) {
+        setPosts((prevPosts) => prevPosts.filter((post) => post._id !== postId));
+      } else {
+        console.error("Erro ao deletar post:", response.data.message);
+      }
+    } catch (error) {
+      console.error("Erro ao excluir post:", error);
+    }
+  };
+
   return (
     <React.Fragment>
-      {savedPosts.map((post) => (
-        <CardPost
-          key={post._id}
-          userId={post.userId}
-          _id={post._id}
-          content={post.content}
-          isAnonymous={post.isAnonymous}
-          photoURLs={post.photoURLs}
-          insertAt={post.insertAt}
-          likeCount={post.likeCount}
-          commentCount={post.commentCount}
-          likedBy={post.likedBy}
-          mentionedUsers={post.mentionedUsers}
-          id={post._id}
-        />
-      ))}
+
+      {postsSaved.map((post) => {
+        const followingMentionedUsers = post.mentionedUsers.map((mentionedId) =>
+          userData.following.includes(mentionedId)
+        );
+        const isFollowingUserPost = userData.following.includes(post.userId);
+
+        return (
+          <CardPost
+            key={post._id}
+            userId={post.userId}
+            _id={post._id}
+            content={post.content}
+            isAnonymous={post.isAnonymous}
+            photoURLs={post.photoURLs}
+            insertAt={post.insertAt}
+            likeCount={post.likeCount}
+            commentCount={post.commentCount}
+            likedBy={post.likedBy}
+            mentionedUsers={post.mentionedUsers}
+            id={post._id}
+            followingMentionedUsers={followingMentionedUsers}
+            isFollowingUserPost={isFollowingUserPost}
+            onDelete={deletePostFromState}
+          />
+        );
+      })}
     </React.Fragment>
   );
 };

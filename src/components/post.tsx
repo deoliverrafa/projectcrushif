@@ -102,7 +102,6 @@ interface CardProps {
 export const CardPost = (props: CardProps) => {
   // const decodedObj = decodeToken(localStorage.getItem("token") ?? "");
   const token = localStorage.getItem("token");
-  const userId = localStorage.getItem("userId");
   const dataUser = getUserData();
 
   const [viewingUser, setViewingUser] = React.useState<User | undefined>(
@@ -677,7 +676,7 @@ export const CardPost = (props: CardProps) => {
                                       mentionedUsers={comment.mentionedUsers}
                                       replies={comment.replies}
                                       userData={dataUser}
-                                      getComments={getNewstComments}
+                                      getComments={getNewstComments}  
                                     />
                                   )
                                 );
