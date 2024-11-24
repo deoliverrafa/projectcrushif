@@ -96,11 +96,13 @@ interface CardProps {
   mentionedUsers: string[];
   followingMentionedUsers: boolean[];
   isFollowingUserPost: boolean;
+  onDelete: (postId: string) => Promise<void>; // Adicione o método para exclusão
 }
 
 export const CardPost = (props: CardProps) => {
   // const decodedObj = decodeToken(localStorage.getItem("token") ?? "");
   const token = localStorage.getItem("token");
+  const userId = localStorage.getItem("userId");
   const dataUser = getUserData();
 
   const [viewingUser, setViewingUser] = React.useState<User | undefined>(
@@ -115,9 +117,10 @@ export const CardPost = (props: CardProps) => {
   const [favorited, setFavorited] = React.useState(false);
   const [showFavorited, setShowFavorited] = React.useState(false);
 
-  const [followedUser, setFollowedUser] = React.useState<boolean>(props.isFollowingUserPost);
-  
-  
+  const [followedUser, setFollowedUser] = React.useState<boolean>(
+    props.isFollowingUserPost
+  );
+
   const [showFullContent, setShowFullContent] = React.useState(false);
 
   const toggleContent = () => {
@@ -223,13 +226,14 @@ export const CardPost = (props: CardProps) => {
   };
 
   // Lógica para comentar
-  const [comment, setComment] = React.useState<string | undefined>(undefined);
+  const [comment, setComment] = React.useState<string | undefined>();
   const [errorMessage, setErrorMessage] = React.useState<string | undefined>(
     undefined
   );
   const [commentCount, setCommentCount] = React.useState<number>(
     props.commentCount
   );
+  const [isFirstComment, setIsFirstComment] = React.useState(false);
 
   const handleCommentSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -247,6 +251,7 @@ export const CardPost = (props: CardProps) => {
       );
 
       if (response.data.posted) {
+        setIsFirstComment(true);
         const newComment = {
           _id: response.data.commentId,
           content: comment || "",
@@ -256,10 +261,16 @@ export const CardPost = (props: CardProps) => {
           likedBy: [],
           mentionedUsers: [],
           replies: [],
+          userData: dataUser,
+          getComments: { getNewstComments },
         };
 
         // Adiciona o novo comentário imediatamente ao estado
-        setComments((prevComments) => [newComment, ...prevComments]);
+        setComments((prevComments) => {
+          const updatedComments = [newComment, ...prevComments];
+          console.log("Comentários atualizados: ", updatedComments);
+          return updatedComments;
+        });
         setCommentCount((prevCount) => prevCount + 1);
         setComment(""); // Limpa o campo de comentário
       }
@@ -283,6 +294,7 @@ export const CardPost = (props: CardProps) => {
     likedBy: string[];
     mentionedUsers: string[];
     replies: string[];
+    userData: User
   }
 
   const [comments, setComments] = React.useState<Comment[]>([]);
@@ -354,6 +366,10 @@ export const CardPost = (props: CardProps) => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [hasMore, loading]);
 
+  const getNewstComments = () => {
+    fetchComments();
+  };
+
   const highlightMentionsAndHashtags = (text: string) => {
     const regex = /([@#][\w-]+)/g;
     const parts = text.split(regex);
@@ -368,6 +384,22 @@ export const CardPost = (props: CardProps) => {
       }
       return part;
     });
+  };
+
+  // Lógica para deletar Post
+
+  const deletePost = async (postId: string) => {
+    try {
+      const response: any = await props.onDelete(postId);
+
+      if (response.data.deleted) {
+        console.log("Post deletado com sucesso");
+      } else {
+        console.error("Erro: Post não foi deletado");
+      }
+    } catch (error) {
+      console.error("Erro ao deletar post:", error);
+    }
   };
 
   return (
@@ -461,10 +493,17 @@ export const CardPost = (props: CardProps) => {
                           />
                         </CarouselItem>
                       ))}
-
                     </CarouselContent>
-                    <CarouselPrevious className={`${props.photoURLs.length <= 1 ? "hidden" : ""} left-4`} />
-                    <CarouselNext className={`${props.photoURLs.length <= 1 ? "hidden" : ""} right-4`} />
+                    <CarouselPrevious
+                      className={`${
+                        props.photoURLs.length <= 1 ? "hidden" : ""
+                      } left-4`}
+                    />
+                    <CarouselNext
+                      className={`${
+                        props.photoURLs.length <= 1 ? "hidden" : ""
+                      } right-4`}
+                    />
                   </Carousel>
                 )}
 
@@ -619,10 +658,12 @@ export const CardPost = (props: CardProps) => {
                                   </Card>
                                 ))}
                               </div>
-                            ) : comments.length > 0 ? (
+                            ) : comments.length > 0 || isFirstComment ? (
                               comments.map((comment) => {
+                                
                                 const dataUser =
                                   commentUserData[comment.userId];
+
                                 return (
                                   dataUser && (
                                     <Comment
@@ -636,6 +677,7 @@ export const CardPost = (props: CardProps) => {
                                       mentionedUsers={comment.mentionedUsers}
                                       replies={comment.replies}
                                       userData={dataUser}
+                                      getComments={getNewstComments}
                                     />
                                   )
                                 );
@@ -714,7 +756,9 @@ export const CardPost = (props: CardProps) => {
                             likeCount={props.likeCount}
                             likedBy={props.likedBy}
                             mentionedUsers={props.mentionedUsers}
-                            followingMentionedUsers={props.followingMentionedUsers}
+                            followingMentionedUsers={
+                              props.followingMentionedUsers
+                            }
                           />
                         </div>
                       }
@@ -755,7 +799,12 @@ export const CardPost = (props: CardProps) => {
                 </ContextMenuItem>
 
                 {props.id !== dataUser?._id ? null : (
-                  <ContextMenuItem className="cursor-pointer text-danger focus:text-primary/70">
+                  <ContextMenuItem
+                    className="cursor-pointer text-danger focus:text-primary/70"
+                    onClick={() => {
+                      deletePost(props._id);
+                    }}
+                  >
                     <TrashOneSolid className="h-4 w-4 mr-1" />
                     Excluir
                   </ContextMenuItem>

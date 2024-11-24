@@ -43,6 +43,7 @@ interface Comment {
   mentionedUsers: string[];
   replies: string[];
   userData: User;
+  getComments?: () => void
 }
 
 const ReplyComment: React.FC<Comment> = (props) => {
@@ -259,6 +260,8 @@ export const Comment: React.FC<Comment> = (props) => {
   const [isHidden, setIsHidden] = React.useState(true);
   const [loading, setLoading] = React.useState(false);
 
+  const [reply, setReply] = React.useState({});
+
   const toggleComment = () => {
     setShowFullComment(!showFullComment);
   };
@@ -303,7 +306,7 @@ export const Comment: React.FC<Comment> = (props) => {
 
   React.useEffect(() => {
     fetchRepliesData();
-  }, [props.replies]);
+  }, [props.replies, reply]);
 
   const handleLike = async () => {
     const newLiked = !liked;
@@ -361,10 +364,9 @@ export const Comment: React.FC<Comment> = (props) => {
       );
 
       const newReply = response.data.comment;
-
+      setReply(newReply)
       setViewingReplies((prevReplies) => [...prevReplies, newReply]);
       setReplyText("");
-      window.location.href = "/";
     } catch (error: any) {
       console.error("Erro ao enviar resposta:", error);
     }
@@ -486,7 +488,7 @@ export const Comment: React.FC<Comment> = (props) => {
                   onInput={handleReplyChange}
                 />
 
-                <Button variant={"outline"} size={"icon"}>
+                <Button variant={"outline"} size={"icon"} onSubmit={props.getComments}>
                   <FatCornerUpRightSolid className="h-5 w-5" />
                 </Button>
               </form>

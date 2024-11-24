@@ -42,6 +42,25 @@ export default function HomePage() {
     localStorage.getItem("userId")
   );
 
+  const deletePostFromState = async (postId: string) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.delete(
+        `${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_POST_DELETE}`,
+        { data: { postId, token } }
+      );
+
+      if (response.data.deleted) {
+        setPosts((prevPosts) => prevPosts.filter((post) => post._id !== postId));
+      } else {
+        console.error("Erro ao deletar post:", response.data.message);
+      }
+    } catch (error) {
+      console.error("Erro ao excluir post:", error);
+    }
+  };
+
+
   React.useEffect(() => {
     const token = localStorage.getItem("token");
 
@@ -151,6 +170,7 @@ export default function HomePage() {
                   mentionedUsers={post.mentionedUsers}
                   followingMentionedUsers={followingMentionedUsers}
                   isFollowingUserPost={isFollowingUserPost}
+                  onDelete={deletePostFromState}
                 />
               );
             })}
