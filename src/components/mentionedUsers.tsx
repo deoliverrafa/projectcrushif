@@ -43,6 +43,9 @@ export const MentionedUsers: React.FC<Comment> = (props) => {
   const [followingMentionedUsers, setFollowingMentionedUsers] = React.useState<
     boolean[]
   >(props.followingMentionedUsers);
+  console.log(props.content);
+  
+  console.log(mentionedUsers);
   
   
   React.useEffect(() => {

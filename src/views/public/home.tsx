@@ -130,7 +130,7 @@ export default function HomePage() {
           />
           <main className="w-full h-full flex flex-col justify-center items-center">
             {posts.map((post) => {
-              const isFollowing = post.mentionedUsers.map((mentionedId) =>
+              const followingMentionedUsers = post.mentionedUsers.map((mentionedId) =>
                 userData.following.includes(mentionedId)
               );
               const isFollowingUserPost = userData.following.includes(post.userId);
@@ -149,7 +149,7 @@ export default function HomePage() {
                   likedBy={post.likedBy}
                   commentCount={post.commentCount}
                   mentionedUsers={post.mentionedUsers}
-                  followingMentionedUsers={isFollowing}
+                  followingMentionedUsers={followingMentionedUsers}
                   isFollowingUserPost={isFollowingUserPost}
                 />
               );

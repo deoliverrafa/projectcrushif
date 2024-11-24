@@ -157,7 +157,8 @@ const ProfileLayout = () => {
     try {
       setLoading(true);
       const response = await axios.get(
-        `${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_POST_GET_USER
+        `${import.meta.env.VITE_API_BASE_URL}${
+          import.meta.env.VITE_POST_GET_USER
         }${userId}/${skip}/${limit}`
       );
 
@@ -205,7 +206,8 @@ const ProfileLayout = () => {
       setLikeCount(likeCount + 1);
     } else {
       axios.post(
-        `${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_USER_UNLIKE
+        `${import.meta.env.VITE_API_BASE_URL}${
+          import.meta.env.VITE_USER_UNLIKE
         }`,
         { token: localStorage.getItem("token"), userId: viewingUser?._id }
       );
@@ -289,14 +291,15 @@ const ProfileLayout = () => {
                   ? `@${viewingUser.nickname}`
                   : "indisponível"}
                 <HeartWavesSolid
-                  className={`${viewingUser?.type === "Plus"
+                  className={`${
+                    viewingUser?.type === "Plus"
                       ? "text-info"
                       : viewingUser?.type === "Admin"
-                        ? "text-danger"
-                        : viewingUser?.type === "verified"
-                          ? "text-success"
-                          : "hidden"
-                    } ml-1 h-3.5 w-3.5`}
+                      ? "text-danger"
+                      : viewingUser?.type === "verified"
+                      ? "text-success"
+                      : "hidden"
+                  } ml-1 h-3.5 w-3.5`}
                 />
               </Badge>
             </div>
@@ -461,10 +464,7 @@ const ProfileLayout = () => {
                 <TooltipTrigger>
                   {!isOwnProfile && (
                     <Link to={`/message/${viewingUser._id}`}>
-                      <Button
-                        variant={"outline"}
-                        size={"icon"}
-                      >
+                      <Button variant={"outline"} size={"icon"}>
                         <MessageSolid className="h-5 w-5" />
                       </Button>
                     </Link>
@@ -522,10 +522,11 @@ const ProfileLayout = () => {
 
             <Badge
               variant={"outline"}
-              className={`${viewingUser?.status === "online"
+              className={`${
+                viewingUser?.status === "online"
                   ? "text-success"
                   : "text-secondary"
-                } gap-1`}
+              } gap-1`}
             >
               {viewingUser?.status === "online" ? (
                 <span className="bg-success rounded-full h-2 w-2"></span>
@@ -547,23 +548,34 @@ const ProfileLayout = () => {
           ) : (
             <>
               <div className="flex flex-col items-center w-full">
-                {posts.map((post) => (
-                  <CardPost
-                    classNames="w-full md:w-full"
-                    key={post._id}
-                    userId={post.userId}
-                    _id={post._id}
-                    content={post.content}
-                    isAnonymous={post.isAnonymous}
-                    photoURLs={post.photoURLs}
-                    insertAt={post.insertAt}
-                    id={post.userId}
-                    likeCount={post.likeCount}
-                    commentCount={post.commentCount}
-                    likedBy={post.likedBy}
-                    mentionedUsers={post.mentionedUsers}
-                  />
-                ))}
+                {posts.map((post) => {
+                  const followingMentionedUsers = post.mentionedUsers.map((mentionedId) =>
+                    currentUser.following.includes(mentionedId)
+                  );
+                  const isFollowingUserPost = currentUser.following.includes(
+                    post.userId
+                  );
+
+                  return (
+                    <CardPost
+                      classNames="w-full md:w-full"
+                      key={post._id}
+                      userId={post.userId}
+                      _id={post._id}
+                      content={post.content}
+                      isAnonymous={post.isAnonymous}
+                      photoURLs={post.photoURLs}
+                      insertAt={post.insertAt}
+                      id={post.userId}
+                      likeCount={post.likeCount}
+                      commentCount={post.commentCount}
+                      likedBy={post.likedBy}
+                      mentionedUsers={post.mentionedUsers}
+                      followingMentionedUsers={followingMentionedUsers}
+                      isFollowingUserPost={isFollowingUserPost}
+                    />
+                  );
+                })}
               </div>
 
               {loading ? (

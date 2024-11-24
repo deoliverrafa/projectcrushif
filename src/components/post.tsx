@@ -116,7 +116,6 @@ export const CardPost = (props: CardProps) => {
   const [showFavorited, setShowFavorited] = React.useState(false);
 
   const [followedUser, setFollowedUser] = React.useState<boolean>(props.isFollowingUserPost);
-  console.log(followedUser);
   
   
   const [showFullContent, setShowFullContent] = React.useState(false);
@@ -714,7 +713,7 @@ export const CardPost = (props: CardProps) => {
                             likeCount={props.likeCount}
                             likedBy={props.likedBy}
                             mentionedUsers={props.mentionedUsers}
-                            followingMentionedUsers={props.followingMentionedUsers  }
+                            followingMentionedUsers={props.followingMentionedUsers}
                           />
                         </div>
                       }
