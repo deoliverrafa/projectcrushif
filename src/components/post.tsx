@@ -173,6 +173,7 @@ export const CardPost = (props: CardProps) => {
   };
 
   const [openShare, setOpenShare] = React.useState(false);
+  const [openDelete, setOpenDelete] = React.useState(false);
   const [copied, setCopied] = React.useState(false);
   const inputRef = React.useRef<HTMLInputElement>(null);
 
@@ -762,6 +763,7 @@ export const CardPost = (props: CardProps) => {
                     <div className="flex flex-row items-center space-x-1">
                       {
                         <div className="flex flex-row items-center gap-2">
+                          {props.mentionedUsers.length > 0 && (
                           <MentionedUsers
                             _id={props._id}
                             content={props.content}
@@ -774,6 +776,7 @@ export const CardPost = (props: CardProps) => {
                               props.followingMentionedUsers
                             }
                           />
+                          )} 
                         </div>
                       }
                     </div>
@@ -815,9 +818,7 @@ export const CardPost = (props: CardProps) => {
                 {props.id !== dataUser?._id ? null : (
                   <ContextMenuItem
                     className="cursor-pointer text-danger focus:text-primary/70"
-                    onClick={() => {
-                      deletePost(props._id);
-                    }}
+                    onClick={() => setOpenDelete(true)}
                   >
                     <TrashOneSolid className="h-4 w-4 mr-1" />
                     Excluir
@@ -869,6 +870,26 @@ export const CardPost = (props: CardProps) => {
           </Card>
         </ContextMenuTrigger>
       </ContextMenu>
+      
+      <Dialog open={openDelete} onOpenChange={setOpenDelete}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader className="space-y-0.5">
+            <DialogTitle>Excluir postagem</DialogTitle>
+
+            <DialogDescription>
+              Deseja excluir está postagem?
+            </DialogDescription>
+          </DialogHeader>
+        
+          <DialogFooter>
+            <Button variant={"danger"} onClick={() => {
+                deletePost(props._id);
+              }}>
+              Deletar
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       <Dialog open={openShare} onOpenChange={setOpenShare}>
         <DialogContent className="sm:max-w-md">

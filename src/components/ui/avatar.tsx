@@ -51,11 +51,7 @@ const AvatarFallback = React.forwardRef<HTMLSpanElement, AvatarFallbackProps>(
       const isDarkTheme = document.documentElement.classList.contains("dark");
 
       const colorVars = [
-        "--primary",
         "--secondary",
-        "--success",
-        "--warning",
-        "--danger",
       ];
 
       const randomColorVar =
