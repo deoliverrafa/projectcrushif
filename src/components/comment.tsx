@@ -30,8 +30,8 @@ import UserIcon from "../../public/images/user.png";
 
 import { getUserDataById } from "../utils/getUserDataById";
 import { getReplyById } from "../utils/getReplyById";
-import decodeToken from "../utils/decodeToken";
 import { User } from "../interfaces/userInterface";
+import { getUserData } from "../utils/getUserData";
 
 interface Comment {
   _id: string;
@@ -43,7 +43,8 @@ interface Comment {
   mentionedUsers: string[];
   replies: string[];
   userData: User;
-  getComments?: () => void
+  postId: string;
+  getComments?: () => void;
 }
 
 const ReplyComment: React.FC<Comment> = (props) => {
@@ -245,8 +246,8 @@ const ReplyComment: React.FC<Comment> = (props) => {
 };
 
 export const Comment: React.FC<Comment> = (props) => {
-  const decodedObject = decodeToken(localStorage.getItem("token") ?? "");
-  const dataUser = decodedObject?.user;
+  // const decodedObject = decodeToken(localStorage.getItem("token") ?? "");
+  const dataUser = getUserData();
 
   const [liked, setLiked] = React.useState(false);
   const [likeCount, setLikeCount] = React.useState(props.likeCount);
@@ -259,8 +260,6 @@ export const Comment: React.FC<Comment> = (props) => {
 
   const [isHidden, setIsHidden] = React.useState(true);
   const [loading, setLoading] = React.useState(false);
-
-  const [reply, setReply] = React.useState({});
 
   const toggleComment = () => {
     setShowFullComment(!showFullComment);
@@ -295,7 +294,7 @@ export const Comment: React.FC<Comment> = (props) => {
         );
 
         const validReplies = fetchedReplies.filter((reply) => reply !== null);
-        setViewingReplies(validReplies);
+        setViewingReplies((prevReplies) => [...prevReplies, ...validReplies]);
       }
     } catch (error) {
       console.error("Erro ao buscar dados das respostas:", error);
@@ -306,7 +305,7 @@ export const Comment: React.FC<Comment> = (props) => {
 
   React.useEffect(() => {
     fetchRepliesData();
-  }, [props.replies, reply]);
+  }, [props.replies]);
 
   const handleLike = async () => {
     const newLiked = !liked;
@@ -360,13 +359,17 @@ export const Comment: React.FC<Comment> = (props) => {
           content: replyText,
           commentId: props._id,
           userId: localStorage.getItem("userId"),
+          postId: props.postId,
         }
       );
 
-      const newReply = response.data.comment;
-      setReply(newReply)
+      const newReply = response.data.reply;
+
       setViewingReplies((prevReplies) => [...prevReplies, newReply]);
-      setReplyText("");
+      if (props.replies) {
+        props.replies.push(newReply._id);
+      }
+      setReplyText(`@${props.userData.nickname} `);
     } catch (error: any) {
       console.error("Erro ao enviar resposta:", error);
     }
@@ -483,12 +486,16 @@ export const Comment: React.FC<Comment> = (props) => {
               >
                 <Input
                   type="text"
-                  placeholder="Adicione um coméntario"
+                  placeholder="Adicione uma resposta"
                   value={replyText}
                   onInput={handleReplyChange}
                 />
 
-                <Button variant={"outline"} size={"icon"} onSubmit={props.getComments}>
+                <Button
+                  variant={"outline"}
+                  size={"icon"}
+                  onSubmit={props.getComments}
+                >
                   <FatCornerUpRightSolid className="h-5 w-5" />
                 </Button>
               </form>
@@ -595,6 +602,7 @@ export const Comment: React.FC<Comment> = (props) => {
                     mentionedUsers={reply.mentionedUsers}
                     replies={reply.replies}
                     userData={props.userData}
+                    postId={props.postId}
                   />
                 </div>
               )

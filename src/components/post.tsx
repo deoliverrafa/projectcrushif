@@ -232,7 +232,6 @@ export const CardPost = (props: CardProps) => {
   const [commentCount, setCommentCount] = React.useState<number>(
     props.commentCount
   );
-  const [isFirstComment, setIsFirstComment] = React.useState(false);
 
   const handleCommentSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -250,7 +249,6 @@ export const CardPost = (props: CardProps) => {
       );
 
       if (response.data.posted) {
-        setIsFirstComment(true);
         const newComment = {
           _id: response.data.commentId,
           content: comment || "",
@@ -265,13 +263,15 @@ export const CardPost = (props: CardProps) => {
         };
 
         // Adiciona o novo comentário imediatamente ao estado
+        setCommentUserData({
+          [localStorage.getItem("userId") ?? ""]: dataUser,
+        });
         setComments((prevComments) => {
           const updatedComments = [newComment, ...prevComments];
-          console.log("Comentários atualizados: ", updatedComments);
           return updatedComments;
         });
         setCommentCount((prevCount) => prevCount + 1);
-        setComment(""); // Limpa o campo de comentário
+        setComment("");
       }
     } catch (error: any) {
       console.log("Erro ao postar comentário", error);
@@ -281,6 +281,7 @@ export const CardPost = (props: CardProps) => {
 
   const handleCommentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
+
     setComment(value);
   };
 
@@ -293,7 +294,7 @@ export const CardPost = (props: CardProps) => {
     likedBy: string[];
     mentionedUsers: string[];
     replies: string[];
-    userData: User
+    userData: User;
   }
 
   const [comments, setComments] = React.useState<Comment[]>([]);
@@ -319,6 +320,7 @@ export const CardPost = (props: CardProps) => {
     }
   };
 
+  // Função para buscar comentários do post
   const fetchComments = async () => {
     setLoading(true);
     try {
@@ -328,19 +330,33 @@ export const CardPost = (props: CardProps) => {
         }${localStorage.getItem("token")}/${props._id}`,
         { params: { skip, limit } }
       );
+
       const newComments: Comment[] = response.data.comments;
-      await Promise.all(
-        newComments.map((comment: Comment) => fetchUserData(comment.userId))
+
+      // Filtrar comentários duplicados
+      const existingCommentIds = new Set(
+        comments.map((comment) => comment._id)
+      );
+      const filteredComments = newComments.filter(
+        (comment) => !existingCommentIds.has(comment._id)
       );
 
-      setComments((prevComments) => [...prevComments, ...newComments]);
+      // Buscar dados dos usuários
+      await Promise.all(
+        filteredComments.map((comment) => fetchUserData(comment.userId))
+      );
+
+      // Atualizar estado
+      setComments((prevComments) => [...prevComments, ...filteredComments]);
       setSkip((prevSkip) => prevSkip + limit);
-      if (newComments.length < limit) {
+
+      if (filteredComments.length < limit) {
         setHasMore(false);
       }
     } catch (error) {
       console.error("Erro ao buscar comentários:", error);
     } finally {
+      setLoading(false);
     }
   };
 
@@ -657,12 +673,10 @@ export const CardPost = (props: CardProps) => {
                                   </Card>
                                 ))}
                               </div>
-                            ) : comments.length > 0 || isFirstComment ? (
+                            ) : comments.length > 0 ? (
                               comments.map((comment) => {
-                                
                                 const dataUser =
                                   commentUserData[comment.userId];
-
                                 return (
                                   dataUser && (
                                     <Comment
@@ -675,8 +689,9 @@ export const CardPost = (props: CardProps) => {
                                       likedBy={comment.likedBy}
                                       mentionedUsers={comment.mentionedUsers}
                                       replies={comment.replies}
+                                      postId={props._id}
                                       userData={dataUser}
-                                      getComments={getNewstComments}  
+                                      getComments={getNewstComments}
                                     />
                                   )
                                 );
