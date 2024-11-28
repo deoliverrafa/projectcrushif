@@ -56,6 +56,16 @@ const App = () => {
     };
   }, []);
 
+  if (Notification.permission === "default") {
+    Notification.requestPermission().then((permission) => {
+      if (permission === "granted") {
+        console.log("Permissão concedida para notificações!");
+      } else {
+        console.log("Permissão para notificações foi negada.");
+      }
+    });
+  }
+
   return (
     <>
       <HexaThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
