@@ -188,7 +188,7 @@ const ReplyComment: React.FC<Comment> = (props) => {
 
             {showHeart && (
               <div className="absolute inset-0 flex items-center justify-center">
-                <HeartSolid className="animate-ping text-primary h-20 w-20" />
+                <HeartSolid className="animate__heartBeat text-primary h-20 w-20" />
               </div>
             )}
           </CardContent>
@@ -206,13 +206,13 @@ const ReplyComment: React.FC<Comment> = (props) => {
                 {liked ? (
                   <HeartSolid
                     className={`${
-                      animateClick ? "animate-click" : ""
+                      animateClick ? "animate__heartBeat" : ""
                     } text-primary h-5 md:h-4 w-5 md:w-4`}
                   />
                 ) : (
                   <HeartBrokenSolid
                     className={`${
-                      animateClick ? "animate-click" : ""
+                      animateClick ? "animate__heartBeat" : ""
                     } h-5 md:h-4 w-5 md:w-4`}
                   />
                 )}
@@ -464,7 +464,7 @@ export const Comment: React.FC<Comment> = (props) => {
 
           {showHeart && (
             <div className="absolute inset-0 flex items-center justify-center">
-              <HeartSolid className="animate-ping text-primary h-20 w-20" />
+              <HeartSolid className="animate__heartBeat text-primary h-20 w-20" />
             </div>
           )}
 
@@ -518,13 +518,13 @@ export const Comment: React.FC<Comment> = (props) => {
                   {liked ? (
                     <HeartSolid
                       className={`${
-                        animateClick ? "animate-click" : ""
+                        animateClick ? "animate__heartBeat" : ""
                       } text-primary h-5 md:h-4 w-5 md:w-4`}
                     />
                   ) : (
                     <HeartBrokenSolid
                       className={`${
-                        animateClick ? "animate-click" : ""
+                        animateClick ? "animate__heartBeat" : ""
                       } h-5 md:h-4 w-5 md:w-4`}
                     />
                   )}

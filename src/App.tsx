@@ -57,7 +57,7 @@ const App = () => {
   }, []);
 
   async function ensurePersistentStorage() {
-    if ('storage' in navigator && 'persist' in navigator.storage) {
+    if ("storage" in navigator && "persist" in navigator.storage) {
       const isPersisted = await navigator.storage.persisted();
       if (isPersisted) {
         console.log("O armazenamento já é persistente.");
@@ -74,19 +74,7 @@ const App = () => {
     }
   }
 
-  // Chamar a função
   ensurePersistentStorage();
-
-
-  if (Notification.permission === "default") {
-    Notification.requestPermission().then((permission) => {
-      if (permission === "granted") {
-        console.log("Permissão concedida para notificações!");
-      } else {
-        console.log("Permissão para notificações foi negada.");
-      }
-    });
-  }
 
   return (
     <>

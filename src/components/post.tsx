@@ -585,13 +585,13 @@ export const CardPost = (props: CardProps) => {
                       {liked ? (
                         <HeartSolid
                           className={`${
-                            animateClick ? "animate-click" : ""
+                            animateClick ? "animate__heartBeat" : ""
                           } text-primary h-5 md:h-4 w-5 md:w-4`}
                         />
                       ) : (
                         <HeartBrokenSolid
                           className={`${
-                            animateClick ? "animate-click" : ""
+                            animateClick ? "animate__heartBeat" : ""
                           } h-5 md:h-4 w-5 md:w-4`}
                         />
                       )}

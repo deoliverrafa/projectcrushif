@@ -439,7 +439,7 @@ const CrushLayout = () => {
                           variant="outline"
                           size="icon"
                           className={`${
-                            animateRefuse ? "animate-click" : ""
+                            animateRefuse ? "animate__heartBeat" : ""
                           } bg-primary-foreground h-12 md:h-12 w-12 md:w-12 hover:bg-primary-foreground/90 rounded-full`}
                           onClick={rejectUser}
                         >
@@ -450,7 +450,7 @@ const CrushLayout = () => {
                           variant="outline"
                           size="icon"
                           className={`${
-                            animateClick ? "animate-click" : ""
+                            animateClick ? "animate__heartBeat" : ""
                           } bg-primary hover:bg-primary/90 h-12 md:h-12 w-12 md:w-12 rounded-full`}
                           onClick={() => likeUser(currentUser._id)}
                         >
