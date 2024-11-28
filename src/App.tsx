@@ -56,6 +56,28 @@ const App = () => {
     };
   }, []);
 
+  async function ensurePersistentStorage() {
+    if ('storage' in navigator && 'persist' in navigator.storage) {
+      const isPersisted = await navigator.storage.persisted();
+      if (isPersisted) {
+        console.log("O armazenamento já é persistente.");
+      } else {
+        const permissionGranted = await navigator.storage.persist();
+        if (permissionGranted) {
+          console.log("Permissão para armazenamento persistente concedida!");
+        } else {
+          console.log("Permissão para armazenamento persistente negada.");
+        }
+      }
+    } else {
+      console.log("A API de armazenamento persistente não está disponível.");
+    }
+  }
+
+  // Chamar a função
+  ensurePersistentStorage();
+
+
   if (Notification.permission === "default") {
     Notification.requestPermission().then((permission) => {
       if (permission === "granted") {
