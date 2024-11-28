@@ -58,16 +58,13 @@ const App = () => {
   }, []);
 
  React.useEffect(() => {
-    // Ensure this code runs only on the client side
     if (typeof window !== 'undefined') {
       OneSignal.init({
         appId: '97f8d678-2350-483e-aa35-b227242c4b6c',
-        // You can add other initialization options here
+        safari_web_id: "web.onesignal.auto.542681a0-163f-4163-99a6-540b36eadb1c",
         notifyButton: {
-          enable: true,
+          enable: false,
         },
-        // Uncomment the below line to run on localhost. See: https://documentation.onesignal.com/docs/local-testing
-        // allowLocalhostAsSecureOrigin: true
       });
     }
   }, []);
