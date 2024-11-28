@@ -45,6 +45,15 @@
       navigator.serviceWorker.register("./public/service-worker.js");
     </script>
     <link rel="manifest" href="./public/manifest.json" />
+
+    <script>
+  window.OneSignalDeferred = window.OneSignalDeferred || [];
+  OneSignalDeferred.push(async function(OneSignal) {
+    await OneSignal.init({
+      appId: "97f8d678-2350-483e-aa35-b227242c4b6c",
+    });
+  });
+</script>
   </head>
 
   <body>
