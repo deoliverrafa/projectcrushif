@@ -464,7 +464,7 @@ export const Comment: React.FC<Comment> = (props) => {
 
           {showHeart && (
             <div className="absolute inset-0 flex items-center justify-center">
-              <HeartSolid className="animate__heartBeat text-primary h-20 w-20" />
+              <HeartSolid className="animate-ping text-primary h-20 w-20" />
             </div>
           )}
 

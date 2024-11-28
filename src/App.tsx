@@ -1,4 +1,5 @@
 import * as React from "react";
+import OneSignal from 'react-onesignal';
 
 import { HexaThemeProvider } from "./components/ui/theme.tsx";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
@@ -56,25 +57,20 @@ const App = () => {
     };
   }, []);
 
-  async function ensurePersistentStorage() {
-    if ("storage" in navigator && "persist" in navigator.storage) {
-      const isPersisted = await navigator.storage.persisted();
-      if (isPersisted) {
-        console.log("O armazenamento já é persistente.");
-      } else {
-        const permissionGranted = await navigator.storage.persist();
-        if (permissionGranted) {
-          console.log("Permissão para armazenamento persistente concedida!");
-        } else {
-          console.log("Permissão para armazenamento persistente negada.");
-        }
-      }
-    } else {
-      console.log("A API de armazenamento persistente não está disponível.");
+ React.useEffect(() => {
+    // Ensure this code runs only on the client side
+    if (typeof window !== 'undefined') {
+      OneSignal.init({
+        appId: '97f8d678-2350-483e-aa35-b227242c4b6c',
+        // You can add other initialization options here
+        notifyButton: {
+          enable: true,
+        },
+        // Uncomment the below line to run on localhost. See: https://documentation.onesignal.com/docs/local-testing
+        // allowLocalhostAsSecureOrigin: true
+      });
     }
-  }
-
-  ensurePersistentStorage();
+  }, []);
 
   return (
     <>
