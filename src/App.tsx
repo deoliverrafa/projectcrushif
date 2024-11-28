@@ -65,17 +65,17 @@ const App = () => {
         notifyButton: {
           enable: false,
         },
-        promptOptions:{
-      slidedown: {
-        prompts: [
-          autoPrompt: true,//true means display the prompt based on the delay options.
-          delay: {
-            pageViews: 3,
-            timeDelay: 30
+        promptOptions: {
+          slidedown: {
+            prompts: [
+              autoPrompt: true,
+              delay: {
+                pageViews: 3,
+                timeDelay: 30
+              }
+            ]
           }
-        ]
-      }
-    }
+        }
       });
     }
   }, []);
