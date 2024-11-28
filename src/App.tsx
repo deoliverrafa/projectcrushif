@@ -65,14 +65,8 @@ const App = () => {
       notifyButton: {
         enable: false,
       },
-      promptOptions: {
-        slidedown: {
-          enabled: true,
-          autoPrompt: true,
-          pageViews: 3,
-          timeDelay: 30,
-        },
-      },
+      
+      OneSignal.Notifications.requestPermission();
     });
   }
 }, []);
