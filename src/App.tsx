@@ -58,27 +58,24 @@ const App = () => {
   }, []);
 
  React.useEffect(() => {
-    if (typeof window !== 'undefined') {
-      OneSignal.init({
-        appId: '97f8d678-2350-483e-aa35-b227242c4b6c',
-        safari_web_id: "web.onesignal.auto.542681a0-163f-4163-99a6-540b36eadb1c",
-        notifyButton: {
-          enable: false,
+  if (typeof window !== 'undefined') {
+    OneSignal.init({
+      appId: '97f8d678-2350-483e-aa35-b227242c4b6c',
+      safari_web_id: "web.onesignal.auto.542681a0-163f-4163-99a6-540b36eadb1c",
+      notifyButton: {
+        enable: false,
+      },
+      promptOptions: {
+        slidedown: {
+          enabled: true,
+          autoPrompt: true,
+          pageViews: 3,
+          timeDelay: 30,
         },
-        promptOptions: {
-          slidedown: {
-            prompts: [
-              autoPrompt: true,
-              delay: {
-                pageViews: 3,
-                timeDelay: 30
-              }
-            ]
-          }
-        }
-      });
-    }
-  }, []);
+      },
+    });
+  }
+}, []);
 
   return (
     <>
