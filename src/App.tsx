@@ -65,8 +65,6 @@ const App = () => {
       notifyButton: {
         enable: false,
       },
-      
-      OneSignal.Notifications.requestPermission();
     });
   }
 }, []);
