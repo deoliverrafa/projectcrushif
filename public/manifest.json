@@ -6,8 +6,8 @@
 "description": "Bem-vindo à CrushIF, a plataforma ideal para estudantes dos Institutos Federais! Conecte-se com colegas, compartilhe conhecimentos e participe de uma comunidade dinâmica e colaborativa. Aqui, você encontra um espaço seguro e interativo para trocar experiências, discutir projetos e se manter atualizado sobre tudo o que acontece no ambiente acadêmico. Junte-se a nós e potencialize sua jornada estudantil!",
 "lang": "pt-BR",
 "dir": "auto",
-"theme_color": "#db2777",
-"background_color": "#000000",
+"theme_color": "#db2979",
+"background_color": "#f5f8ff",
 "orientation": "any",
 "icons": [
     {
@@ -25,7 +25,7 @@
 ],
 "screenshots": [
     {
-        "src": "./images/logo/logo.png",
+        "src": "./images/login_art.png",
         "sizes": "2880x1800",
         "type": "image/png",
         "description": "A screenshot of the home page"
