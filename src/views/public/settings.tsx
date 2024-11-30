@@ -30,6 +30,7 @@ import {
 } from "../../components/ui/dialog.tsx";
 import { Label } from "../../components/ui/label.tsx";
 import { Input } from "../../components/ui/input.tsx";
+import { Switch } from "../../components/ui/switch.tsx"
 
 import UserIcon from "../../../public/images/user.png"
 
@@ -59,6 +60,14 @@ const SettingsLayout = ({
   const [error, setError] = React.useState("");
 
   const [password, setPassword] = React.useState<string>("");
+  const [inContrast, setInContrast] = React.useState<boolean>(
+    localStorage.getItem("inContrast") === "true"
+  );
+
+  React.useEffect(() => {
+    document.body.classList.toggle("high-contrast", inContrast);
+    localStorage.setItem("inContrast", String(inContrast));
+  }, [inContrast]);
 
   const deleteAccount = async () => {
     try {
@@ -84,26 +93,44 @@ const SettingsLayout = ({
     <React.Fragment>
       <Card className="select-none my-2 w-full md:w-6/12">
         <CardHeader>
-          <h1 className="font-poppins font-semibold tracking-widest text-xl">
-            Geral
+          <h1 className="font-poppins font-semibold text-foreground tracking-widest text-xl">
+            Exibição
           </h1>
         </CardHeader>
+        
         <Separator className="mb-5" />
-        <CardContent>
+        
+        <CardContent className="space-y-4">
           <div className="flex flex-row justify-between items-center">
-            <CardDescription>Tema:</CardDescription>
+            <div className="flex flex-col">
+            <CardDescription className="text-foreground">Tema</CardDescription>
+            <CardDescription className="text-xs md:text-xs text-muted-foreground">Selecione um tema para ser aplicado na aplicação</CardDescription>
+            </div>
             <ThemeToggle />
+          </div>
+          
+          <div className="flex flex-row justify-between items-center">
+            <div className="flex flex-col">
+            <CardDescription className="text-foreground">Texto em alta contraste</CardDescription>
+            <CardDescription className="text-xs md:text-xs text-muted-foreground">O texto ficará mais vísivel para os usuários na aplicação</CardDescription>
+            </div>
+            <Switch 
+              checked={inContrast}
+              onCheckedChange={(checked) => setInContrast(checked)}
+            />
           </div>
         </CardContent>
       </Card>
 
       <Card className="select-none my-2 w-full md:w-6/12">
         <CardHeader>
-          <h1 className="font-poppins font-semibold tracking-widest text-xl">
+          <h1 className="font-poppins font-semibold text-foreground tracking-widest text-xl">
             Conta
           </h1>
         </CardHeader>
+        
         <Separator className="mb-5" />
+        
         <CardContent>
           <div className="flex flex-row items-center space-x-2">
             <Avatar className="border-2 border-border">

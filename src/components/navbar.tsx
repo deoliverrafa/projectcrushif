@@ -515,7 +515,7 @@ export const NavBarReturn = (props: NavBarReturnProps) => {
           </Button>
         </NavbarContent>
 
-        <NavbarContent className="text-muted-foreground font-poppins font-semibold md:font-medium">
+        <NavbarContent className="text-foreground font-poppins font-semibold md:font-medium">
           {props.title}
         </NavbarContent>
 

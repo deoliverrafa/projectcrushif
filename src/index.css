@@ -31,6 +31,7 @@
     --border: 254 25% 90%;
     --input: 254 25% 90%;
     --ring: 333 71% 51%;
+    --highlight: 0 0% 75%;
     --radius: 1rem;
   }
 
@@ -60,6 +61,7 @@
     --border: 216 24% 23%;
     --input: 216 24% 23%;
     --ring: 335 78% 42%;
+    --highlight: 215 18% 37%;
     --radius: 1rem;
   }
 
@@ -89,6 +91,7 @@
     --border: 216 24% 17%;
     --input: 216 24% 17%;
     --ring: 336 74% 35%;
+    --highlight: 0 0% 37%;
     --radius: 1rem;
   }
 
@@ -118,6 +121,7 @@
     --border: 333 30% 50%;
     --input: 333 30% 18%;
     --ring: 333 71% 51%;
+    --highlight: 333 90% 75%;
     --radius: 1rem;
   }
 
@@ -147,6 +151,7 @@
     --border: 335 30% 18%;
     --input: 335 30% 18%;
     --ring: 335 78% 42%;
+    --highlight: 335 90% 35%;
     --radius: 1rem;
   }
 }

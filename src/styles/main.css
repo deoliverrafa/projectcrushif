@@ -32,3 +32,10 @@
   border-right: 2px solid hsl(var(--border));
   transform: rotate(180deg);
 }
+
+.high-contrast {
+  text-shadow: 1px 1px 0px hsl(var(--highlight)), 
+    -1px -1px 0px hsl(var(--highlight)),
+    1px -1px 0px hsl(var(--highlight)),
+    -1px 1px 0px hsl(var(--highlight));
+}
