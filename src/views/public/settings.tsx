@@ -48,6 +48,7 @@ interface UserData {
   avatar: string;
   email: string;
   type: string;
+  status: string;
 }
 
 const SettingsLayout = ({
