@@ -12,6 +12,8 @@ import { Separator } from "../../components/ui/separator";
 import { Drawer, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle, DrawerTrigger } from "../../components/ui/drawer";
 import { Input } from "../../components/ui/input";
 
+import { getStatusUser } from "../../utils/getStatusUser.tsx";
+
 import { InfoSolid } from "@mynaui/icons-react";
 
 import Logo from "../../../public/images/logo/logo.png";
@@ -27,6 +29,11 @@ interface User {
 
 const FollowersLayout = () => {
   const { id } = useParams<string>();
+  const [userId] = React.useState<string | null>(
+    localStorage.getItem("userId")
+  );
+  
+  getStatusUser(userId)
 
   const [followersUsers, setFollowersUsers] = React.useState<User[]>([]);
   const [filteredUsers, setFilteredUsers] = React.useState<User[]>([]);

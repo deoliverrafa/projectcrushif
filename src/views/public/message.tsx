@@ -26,7 +26,10 @@ import {
 import { Input } from "../../components/ui/input";
 import { ScrollArea } from "../../components/ui/scroll-area";
 import { MessageReceived } from "../../components/message";
+
 import axios from "axios"; // Importando o Axios
+
+import { getStatusUser } from "../../utils/getStatusUser.tsx"
 import { getUserDataById } from "../../utils/getUserDataById";
 import { User } from "../../interfaces/userInterface";
 
@@ -47,11 +50,17 @@ interface Message {
 
 const MessageLayout = () => {
   const { id } = useParams<string>();
+  const [userId] = React.useState<string | null>(
+    localStorage.getItem("userId")
+  );
+  
   const [chatUser, setChatUser] = React.useState<User>();
   const [messages, setMessages] = React.useState<Message[]>([]);
   const [currentUserId] = React.useState(localStorage.getItem("userId"));
   const [activeChatUserId] = React.useState(id);
   const [newMessage, setNewMessage] = React.useState("");
+  
+  getStatusUser(userId)
 
   React.useEffect(() => {
     const fetchUserData = async () => {

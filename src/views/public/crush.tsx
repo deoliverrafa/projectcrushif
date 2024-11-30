@@ -41,6 +41,7 @@ import SelfieIcon from "../../../public/images/selfie_art.png";
 import NotFoundArt from "../../../public/images/not_found_art.png";
 
 import { getUserData } from "../../utils/getUserData";
+import { getStatusUser } from "../../utils/getStatusUser.tsx";
 import decodeToken from "../../utils/decodeToken";
 
 interface User {
@@ -59,6 +60,11 @@ const CrushLayout = () => {
   const userData = decodedObj?.user;
 
   const [users, setUsers] = React.useState<User[]>([]);
+  const [userId] = React.useState<string | null>(
+    localStorage.getItem("userId")
+  );
+  
+  getStatusUser(userId);
 
   const [allUsers, setAllUsers] = React.useState<User[]>([]);
   const [likedByUsers, setLikedByUsers] = React.useState<User[]>([]);

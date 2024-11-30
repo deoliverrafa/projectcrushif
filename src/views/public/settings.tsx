@@ -93,15 +93,15 @@ const SettingsLayout = ({
     <React.Fragment>
       <Card className="select-none my-2 w-full md:w-6/12">
         <CardHeader>
-          <h1 className="font-poppins font-semibold text-foreground tracking-widest text-xl">
+          <CardTitle className="text-foreground uppercase text-2xl md:text-5xl">
             Exibição
-          </h1>
+          </CardTitle>
         </CardHeader>
         
         <Separator className="mb-5" />
         
         <CardContent className="space-y-4">
-          <div className="flex flex-row justify-between items-center">
+          <div className="flex flex-row justify-between items-center gap-1">
             <div className="flex flex-col">
             <CardDescription className="text-foreground">Tema</CardDescription>
             <CardDescription className="text-xs md:text-xs text-muted-foreground">Selecione um tema para ser aplicado na aplicação</CardDescription>
@@ -109,7 +109,7 @@ const SettingsLayout = ({
             <ThemeToggle />
           </div>
           
-          <div className="flex flex-row justify-between items-center">
+          <div className="flex flex-row justify-between items-center gap-1">
             <div className="flex flex-col">
             <CardDescription className="text-foreground">Texto em alta contraste</CardDescription>
             <CardDescription className="text-xs md:text-xs text-muted-foreground">O texto ficará mais vísivel para os usuários na aplicação</CardDescription>
@@ -124,25 +124,36 @@ const SettingsLayout = ({
 
       <Card className="select-none my-2 w-full md:w-6/12">
         <CardHeader>
-          <h1 className="font-poppins font-semibold text-foreground tracking-widest text-xl">
+          <CardTitle className="text-foreground uppercase text-2xl md:text-5xl">
             Conta
-          </h1>
+          </CardTitle>
         </CardHeader>
         
         <Separator className="mb-5" />
         
         <CardContent>
           <div className="flex flex-row items-center space-x-2">
-            <Avatar className="border-2 border-border">
-              <AvatarFallback>{userData.nickname}</AvatarFallback>
-              <AvatarImage className="object-cover" src={userData.avatar ? userData.avatar : UserIcon} />
+            <div className="relative">
+            <Avatar className="shadow-lg border-2 border-border">
+              <AvatarFallback>{userData?.userName}</AvatarFallback>
+              <AvatarImage
+                className="object-cover"
+                src={userData?.avatar ? userData?.avatar : UserIcon}
+              />
             </Avatar>
+
+            <span
+              className={`border border-border h-2.5 w-2.5 bottom-0 right-1 rounded-full text-xs ${
+                userData.status === "online" ? "bg-success" : "bg-secondary"
+              } absolute`}
+            ></span>
+          </div>
 
             <div className="flex flex-col">
               <div className="flex flex-row items-center space-x-1">
-                <CardTitle className="font-semibold md:font-medium text-md md:text-sm tracking-tight">
+                <CardDescription className="font-semibold md:font-medium text-md md:text-sm tracking-tight">
                   {userData.nickname}
-                </CardTitle>
+                </CardDescription>
                 <HeartWavesSolid
                   className={`${userData?.type === "Plus"
                       ? "text-info"
@@ -154,9 +165,9 @@ const SettingsLayout = ({
                     } h-3 w-3`}
                 />
               </div>
-              <CardTitle className="font-normal md:font-light text-sm md:text-xs tracking-tight">
+              <CardDescription className="font-normal md:font-light text-xs md:text-xs">
                 {userData.email}
-              </CardTitle>
+              </CardDescription>
             </div>
           </div>
         </CardContent>
@@ -164,13 +175,6 @@ const SettingsLayout = ({
         <Separator className="mb-5" />
 
         <CardFooter className="flex-col justify-start items-start space-y-2">
-          <Link to={"/"}>
-            <Button variant={"danger"} onClick={logOutHandle}>
-              <LogoutSolid className="mr-2 h-5 w-5" />
-              Deslogar
-            </Button>
-          </Link>
-
           <Dialog>
             <DialogTrigger asChild>
               <Button variant={"danger"}>
@@ -211,6 +215,13 @@ const SettingsLayout = ({
               </DialogFooter>
             </DialogContent>
           </Dialog>
+          
+          <Link to={"/"}>
+            <Button variant={"danger"} onClick={logOutHandle}>
+              <LogoutSolid className="mr-2 h-5 w-5" />
+              Deslogar
+            </Button>
+          </Link>
         </CardFooter>
       </Card>
     </React.Fragment>
