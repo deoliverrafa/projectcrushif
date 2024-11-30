@@ -142,12 +142,6 @@ const SettingsLayout = ({
                 src={userData?.avatar ? userData?.avatar : UserIcon}
               />
             </Avatar>
-
-            <span
-              className={`border border-border h-2.5 w-2.5 bottom-0 right-1 rounded-full text-xs ${
-                userData.status === "online" ? "bg-success" : "bg-secondary"
-              } absolute`}
-            ></span>
           </div>
 
             <div className="flex flex-col">
