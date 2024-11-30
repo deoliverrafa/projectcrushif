@@ -2,23 +2,17 @@ import * as React from "react";
 
 import { NavBarReturn } from "../../components/navbar";
 import { ChatUserCard } from "../../components/user-card";
+
 import { Card, CardContent } from "../../components/ui/card";
-import { getStatusUser } from "../../utils/getStatusUser.tsx"
 import { User } from "../../interfaces/userInterface";
 import axios from "axios";
-
-
 import LoadingPage from "./loading";
 
 const MessagesLayout = () => {
 
   const [followingUsers, setFollowingUsers] = React.useState<User[]>([]);
-  const [userId] = React.useState<string | null>(
-    localStorage.getItem("userId")
-  );
+  const userId = localStorage.getItem("userId")
   const [loading, setLoading] = React.useState(false);
-  
-  getStatusUser(userId)
 
   React.useEffect(() => {
     const fetchFollowingUsers = async () => {
