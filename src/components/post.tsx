@@ -90,6 +90,7 @@ interface CardProps {
   insertAt: Date;
   following?: boolean;
   id: string;
+  status?: string;
   likeCount: number;
   commentCount: number;
   likedBy: string[];
@@ -423,13 +424,14 @@ export const CardPost = (props: CardProps) => {
       <ContextMenu>
         <ContextMenuTrigger className="relative flex justify-center w-full">
           <Card
-            className={`select-none my-2 w-full md:w-6/12 ${props.classNames}`}
+            className={`select-none my-1 w-full md:w-6/12 ${props.classNames}`}
             onDoubleClick={handleDoubleLike}
           >
             <CardHeader className="flex flex-row justify-between items-center">
               {!props.isAnonymous ? (
                 <Link to={`/profile/${props.id}`} className="flex space-x-2">
-                  <Avatar className="shadow-lg border-2 border-border">
+                <div className="relative">
+                <Avatar className="shadow-lg border-2 border-border">
                     <AvatarFallback>
                       {!props.isAnonymous ? viewingUser?.nickname : ""}
                     </AvatarFallback>
@@ -439,6 +441,13 @@ export const CardPost = (props: CardProps) => {
                       src={!props.isAnonymous ? viewingUser?.avatar : UserIcon}
                     />
                   </Avatar>
+
+                <span
+              className={`border border-border h-2.5 w-2.5 bottom-0 right-1 rounded-full text-xs ${
+                viewingUser?.status === "online" ? "bg-success" : "bg-secondary"
+              } absolute`}
+            ></span>
+          </div>
 
                   <div className="flex flex-col items-start justify-center space-y-1">
                     <div className="flex flex-row items-center space-x-1">
@@ -538,7 +547,7 @@ export const CardPost = (props: CardProps) => {
                 )}
 
                 <div className="flex flex-row items-center h-full w-full">
-                  <CardDescription className="text-foreground font-normal md:font-light tracking-tight text-md md:text-sm">
+                  <CardDescription className="text-foreground font-normal md:font-light tracking-tight text-md md:text-sm break-words">
                     <span className="font-semibold md:font-medium">
                       {!props.isAnonymous ? viewingUser?.nickname : "anônimo"}:{" "}
                     </span>

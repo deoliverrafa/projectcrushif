@@ -39,3 +39,8 @@
     1px -1px 0px hsl(var(--highlight)),
     -1px 1px 0px hsl(var(--highlight));
 }
+
+.break-words {
+  word-wrap: break-word;
+  word-break: break-word;
+}

@@ -33,11 +33,13 @@ export const MessageReceived = (props: Message) => {
         } mb-4`}
       >
         <div
-          className={`max-w-[70%] p-3 rounded-lg ${
-            props.isSender ? "bg-info text-info-foreground" : "bg-card border border-border"
+          className={`max-w-[calc(100%-16px)] md:max-w-[70%] p-3 rounded-lg ${
+            props.isSender
+              ? "bg-info text-info-foreground"
+              : "bg-card border border-border"
           }`}
         >
-          <p>{props.content}</p>
+          <p className="break-words">{props.content}</p>
           <div className="flex justify-end items-center mt-1 space-x-1">
             <span className="text-xs opacity-70">
               {formatDistanceToNow(new Date(props.insertAt), {

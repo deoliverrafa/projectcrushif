@@ -141,9 +141,7 @@ const SearchLayout = () => {
           <div className="flex flex-row justify-between items-center space-x-2 w-full">
             <div className="flex flex-col justify-center w-full">
               <Input
-                type="search"
-                placeholder="Procure"
-                className="font-inter font-medium"
+                placeholder="Pesquisar"
                 name="query"
                 id="query"
                 onChange={handleSearch}
@@ -153,7 +151,7 @@ const SearchLayout = () => {
         </CardContent>
       </Card>
         
-      <Card className="w-full md:w-6/12 mt-2">
+      <Card className="h-full w-full md:w-6/12 mt-2">
         {queryResponse.length > 0 && (
           <p className="font-poppins font-medium md:font-normal tracking-wide text-md md:text-sm text-muted-foreground">
             {queryResponse.length === 1 ? (
@@ -175,7 +173,6 @@ const SearchLayout = () => {
         )}
 
         {queryResponse.length > 0 || suggestedUsers.length > 0 ? (
-          <ScrollArea className="h-96 w-full rounded-md">
             <div className="p-4">
               {queryResponse.length > 0 ? (
                 queryResponse.map((user: User) => {
@@ -184,6 +181,7 @@ const SearchLayout = () => {
                   );
                   return (
                     <>
+                    <ScrollArea className="h-full w-full rounded-md">
                       <SearchUserCard
                         avatar={user.avatar}
                         nickname={user.nickname}
@@ -194,6 +192,7 @@ const SearchLayout = () => {
                         key={user._id}
                         status={user.status}
                       />
+                      </ScrollArea>
                     </>
                   );
                 })
@@ -212,7 +211,6 @@ const SearchLayout = () => {
                 </div>
               )}
             </div>
-          </ScrollArea>
         ) : null}
       </Card>
     </form>

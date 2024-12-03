@@ -2,7 +2,7 @@ import * as React from "react";
 
 import { NavBarReturn } from "../../components/navbar";
 import { ChatUserCard } from "../../components/user-card";
-import { Card, CardContent } from "../../components/ui/card";
+import { Card, CardContent, CardHeader, CardDescription } from "../../components/ui/card";
 
 import { User } from "../../interfaces/userInterface";
 import axios from "axios";
@@ -50,7 +50,15 @@ const MessagesLayout = () => {
   return (
     <React.Fragment>
       <Card className="select-none mt-2 w-full md:w-6/12">
-        <CardContent>
+        {followingUsers.length > 0 ? (
+           <div className="flex flex-row justify-between items-center">
+            <CardDescription className="text-foreground ml-4 mt-4 uppercase">Contatos</CardDescription>
+                
+            <CardDescription className="mr-4 mt-4 text-xs md:text-xs">{followingUsers.length} contatos</CardDescription>
+              </div>
+        ) : null}
+        
+        <CardContent className="p-4">
           {followingUsers.map((user) => {
             return(
               <ChatUserCard 

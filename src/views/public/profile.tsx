@@ -519,7 +519,7 @@ const ProfileLayout = () => {
           </div>
 
           <div className="flex flex-col gap-1">
-            <CardDescription>Sugestões para você</CardDescription>
+            <CardDescription className="text-foreground uppercase">Sugestões para você</CardDescription>
             <UserSuggestions removeUserId={viewingUser._id} />
           </div>
         </CardContent>

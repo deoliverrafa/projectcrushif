@@ -35,6 +35,7 @@ interface User {
   avatar: string;
   type: string;
   isFollowing: boolean;
+  status: string;
 }
 
 export const MentionedUsers: React.FC<Comment> = (props) => {
@@ -99,8 +100,10 @@ export const MentionedUsers: React.FC<Comment> = (props) => {
                     key={user._id}
                     avatar={user.avatar}
                     nickname={user.nickname}
+                    userName={user.userName}
                     type={user.type}
                     _id={user._id}
+                    status={user.status}
                     following={followingMentionedUsers[index]}
                     onFollowToggle={() => {toggleFollow}}
                   />

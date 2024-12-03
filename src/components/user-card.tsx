@@ -47,7 +47,7 @@ export const SearchUserCard = (props: User) => {
   
 
   return (
-    <Card className="my-2 w-full">
+    <Card className="my-1 w-full">
       <div className="flex flex-row justify-between items-center p-4">
         <Link to={`/profile/${props._id}`} className="flex space-x-2 h-full">
           <div className="relative">
@@ -115,7 +115,7 @@ export const UserCard = (props: User) => {
   return (
     <React.Fragment>
       <Link to={`${props.link}${props._id}`}>
-        <Card className="my-2 w-full">
+        <Card className="my-1 w-full">
           <div className="flex flex-row justify-between items-center p-4 w-full">
             <div className="flex flex-row items-center gap-1">
               <div className="relative">
@@ -173,7 +173,7 @@ export const ChatUserCard = (props: User) => {
   return (
     <React.Fragment>
       <Link to={`/message/${props._id}`}>
-        <Card className="my-2 w-full">
+        <Card className="my-1 w-full">
           <div className="flex flex-row justify-between items-center p-4 w-full">
             <div className="flex flex-row items-center gap-1">
               <div className="relative">

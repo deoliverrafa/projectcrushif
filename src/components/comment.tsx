@@ -38,6 +38,7 @@ interface Comment {
   content: string;
   insertAt: Date;
   userId: string;
+  status: string;
   likeCount: number;
   likedBy: string[];
   mentionedUsers: string[];
@@ -131,6 +132,7 @@ const ReplyComment: React.FC<Comment> = (props) => {
         >
           <Link to={`/profile/${props.userId}`}>
             <CardHeader className="flex flex-row items-center space-x-4 p-4">
+            <div className="relative">
               <Avatar className="h-10 w-10 border-2 border-border">
                 <AvatarFallback>{viewingUser?.nickname[0]}</AvatarFallback>
                 <AvatarImage
@@ -139,6 +141,14 @@ const ReplyComment: React.FC<Comment> = (props) => {
                   alt={viewingUser?.nickname}
                 />
               </Avatar>
+              
+              <span
+              className={`border border-border h-2.5 w-2.5 bottom-0 right-1 rounded-full text-xs ${
+                viewingUser?.status === "online" ? "bg-success" : "bg-secondary"
+              } absolute`}
+            ></span>
+            </div>
+            
               <div className="flex flex-col">
                 <div className="flex items-center gap-1">
                   <CardDescription className="font-semibold md:font-semibold">
@@ -406,6 +416,7 @@ export const Comment: React.FC<Comment> = (props) => {
         <div className="flex justify-start w-fit">
           <Link to={`/profile/${props.userId}`}>
             <CardHeader className="flex flex-row items-center space-x-4 p-4">
+             <div className="relative">
               <Avatar className="h-10 w-10 border-2 border-border">
                 <AvatarFallback>{viewingUser?.nickname[0]}</AvatarFallback>
                 <AvatarImage
@@ -414,6 +425,14 @@ export const Comment: React.FC<Comment> = (props) => {
                   alt={viewingUser?.nickname}
                 />
               </Avatar>
+              
+              <span
+              className={`border border-border h-2.5 w-2.5 bottom-0 right-1 rounded-full text-xs ${
+                viewingUser?.status === "online" ? "bg-success" : "bg-secondary"
+              } absolute`}
+            ></span>
+            </div>
+            
               <div className="flex flex-col">
                 <div className="flex items-center gap-1">
                   <CardDescription className="font-semibold md:font-semibold">

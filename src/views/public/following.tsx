@@ -23,6 +23,7 @@ interface User {
   avatar: string;
   userName: string;
   type: string;
+  status: string;
 }
 
 const FollowingLayout = () => {
@@ -147,6 +148,7 @@ const FollowingLayout = () => {
                   userName={user.userName}
                   nickname={user.nickname}
                   _id={user._id}
+                  status={user.status}
                 />
               ))
             ) : (

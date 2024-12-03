@@ -92,7 +92,7 @@ const LoginLayout = () => {
               onSubmit={handleSubmit}
             >
               <div className="grid items-center gap-1.5 w-full max-w-sm">
-                <Label htmlFor="nickname">Usuário/email</Label>
+                <Label htmlFor="nickname">Usuário ou email</Label>
                 <Input
                   type="text"
                   placeholder="Usuário ou email"
