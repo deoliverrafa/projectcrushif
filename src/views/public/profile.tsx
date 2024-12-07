@@ -287,6 +287,7 @@ const ProfileLayout = () => {
           />
 
           <div className="absolute bottom-[-30px] left-4">
+            <div className="relative">
             <Avatar className="h-20 w-20 shadow-lg border-4 border-border rounded-full">
               <AvatarFallback>{viewingUser.nickname}</AvatarFallback>
               <AvatarImage
@@ -294,19 +295,26 @@ const ProfileLayout = () => {
                 src={viewingUser.avatar ? viewingUser.avatar : UserIcon}
               />
             </Avatar>
+            
+            <span
+              className={`border border-border h-4 w-4 bottom-0 right-2 rounded-full text-xs ${
+                viewingUser?.status === "online" ? "bg-success" : "bg-secondary"
+              } absolute`}
+            ></span>
+            </div>
           </div>
         </div>
 
         <CardHeader className="flex flex-row justify-between items-center mt-8">
           <div className="flex flex-col gap-1">
-            <CardTitle className="font-medium text-sm md:text-sm">
+            <CardTitle className="text-foreground font-medium text-sm md:text-sm">
               {viewingUser.userName
                 ? viewingUser.userName
                 : "Nome indisponível"}
             </CardTitle>
 
             <div className="flex flex-row items-center gap-1">
-              <Badge variant={"outline"} className="font-light w-fit">
+              <Badge variant={"outline"} className="text-muted-foreground w-fit">
                 {viewingUser.nickname
                   ? `@${viewingUser.nickname}`
                   : "indisponível"}
@@ -436,13 +444,23 @@ const ProfileLayout = () => {
 
         <CardContent className="space-y-6">
           <div className="flex flex-row justify-evenly items-center">
+            <Link to={`/likedBy/${viewingUser._id}`}
+              className="flex flex-col items-center"
+            >
+              <CardTitle className="text-primary">{likeCount}</CardTitle>
+
+              <CardDescription className="text-primary">Curtidas</CardDescription>
+            </Link>
+          
+            <Separator className="h-10" orientation="vertical" />
+            
             <Link
               to={`/followers/${viewingUser._id}`}
               className="flex flex-col items-center"
             >
-              <CardTitle>{NFollowing}</CardTitle>
+              <CardTitle className="text-foreground">{NFollowing}</CardTitle>
 
-              <CardDescription>Seguidores</CardDescription>
+              <CardDescription className="text-foreground">Seguidores</CardDescription>
             </Link>
 
             <Separator className="h-10" orientation="vertical" />
@@ -451,9 +469,9 @@ const ProfileLayout = () => {
               to={`/following/${viewingUser._id}`}
               className="flex flex-col items-center"
             >
-              <CardTitle>{viewingUser.Nfollowing}</CardTitle>
+              <CardTitle className="text-foreground">{viewingUser.Nfollowing}</CardTitle>
 
-              <CardDescription>Seguindo</CardDescription>
+              <CardDescription className="text-foreground">Seguindo</CardDescription>
             </Link>
           </div>
 
@@ -526,37 +544,9 @@ const ProfileLayout = () => {
 
         <Separator />
 
-        <CardFooter className="flex flex-col space-y-2 px-0 w-full">
-          <div className="flex flex-row justify-around items-center my-4 w-full">
-            <Link to={`/likedBy/${viewingUser._id}`}>
-              <Badge variant={"outline"} className="text-primary gap-1">
-                <HeartSolid className="h-3 w-3" />
-                Curtidas: {likeCount}
-              </Badge>
-            </Link>
-
-            <Badge variant={"outline"} className="text-warning gap-1">
-              <FolderHeartSolid className="h-3 w-3" />
-              Postagens: {posts.length}
-            </Badge>
-
-            <Badge
-              variant={"outline"}
-              className={`${
-                viewingUser?.status === "online"
-                  ? "text-success"
-                  : "text-secondary"
-              } gap-1`}
-            >
-              {viewingUser?.status === "online" ? (
-                <span className="bg-success rounded-full h-2 w-2"></span>
-              ) : (
-                <span className="bg-secondary rounded-full h-2 w-2"></span>
-              )}
-              {viewingUser?.status}
-            </Badge>
-          </div>
-
+        <CardFooter className="flex flex-col items-start space-y-2 px-0 w-full">
+          <CardDescription className="text-foreground uppercase mt-5 mb-1 ms-6">Postagens do usuário</CardDescription>
+          
           {posts.length === 0 ? (
             <div className="flex flex-col items-center space-y-4">
               <FolderSlashSolid className="h-20 w-20" />
