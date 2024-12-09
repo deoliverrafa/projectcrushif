@@ -452,7 +452,7 @@ export const CardPost = (props: CardProps) => {
                   <div className="flex flex-col items-start justify-center space-y-1">
                     <div className="flex flex-row items-center space-x-1">
                       <div>
-                        <CardTitle className="font-semibold md:font-medium text-lg md:text-md tracking-tight">
+                        <CardTitle className="text-foreground font-semibold md:font-medium text-lg md:text-md tracking-tight">
                           {!props.isAnonymous
                             ? viewingUser?.nickname
                             : "Anônimo"}

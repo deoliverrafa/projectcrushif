@@ -9,6 +9,7 @@ import { NavBar } from "../../components/navbar.tsx";
 import { BottomBar } from "../../components/bottombar.tsx";
 import { Fab } from "../../components/ui/fab.tsx";
 import { CardPost } from "../../components/post.tsx";
+import { UserFollowing } from "../../components/userSuggestions.tsx"
 
 import { PlusSolid, SpinnerSolid } from "@mynaui/icons-react";
 
@@ -148,6 +149,8 @@ export default function HomePage() {
             avatarPath={userData.avatar || localAvatarPath}
           />
           <main className="w-full h-full flex flex-col justify-center items-center">
+            <UserFollowing />
+            
             {posts.map((post) => {
               const followingMentionedUsers = post.mentionedUsers.map((mentionedId) =>
                 userData.following.includes(mentionedId)

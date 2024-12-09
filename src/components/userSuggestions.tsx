@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import * as React from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 
@@ -9,6 +9,7 @@ import {
   CardDescription,
   CardFooter,
   CardHeader,
+  CardTitle
 } from "./ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Button } from "./ui/button";
@@ -18,17 +19,18 @@ import { HeartWavesSolid, XSolid } from "@mynaui/icons-react";
 import UserIcon from "../../public/images/user.png";
 import { toggleFollow } from "../utils/followUtils";
 import { User } from "../interfaces/userInterface";
+import { getUserData } from "../utils/getUserData.tsx";
 
 interface UserSuggestions {
   removeUserId: string;
 }
 
 export const UserSuggestions = (props: UserSuggestions) => {
-  const [suggestedUsers, setSuggestedUsers] = useState<User[]>([]);
-  const [error, setError] = useState<string | null>(null);
+  const [suggestedUsers, setSuggestedUsers] = React.useState<User[]>([]);
+  const [error, setError] = React.useState<string | null>(null);
   const token = localStorage.getItem("token");
 
-  const [hiddenUsers, setHiddenUsers] = useState<{ [key: string]: boolean }>(
+  const [hiddenUsers, setHiddenUsers] = React.useState<{ [key: string]: boolean }>(
     {}
   );
 
@@ -48,7 +50,7 @@ export const UserSuggestions = (props: UserSuggestions) => {
     }
   };
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (token) {
       fetchSuggestedUsers();
     } else {
@@ -56,7 +58,7 @@ export const UserSuggestions = (props: UserSuggestions) => {
     }
   }, [token]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     hideUser(props.removeUserId);
   }, [props.removeUserId]);
 
@@ -174,3 +176,99 @@ export const UserSuggestions = (props: UserSuggestions) => {
     </React.Fragment>
   );
 };
+
+export const UserFollowing = () => {
+  const [userId] = React.useState<string | null>(
+    localStorage.getItem("userId")
+  );
+  const userData = getUserData();
+  
+  const [followingUsers, setFollowingUsers] = React.useState<User[]>([]);
+  
+  const [loading, setLoading] = React.useState(false);
+  
+  React.useEffect(() => {
+    const fetchFollowingUsers = async () => {
+      try {
+        setLoading(true);
+        const response = await axios.get(
+          `${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_FOLLOWING_USER
+          }${userId}`
+        );
+
+        if (response.data.following) {
+          setFollowingUsers(response.data.following);
+        }
+      } catch (error) {
+        console.error(
+          "Erro ao buscar usuários que estão sendo seguidos:",
+          error
+        );
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (userId) {
+      fetchFollowingUsers();
+    }
+  }, [userId]);
+  
+  return (
+    <React.Fragment>
+      <Card className="flex flex-col select-none my-1 w-full md:w-6/12">
+        <CardHeader>
+          <CardTitle className="text-foreground uppercase">Amigos próximos</CardTitle>
+        </CardHeader>
+          
+        <ScrollArea className="w-full border-none whitespace-nowrap rounded-md border">
+          <div className="flex w-max space-x-4">
+            <CardContent className="flex flex-row items-center space-x-4">
+              <Link to={`/profile/${userData._id}`}>
+                <Avatar className="h-16 w-16 shadow-lg border-2 border-border rounded-full">
+                  <AvatarFallback>
+                      {userData.nickname ? userData.nickname : ""}
+                  </AvatarFallback>
+
+                  <AvatarImage
+                      className="object-cover"
+                      src={userData.avatar ? userData.avatar : UserIcon}
+                    />
+                </Avatar>
+                  
+                <CardDescription className="text-foreground text-xs md:text-xs truncate max-w-[80px] text-center font-medium md:font-normal">Seu perfil</CardDescription>
+              </Link>
+              
+            {followingUsers.map((user) => (
+            <Link to={`/profile/${user._id}`}>
+              <div className="relative">
+                <Avatar className="h-16 w-16 shadow-lg border-2 border-border rounded-full">
+                  <AvatarFallback>
+                      {user.nickname ? user.nickname : ""}
+                    </AvatarFallback>
+
+                  <AvatarImage
+                      className="object-cover"
+                      src={user.avatar ? user.avatar : UserIcon}
+                    />
+                </Avatar>
+                  
+                <span
+              className={`border border-border h-3.5 w-3.5 bottom-0 right-2 rounded-full text-xs ${
+                user.status === "online" ? "bg-success" : "bg-secondary"
+              } absolute`}
+            ></span>
+              </div>
+                  
+              <CardDescription className="text-foreground text-xs md:text-xs truncate max-w-[80px] text-center font-medium md:font-normal">{user.nickname}</CardDescription>
+            </Link>
+            ))}
+          </CardContent>
+            
+          </div>
+          <ScrollBar orientation="horizontal" />
+        </ScrollArea>
+      </Card>
+    </React.Fragment>
+  )
+}
