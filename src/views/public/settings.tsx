@@ -42,20 +42,13 @@ import {
 } from "@mynaui/icons-react";
 
 import { getUserData } from "../../utils/getUserData.tsx";
-
-interface UserData {
-  nickname: string;
-  avatar: string;
-  email: string;
-  type: string;
-  status: string;
-}
+import { User } from "../../interfaces/userInterface.ts";
 
 const SettingsLayout = ({
   userData,
   logOutHandle,
 }: {
-  userData: UserData;
+  userData: User;
   logOutHandle: () => void;
 }) => {
   const [error, setError] = React.useState("");

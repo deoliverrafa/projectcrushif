@@ -38,7 +38,7 @@ interface Comment {
   content: string;
   insertAt: Date;
   userId: string;
-  status: string;
+  status?: string;
   likeCount: number;
   likedBy: string[];
   mentionedUsers: string[];

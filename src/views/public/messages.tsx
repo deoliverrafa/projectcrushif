@@ -2,7 +2,7 @@ import * as React from "react";
 
 import { NavBarReturn } from "../../components/navbar";
 import { ChatUserCard } from "../../components/user-card";
-import { Card, CardContent, CardHeader, CardDescription } from "../../components/ui/card";
+import { Card, CardContent, CardDescription } from "../../components/ui/card";
 
 import { User } from "../../interfaces/userInterface";
 import axios from "axios";

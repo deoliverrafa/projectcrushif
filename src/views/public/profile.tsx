@@ -62,7 +62,6 @@ import {
   FolderSlashSolid,
   HeartSolid,
   HeartBrokenSolid,
-  FolderHeartSolid,
   CheckSquareOneSolid,
   UserPlusSolid,
   UserCircleSolid,

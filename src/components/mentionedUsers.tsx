@@ -16,6 +16,7 @@ import { Button } from "./ui/button";
 import { At, SpinnerSolid } from "@mynaui/icons-react";
 
 import { getUserDataById } from "../utils/getUserDataById";
+import { User } from "../interfaces/userInterface";
 
 interface Comment {
   _id: string;
@@ -29,14 +30,6 @@ interface Comment {
   followingMentionedUsers: boolean[];
 }
 
-interface User {
-  _id: string;
-  nickname: string;
-  avatar: string;
-  type: string;
-  isFollowing: boolean;
-  status: string;
-}
 
 export const MentionedUsers: React.FC<Comment> = (props) => {
   const [mentionedUsers, setMentionedUsers] = React.useState<User[]>([]);

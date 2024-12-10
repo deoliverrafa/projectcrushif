@@ -214,6 +214,10 @@ export const UserFollowing = () => {
     }
   }, [userId]);
   
+  if (loading) {
+    return (null)
+  }
+
   return (
     <React.Fragment>
       <Card className="flex flex-col select-none my-1 w-full md:w-6/12">
