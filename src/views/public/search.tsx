@@ -210,7 +210,7 @@ const SearchLayout = () => {
         )}
       </Card>
         
-      <Card className="h-screen md:h-full w-full md:w-6/12 mt-2">
+      <Card className="h-screen md:h-full w-full md:w-6/12 mt-1">
         {queryResponse.length > 0 && (
           <p className="font-poppins font-medium md:font-normal tracking-wide text-md md:text-sm text-muted-foreground">
             {queryResponse.length === 1 ? (
