@@ -189,7 +189,7 @@ const SearchLayout = () => {
         
         {recentSearches.length > 0 && (
           <CardFooter className="flex flex-col items-start">
-            <CardDescription className="text-muted-foreground text-xs md:text-xs mb-1">Recentes</CardDescription>
+            <CardDescription className="text-muted-foreground text-xs md:text-xs mb-1">Pesquisas recentes</CardDescription>
             
             {recentSearches.map((search) => (
               <Card className="bg-background p-0 ps-2 my-0.5 w-full" key={search}>
