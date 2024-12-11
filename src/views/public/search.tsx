@@ -194,7 +194,7 @@ const SearchLayout = () => {
             {recentSearches.map((search) => (
               <Card className="bg-background p-0 ps-2 my-0.5 w-full" key={search}>
                 <CardContent className="flex flex-row justify-between items-center p-0">
-                  <div className="w-full flex flex-row items-center gap-1" onClick={() => handleRecentSearchClick(search)}>
+                  <div className="cursor-pointer w-full flex flex-row items-center gap-1" onClick={() => handleRecentSearchClick(search)}>
                     <UndoSolid className="h-4 w-4" />
                     <CardDescription
                     className="text-sm md:text-sm">{search}</CardDescription>
