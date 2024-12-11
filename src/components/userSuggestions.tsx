@@ -220,7 +220,7 @@ export const UserFollowing = () => {
 
   return (
     <React.Fragment>
-      <Card className="flex flex-col select-none my-1 w-full md:w-6/12">
+      <Card className="flex flex-col select-none mt-1 w-full md:w-6/12">
         <CardHeader>
           <CardTitle className="text-foreground uppercase">Amigos próximos</CardTitle>
         </CardHeader>

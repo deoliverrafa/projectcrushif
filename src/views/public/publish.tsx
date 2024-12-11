@@ -18,6 +18,8 @@ import {
   TrashOneSolid,
 } from "@mynaui/icons-react";
 
+import { getStatusUser } from "../../utils/getStatusUser.tsx";
+
 import PostingArt from "../../../public/images/posting_art.png"
 
 interface CardData {
@@ -37,6 +39,10 @@ const LogoLayout = () => {
 };
 
 const PublishLayout = () => {
+  const [userId] = React.useState<string | null>(
+    localStorage.getItem("userId")
+  );
+  
   const [isAnonymous, setAnonymous] = React.useState<boolean>(false);
   const [errorMessage, setErrorMessage] = React.useState("");
 
@@ -168,6 +174,7 @@ const PublishLayout = () => {
     }
   }
 
+  getStatusUser(userId)
 
   const MenuNavbar = () => {
     return (

@@ -189,12 +189,12 @@ const SearchLayout = () => {
         
         {recentSearches.length > 0 && (
           <CardFooter className="flex flex-col items-start">
-            <CardDescription className="text-muted-foreground text-xs md:text-xs mb-1">Recentes</CardDescription>
+            <CardDescription className="text-muted-foreground text-xs md:text-xs mb-1">Pesquisas recentes</CardDescription>
             
             {recentSearches.map((search) => (
               <Card className="bg-background p-0 ps-2 my-0.5 w-full" key={search}>
                 <CardContent className="flex flex-row justify-between items-center p-0">
-                  <div className="w-full flex flex-row items-center gap-1" onClick={() => handleRecentSearchClick(search)}>
+                  <div className="cursor-pointer w-full flex flex-row items-center gap-1" onClick={() => handleRecentSearchClick(search)}>
                     <UndoSolid className="h-4 w-4" />
                     <CardDescription
                     className="text-sm md:text-sm">{search}</CardDescription>
@@ -210,7 +210,7 @@ const SearchLayout = () => {
         )}
       </Card>
         
-      <Card className="h-screen md:h-full w-full md:w-6/12 mt-2">
+      <Card className="h-screen md:h-full w-full md:w-6/12 mt-1">
         {queryResponse.length > 0 && (
           <p className="font-poppins font-medium md:font-normal tracking-wide text-md md:text-sm text-muted-foreground">
             {queryResponse.length === 1 ? (

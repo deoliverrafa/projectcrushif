@@ -5,12 +5,13 @@ import { ChatUserCard } from "../../components/user-card";
 import { Card, CardContent, CardDescription } from "../../components/ui/card";
 
 import { User } from "../../interfaces/userInterface";
+import { getStatusUser } from "../../utils/getStatusUser.tsx";
+
 import axios from "axios";
 
 import LoadingPage from "./loading";
 
 const MessagesLayout = () => {
-
   const [followingUsers, setFollowingUsers] = React.useState<User[]>([]);
   const userId = localStorage.getItem("userId")
   const [loading, setLoading] = React.useState(false);
@@ -42,6 +43,8 @@ const MessagesLayout = () => {
       fetchFollowingUsers();
     }
   }, [userId]);
+  
+  getStatusUser(userId)
   
   if (loading) {
     return <LoadingPage />;

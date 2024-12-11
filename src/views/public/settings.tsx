@@ -42,6 +42,7 @@ import {
 } from "@mynaui/icons-react";
 
 import { getUserData } from "../../utils/getUserData.tsx";
+import { getStatusUser } from "../../utils/getStatusUser.tsx";
 import { User } from "../../interfaces/userInterface.ts";
 
 const SettingsLayout = ({
@@ -51,6 +52,10 @@ const SettingsLayout = ({
   userData: User;
   logOutHandle: () => void;
 }) => {
+  const [userId] = React.useState<string | null>(
+    localStorage.getItem("userId")
+  );
+  
   const [error, setError] = React.useState("");
 
   const [password, setPassword] = React.useState<string>("");
@@ -82,6 +87,8 @@ const SettingsLayout = ({
       }
     }
   };
+  
+  getStatusUser(userId);
 
   return (
     <React.Fragment>

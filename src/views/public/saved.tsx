@@ -10,7 +10,9 @@ import { Card, CardContent, CardDescription } from "../../components/ui/card";
 import { SpinnerSolid } from "@mynaui/icons-react";
 
 import NoHaveArt from "../../../public/images/no_have_art.png";
+
 import { getUserData } from "../../utils/getUserData";
+import { getStatusUser } from "../../utils/getStatusUser.tsx";
 
 interface CardProps {
   _id: string;
@@ -27,6 +29,9 @@ interface CardProps {
 
 const SavedLayout = ({ savedPosts }: { savedPosts: CardProps[] }) => {
   const userData = getUserData();
+  const [userId] = React.useState<string | null>(
+    localStorage.getItem("userId")
+  );
 
   const [postsSaved, setPosts] = React.useState<CardProps[]>(savedPosts);
 
@@ -47,6 +52,8 @@ const SavedLayout = ({ savedPosts }: { savedPosts: CardProps[] }) => {
       console.error("Erro ao excluir post:", error);
     }
   };
+  
+  getStatusUser(userId)
 
   return (
     <React.Fragment>

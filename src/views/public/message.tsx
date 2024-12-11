@@ -31,6 +31,7 @@ import axios from "axios"; // Importando o Axios
 
 import { getUserDataById } from "../../utils/getUserDataById";
 import { User } from "../../interfaces/userInterface";
+import { getStatusUser } from "../../utils/getStatusUser.tsx";
 
 const socket = io(`${import.meta.env.VITE_API_BASE_URL}`, {
   transports: ["websocket"],
@@ -49,6 +50,10 @@ interface Message {
 
 const MessageLayout = () => {
   const { id } = useParams<string>();
+  const [userId] = React.useState<string | null>(
+    localStorage.getItem("userId")
+  );
+  
   const [chatUser, setChatUser] = React.useState<User>();
   const [messages, setMessages] = React.useState<Message[]>([]);
   const [currentUserId] = React.useState(localStorage.getItem("userId"));
@@ -198,6 +203,19 @@ const MessageLayout = () => {
       sendMessage();
     }
   };
+
+  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    const scrollHeight = e.currentTarget.scrollHeight;
+    const scrollTop = e.currentTarget.scrollTop;
+    const clientHeight = e.currentTarget.clientHeight;
+
+    // Se o usuário chegou ao final, marque as mensagens como lidas
+    if (scrollHeight - scrollTop === clientHeight) {
+      markMessagesAsRead();
+    }
+  };
+  
+  getStatusUser(userId)
 
   return (
     <React.Fragment>

@@ -17,6 +17,8 @@ import { InfoSolid } from "@mynaui/icons-react";
 import Logo from "../../../public/images/logo/logo.png";
 import NoHaveArt from "../../../public/images/no_have_art.png";
 
+import { getStatusUser } from "../../utils/getStatusUser.tsx"
+
 interface User {
   _id: string;
   nickname: string;
@@ -28,7 +30,10 @@ interface User {
 
 const FollowersLayout = () => {
   const { id } = useParams<string>();
-
+  const [userId] = React.useState<string | null>(
+    localStorage.getItem("userId")
+  );
+  
   const [followersUsers, setFollowersUsers] = React.useState<User[]>([]);
   const [filteredUsers, setFilteredUsers] = React.useState<User[]>([]);
   const [searchQuery, setSearchQuery] = React.useState<string>("");
@@ -70,6 +75,8 @@ const FollowersLayout = () => {
     );
     setFilteredUsers(filtered);
   }, [searchQuery, followersUsers]);
+
+  getStatusUser(userId)
 
   if (loading) {
     return <LoadingPage />;
