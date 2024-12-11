@@ -67,6 +67,7 @@ import {
 import UserIcon from "../../../public/images/user.png"
 
 import { getUserData } from "../../utils/getUserData.tsx";
+import { getStatusUser } from "../../utils/getStatusUser.tsx";
 import { isValidImage } from "../../controllers/avatarUpdate";
 import { IFs, CURSOs } from "../../utils/infoIFs.ts";
 
@@ -94,6 +95,9 @@ interface userData {
 const GENDERs = ["Masculino", "Feminino"];
 
 const EditProfileLayout = (props: userData) => {
+  const [userId] = React.useState<string | null>(
+    localStorage.getItem("userId")
+  );
 
   const [errorMessage, setDataErrorMessage] = React.useState<String>();
   const [successMessage, setDataSuccessMessage] = React.useState<String>();
@@ -450,6 +454,8 @@ const EditProfileLayout = (props: userData) => {
       setLoading(false);
     }
   };
+  
+  getStatusUser(userId)
 
   return (
     <React.Fragment>

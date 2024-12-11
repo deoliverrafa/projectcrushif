@@ -41,6 +41,7 @@ import SelfieIcon from "../../../public/images/selfie_art.png";
 import NotFoundArt from "../../../public/images/not_found_art.png";
 
 import { getUserData } from "../../utils/getUserData";
+import { getStatusUser } from "../../utils/getStatusUser.tsx"
 import decodeToken from "../../utils/decodeToken";
 
 interface User {
@@ -56,6 +57,10 @@ interface User {
 
 const CrushLayout = () => {
   const decodedObj = decodeToken(localStorage.getItem("token") ?? "");
+  const [userId] = React.useState<string | null>(
+    localStorage.getItem("userId")
+  );
+  
   const userData = decodedObj?.user;
 
   const [users, setUsers] = React.useState<User[]>([]);
@@ -254,6 +259,8 @@ const CrushLayout = () => {
     }
   }, [localStorage.getItem("token")]);
 
+  getStatusUser(userId)
+  
   return (
     <React.Fragment>
       <div className="bg-card flex flex-row justify-center items-center mt-2 w-full">
