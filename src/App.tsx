@@ -60,8 +60,8 @@ const App = () => {
  React.useEffect(() => {
   if (typeof window !== 'undefined') {
     OneSignal.init({
-      appId: '97f8d678-2350-483e-aa35-b227242c4b6c',
-      safari_web_id: "web.onesignal.auto.542681a0-163f-4163-99a6-540b36eadb1c",
+      appId: import.meta.env.VITE_ONESIGNAL_APP_ID,
+      safari_web_id: import.meta.env.VITE_ONESIGNAL_SAFARI_ID,
       notifyButton: {
         enable: false,
       },
