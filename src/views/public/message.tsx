@@ -53,7 +53,7 @@ const MessageLayout = () => {
   const [userId] = React.useState<string | null>(
     localStorage.getItem("userId")
   );
-  
+
   const [chatUser, setChatUser] = React.useState<User>();
   const [messages, setMessages] = React.useState<Message[]>([]);
   const [currentUserId] = React.useState(localStorage.getItem("userId"));
@@ -74,11 +74,6 @@ const MessageLayout = () => {
     fetchUserData();
   }, [id]);
 
-  React.useEffect(() => {
-    if (messages.length > 0) {
-      markMessagesAsRead();
-    }
-  }, [messages]);
 
   React.useEffect(() => {
     socket.emit("joinRoom", {
@@ -187,11 +182,13 @@ const MessageLayout = () => {
         },
         { withCredentials: true }
       );
-
-      socket.emit("messageRead", {
-        senderId: currentUserId,
-        receiverId: activeChatUserId,
-      });
+      
+      if (activeChatUserId && currentUserId) {
+        socket.emit("messageRead", {
+          senderId: currentUserId,
+          receiverId: activeChatUserId,
+        });
+      }
     } catch (error) {
       console.error("Erro ao marcar mensagens como lidas", error);
     }
@@ -203,8 +200,8 @@ const MessageLayout = () => {
       sendMessage();
     }
   };
-  
-  getStatusUser(userId)
+
+  getStatusUser(userId);
 
   return (
     <React.Fragment>
