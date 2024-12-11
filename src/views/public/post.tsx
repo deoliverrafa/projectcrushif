@@ -23,10 +23,16 @@ interface Post {
 
 import { getPostDataById } from "../../utils/getPostDataById";
 import { getUserData } from "../../utils/getUserData";
+import { getStatusUser } from "../../utils/getStatusUser.tsx"
+
 import axios from "axios";
 
 const PostLayout = () => {
   const { id } = useParams<string>();
+  const [userId] = React.useState<string | null>(
+    localStorage.getItem("userId")
+  );
+  
   const [viewingPost, setViewingPost] = React.useState<Post | null>(null);
   const postId = id || "";
   const userData = getUserData();
@@ -68,6 +74,8 @@ const PostLayout = () => {
     (mentionedId) => userData.following.includes(mentionedId)
   );
   const isFollowingUserPost = userData.following.includes(viewingPost.userId);
+  
+  getStatusUser(userId);
 
   return (
     <React.Fragment>
