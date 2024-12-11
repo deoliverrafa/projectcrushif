@@ -49,12 +49,14 @@ interface Message {
 
 const MessageLayout = () => {
   const { id } = useParams<string>();
-  
   const [chatUser, setChatUser] = React.useState<User>();
   const [messages, setMessages] = React.useState<Message[]>([]);
   const [currentUserId] = React.useState(localStorage.getItem("userId"));
   const [activeChatUserId] = React.useState(id);
   const [newMessage, setNewMessage] = React.useState("");
+
+  // Ref para o auto-scroll
+  const messagesEndRef = React.useRef<HTMLDivElement>(null);
 
   React.useEffect(() => {
     const fetchUserData = async () => {
@@ -67,7 +69,12 @@ const MessageLayout = () => {
     fetchUserData();
   }, [id]);
 
-  // Buscando mensagens entre os dois usuários quando o chat for iniciado
+  React.useEffect(() => {
+    if (messages.length > 0) {
+      markMessagesAsRead();
+    }
+  }, [messages]);
+
   React.useEffect(() => {
     socket.emit("joinRoom", {
       senderId: currentUserId,
@@ -93,19 +100,13 @@ const MessageLayout = () => {
 
   React.useEffect(() => {
     socket.on("newMessage", (message) => {
-      // Verifica se a mensagem já existe no estado
-      setMessages((prevMessages) => {
-        if (!prevMessages.some((msg) => msg._id === message._id)) {
-          return [...prevMessages, message];
-        }
-        return prevMessages;
-      });
-      return () => {
-        socket.off("newMessage");
-      };
+      setMessages((prevMessages) => [...prevMessages, message]);
+      socket.emit("messageReceived", message._id);
     });
 
     socket.on("messageRead", (messageId) => {
+      markMessagesAsRead();
+
       setMessages((prevMessages) =>
         prevMessages.map((msg) =>
           msg._id === messageId ? { ...msg, status: "read" } : msg
@@ -123,7 +124,36 @@ const MessageLayout = () => {
     };
   }, [chatUser]);
 
-  // Enviar mensagem
+  React.useEffect(() => {
+    socket.on("messageStatusUpdated", ({ messageId, status }) => {
+      setMessages((prevMessages) =>
+        prevMessages.map((msg) =>
+          msg._id === messageId ? { ...msg, status } : msg
+        )
+      );
+    });
+
+    socket.on("messagesUpdated", ({ receiverId, status }) => {
+      if (receiverId === activeChatUserId) {
+        setMessages((prevMessages) =>
+          prevMessages.map((msg) =>
+            msg.status !== "read" ? { ...msg, status } : msg
+          )
+        );
+      }
+    });
+
+    return () => {
+      socket.off("messageStatusUpdated");
+      socket.off("messagesUpdated");
+    };
+  }, [activeChatUserId]);
+
+  // Auto-scroll ao final do contêiner
+  React.useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
+
   const sendMessage = async () => {
     const message: Message = {
       senderId: currentUserId ?? "",
@@ -136,14 +166,12 @@ const MessageLayout = () => {
 
     try {
       socket.emit("sendMessage", message);
-
       setNewMessage("");
     } catch (error) {
       console.error("Erro ao enviar mensagem", error);
     }
   };
 
-  // Marcar mensagens como "lidas"
   const markMessagesAsRead = async () => {
     try {
       await axios.post(
@@ -154,27 +182,20 @@ const MessageLayout = () => {
         },
         { withCredentials: true }
       );
+
+      socket.emit("messageRead", {
+        senderId: currentUserId,
+        receiverId: activeChatUserId,
+      });
     } catch (error) {
       console.error("Erro ao marcar mensagens como lidas", error);
     }
   };
 
-  // Função para enviar ao pressionar Enter
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
       event.preventDefault();
       sendMessage();
-    }
-  };
-
-  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
-    const scrollHeight = e.currentTarget.scrollHeight;
-    const scrollTop = e.currentTarget.scrollTop;
-    const clientHeight = e.currentTarget.clientHeight;
-
-    // Se o usuário chegou ao final, marque as mensagens como lidas
-    if (scrollHeight - scrollTop === clientHeight) {
-      markMessagesAsRead();
     }
   };
 
@@ -217,10 +238,7 @@ const MessageLayout = () => {
             </Link>
           </CardHeader>
 
-          <ScrollArea
-            className="h-96 w-full rounded-md"
-            onScroll={handleScroll}
-          >
+          <ScrollArea className="h-96 w-full rounded-md">
             {messages.map((message) => (
               <MessageReceived
                 _id={message._id ?? ""}
@@ -232,6 +250,8 @@ const MessageLayout = () => {
                 isSender={message.senderId === currentUserId}
               />
             ))}
+            {/* Div invisível para forçar o scroll */}
+            <div ref={messagesEndRef} />
           </ScrollArea>
 
           <CardFooter className="flex flex-row justify-between gap-1 px-0 md:px-6 w-full">
@@ -240,13 +260,9 @@ const MessageLayout = () => {
               placeholder="Adicione uma mensagem"
               value={newMessage}
               onChange={(e) => setNewMessage(e.target.value)}
-              onKeyDown={handleKeyDown} // Atalho para enviar com Enter
+              onKeyDown={handleKeyDown}
             />
-            <Button
-              onClick={sendMessage}
-              variant={"outline"}
-              size={"icon"}
-            >
+            <Button onClick={sendMessage} variant={"outline"} size={"icon"}>
               <FatCornerUpRightSolid className="h-5 w-5" />
             </Button>
           </CardFooter>
