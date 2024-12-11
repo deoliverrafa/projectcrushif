@@ -203,17 +203,6 @@ const MessageLayout = () => {
       sendMessage();
     }
   };
-
-  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
-    const scrollHeight = e.currentTarget.scrollHeight;
-    const scrollTop = e.currentTarget.scrollTop;
-    const clientHeight = e.currentTarget.clientHeight;
-
-    // Se o usuário chegou ao final, marque as mensagens como lidas
-    if (scrollHeight - scrollTop === clientHeight) {
-      markMessagesAsRead();
-    }
-  };
   
   getStatusUser(userId)
 
