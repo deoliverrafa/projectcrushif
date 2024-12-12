@@ -31,7 +31,6 @@ import axios from "axios"; // Importando o Axios
 
 import { getUserDataById } from "../../utils/getUserDataById";
 import { User } from "../../interfaces/userInterface";
-import { getStatusUser } from "../../utils/getStatusUser.tsx";
 
 const socket = io(`${import.meta.env.VITE_API_BASE_URL}`, {
   transports: ["websocket"],
@@ -50,10 +49,6 @@ interface Message {
 
 const MessageLayout = () => {
   const { id } = useParams<string>();
-  const [userId] = React.useState<string | null>(
-    localStorage.getItem("userId")
-  );
-
   const [chatUser, setChatUser] = React.useState<User>();
   const [messages, setMessages] = React.useState<Message[]>([]);
   const [currentUserId] = React.useState(localStorage.getItem("userId"));
@@ -74,13 +69,22 @@ const MessageLayout = () => {
     fetchUserData();
   }, [id]);
 
+  React.useEffect(() => {
+    if (messages.length > 0 && activeChatUserId) {
+      markMessagesAsRead();
+    }
+  }, [messages]);
 
   React.useEffect(() => {
-    socket.emit("joinRoom", {
-      senderId: currentUserId,
-      receiverId: activeChatUserId,
-    });
+    if (currentUserId && activeChatUserId) {
+      socket.emit("joinRoom", {
+        senderId: currentUserId,
+        receiverId: activeChatUserId,
+      });
+    }
+  }, [currentUserId, activeChatUserId]); // Certifique-se de passar as dependências corretamente
 
+  React.useEffect(() => {
     const fetchMessages = async () => {
       try {
         const response = await axios.get(
@@ -94,25 +98,27 @@ const MessageLayout = () => {
         console.error("Erro ao buscar mensagens", error);
       }
     };
-
-    fetchMessages();
-  }, [currentUserId, activeChatUserId]);
+    if (messages.length == 0) {
+      fetchMessages();
+    }
+  }, []);
 
   React.useEffect(() => {
     socket.on("newMessage", (message) => {
+      setCheckMessage(true)
       setMessages((prevMessages) => [...prevMessages, message]);
       socket.emit("messageReceived", message._id);
     });
 
-    socket.on("messageRead", (messageId) => {
-      markMessagesAsRead();
+    // socket.on("messageRead", (messageId) => {
+    //   markMessagesAsRead();
 
-      setMessages((prevMessages) =>
-        prevMessages.map((msg) =>
-          msg._id === messageId ? { ...msg, status: "read" } : msg
-        )
-      );
-    });
+    //   setMessages((prevMessages) =>
+    //     prevMessages.map((msg) =>
+    //       msg._id === messageId ? { ...msg, status: "read" } : msg
+    //     )
+    //   );
+    // });
 
     socket.emit("register", currentUserId);
 
@@ -120,11 +126,19 @@ const MessageLayout = () => {
 
     return () => {
       socket.off("newMessage");
-      socket.off("messageRead");
+      // socket.off("messageRead");
     };
   }, [chatUser]);
 
+  // Variável para fazer o controle da renderização e update do status da mensagem
+  const [checkMessage, setCheckMessage] = React.useState(false);
+
   React.useEffect(() => {
+    // socket.on("newMessage", (message) => {
+    //   setMessages((prevMessages) => [...prevMessages, message]);
+    //   socket.emit("messageRead", message._id);
+    // });       
+
     socket.on("messageStatusUpdated", ({ messageId, status }) => {
       setMessages((prevMessages) =>
         prevMessages.map((msg) =>
@@ -133,13 +147,27 @@ const MessageLayout = () => {
       );
     });
 
+    // socket.on("messageReadStatus", ({ messageId, status }) => {
+    //   setMessages((prevMessages) =>
+    //     prevMessages.map((msg) =>
+    //       msg._id === messageId ? { ...msg, status } : msg
+    //     )
+    //   );
+    // });
+
     socket.on("messagesUpdated", ({ receiverId, status }) => {
+
       if (receiverId === activeChatUserId) {
+        if (checkMessage) {
         setMessages((prevMessages) =>
           prevMessages.map((msg) =>
             msg.status !== "read" ? { ...msg, status } : msg
           )
         );
+        console.log("CheckMessagesetouFalse");
+        
+        setCheckMessage(false);
+      }
       }
     });
 
@@ -148,9 +176,10 @@ const MessageLayout = () => {
       socket.off("messagesUpdated");
     };
   }, [activeChatUserId]);
-
+  
   // Auto-scroll ao final do contêiner
   React.useEffect(() => {
+    setCheckMessage(true)
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
@@ -182,9 +211,9 @@ const MessageLayout = () => {
         },
         { withCredentials: true }
       );
-      
+
       if (activeChatUserId && currentUserId) {
-        socket.emit("messageRead", {
+        socket.emit("markMessagesAsRead", {
           senderId: currentUserId,
           receiverId: activeChatUserId,
         });
@@ -200,8 +229,6 @@ const MessageLayout = () => {
       sendMessage();
     }
   };
-
-  getStatusUser(userId);
 
   return (
     <React.Fragment>
@@ -243,17 +270,20 @@ const MessageLayout = () => {
           </CardHeader>
 
           <ScrollArea className="h-96 w-full rounded-md">
-            {messages.map((message) => (
-              <MessageReceived
-                _id={message._id ?? ""}
-                key={message._id || message.timestamp}
-                content={message.content}
-                insertAt={message.timestamp}
-                type={message.type}
-                status={message.status}
-                isSender={message.senderId === currentUserId}
-              />
-            ))}
+            {messages.map((message) => {
+              return (
+                <MessageReceived
+                  _id={message._id ?? ""}
+                  key={message._id || message.timestamp}
+                  content={message.content}
+                  insertAt={message.timestamp}
+                  type={message.type}
+                  status={message.status}
+                  isSender={message.senderId === currentUserId}
+                />
+              );
+            })}
+
             {/* Div invisível para forçar o scroll */}
             <div ref={messagesEndRef} />
           </ScrollArea>

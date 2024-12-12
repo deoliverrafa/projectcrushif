@@ -24,7 +24,7 @@ const getStatusIcon = (status: Message["status"]) => {
   }
 };
 
-export const MessageReceived = (props: Message) => {
+export const MessageReceived = (props: Message) => {  
   return (
     <React.Fragment>
       <div
