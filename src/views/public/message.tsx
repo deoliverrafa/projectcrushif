@@ -147,13 +147,13 @@ const MessageLayout = () => {
       );
     });
 
-    // socket.on("messageReadStatus", ({ messageId, status }) => {
-    //   setMessages((prevMessages) =>
-    //     prevMessages.map((msg) =>
-    //       msg._id === messageId ? { ...msg, status } : msg
-    //     )
-    //   );
-    // });
+    socket.on("messageReadStatus", ({ messageId, status }) => {
+      setMessages((prevMessages) =>
+        prevMessages.map((msg) =>
+          msg._id === messageId ? { ...msg, status } : msg
+        )
+      );
+    });
 
     socket.on("messagesUpdated", ({ receiverId, status }) => {
 
