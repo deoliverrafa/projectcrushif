@@ -508,12 +508,12 @@ export const CardPost = (props: CardProps) => {
             <CardContent className="relative pb-0">
               <div className="flex flex-col items-center justify-center">
                 {props.photoURLs.length >= 1 && (
-                  <Carousel className="flex flex-col items-center my-2 relative h-[500px] w-full">
+                  <Carousel className="flex flex-col items-center my-2 relative h-[500px] w-[300px] md:w-[400px]">
                     <CarouselContent>
                       {props.photoURLs.map((photo, index) => (
                         <CarouselItem className="relative" key={index}>
                           <img
-                            className="rounded-lg object-cover min-h-[500px] max-h-[500px] w-full"
+                            className="rounded-lg object-cover min-h-[500px] max-h-[500px] w-[300px] md:w-[400px]"
                             src={photo}
                             alt={`Imagem ${index + 1}`}
                           />

@@ -239,11 +239,11 @@ const PublishLayout = () => {
                         <img
                           src={src}
                           alt={`Uploaded ${index}`}
-                          className="object-cover h-20 w-20"
+                          className="rounded-lg object-cover h-20 w-20"
                         />
                       </CardContent>
 
-                      <div onClick={() => handleDeleteImage(index)} className="cursor-pointer bg-danger text-white rounded-full absolute top-2 right-2 p-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <div onClick={() => handleDeleteImage(index)} className="cursor-pointer bg-danger text-white rounded-full absolute top-1 right-1 p-1 opacity-0 group-hover:opacity-100 transition-opacity">
                         <TrashOneSolid />
                       </div>
                     </Card>
