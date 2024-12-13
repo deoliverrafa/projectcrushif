@@ -70,6 +70,8 @@ import {
   CheckSquareOneSolid,
   HeartWavesSolid,
   FatCornerUpRightSolid,
+  MaximizeSolid,
+  DownloadSolid
 } from "@mynaui/icons-react";
 
 import AnonymousIcon from "../../public/images/anonymous.png";
@@ -176,6 +178,29 @@ export const CardPost = (props: CardProps) => {
 
   const [openShare, setOpenShare] = React.useState(false);
   const [openDelete, setOpenDelete] = React.useState(false);
+  
+  const [openImage, setOpenImage] = React.useState(false);
+  const [imageExpand, setImageExpand] = React.useState("");
+  
+  const handleImageExpand = (image: string) => {
+    setOpenImage(true);
+    setImageExpand(image);
+  };
+
+  const downloadImage = async (url: string) => {
+  try {
+    const response = await fetch(url);
+    const blob = await response.blob();
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = "imagem-crushif.jpg";
+    link.click();
+    URL.revokeObjectURL(link.href);
+  } catch (error) {
+    console.error("Erro ao baixar a imagem:", error);
+  }
+};
+  
   const [copied, setCopied] = React.useState(false);
   const inputRef = React.useRef<HTMLInputElement>(null);
 
@@ -517,6 +542,10 @@ export const CardPost = (props: CardProps) => {
                             src={photo}
                             alt={`Imagem ${index + 1}`}
                           />
+                          
+                          <Button className="absolute top-1 left-6 h-8 w-8 rounded-full" variant={"outline"} size={"icon"} onClick={() => handleImageExpand(photo)}>
+                          <MaximizeSolid className="h-4 w-4" />
+                          </Button>
                           
                           <Badge className="bg-background text-foreground font-semibold md:font-medium border border-border absolute top-2 right-2">{index + 1}/{props.photoURLs.length}</Badge>
                         </CarouselItem>
@@ -898,6 +927,26 @@ export const CardPost = (props: CardProps) => {
                 deletePost(props._id);
               }}>
               Deletar
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+      
+      <Dialog open={openImage} onOpenChange={setOpenImage}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Visualizando imagem ampliada</DialogTitle>
+            <DialogDescription>
+              Explore a imagem em maior detalhe. Use o botão de fechar para retornar à visualização anterior.
+            </DialogDescription>
+          </DialogHeader>
+          
+          <img className="rounded-lg object-cover min-h-[500px] max-h-[500px] w-[300px] md:w-[400px]" src={imageExpand} alt="post" />
+          
+          <DialogFooter>
+            <Button variant={"secondary"} onClick={() => downloadImage(imageExpand)}>
+              <DownloadSolid />
+              Baixar imagem
             </Button>
           </DialogFooter>
         </DialogContent>
