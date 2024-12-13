@@ -232,7 +232,7 @@ const MessageLayout = () => {
 
   return (
     <React.Fragment>
-      <Card className="select-none mt-2 w-full md:w-6/12">
+      <Card className="select-none mt-1 w-full md:w-6/12">
         <CardContent>
           <CardHeader className="flex flex-row justify-between items-center px-0 md:px-6">
             <Link
@@ -269,7 +269,7 @@ const MessageLayout = () => {
             </Link>
           </CardHeader>
 
-          <ScrollArea className="h-96 w-full rounded-md">
+          <ScrollArea className="h-screen md:h-96 w-full rounded-md">
             {messages.map((message) => {
               return (
                 <MessageReceived

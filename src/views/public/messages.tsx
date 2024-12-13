@@ -3,6 +3,7 @@ import * as React from "react";
 import { NavBarReturn } from "../../components/navbar";
 import { ChatUserCard } from "../../components/user-card";
 import { Card, CardContent, CardDescription } from "../../components/ui/card";
+import { ScrollArea } from "../../components/ui/scroll-area";
 
 import { User } from "../../interfaces/userInterface";
 import { getStatusUser } from "../../utils/getStatusUser.tsx";
@@ -52,7 +53,7 @@ const MessagesLayout = () => {
 
   return (
     <React.Fragment>
-      <Card className="select-none mt-2 w-full md:w-6/12">
+      <Card className="select-none mt-1 w-full md:w-6/12">
         {followingUsers.length > 0 ? (
            <div className="flex flex-row justify-between items-center">
             <CardDescription className="text-foreground ml-4 mt-4 uppercase">Contatos</CardDescription>
@@ -62,6 +63,7 @@ const MessagesLayout = () => {
         ) : null}
         
         <CardContent className="p-4">
+          <ScrollArea className="h-screen md:h-96 w-full rounded-md">
           {followingUsers.map((user) => {
             return(
               <ChatUserCard 
@@ -106,6 +108,7 @@ const MessagesLayout = () => {
             nickname={"BabyShark"}
             description="toque para conversar"
           /> */}
+          </ScrollArea>
         </CardContent>
       </Card>
     </React.Fragment>

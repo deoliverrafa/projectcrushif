@@ -55,6 +55,7 @@ import {
 } from "../components/ui/dialog.tsx";
 import { Label } from "../components/ui/label.tsx";
 import { ScrollArea } from "./ui/scroll-area.tsx";
+import { Badge } from "./ui/badge.tsx"
 
 import {
   HeartBrokenSolid,
@@ -510,12 +511,14 @@ export const CardPost = (props: CardProps) => {
                   <Carousel className="flex flex-col items-center my-2 relative h-[500px] w-full">
                     <CarouselContent>
                       {props.photoURLs.map((photo, index) => (
-                        <CarouselItem key={index}>
+                        <CarouselItem className="relative" key={index}>
                           <img
                             className="rounded-lg object-cover h-[500px] w-full"
                             src={photo}
                             alt={`Imagem ${index + 1}`}
                           />
+                          
+                          <Badge className="bg-background text-foreground font-semibold md:font-medium border border-border absolute top-2 right-2">{index + 1}/{props.photoURLs.length}</Badge>
                         </CarouselItem>
                       ))}
                     </CarouselContent>
