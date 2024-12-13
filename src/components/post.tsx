@@ -513,7 +513,7 @@ export const CardPost = (props: CardProps) => {
                       {props.photoURLs.map((photo, index) => (
                         <CarouselItem className="relative" key={index}>
                           <img
-                            className="rounded-lg object-cover h-[500px] w-full"
+                            className="rounded-lg object-cover min-h-[500px] max-h-[500px] w-full"
                             src={photo}
                             alt={`Imagem ${index + 1}`}
                           />
