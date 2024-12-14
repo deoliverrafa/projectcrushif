@@ -189,7 +189,10 @@ export const CardPost = (props: CardProps) => {
   };
 
   const [openShare, setOpenShare] = React.useState(false);
+  
   const [openDelete, setOpenDelete] = React.useState(false);
+  const [isDeleting, setIsDeleting] = React.useState(false);
+
   
   const [openImage, setOpenImage] = React.useState(false);
   const [imageExpand, setImageExpand] = React.useState("");
@@ -445,6 +448,8 @@ export const CardPost = (props: CardProps) => {
 
   const deletePost = async (postId: string) => {
     try {
+      setIsDeleting(true);
+      setOpenDelete(false);
       const response: any = await props.onDelete(postId);
 
       if (response.data.deleted) {
@@ -454,6 +459,8 @@ export const CardPost = (props: CardProps) => {
       }
     } catch (error) {
       console.error("Erro ao deletar post:", error);
+    } finally {
+      setIsDeleting(false);
     }
   };
   
@@ -480,7 +487,7 @@ export const CardPost = (props: CardProps) => {
       <ContextMenu>
         <ContextMenuTrigger className="relative flex justify-center w-full">
           <Card
-            className={`select-none my-1 w-full md:w-6/12 ${props.classNames}`}
+            className={`select-none my-1 w-full md:w-6/12 ${props.classNames} ${isDeleting ? 'slide-out-elliptic-top-bck' : ''}`}
             onDoubleClick={handleDoubleLike}
           >
             <CardHeader className="flex flex-row justify-between items-center">
@@ -577,7 +584,7 @@ export const CardPost = (props: CardProps) => {
                           <MaximizeSolid className="h-4 w-4" />
                           </Button>
                           
-                          <Badge className="bg-background text-foreground font-semibold md:font-medium border border-border absolute top-2 right-2">{index + 1}/{props.photoURLs.length}</Badge>
+                          <Badge className="absolute top-2 right-2" variant="outline">{index + 1}/{props.photoURLs.length}</Badge>
                         </CarouselItem>
                       ))}
                     </CarouselContent>

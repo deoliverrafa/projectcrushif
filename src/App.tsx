@@ -4,6 +4,7 @@ import OneSignal from 'react-onesignal';
 import { HexaThemeProvider } from "./components/ui/theme.tsx";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./styles/main.css";
+import "./styles/animation.css";
 
 import LoadingPage from "./views/public/loading.tsx";
 
