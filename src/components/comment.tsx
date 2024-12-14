@@ -151,7 +151,7 @@ const ReplyComment: React.FC<Comment> = (props) => {
             
               <div className="flex flex-col">
                 <div className="flex items-center gap-1">
-                  <CardDescription className="font-semibold md:font-semibold">
+                  <CardDescription className="text-foreground font-semibold md:font-semibold">
                     {viewingUser?.nickname}
                   </CardDescription>
                   <HeartWavesSolid
@@ -435,7 +435,7 @@ export const Comment: React.FC<Comment> = (props) => {
             
               <div className="flex flex-col">
                 <div className="flex items-center gap-1">
-                  <CardDescription className="font-semibold md:font-semibold">
+                  <CardDescription className="text-foreground font-semibold md:font-semibold">
                     {viewingUser?.nickname}
                   </CardDescription>
                   <HeartWavesSolid

@@ -7,6 +7,8 @@ import { ptBR } from "date-fns/locale";
 import { MentionedUsers } from "./mentionedUsers.tsx";
 import { Comment } from "./comment.tsx";
 
+import { Badge } from "./ui/badge.tsx"
+
 import {
   Card,
   CardContent,
@@ -55,7 +57,6 @@ import {
 } from "../components/ui/dialog.tsx";
 import { Label } from "../components/ui/label.tsx";
 import { ScrollArea } from "./ui/scroll-area.tsx";
-import { Badge } from "./ui/badge.tsx"
 
 import {
   HeartBrokenSolid,
@@ -71,7 +72,9 @@ import {
   HeartWavesSolid,
   FatCornerUpRightSolid,
   MaximizeSolid,
-  DownloadSolid
+  DownloadSolid,
+  PlusSolid,
+  MinusSolid
 } from "@mynaui/icons-react";
 
 import AnonymousIcon from "../../public/images/anonymous.png";
@@ -129,6 +132,15 @@ export const CardPost = (props: CardProps) => {
   const toggleContent = () => {
     setShowFullContent(!showFullContent);
   };
+  
+  const [zoomLevel, setZoomLevel] = React.useState(100);
+  const increaseZoom = () => {
+    setZoomLevel((prevZoom) => Math.min(prevZoom + 10, 200));
+  };
+  const decreaseZoom = () => {
+    setZoomLevel((prevZoom) => Math.max(prevZoom - 10, 25));
+  };
+
 
   React.useEffect(() => {
     if (props.likedBy.includes(localStorage.getItem("userId") || "")) {
@@ -932,7 +944,7 @@ export const CardPost = (props: CardProps) => {
         </DialogContent>
       </Dialog>
       
-      <Dialog open={openImage} onOpenChange={setOpenImage}>
+            <Dialog open={openImage} onOpenChange={setOpenImage}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle>Visualizando imagem ampliada</DialogTitle>
@@ -940,9 +952,34 @@ export const CardPost = (props: CardProps) => {
               Explore a imagem em maior detalhe. Use o botão de fechar para retornar à visualização anterior.
             </DialogDescription>
           </DialogHeader>
-          
-          <img className="rounded-lg object-cover min-h-[500px] max-h-[500px] w-[300px] md:w-[400px]" src={imageExpand} alt="post" />
-          
+      
+          <div className="relative flex justify-center items-center">
+            <img
+              className="rounded-lg object-cover min-h-[500px] max-h-[500px] w-[300px] md:w-[400px] transition-transform duration-300 ease-in-out"
+              src={imageExpand}
+              alt="post"
+              style={{ transform: `scale(${zoomLevel / 100})` }}
+            />
+      
+            <div className="absolute flex items-center justify-center gap-2 bg-background border border-border text-foreground font-semibold md:font-medium rounded-lg px-2.5 py-0.5 bottom-2">
+              <button
+                className="flex items-center justify-center p-1 border rounded-full"
+                onClick={decreaseZoom}
+                disabled={zoomLevel <= 25}
+              >
+                <MinusSolid />
+              </button>
+              <span>{zoomLevel}%</span>
+              <button
+                className="flex items-center justify-center p-1 border rounded-full"
+                onClick={increaseZoom}
+                disabled={zoomLevel >= 200}
+              >
+                <PlusSolid />
+              </button>
+            </div>
+          </div>
+      
           <DialogFooter>
             <Button variant={"secondary"} onClick={() => downloadImage(imageExpand)}>
               <DownloadSolid />
