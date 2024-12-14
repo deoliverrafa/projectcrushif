@@ -965,7 +965,7 @@ export const CardPost = (props: CardProps) => {
               <button
                 className="flex items-center justify-center p-1 border rounded-full"
                 onClick={decreaseZoom}
-                disabled={zoomLevel <= 25}
+                disabled={zoomLevel <= 10}
               >
                 <MinusSolid />
               </button>
