@@ -170,7 +170,7 @@ const ReplyComment: React.FC<Comment> = (props) => {
                   {formatDistanceToNow(new Date(props.insertAt), {
                     addSuffix: true,
                     locale: ptBR,
-                  })}
+                  })} atrás
                 </CardDescription>
               </div>
             </CardHeader>
@@ -454,7 +454,7 @@ export const Comment: React.FC<Comment> = (props) => {
                   {formatDistanceToNow(new Date(props.insertAt), {
                     addSuffix: true,
                     locale: ptBR,
-                  })}
+                  })} atrás
                 </CardDescription>
               </div>
             </CardHeader>

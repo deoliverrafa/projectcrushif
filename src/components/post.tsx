@@ -456,6 +456,24 @@ export const CardPost = (props: CardProps) => {
       console.error("Erro ao deletar post:", error);
     }
   };
+  
+  const [friendWhoLikedData, setFriendWhoLikedData] = React.useState<User | null>(null);
+  
+  React.useEffect(() => {
+    if (props.likedBy && dataUser?.following) {
+      const friend = props.likedBy.find((likedUserId) =>
+        dataUser.following.includes(likedUserId)
+      );
+
+      if (friend) {
+        getUserDataById(friend).then((userData) => {
+          setFriendWhoLikedData(userData);
+        });
+      } else {
+        setFriendWhoLikedData(null);
+      }
+    }
+  }, [props.likedBy, dataUser?.following]);
 
   return (
     <React.Fragment>
@@ -615,11 +633,30 @@ export const CardPost = (props: CardProps) => {
               </div>
 
               <div className="flex justify-start w-fit">
-                <Link to={`/likedByPost/${props._id}`} className="w-fit">
+                {friendWhoLikedData ? (
+                  <Link to={`/likedByPost/${props._id}`} className="flex flex-row items-center gap-1 w-fit">
+                    <Avatar className="h-6 w-6 shadow-lg border border-border">
+                    <AvatarFallback>
+                      {friendWhoLikedData.nickname ? friendWhoLikedData.nickname : ""}
+                    </AvatarFallback>
+
+                    <AvatarImage
+                      className="object-cover"
+                      src={friendWhoLikedData.avatar ? friendWhoLikedData.avatar : UserIcon}
+                    />
+                  </Avatar>
+                  
+                    <CardDescription className="font-normal md:font-light tracking-tight text-md md:text-sm w-fit">
+                    Curtido por <span className="text-foreground"> {friendWhoLikedData.nickname}</span> e {likeCount - 1 > 1 ? "outras" : "outra"} <span className="text-foreground">{likeCount - 1} {likeCount - 1 > 1 ? "pessoas" : "pessoa"}</span>
+                  </CardDescription>
+                  </Link>
+                ) : (
+                  <Link to={`/likedByPost/${props._id}`} className="w-fit">
                   <CardDescription className="font-normal md:font-light tracking-tight text-md md:text-sm w-fit">
-                    ver todas as {likeCount} curtidas
+                    Curtido por <span className="text-foreground">{likeCount} {likeCount > 1 ? "pessoas" : "pessoa"}</span>
                   </CardDescription>
                 </Link>
+                )}
               </div>
             </CardContent>
 
