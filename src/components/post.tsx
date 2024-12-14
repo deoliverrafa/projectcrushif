@@ -138,7 +138,7 @@ export const CardPost = (props: CardProps) => {
     setZoomLevel((prevZoom) => Math.min(prevZoom + 10, 200));
   };
   const decreaseZoom = () => {
-    setZoomLevel((prevZoom) => Math.max(prevZoom - 10, 25));
+    setZoomLevel((prevZoom) => Math.max(prevZoom - 10, 10));
   };
 
 
