@@ -504,12 +504,11 @@ export const CardPost = (props: CardProps) => {
                       src={!props.isAnonymous ? viewingUser?.avatar : UserIcon}
                     />
                   </Avatar>
-
-                <span
-              className={`border border-border h-2.5 w-2.5 bottom-0 right-1 rounded-full text-xs ${
-                viewingUser?.status === "online" ? "bg-success" : "bg-secondary"
-              } absolute`}
-            ></span>
+            
+            <div className="pulse-status-container bottom-0 right-1 rounded-full text-xs absolute">
+              <span className={`pulse-status ${viewingUser?.status === "online" ? "bg-success/70" : "bg-secondary/70"}`}></span>
+              <span className={`pulse-status-core h-2.5 w-2.5 ${viewingUser?.status === "online" ? "bg-success" : "bg-secondary"}`}></span>
+            </div>
           </div>
 
                   <div className="flex flex-col items-start justify-center space-y-1">
@@ -570,12 +569,12 @@ export const CardPost = (props: CardProps) => {
             <CardContent className="relative pb-0">
               <div className="flex flex-col items-center justify-center">
                 {props.photoURLs.length >= 1 && (
-                  <Carousel className="flex flex-col items-center my-2 relative h-[500px] w-[300px] md:w-[400px]">
+                  <Carousel className="flex flex-col items-center my-2 relative h-[500px] w-[300px] md:w-[450px]">
                     <CarouselContent>
                       {props.photoURLs.map((photo, index) => (
                         <CarouselItem className="relative" key={index}>
                           <img
-                            className="rounded-lg object-cover min-h-[500px] max-h-[500px] w-[300px] md:w-[400px]"
+                            className="rounded-lg object-cover min-h-[500px] max-h-[500px] w-[300px] md:w-[450px]"
                             src={photo}
                             alt={`Imagem ${index + 1}`}
                           />

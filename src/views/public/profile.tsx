@@ -295,11 +295,10 @@ const ProfileLayout = () => {
               />
             </Avatar>
             
-            <span
-              className={`border border-border h-4 w-4 bottom-0 right-2 rounded-full text-xs ${
-                viewingUser?.status === "online" ? "bg-success" : "bg-secondary"
-              } absolute`}
-            ></span>
+            <div className="pulse-status-container bottom-1 right-3 rounded-full text-xs absolute">
+              <span className={`pulse-status ${viewingUser?.status === "online" ? "bg-success/70" : "bg-secondary/70"}`}></span>
+              <span className={`pulse-status-core h-3.5 w-3.5 ${viewingUser?.status === "online" ? "bg-success" : "bg-secondary"}`}></span>
+            </div>
             </div>
           </div>
         </div>

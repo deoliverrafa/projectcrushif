@@ -59,11 +59,10 @@ export const SearchUserCard = (props: User) => {
               />
             </Avatar>
 
-            <span
-              className={`border border-border h-2.5 w-2.5 bottom-0 right-1 rounded-full text-xs ${
-                props.status === "online" ? "bg-success" : "bg-secondary"
-              } absolute`}
-            ></span>
+            <div className="pulse-status-container bottom-0 right-1 rounded-full text-xs absolute">
+              <span className={`pulse-status ${props.status === "online" ? "bg-success/70" : "bg-secondary/70"}`}></span>
+              <span className={`pulse-status-core h-2.5 w-2.5 ${props.status === "online" ? "bg-success" : "bg-secondary"}`}></span>
+            </div>
           </div>
 
           <div className="flex flex-col items-start">
@@ -127,11 +126,10 @@ export const UserCard = (props: User) => {
                   />
                 </Avatar>
 
-                <span
-                  className={`border border-border h-2.5 w-2.5 bottom-0 right-1 rounded-full text-xs ${
-                    props.status === "online" ? "bg-success" : "bg-secondary"
-                  } absolute`}
-                ></span>
+                <div className="pulse-status-container bottom-0 right-1 rounded-full text-xs absolute">
+              <span className={`pulse-status ${props.status === "online" ? "bg-success/70" : "bg-secondary/70"}`}></span>
+              <span className={`pulse-status-core h-2.5 w-2.5 ${props.status === "online" ? "bg-success" : "bg-secondary"}`}></span>
+            </div>
               </div>
 
               <div className="flex flex-col items-start">
@@ -185,11 +183,10 @@ export const ChatUserCard = (props: User) => {
                   />
                 </Avatar>
 
-                <span
-                  className={`border border-border h-2.5 w-2.5 bottom-0 right-1 rounded-full text-xs ${
-                    props.status === "online" ? "bg-success" : "bg-secondary"
-                  } absolute`}
-                ></span>
+                <div className="pulse-status-container bottom-0 right-1 rounded-full text-xs absolute">
+              <span className={`pulse-status ${props.status === "online" ? "bg-success/70" : "bg-secondary/70"}`}></span>
+              <span className={`pulse-status-core h-2.5 w-2.5 ${props.status === "online" ? "bg-success" : "bg-secondary"}`}></span>
+            </div>
               </div>
 
               <div className="flex flex-col items-start">

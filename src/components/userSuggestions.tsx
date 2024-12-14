@@ -122,13 +122,10 @@ export const UserSuggestions = (props: UserSuggestions) => {
                           />
                         </Avatar>
 
-                        <span
-                          className={`border border-border h-3.5 w-3.5 bottom-0.5 right-1.5 rounded-full text-xs ${
-                            user.status === "online"
-                              ? "bg-success"
-                              : "bg-secondary"
-                          } absolute`}
-                        ></span>
+                        <div className="pulse-status-container bottom-0 right-2 rounded-full text-xs absolute">
+              <span className={`pulse-status ${user.status === "online" ? "bg-success/70" : "bg-secondary/70"}`}></span>
+              <span className={`pulse-status-core h-3 w-3 ${user.status === "online" ? "bg-success" : "bg-secondary"}`}></span>
+            </div>
                       </div>
                     </CardHeader>
 
@@ -257,11 +254,10 @@ export const UserFollowing = () => {
                     />
                 </Avatar>
                   
-                <span
-              className={`border border-border h-3.5 w-3.5 bottom-0 right-2 rounded-full text-xs ${
-                user.status === "online" ? "bg-success" : "bg-secondary"
-              } absolute`}
-            ></span>
+                <div className="pulse-status-container bottom-0 right-2 rounded-full text-xs absolute">
+              <span className={`pulse-status ${user.status === "online" ? "bg-success/70" : "bg-secondary/70"}`}></span>
+              <span className={`pulse-status-core h-3 w-3 ${user.status === "online" ? "bg-success" : "bg-secondary"}`}></span>
+            </div>
               </div>
                   
               <CardDescription className="text-foreground text-xs md:text-xs truncate max-w-[80px] text-center font-medium md:font-normal">{user.nickname}</CardDescription>
