@@ -182,7 +182,7 @@ const PublishLayout = () => {
         {!isAnonymous ? (
           <TooltipProvider>
             <Tooltip>
-              <TooltipTrigger asChild>
+              <TooltipTrigger>
                 <EarthSolid />
               </TooltipTrigger>
 
@@ -194,7 +194,7 @@ const PublishLayout = () => {
         ) : (
           <TooltipProvider>
             <Tooltip>
-              <TooltipTrigger asChild>
+              <TooltipTrigger>
                 <IncognitoSolid />
               </TooltipTrigger>
 

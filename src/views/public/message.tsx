@@ -1,6 +1,6 @@
 import * as React from "react";
 import { io } from "socket.io-client";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 
 import { NavBarReturn } from "../../components/navbar";
 
@@ -20,8 +20,8 @@ import {
 import { Button } from "../../components/ui/button";
 import {
   ChevronRight,
+  ChevronLeft,
   FatCornerUpRightSolid,
-  UserSolid,
 } from "@mynaui/icons-react";
 import { Input } from "../../components/ui/input";
 import { ScrollArea } from "../../components/ui/scroll-area";
@@ -48,6 +48,8 @@ interface Message {
 }
 
 const MessageLayout = () => {
+  const navigate = useNavigate();
+  
   const { id } = useParams<string>();
   const [chatUser, setChatUser] = React.useState<User>();
   const [messages, setMessages] = React.useState<Message[]>([]);
@@ -234,39 +236,45 @@ const MessageLayout = () => {
     <React.Fragment>
       <Card className="select-none mt-1 w-full md:w-6/12">
         <CardContent>
-          <CardHeader className="flex flex-row justify-between items-center px-0 md:px-6">
-            <Link
-              to={`/profile/${activeChatUserId}`}
-              className="flex flex-row items-center gap-2"
-            >
-              <div className="relative">
-                <Avatar className="shadow-lg border-2 border-border">
-                  <AvatarFallback>{chatUser?.nickname}</AvatarFallback>
-                  <AvatarImage src={chatUser?.avatar} />
-                </Avatar>
-                <span
-                  className={`border border-border h-2.5 w-2.5 bottom-0 right-1 rounded-full text-xs ${
-                    chatUser?.status === "online"
-                      ? "bg-success"
-                      : "bg-secondary"
-                  } absolute`}
-                ></span>
-              </div>
-              <div className="flex flex-col">
-                <CardTitle className="font-semibold md:font-medium text-md tracking-tight truncate max-w-[120px]">
-                  {chatUser?.nickname}
-                </CardTitle>
-                <CardDescription className="text-xs truncate max-w-[120px]">
-                  {chatUser?.userName}
-                </CardDescription>
-              </div>
-              <ChevronRight />
-            </Link>
-            <Link to={`/profile/${activeChatUserId}`}>
-              <Button size={"icon"} variant={"outline"}>
-                <UserSolid />
+          <CardHeader className=" transition-transform duration-300 select-none bg-card shadow sticky top-0 inset-x-0 translate-y-0 md:translate-y-0/2 flex flex-row justify-between items-center px-0 md:px-6 w-full z-20">
+            <div className="flex flex-row items-center gap-2">
+              <Button
+                variant={"outline"}
+                size={"icon"}
+                className="text-muted-foreground hover:text-primary/70 hover:border-primary/70"
+                onClick={() => navigate(-1)}
+              >
+                <ChevronLeft />
               </Button>
-            </Link>
+            
+              <Link
+                to={`/profile/${activeChatUserId}`}
+                className="flex flex-row items-center gap-2"
+              >
+                <div className="relative">
+                  <Avatar className="shadow-lg border-2 border-border">
+                    <AvatarFallback>{chatUser?.nickname}</AvatarFallback>
+                    <AvatarImage src={chatUser?.avatar} />
+                  </Avatar>
+                  <span
+                    className={`border border-border h-2.5 w-2.5 bottom-0 right-1 rounded-full text-xs ${
+                      chatUser?.status === "online"
+                        ? "bg-success"
+                        : "bg-secondary"
+                    } absolute`}
+                  ></span>
+                </div>
+                <div className="flex flex-col">
+                  <CardTitle className="font-semibold md:font-medium text-md tracking-tight truncate max-w-[120px]">
+                    {chatUser?.nickname}
+                  </CardTitle>
+                  <CardDescription className="text-xs truncate max-w-[120px]">
+                    {chatUser?.userName}
+                  </CardDescription>
+                </div>
+                <ChevronRight />
+              </Link>
+            </div>
           </CardHeader>
 
           <ScrollArea className="h-screen md:h-96 w-full rounded-md">
@@ -309,7 +317,6 @@ const MessageLayout = () => {
 const MessagePage = () => {
   return (
     <React.Fragment>
-      <NavBarReturn title={"Mensagem"} />
       <main className="flex flex-col justify-center items-center h-full w-full">
         <MessageLayout />
       </main>

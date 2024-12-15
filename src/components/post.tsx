@@ -64,6 +64,7 @@ import {
   BookmarkSolid,
   MessageSolid,
   UserPlusSolid,
+  UserCheckSolid,
   ShareSolid,
   TrashOneSolid,
   FlagOneSolid,
@@ -886,8 +887,18 @@ export const CardPost = (props: CardProps) => {
                     className="cursor-pointer focus:text-primary/70"
                     onClick={handleFollowToggle}
                   >
-                    <UserPlusSolid className="h-4 w-4 mr-1" />
-                    {followedUser ? "Seguindo" : "Seguir"}
+                    {followedUser ? (
+                      <>
+                    <UserCheckSolid className="h-4 w-4 mr-1" />
+                    Seguindo
+                    </>
+                    ) : (
+                      <>
+                      <UserPlusSolid className="h-4 w-4 mr-1" />
+                      Seguir
+                      </>
+                    )}
+                    
                   </ContextMenuItem>
                 )}
 

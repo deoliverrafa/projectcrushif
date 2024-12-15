@@ -77,7 +77,7 @@ const Profile = ({ nickname, avatar, type }: profile) => {
 
   return (
     <Sheet>
-      <SheetTrigger asChild>
+      <SheetTrigger>
         <Avatar className="shadow-lg border-2 border-border h-8 w-8">
           <AvatarImage
             className="object-cover"
@@ -417,25 +417,21 @@ export const NavBar = (props: userData) => {
 
             <Link
               to={"/settings"}
-              className="flex flex-row justify-between items-center"
+              className="flex flex-row justify-between items-center px-1"
             >
-              <DropdownItem className="focus:text-primary/70 w-full cursor-pointer flex flex-row items-center gap-1">
+              <DropdownItem className=" w-full flex flex-row items-center gap-1">
                 <CogFourSolid className="h-5 w-5" />
-                <p className="font-poppins font-semibold md:font-medium">
-                  Configurações
-                </p>
+                Configurações
               </DropdownItem>
             </Link>
 
             <Link
               to={"/support"}
-              className="flex flex-row justify-between items-center"
+              className="flex flex-row justify-between items-center px-1"
             >
               <DropdownItem className="focus:text-primary/70 w-full cursor-pointer flex flex-row items-center gap-1">
                 <QuestionCircleSolid className="h-5 w-5" />
-                <p className="font-poppins font-semibold md:font-medium">
                   Suporte
-                </p>
               </DropdownItem>
             </Link>
           </DropdownContent>

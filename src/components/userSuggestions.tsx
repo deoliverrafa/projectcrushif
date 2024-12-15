@@ -217,11 +217,7 @@ export const UserFollowing = () => {
 
   return (
     <React.Fragment>
-      <Card className="flex flex-col select-none mt-1 w-full md:w-6/12">
-        <CardHeader>
-          <CardTitle className="text-foreground uppercase">Amigos próximos</CardTitle>
-        </CardHeader>
-          
+      <Card className="rounded-3xl flex flex-col select-none pt-6 pb-0 mt-1 w-full md:w-6/12">
         <ScrollArea className="w-full border-none whitespace-nowrap rounded-md border">
           <div className="flex w-max space-x-4">
             <CardContent className="flex flex-row items-center space-x-4">

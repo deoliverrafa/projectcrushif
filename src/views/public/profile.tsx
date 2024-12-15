@@ -25,12 +25,13 @@ import {
   AvatarImage,
 } from "../../components/ui/avatar.tsx";
 import {
-  Drawer,
-  DrawerContent,
-  DrawerDescription,
-  DrawerHeader,
-  DrawerTrigger,
-} from "../../components/ui/drawer.tsx";
+  Dropdown,
+  DropdownContent,
+  DropdownItem,
+  DropdownLabel,
+  DropdownTrigger,
+  DropdownSeparator
+} from "../../components/ui/dropdown.tsx";
 import { Separator } from "../../components/ui/separator.tsx";
 import {
   Dialog,
@@ -52,6 +53,9 @@ import {
 // import { getUserData } from "../../utils/getUserData.tsx";
 import { getUserDataById } from "../../utils/getUserDataById.tsx";
 import { getStatusUser } from "../../utils/getStatusUser.tsx";
+import { User } from "../../interfaces/userInterface.ts";
+import { toggleFollow } from "../../utils/followUtils.tsx";
+import { getUserData } from "../../utils/getUserData.tsx";
 
 import {
   HeartWavesSolid,
@@ -64,17 +68,17 @@ import {
   HeartBrokenSolid,
   CheckSquareOneSolid,
   UserPlusSolid,
+  UserCheckSolid,
   UserCircleSolid,
   EditOneSolid,
   Ban,
   FlagOneSolid,
   SpinnerSolid,
+  DotsVerticalSolid,
+  At
 } from "@mynaui/icons-react";
 
 import UserIcon from "../../../public/images/user.png";
-import { User } from "../../interfaces/userInterface.ts";
-import { toggleFollow } from "../../utils/followUtils.tsx";
-import { getUserData } from "../../utils/getUserData.tsx";
 
 interface Post {
   className?: string;
@@ -106,6 +110,11 @@ const ProfileLayout = () => {
   const [limit] = React.useState(5);
   const [hasMorePosts, setHasMorePosts] = React.useState(true);
   const [posts, setPosts] = React.useState<Post[]>([]);
+  
+  const [showFullBio, setShowFullBio] = React.useState(false);
+  const toggleBio = () => {
+    setShowFullBio(!showFullBio);
+  };
 
   const [loading, setLoading] = React.useState(false);
 
@@ -133,24 +142,26 @@ const ProfileLayout = () => {
   }, [copied]);
 
   React.useEffect(() => {
-    const fetchViewingUserData = async () => {
-      try {
-        const data = await getUserDataById(id);
-        setViewingUser(data);
-        if (data.likedBy.includes(userId || "")) {
-          setLiked(true);
-        }
-        setLikeCount(data.likeCount);
-        await fetchPosts(data._id);
-      } catch (error) {
-        console.error("Error fetching viewing user data:", error);
-      }
-    };
+  const fetchViewingUserData = async () => {
+    try {
+      const data = await getUserDataById(id);
+      setViewingUser(data);
 
-    if (id) {
-      fetchViewingUserData();
+      if (data.likedBy.includes(userId || "")) {
+        setLiked(true);
+      }
+
+      setLikeCount(data.likeCount);
+      await fetchPosts(data._id);
+    } catch (error) {
+      console.error("Error fetching viewing user data:", error);
     }
-  }, [id, userId]);
+  };
+
+  if (id) {
+    fetchViewingUserData();
+  }
+}, [id, currentUser, userId]);
 
   const fetchPosts = async (userId: string) => {
     try {
@@ -265,14 +276,109 @@ const ProfileLayout = () => {
       console.error("Erro ao excluir post:", error);
     }
   };
-
+  
   if (!currentUser || !viewingUser) {
     return <LoadingPage />;
   }
-
-  const isOwnProfile = currentUser._id === viewingUser._id;
+  
+  const isOwnProfile = currentUser._id === viewingUser?._id;
+  
+  const MenuNavbar = () => {
+    return (
+      <React.Fragment>
+        <Dropdown>
+          <DropdownTrigger>
+            <DotsVerticalSolid className="h-8 w-8" />
+          </DropdownTrigger>
+          
+          <DropdownContent>
+            <DropdownLabel>
+              Menu
+            </DropdownLabel>
+            
+            <DropdownItem
+              onClick={handleLike}
+              className="px-4"
+            >
+              {liked ? (
+                <>
+                <HeartSolid className="text-primary h-5 w-5 mr-2" />
+                {likeCount} Curtidas
+                </>
+              ) : (
+                <>
+                <HeartBrokenSolid className="h-5 w-5 mr-2" />
+                {likeCount} Curtidas
+                </>
+              )}
+            </DropdownItem>
+            
+            {!isOwnProfile && (
+              <DropdownItem
+                className="justify-start items-center w-full px-4"
+                onClick={handleFollowToggle}
+              > {followedUser ? (
+                  <>
+                  <UserCheckSolid className="h-5 w-5 mr-2" />
+                  Seguindo
+                  </>
+                ) : (
+                  <>
+                  <UserPlusSolid className="h-5 w-5 mr-2" />
+                  Seguir
+                  </>
+                )}
+              </DropdownItem>
+            )}
+            
+            <DropdownSeparator />
+            
+            <DropdownItem
+              className="justify-start items-center w-full px-4"
+              onClick={() => setOpenShare(true)}
+            >
+              <ShareSolid className="h-5 w-5 mr-2" />
+              Compartilhar
+            </DropdownItem>
+            
+            <Link to={`/about/${viewingUser._id}`}>
+              <DropdownItem className="justify-start items-center w-full px-4" variant={"ghost"}>
+                <UserCircleSolid className="h-5 w-5 mr-2" />
+                  Sobre
+              </DropdownItem>
+            </Link>
+            
+            <DropdownSeparator />
+            
+            {isOwnProfile && (
+              <Link to={"/profile/edit"}>
+                <DropdownItem
+                  className="text-danger justify-start items-center w-full px-4"
+                >
+                  <EditOneSolid className="h-5 w-5 mr-2" />
+                    Editar
+                </DropdownItem>
+              </Link>
+            )}
+            
+            {!isOwnProfile && (
+              <DropdownItem
+                className="text-danger justify-start items-center w-full px-4"
+              >
+                <FlagOneSolid className="h-5 w-5 mr-2" />
+                Reportar
+              </DropdownItem>
+            )}
+          </DropdownContent>
+        </Dropdown>
+      </React.Fragment>
+    )
+  }
+  
   return (
-    <>
+    <React.Fragment>
+      <NavBarReturn title={"Perfil"} menu={<MenuNavbar />} />
+      
       <Card className="select-none mt-2 w-full md:w-6/12">
         <div className="relative w-full h-40">
           <img
@@ -304,18 +410,17 @@ const ProfileLayout = () => {
         </div>
 
         <CardHeader className="flex flex-row justify-between items-center mt-8">
-          <div className="flex flex-col gap-1">
-            <CardTitle className="text-foreground font-medium text-sm md:text-sm">
-              {viewingUser.userName
-                ? viewingUser.userName
-                : "Nome indisponível"}
-            </CardTitle>
-
-            <div className="flex flex-row items-center gap-1">
-              <Badge variant={"outline"} className="text-muted-foreground w-fit">
+          <div className="flex flex-col gap-1 w-full">
+            <div className="flex flex-row justify-between items-center w-full my-0.5">
+              <CardDescription className="flex flex-row items-center text-foreground font-bold md:font-semibold text-sm md:text-sm truncate max-w-72">
+                <At className="h-4 w-4" />
                 {viewingUser.nickname
-                  ? `@${viewingUser.nickname}`
+                  ? `${viewingUser.nickname}`
                   : "indisponível"}
+              </CardDescription>
+              
+              <Badge variant={"outline"} className="text-muted-foreground w-fit">
+                {viewingUser?.type}
                 <HeartWavesSolid
                   className={`${
                     viewingUser?.type === "Plus"
@@ -329,129 +434,46 @@ const ProfileLayout = () => {
                 />
               </Badge>
             </div>
+            
+            <CardTitle className="my-0.5 text-foreground truncate max-w-72">
+              {viewingUser.userName
+                ? viewingUser.userName
+                : "Nome indisponível"}
+            </CardTitle>
+            
+            <div className="my-0.5">
+              <CardDescription className="text-foreground text-xs md:text-xs">
+                {viewingUser?.bio ? (
+                <>
+                  <span className="font-semibold md:font-medium">Bio:</span>{" "}
+                  {showFullBio ? (
+                    viewingUser?.bio
+                  ) : (
+                  `${viewingUser?.bio.slice(0, 50)}${viewingUser?.bio.length > 50 ? " " : " "}`
+                  )}
+                  {viewingUser.bio.length > 50 && (
+                  <span
+                    onClick={toggleBio}
+                    className="text-muted-foreground tracking-tight font-normal md:font-light cursor-pointer"
+                  >
+                    {showFullBio ? "...ver menos" : "...ver mais"}
+                  </span>
+                  )}
+                </>
+                ) : (
+                <>
+                  <span className="font-semibold md:font-medium">Bio:</span>{" indisponível"}
+                </>
+                )}
+              </CardDescription>
+            </div>
           </div>
-
-          <Drawer>
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger>
-                  <DrawerTrigger asChild>
-                    <Button variant={"outline"} size={"icon"}>
-                      <MenuSolid className="h-5 w-5" />
-                    </Button>
-                  </DrawerTrigger>
-                </TooltipTrigger>
-
-                <TooltipContent>
-                  <p>Menu</p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-
-            <DrawerContent>
-              <div className="mx-auto w-full max-w-sm">
-                <DrawerHeader className="flex flex-row justify-around items-center">
-                  <div className="flex flex-col items-center space-y-1">
-                    <Button
-                      variant={"outline"}
-                      size={"icon"}
-                      onClick={handleLike}
-                    >
-                      {liked ? (
-                        <HeartSolid className="text-primary h-5 md:h-4 w-5 md:w-4" />
-                      ) : (
-                        <HeartBrokenSolid className="h-5 md:h-4 w-5 md:w-4" />
-                      )}
-                    </Button>
-                    <DrawerDescription>Curtir</DrawerDescription>
-                  </div>
-                </DrawerHeader>
-              </div>
-
-              <Separator />
-
-              <div className="py-5 space-y-2 mx-auto w-full max-w-sm">
-                {!isOwnProfile && (
-                  <Button
-                    variant={"ghost"}
-                    className="justify-start w-full"
-                    onClick={handleFollowToggle}
-                  >
-                    <UserPlusSolid className="h-5 md:h-4 w-5 md:w-4 mr-2" />
-                    {followedUser ? "Seguindo" : "Seguir"}
-                  </Button>
-                )}
-
-                <Button
-                  className="justify-start w-full"
-                  variant={"ghost"}
-                  onClick={() => setOpenShare(true)}
-                >
-                  <ShareSolid className="h-5 md:h-4 w-5 md:w-4 mr-2" />
-                  Compartilhar
-                </Button>
-
-                <Link to={`/about/${viewingUser._id}`}>
-                  <Button className="justify-start w-full" variant={"ghost"}>
-                    <UserCircleSolid className="h-5 md:h-4 w-5 md:w-4 mr-2" />
-                    Sobre
-                  </Button>
-                </Link>
-              </div>
-
-              <Separator />
-
-              <div className="py-5 space-y-2 mx-auto w-full max-w-sm">
-                {isOwnProfile && (
-                  <Link to={"/profile/edit"}>
-                    <Button
-                      variant={"ghost"}
-                      className="text-danger justify-start w-full"
-                    >
-                      <EditOneSolid className="h-5 md:h-4 w-5 md:w-4 mr-2" />
-                      Editar
-                    </Button>
-                  </Link>
-                )}
-
-                {!isOwnProfile && (
-                  <Button
-                    variant={"ghost"}
-                    className="text-danger justify-start w-full"
-                  >
-                    <FlagOneSolid className="h-5 md:h-4 w-5 md:w-4 mr-2" />
-                    Reportar
-                  </Button>
-                )}
-
-                {!isOwnProfile && (
-                  <Button
-                    variant={"ghost"}
-                    className="text-danger justify-start w-full"
-                  >
-                    <Ban className="h-5 md:h-4 w-5 md:w-4 mr-2" />
-                    Bloquear
-                  </Button>
-                )}
-              </div>
-            </DrawerContent>
-          </Drawer>
         </CardHeader>
 
         <Separator className="mb-5" />
 
         <CardContent className="space-y-6">
           <div className="flex flex-row justify-evenly items-center">
-            <Link to={`/likedBy/${viewingUser._id}`}
-              className="flex flex-col items-center"
-            >
-              <CardTitle className="text-primary">{likeCount}</CardTitle>
-
-              <CardDescription className="text-primary">Curtidas</CardDescription>
-            </Link>
-          
-            <Separator className="h-10" orientation="vertical" />
-            
             <Link
               to={`/followers/${viewingUser._id}`}
               className="flex flex-col items-center"
@@ -542,14 +564,12 @@ const ProfileLayout = () => {
 
         <Separator />
 
-        <CardFooter className="flex flex-col items-start space-y-2 px-0 w-full">
-          <CardDescription className="text-foreground uppercase mt-5 mb-1 ms-6">Postagens do usuário</CardDescription>
-          
+        <CardFooter className="flex flex-col space-y-2 px-0 w-full">
           {posts.length === 0 ? (
-            <div className="flex flex-col items-center space-y-4">
+            <div className="flex flex-col items-center space-y-2">
               <FolderSlashSolid className="h-20 w-20" />
 
-              <CardDescription className="text-center text-wrap text-sm md:text-md">
+              <CardDescription className="text-center text-wrap">
                 Usuário {viewingUser.nickname} não possui nenhuma publicação
               </CardDescription>
             </div>
@@ -623,7 +643,7 @@ const ProfileLayout = () => {
             <Button
               type="submit"
               size="icon"
-              className="rounded"
+              className="rounded-full"
               variant={"outline"}
               onClick={handleCopy}
             >
@@ -642,15 +662,13 @@ const ProfileLayout = () => {
           )}
         </DialogContent>
       </Dialog>
-    </>
+    </React.Fragment>
   );
 };
 
 const ProfilePage = () => {
   return (
     <>
-      <NavBarReturn title={"Perfil"} />
-
       <main className="flex flex-col justify-center items-center h-full w-full">
         <ProfileLayout />
       </main>

@@ -278,7 +278,10 @@ const CrushLayout = () => {
                     Curtiram você
                   </div>
                   {matchesUsers.length > 0 ? (
-                    <span className="animate-pulse bg-info rounded-full h-2.5 w-2.5"></span>
+                    <div className="flex items-center justify-center h-4 w-4 right-[1px] bottom-0 relative rounded-full text-xs">
+                      <span className="pulse-status bg-info/70"></span>
+                      <span className="pulse-status-core bg-info rounded-full h-2.5 w-2.5"></span>
+                    </div>
                   ) : null}
                 </Button>
               </DrawerTrigger>
