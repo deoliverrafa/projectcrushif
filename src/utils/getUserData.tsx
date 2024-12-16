@@ -1,27 +1,28 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { User } from "../interfaces/userInterface";
 
-interface User {
-  _id: string;
-  nickname: string;
-  userName: string;
-  email: string;
-  campus: string;
-  avatar: string;
-  banner: string;
-  birthdaydata: string;
-  Nfollowing: number;
-  Nfollowers: number;
-  following: string[];
-  followers: string[];
-  curso: string;
-  type: string;
-  bio: string;
-  password: string;
-  gender: string;
-  isFollowing: boolean;
-  status: string;
-}
+// interface User {
+//   _id: string;
+//   nickname: string;
+//   userName: string;
+//   email: string;
+//   campus: string;
+//   avatar: string;
+//   banner: string;
+//   birthdaydata: string;
+//   Nfollowing: number;
+//   Nfollowers: number;
+//   following: string[];
+//   followers: string[];
+//   curso: string;
+//   type: string;
+//   bio: string;
+//   password: string;
+//   gender: string;
+//   isFollowing: boolean;
+//   status: string;
+// }
 
 export function getUserData() {
   const [userData, setUserData] = useState<User>({
