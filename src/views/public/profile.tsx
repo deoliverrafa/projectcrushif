@@ -75,7 +75,10 @@ import {
   FlagOneSolid,
   SpinnerSolid,
   DotsVerticalSolid,
-  At
+  At,
+  BrandInstagramSolid,
+  BrandFacebookSolid,
+  BrandXSolid
 } from "@mynaui/icons-react";
 
 import UserIcon from "../../../public/images/user.png";
@@ -277,6 +280,34 @@ const ProfileLayout = () => {
     }
   };
   
+  const [likedByUsers, setLikedByUsers] = React.useState<User[]>([]);
+
+const isUserFollowed = (user: User) => {
+  return currentUser?.following?.includes(user._id);
+};
+
+const fetchLikedByUsers = async () => {
+  if (viewingUser?.likedBy?.length) {
+    try {
+      const userIds = viewingUser?.likedBy.slice(0, 3);
+      const userPromises = userIds.map((id) => getUserDataById(id));
+      const users = await Promise.all(userPromises);
+
+      const filteredUsers = users.filter(
+        (user) => user._id !== currentUser?._id && isUserFollowed(user)
+      );
+
+      setLikedByUsers(filteredUsers);
+    } catch (error) {
+      console.error("Erro ao buscar dados dos curtidores:", error);
+    }
+  }
+};
+
+React.useEffect(() => {
+  fetchLikedByUsers();
+}, [viewingUser?.likedBy]);
+  
   if (!currentUser || !viewingUser) {
     return <LoadingPage />;
   }
@@ -441,31 +472,107 @@ const ProfileLayout = () => {
                 : "Nome indisponível"}
             </CardTitle>
             
+          {viewingUser.bio && (
             <div className="my-0.5">
               <CardDescription className="text-foreground text-xs md:text-xs">
                 {viewingUser?.bio ? (
                 <>
-                  <span className="font-semibold md:font-medium">Bio:</span>{" "}
                   {showFullBio ? (
                     viewingUser?.bio
                   ) : (
-                  `${viewingUser?.bio.slice(0, 50)}${viewingUser?.bio.length > 50 ? " " : " "}`
+                  `${viewingUser?.bio.slice(0, 50)}${viewingUser?.bio.length > 50 ? "" : ""}`
                   )}
                   {viewingUser.bio.length > 50 && (
                   <span
                     onClick={toggleBio}
                     className="text-muted-foreground tracking-tight font-normal md:font-light cursor-pointer"
                   >
-                    {showFullBio ? "...ver menos" : "...ver mais"}
+                    {showFullBio ? " ...ver menos" : " ...ver mais"}
                   </span>
                   )}
                 </>
                 ) : (
-                <>
-                  <span className="font-semibold md:font-medium">Bio:</span>{" indisponível"}
-                </>
+                <></>
                 )}
               </CardDescription>
+            </div>
+          )}
+            
+            {viewingUser.link && (
+            <div className="flex flex-row justify-start items-center my-0.5">
+              <Link className="text-primary font-bold md:font-semibold underline text-xs md:text-xs">
+              https://www.crushif.vercel.app/
+              </Link>
+            </div>
+            )}
+            
+            {viewingUser.instagram || viewingUser.facebook || viewingUser.twitter && (
+            <div className="flex flex-row justify-start gap-2 items-center my-0.5">
+              <Button variant={"outline"} size={"icon"}>
+                <BrandInstagramSolid />
+              </Button>
+              
+              <Button variant={"outline"} size={"icon"}>
+                <BrandFacebookSolid />
+              </Button>
+              
+              <Button variant={"outline"} size={"icon"}>
+                <BrandXSolid />
+              </Button>
+            </div>
+            )}
+            
+            <div className="flex flex-row justify-start items-center my-0.5">
+            {Array.isArray(likedByUsers) && likedByUsers.length > 0 ? (
+                <Link to={`/likedBy/${viewingUser._id}`} className="flex flex-row items-center gap-1 w-fit">
+                  <div className="flex -space-x-3 *:ring *:ring-background">
+                   {likedByUsers.map((friend, index) => (
+                      <Avatar key={`${friend._id}-${index}`} className="h-6 w-6 shadow-lg border border-border">
+                  <AvatarFallback>
+                    {friend.nickname ? friend.nickname.slice(0, 2) : ""}
+                  </AvatarFallback>
+                    <AvatarImage
+                      className="object-cover"
+                      src={friend.avatar ? friend.avatar : UserIcon}
+                    />
+              </Avatar>
+              ))}
+            </div>
+            
+            <CardDescription className="text-xs md:text-xs">
+        Curtido(a) por{" "}
+        {likedByUsers.map((friend, index) => (
+          <span key={`${friend._id}-${index}`} className="text-foreground">
+            {friend.nickname}
+            {index < likedByUsers.length - 1 ? ", " : ""}
+          </span>
+        ))}{" "}
+        {viewingUser.likedBy.length - likedByUsers.length > 0 && (
+          <>
+            e {viewingUser.likedBy.length - likedByUsers.length > 1
+                ? "outras"
+                : "outra"}{" "}
+            <span className="text-foreground">
+              {viewingUser.likedBy.length - likedByUsers.length}{" "}
+              {viewingUser.likedBy.length - likedByUsers.length > 1
+                ? "pessoas"
+                : "pessoa"}
+            </span>
+          </>
+        )}
+      </CardDescription>
+      </Link>
+      ) : (
+      <Link to={`/likedByPost/${viewingUser._id}`} className="w-fit">
+      <CardDescription className="text-xs md:text-xs">
+        Curtido(a) por{" "}
+        <span className="text-foreground">
+          {viewingUser.likedBy.length}{" "}
+          {viewingUser.likedBy.length > 1 ? "pessoas" : "pessoa"}
+        </span>
+      </CardDescription>
+    </Link>
+      )}
             </div>
           </div>
         </CardHeader>

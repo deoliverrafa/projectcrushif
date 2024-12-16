@@ -93,10 +93,10 @@ export const UserSuggestions = (props: UserSuggestions) => {
 
       <ScrollArea className="w-full border-none whitespace-nowrap rounded-md border">
         <div className="flex w-max space-x-4 p-4">
-          {suggestedUsers.map((user) => {
+          {suggestedUsers.map((user, index) => {
             return (
               !hiddenUsers[user._id] && (
-                <Card className="select-none relative flex flex-col items-center">
+                <Card key={`${user._id}-${index}`} className="select-none relative flex flex-col items-center">
                   <Button
                     className="absolute top-0 right-0"
                     variant={"ghost"}
@@ -110,7 +110,6 @@ export const UserSuggestions = (props: UserSuggestions) => {
                   <Link
                     className="flex flex-col items-center"
                     to={`/profile/${user._id}`}
-                    key={user._id}
                   >
                     <CardHeader>
                       <div className="relative">
@@ -236,8 +235,8 @@ export const UserFollowing = () => {
                 <CardDescription className="text-foreground text-xs md:text-xs truncate max-w-[80px] text-center font-medium md:font-normal">Seu perfil</CardDescription>
               </Link>
               
-            {followingUsers.map((user) => (
-            <Link to={`/profile/${user._id}`}>
+            {followingUsers.map((user, index) => (
+            <Link to={`/profile/${user._id}`} key={`${user._id}-${index}`}>
               <div className="relative">
                 <Avatar className="h-16 w-16 shadow-lg border-2 border-border rounded-full">
                   <AvatarFallback>

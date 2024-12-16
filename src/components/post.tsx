@@ -436,7 +436,7 @@ export const CardPost = (props: CardProps) => {
     return parts.map((part, index) => {
       if (part.match(regex)) {
         return (
-          <span key={index} className="text-primary font-medium md:font-normal">
+          <span key={`${part}-${index}`} className="text-primary font-medium md:font-normal">
             {part}
           </span>
         );
@@ -465,21 +465,22 @@ export const CardPost = (props: CardProps) => {
     }
   };
   
-  const [friendWhoLikedData, setFriendWhoLikedData] = React.useState<User | null>(null);
+  const [friendsWhoLikedData, setFriendsWhoLikedData] = React.useState<User | null>(null);
   
   React.useEffect(() => {
     if (props.likedBy && dataUser?.following) {
-      const friend = props.likedBy.find((likedUserId) =>
-        dataUser.following.includes(likedUserId)
-      );
+      const friends = props.likedBy.filter((likedUserId) =>
+      dataUser.following.includes(likedUserId)
+    ).slice(0, 3);
 
-      if (friend) {
-        getUserDataById(friend).then((userData) => {
-          setFriendWhoLikedData(userData);
+      if (friends.length > 0) {
+      Promise.all(friends.map((friendId) => getUserDataById(friendId)))
+        .then((usersData) => {
+          setFriendsWhoLikedData(usersData);
         });
-      } else {
-        setFriendWhoLikedData(null);
-      }
+    } else {
+      setFriendsWhoLikedData([]);
+    }
     }
   }, [props.likedBy, dataUser?.following]);
 
@@ -573,7 +574,7 @@ export const CardPost = (props: CardProps) => {
                   <Carousel className="flex flex-col items-center my-2 relative h-[500px] w-[300px] md:w-[450px]">
                     <CarouselContent>
                       {props.photoURLs.map((photo, index) => (
-                        <CarouselItem className="relative" key={index}>
+                        <CarouselItem className="relative" key={`${photo}-${index}`}>
                           <img
                             className="rounded-lg object-cover min-h-[500px] max-h-[500px] w-[300px] md:w-[450px]"
                             src={photo}
@@ -632,7 +633,7 @@ export const CardPost = (props: CardProps) => {
                         className="text-muted-foreground tracking-tight font-normal md:font-light cursor-pointer"
                         onClick={toggleContent}
                       >
-                        {showFullContent ? " ...ver menos" : " ...ver mais"}
+                  {showFullContent ? " ...ver menos" : " ...ver mais"}
                       </span>
                     )}
                   </CardDescription>
@@ -640,30 +641,56 @@ export const CardPost = (props: CardProps) => {
               </div>
 
               <div className="flex justify-start w-fit">
-                {friendWhoLikedData ? (
-                  <Link to={`/likedByPost/${props._id}`} className="flex flex-row items-center gap-1 w-fit">
-                    <Avatar className="h-6 w-6 shadow-lg border border-border">
-                    <AvatarFallback>
-                      {friendWhoLikedData.nickname ? friendWhoLikedData.nickname : ""}
-                    </AvatarFallback>
-
+                {Array.isArray(friendsWhoLikedData) && friendsWhoLikedData.length > 0 ? (
+                <Link to={`/likedByPost/${props._id}`} className="flex flex-row items-center gap-1 w-fit">
+                  <div className="flex -space-x-3 *:ring *:ring-background">
+                   {friendsWhoLikedData.map((friend, index) => (
+                      <Avatar key={`${friend._id}-${index}`} className="h-6 w-6 shadow-lg border border-border">
+                  <AvatarFallback>
+                    {friend.nickname ? friend.nickname.slice(0, 2) : ""}
+                  </AvatarFallback>
                     <AvatarImage
                       className="object-cover"
-                      src={friendWhoLikedData.avatar ? friendWhoLikedData.avatar : UserIcon}
+                      src={friend.avatar ? friend.avatar : UserIcon}
                     />
-                  </Avatar>
-                  
-                    <CardDescription className="font-normal md:font-light tracking-tight text-md md:text-sm w-fit">
-                    Curtido por <span className="text-foreground"> {friendWhoLikedData.nickname}</span> e {likeCount - 1 > 1 ? "outras" : "outra"} <span className="text-foreground">{likeCount - 1} {likeCount - 1 > 1 ? "pessoas" : "pessoa"}</span>
-                  </CardDescription>
-                  </Link>
-                ) : (
-                  <Link to={`/likedByPost/${props._id}`} className="w-fit">
-                  <CardDescription className="font-normal md:font-light tracking-tight text-md md:text-sm w-fit">
-                    Curtido por <span className="text-foreground">{likeCount} {likeCount > 1 ? "pessoas" : "pessoa"}</span>
-                  </CardDescription>
-                </Link>
-                )}
+              </Avatar>
+              ))}
+            </div>
+            
+            <CardDescription className="text-xs md:text-xs">
+        Curtido(a) por{" "}
+        {friendsWhoLikedData.map((friend, index) => (
+          <span key={`${friend._id}-${index}`} className="text-foreground">
+            {friend.nickname}
+            {index < friendsWhoLikedData.length - 1 ? ", " : ""}
+          </span>
+        ))}{" "}
+        {props.likedBy.length - friendsWhoLikedData.length > 0 && (
+          <>
+            e {props.likedBy.length - friendsWhoLikedData.length > 1
+                ? "outras"
+                : "outra"}{" "}
+            <span className="text-foreground">
+              {props.likedBy.length - friendsWhoLikedData.length}{" "}
+              {props.likedBy.length - friendsWhoLikedData.length > 1
+                ? "pessoas"
+                : "pessoa"}
+            </span>
+          </>
+        )}
+      </CardDescription>
+      </Link>
+      ) : (
+      <Link to={`/likedByPost/${props._id}`} className="w-fit">
+      <CardDescription className="text-xs md:text-xs">
+        Curtido(a) por{" "}
+        <span className="text-foreground">
+          {props.likedBy.length}{" "}
+          {props.likedBy.length > 1 ? "pessoas" : "pessoa"}
+        </span>
+      </CardDescription>
+    </Link>
+      )}
               </div>
             </CardContent>
 
