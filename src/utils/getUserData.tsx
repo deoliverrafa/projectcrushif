@@ -51,6 +51,7 @@ export function getUserData() {
     likedUsers: [],
     to: "",
     twitter: "",
+    link:"",
   });
 
   useEffect(() => {
