@@ -42,7 +42,7 @@ const FollowersLayout = () => {
   const [userId] = React.useState<string | null>(
     localStorage.getItem("userId")
   );
-  const userData = getUserData()
+  const userData = getUserData();
 
   const [followersUsers, setFollowersUsers] = React.useState<User[]>([]);
   const [filteredUsers, setFilteredUsers] = React.useState<User[]>([]);
@@ -87,7 +87,7 @@ const FollowersLayout = () => {
 
   getStatusUser(userId);
 
-  if (loading) {
+  if (loading || userData._id == "") {
     return <LoadingPage />;
   }
 
@@ -158,13 +158,13 @@ const FollowersLayout = () => {
 
             {filteredUsers.length > 0 ? <Separator className="my-2" /> : null}
 
-            {filteredUsers.length > 0 ? (
+            {filteredUsers.length > 0 && userData._id != "" ? (
               filteredUsers.map((user) => {
+                const isFollowing =
+                  userData?.following?.some(
+                    (followingId) => followingId === user._id
+                  ) ?? false;
 
-                const isFollowing = userData?.following.some(
-                  (followingId) => followingId === user._id
-                );
-                
                 return (
                   <SearchUserCard
                     key={user._id}
