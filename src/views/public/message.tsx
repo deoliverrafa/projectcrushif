@@ -2,8 +2,6 @@ import * as React from "react";
 import { io } from "socket.io-client";
 import { Link, useParams, useNavigate } from "react-router-dom";
 
-import { NavBarReturn } from "../../components/navbar";
-
 import {
   Card,
   CardContent,
@@ -49,7 +47,7 @@ interface Message {
 
 const MessageLayout = () => {
   const navigate = useNavigate();
-  
+
   const { id } = useParams<string>();
   const [chatUser, setChatUser] = React.useState<User>();
   const [messages, setMessages] = React.useState<Message[]>([]);
@@ -107,20 +105,10 @@ const MessageLayout = () => {
 
   React.useEffect(() => {
     socket.on("newMessage", (message) => {
-      setCheckMessage(true)
+      setCheckMessage(true);
       setMessages((prevMessages) => [...prevMessages, message]);
       socket.emit("messageReceived", message._id);
     });
-
-    // socket.on("messageRead", (messageId) => {
-    //   markMessagesAsRead();
-
-    //   setMessages((prevMessages) =>
-    //     prevMessages.map((msg) =>
-    //       msg._id === messageId ? { ...msg, status: "read" } : msg
-    //     )
-    //   );
-    // });
 
     socket.emit("register", currentUserId);
 
@@ -134,13 +122,9 @@ const MessageLayout = () => {
 
   // Variável para fazer o controle da renderização e update do status da mensagem
   const [checkMessage, setCheckMessage] = React.useState(false);
+  console.log("CheckMessageStatus", checkMessage);
 
   React.useEffect(() => {
-    // socket.on("newMessage", (message) => {
-    //   setMessages((prevMessages) => [...prevMessages, message]);
-    //   socket.emit("messageRead", message._id);
-    // });       
-
     socket.on("messageStatusUpdated", ({ messageId, status }) => {
       setMessages((prevMessages) =>
         prevMessages.map((msg) =>
@@ -158,18 +142,19 @@ const MessageLayout = () => {
     });
 
     socket.on("messagesUpdated", ({ receiverId, status }) => {
-
       if (receiverId === activeChatUserId) {
-        if (checkMessage) {
-        setMessages((prevMessages) =>
-          prevMessages.map((msg) =>
-            msg.status !== "read" ? { ...msg, status } : msg
-          )
-        );
-        console.log("CheckMessagesetouFalse");
-        
-        setCheckMessage(false);
-      }
+        setCheckMessage((prevCheckMessage) => {
+          if (prevCheckMessage) {
+            setMessages((prevMessages) =>
+              prevMessages.map((msg) =>
+                msg.status !== "read" ? { ...msg, status } : msg
+              )
+            );
+            console.log("CheckMessageFalse", false);
+            return false;
+          }
+          return prevCheckMessage;
+        });
       }
     });
 
@@ -178,10 +163,9 @@ const MessageLayout = () => {
       socket.off("messagesUpdated");
     };
   }, [activeChatUserId]);
-  
+
   // Auto-scroll ao final do contêiner
-  React.useEffect(() => {
-    setCheckMessage(true)
+  React.useEffect(() => {    
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
@@ -246,7 +230,7 @@ const MessageLayout = () => {
               >
                 <ChevronLeft />
               </Button>
-            
+
               <Link
                 to={`/profile/${activeChatUserId}`}
                 className="flex flex-row items-center gap-2"
