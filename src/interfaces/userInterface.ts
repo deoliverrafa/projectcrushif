@@ -21,6 +21,7 @@ export interface User {
   likedUsers: string[];
   likedBy: string[];
   to: string,
+  link: string,
   instagram: string,
   facebook:string,
   twitter:string,

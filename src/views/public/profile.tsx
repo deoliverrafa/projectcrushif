@@ -59,7 +59,6 @@ import { getUserData } from "../../utils/getUserData.tsx";
 
 import {
   HeartWavesSolid,
-  MenuSolid,
   ShareSolid,
   MessageSolid,
   CopySolid,
@@ -71,7 +70,6 @@ import {
   UserCheckSolid,
   UserCircleSolid,
   EditOneSolid,
-  Ban,
   FlagOneSolid,
   SpinnerSolid,
   DotsVerticalSolid,
@@ -373,7 +371,7 @@ React.useEffect(() => {
             </DropdownItem>
             
             <Link to={`/about/${viewingUser._id}`}>
-              <DropdownItem className="justify-start items-center w-full px-4" variant={"ghost"}>
+              <DropdownItem className="justify-start items-center w-full px-4" >
                 <UserCircleSolid className="h-5 w-5 mr-2" />
                   Sobre
               </DropdownItem>
@@ -500,7 +498,7 @@ React.useEffect(() => {
             
             {viewingUser.link && (
             <div className="flex flex-row justify-start items-center my-0.5">
-              <Link className="text-primary font-bold md:font-semibold underline text-xs md:text-xs">
+              <Link className="text-primary font-bold md:font-semibold underline text-xs md:text-xs" to={viewingUser.link}>
               https://www.crushif.vercel.app/
               </Link>
             </div>
