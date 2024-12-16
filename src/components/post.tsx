@@ -7,7 +7,7 @@ import { ptBR } from "date-fns/locale";
 import { MentionedUsers } from "./mentionedUsers.tsx";
 import { Comment } from "./comment.tsx";
 
-import { Badge } from "./ui/badge.tsx"
+import { Badge } from "./ui/badge.tsx";
 
 import {
   Card,
@@ -75,7 +75,7 @@ import {
   MaximizeSolid,
   DownloadSolid,
   PlusSolid,
-  MinusSolid
+  MinusSolid,
 } from "@mynaui/icons-react";
 
 import AnonymousIcon from "../../public/images/anonymous.png";
@@ -133,7 +133,7 @@ export const CardPost = (props: CardProps) => {
   const toggleContent = () => {
     setShowFullContent(!showFullContent);
   };
-  
+
   const [zoomLevel, setZoomLevel] = React.useState(100);
   const increaseZoom = () => {
     setZoomLevel((prevZoom) => Math.min(prevZoom + 10, 200));
@@ -141,7 +141,6 @@ export const CardPost = (props: CardProps) => {
   const decreaseZoom = () => {
     setZoomLevel((prevZoom) => Math.max(prevZoom - 10, 10));
   };
-
 
   React.useEffect(() => {
     if (props.likedBy.includes(localStorage.getItem("userId") || "")) {
@@ -190,33 +189,32 @@ export const CardPost = (props: CardProps) => {
   };
 
   const [openShare, setOpenShare] = React.useState(false);
-  
+
   const [openDelete, setOpenDelete] = React.useState(false);
   const [isDeleting, setIsDeleting] = React.useState(false);
 
-  
   const [openImage, setOpenImage] = React.useState(false);
   const [imageExpand, setImageExpand] = React.useState("");
-  
+
   const handleImageExpand = (image: string) => {
     setOpenImage(true);
     setImageExpand(image);
   };
 
   const downloadImage = async (url: string) => {
-  try {
-    const response = await fetch(url);
-    const blob = await response.blob();
-    const link = document.createElement("a");
-    link.href = URL.createObjectURL(blob);
-    link.download = "imagem-crushif.jpg";
-    link.click();
-    URL.revokeObjectURL(link.href);
-  } catch (error) {
-    console.error("Erro ao baixar a imagem:", error);
-  }
-};
-  
+    try {
+      const response = await fetch(url);
+      const blob = await response.blob();
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = "imagem-crushif.jpg";
+      link.click();
+      URL.revokeObjectURL(link.href);
+    } catch (error) {
+      console.error("Erro ao baixar a imagem:", error);
+    }
+  };
+
   const [copied, setCopied] = React.useState(false);
   const inputRef = React.useRef<HTMLInputElement>(null);
 
@@ -436,7 +434,10 @@ export const CardPost = (props: CardProps) => {
     return parts.map((part, index) => {
       if (part.match(regex)) {
         return (
-          <span key={`${part}-${index}`} className="text-primary font-medium md:font-normal">
+          <span
+            key={`${part}-${index}`}
+            className="text-primary font-medium md:font-normal"
+          >
             {part}
           </span>
         );
@@ -464,23 +465,25 @@ export const CardPost = (props: CardProps) => {
       setIsDeleting(false);
     }
   };
-  
-  const [friendsWhoLikedData, setFriendsWhoLikedData] = React.useState<User | null>(null);
-  
+
+  const [friendsWhoLikedData, setFriendsWhoLikedData] =
+    React.useState<User | null>(null);
+
   React.useEffect(() => {
     if (props.likedBy && dataUser?.following) {
-      const friends = props.likedBy.filter((likedUserId) =>
-      dataUser.following.includes(likedUserId)
-    ).slice(0, 3);
+      const friends = props.likedBy
+        .filter((likedUserId) => dataUser.following.includes(likedUserId))
+        .slice(0, 3);
 
       if (friends.length > 0) {
-      Promise.all(friends.map((friendId) => getUserDataById(friendId)))
-        .then((usersData) => {
-          setFriendsWhoLikedData(usersData);
-        });
-    } else {
-      setFriendsWhoLikedData([]);
-    }
+        Promise.all(friends.map((friendId) => getUserDataById(friendId))).then(
+          (usersData) => {
+            setFriendsWhoLikedData(usersData);
+          }
+        );
+      } else {
+        setFriendsWhoLikedData([]);
+      }
     }
   }, [props.likedBy, dataUser?.following]);
 
@@ -489,29 +492,45 @@ export const CardPost = (props: CardProps) => {
       <ContextMenu>
         <ContextMenuTrigger className="relative flex justify-center w-full">
           <Card
-            className={`select-none my-1 w-full md:w-6/12 ${props.classNames} ${isDeleting ? 'slide-out-elliptic-top-bck' : ''}`}
+            className={`select-none my-1 w-full md:w-6/12 ${props.classNames} ${
+              isDeleting ? "slide-out-elliptic-top-bck" : ""
+            }`}
             onDoubleClick={handleDoubleLike}
           >
             <CardHeader className="flex flex-row justify-between items-center">
               {!props.isAnonymous ? (
                 <Link to={`/profile/${props.id}`} className="flex space-x-2">
-                <div className="relative">
-                <Avatar className="shadow-lg border-2 border-border">
-                    <AvatarFallback>
-                      {!props.isAnonymous ? viewingUser?.nickname : ""}
-                    </AvatarFallback>
+                  <div className="relative">
+                    <Avatar className="shadow-lg border-2 border-border">
+                      <AvatarFallback>
+                        {!props.isAnonymous ? viewingUser?.nickname : ""}
+                      </AvatarFallback>
 
-                    <AvatarImage
-                      className="object-cover"
-                      src={!props.isAnonymous ? viewingUser?.avatar : UserIcon}
-                    />
-                  </Avatar>
-            
-            <div className="pulse-status-container bottom-0 right-1 rounded-full text-xs absolute">
-              <span className={`pulse-status ${viewingUser?.status === "online" ? "bg-success/70" : "bg-secondary/70"}`}></span>
-              <span className={`pulse-status-core h-2.5 w-2.5 ${viewingUser?.status === "online" ? "bg-success" : "bg-secondary"}`}></span>
-            </div>
-          </div>
+                      <AvatarImage
+                        className="object-cover"
+                        src={
+                          !props.isAnonymous ? viewingUser?.avatar : UserIcon
+                        }
+                      />
+                    </Avatar>
+
+                    <div className="pulse-status-container bottom-0 right-1 rounded-full text-xs absolute">
+                      <span
+                        className={`pulse-status ${
+                          viewingUser?.status === "online"
+                            ? "bg-success/70"
+                            : "bg-secondary/70"
+                        }`}
+                      ></span>
+                      <span
+                        className={`pulse-status-core h-2.5 w-2.5 ${
+                          viewingUser?.status === "online"
+                            ? "bg-success"
+                            : "bg-secondary"
+                        }`}
+                      ></span>
+                    </div>
+                  </div>
 
                   <div className="flex flex-col items-start justify-center space-y-1">
                     <div className="flex flex-row items-center space-x-1">
@@ -574,18 +593,31 @@ export const CardPost = (props: CardProps) => {
                   <Carousel className="flex flex-col items-center my-2 relative h-[500px] w-[300px] md:w-[450px]">
                     <CarouselContent>
                       {props.photoURLs.map((photo, index) => (
-                        <CarouselItem className="relative" key={`${photo}-${index}`}>
+                        <CarouselItem
+                          className="relative"
+                          key={`${photo}-${index}`}
+                        >
                           <img
                             className="rounded-lg object-cover min-h-[500px] max-h-[500px] w-[300px] md:w-[450px]"
                             src={photo}
                             alt={`Imagem ${index + 1}`}
                           />
-                          
-                          <Button className="absolute top-1 left-6 h-8 w-8 rounded-full" variant={"outline"} size={"icon"} onClick={() => handleImageExpand(photo)}>
-                          <MaximizeSolid className="h-4 w-4" />
+
+                          <Button
+                            className="absolute top-1 left-6 h-8 w-8 rounded-full"
+                            variant={"outline"}
+                            size={"icon"}
+                            onClick={() => handleImageExpand(photo)}
+                          >
+                            <MaximizeSolid className="h-4 w-4" />
                           </Button>
-                          
-                          <Badge className="absolute top-2 right-2" variant="outline">{index + 1}/{props.photoURLs.length}</Badge>
+
+                          <Badge
+                            className="absolute top-2 right-2"
+                            variant="outline"
+                          >
+                            {index + 1}/{props.photoURLs.length}
+                          </Badge>
                         </CarouselItem>
                       ))}
                     </CarouselContent>
@@ -633,7 +665,7 @@ export const CardPost = (props: CardProps) => {
                         className="text-muted-foreground tracking-tight font-normal md:font-light cursor-pointer"
                         onClick={toggleContent}
                       >
-                  {showFullContent ? " ...ver menos" : " ...ver mais"}
+                        {showFullContent ? " ...ver menos" : " ...ver mais"}
                       </span>
                     )}
                   </CardDescription>
@@ -641,56 +673,69 @@ export const CardPost = (props: CardProps) => {
               </div>
 
               <div className="flex justify-start w-fit">
-                {Array.isArray(friendsWhoLikedData) && friendsWhoLikedData.length > 0 ? (
-                <Link to={`/likedByPost/${props._id}`} className="flex flex-row items-center gap-1 w-fit">
-                  <div className="flex -space-x-3 *:ring *:ring-background">
-                   {friendsWhoLikedData.map((friend, index) => (
-                      <Avatar key={`${friend._id}-${index}`} className="h-6 w-6 shadow-lg border border-border">
-                  <AvatarFallback>
-                    {friend.nickname ? friend.nickname.slice(0, 2) : ""}
-                  </AvatarFallback>
-                    <AvatarImage
-                      className="object-cover"
-                      src={friend.avatar ? friend.avatar : UserIcon}
-                    />
-              </Avatar>
-              ))}
-            </div>
-            
-            <CardDescription className="text-xs md:text-xs">
-        Curtido(a) por{" "}
-        {friendsWhoLikedData.map((friend, index) => (
-          <span key={`${friend._id}-${index}`} className="text-foreground">
-            {friend.nickname}
-            {index < friendsWhoLikedData.length - 1 ? ", " : ""}
-          </span>
-        ))}{" "}
-        {props.likedBy.length - friendsWhoLikedData.length > 0 && (
-          <>
-            e {props.likedBy.length - friendsWhoLikedData.length > 1
-                ? "outras"
-                : "outra"}{" "}
-            <span className="text-foreground">
-              {props.likedBy.length - friendsWhoLikedData.length}{" "}
-              {props.likedBy.length - friendsWhoLikedData.length > 1
-                ? "pessoas"
-                : "pessoa"}
-            </span>
-          </>
-        )}
-      </CardDescription>
-      </Link>
-      ) : (
-      <Link to={`/likedByPost/${props._id}`} className="w-fit">
-      <CardDescription className="text-xs md:text-xs">
-        Curtido(a) por{" "}
-        <span className="text-foreground">
-          {props.likedBy.length}{" "}
-          {props.likedBy.length > 1 ? "pessoas" : "pessoa"}
-        </span>
-      </CardDescription>
-    </Link>
-      )}
+                {Array.isArray(friendsWhoLikedData) &&
+                friendsWhoLikedData.length > 0 ? (
+                  <Link
+                    to={`/likedByPost/${props._id}`}
+                    className="flex flex-row items-center gap-1 w-fit"
+                  >
+                    <div className="flex -space-x-3 *:ring *:ring-background">
+                      {friendsWhoLikedData.map((friend, index) => (
+                        <Avatar
+                          key={`${friend._id}-${index}`}
+                          className="h-6 w-6 shadow-lg border border-border"
+                        >
+                          <AvatarFallback>
+                            {friend.nickname ? friend.nickname.slice(0, 2) : ""}
+                          </AvatarFallback>
+                          <AvatarImage
+                            className="object-cover"
+                            src={friend.avatar ? friend.avatar : UserIcon}
+                          />
+                        </Avatar>
+                      ))}
+                    </div>
+
+                    <CardDescription className="text-xs md:text-xs">
+                      Curtido(a) por{" "}
+                      {friendsWhoLikedData.map((friend, index) => (
+                        <span
+                          key={`${friend._id}-${index}`}
+                          className="text-foreground"
+                        >
+                          {friend.nickname}
+                          {index < friendsWhoLikedData.length - 1 ? ", " : ""}
+                        </span>
+                      ))}{" "}
+                      {props.likedBy.length - friendsWhoLikedData.length >
+                        0 && (
+                        <>
+                          e{" "}
+                          {props.likedBy.length - friendsWhoLikedData.length > 1
+                            ? "outras"
+                            : "outra"}{" "}
+                          <span className="text-foreground">
+                            {props.likedBy.length - friendsWhoLikedData.length}{" "}
+                            {props.likedBy.length - friendsWhoLikedData.length >
+                            1
+                              ? "pessoas"
+                              : "pessoa"}
+                          </span>
+                        </>
+                      )}
+                    </CardDescription>
+                  </Link>
+                ) : (
+                  <Link to={`/likedByPost/${props._id}`} className="w-fit">
+                    <CardDescription className="text-xs md:text-xs">
+                      Curtido(a) por{" "}
+                      <span className="text-foreground">
+                        {props.likedBy.length}{" "}
+                        {props.likedBy.length > 1 ? "pessoas" : "pessoa"}
+                      </span>
+                    </CardDescription>
+                  </Link>
+                )}
               </div>
             </CardContent>
 
@@ -888,19 +933,19 @@ export const CardPost = (props: CardProps) => {
                       {
                         <div className="flex flex-row items-center gap-2">
                           {props.mentionedUsers.length > 0 && (
-                          <MentionedUsers
-                            _id={props._id}
-                            content={props.content}
-                            insertAt={props.insertAt}
-                            userId={props.userId}
-                            likeCount={props.likeCount}
-                            likedBy={props.likedBy}
-                            mentionedUsers={props.mentionedUsers}
-                            followingMentionedUsers={
-                              props.followingMentionedUsers
-                            }
-                          />
-                          )} 
+                            <MentionedUsers
+                              _id={props._id}
+                              content={props.content}
+                              insertAt={props.insertAt}
+                              userId={props.userId}
+                              likeCount={props.likeCount}
+                              likedBy={props.likedBy}
+                              mentionedUsers={props.mentionedUsers}
+                              followingMentionedUsers={
+                                props.followingMentionedUsers
+                              }
+                            />
+                          )}
                         </div>
                       }
                     </div>
@@ -916,16 +961,15 @@ export const CardPost = (props: CardProps) => {
                   >
                     {followedUser ? (
                       <>
-                    <UserCheckSolid className="h-4 w-4 mr-1" />
-                    Seguindo
-                    </>
+                        <UserCheckSolid className="h-4 w-4 mr-1" />
+                        Seguindo
+                      </>
                     ) : (
                       <>
-                      <UserPlusSolid className="h-4 w-4 mr-1" />
-                      Seguir
+                        <UserPlusSolid className="h-4 w-4 mr-1" />
+                        Seguir
                       </>
                     )}
-                    
                   </ContextMenuItem>
                 )}
 
@@ -1004,36 +1048,38 @@ export const CardPost = (props: CardProps) => {
           </Card>
         </ContextMenuTrigger>
       </ContextMenu>
-      
+
       <Dialog open={openDelete} onOpenChange={setOpenDelete}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader className="space-y-0.5">
             <DialogTitle>Excluir postagem</DialogTitle>
 
-            <DialogDescription>
-              Deseja excluir está postagem?
-            </DialogDescription>
+            <DialogDescription>Deseja excluir está postagem?</DialogDescription>
           </DialogHeader>
-        
+
           <DialogFooter>
-            <Button variant={"danger"} onClick={() => {
+            <Button
+              variant={"danger"}
+              onClick={() => {
                 deletePost(props._id);
-              }}>
+              }}
+            >
               Deletar
             </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
-      
-            <Dialog open={openImage} onOpenChange={setOpenImage}>
+
+      <Dialog open={openImage} onOpenChange={setOpenImage}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle>Visualizando imagem ampliada</DialogTitle>
             <DialogDescription>
-              Explore a imagem em maior detalhe. Use o botão de fechar para retornar à visualização anterior.
+              Explore a imagem em maior detalhe. Use o botão de fechar para
+              retornar à visualização anterior.
             </DialogDescription>
           </DialogHeader>
-      
+
           <div className="relative flex justify-center items-center">
             <img
               className="rounded-lg object-cover min-h-[500px] max-h-[500px] w-[300px] md:w-[400px] transition-transform duration-300 ease-in-out"
@@ -1041,7 +1087,7 @@ export const CardPost = (props: CardProps) => {
               alt="post"
               style={{ transform: `scale(${zoomLevel / 100})` }}
             />
-      
+
             <div className="absolute flex items-center justify-center gap-2 bg-background border border-border text-foreground font-semibold md:font-medium rounded-lg px-2.5 py-0.5 bottom-2">
               <button
                 className="flex items-center justify-center p-1 border rounded-full"
@@ -1060,9 +1106,12 @@ export const CardPost = (props: CardProps) => {
               </button>
             </div>
           </div>
-      
+
           <DialogFooter>
-            <Button variant={"secondary"} onClick={() => downloadImage(imageExpand)}>
+            <Button
+              variant={"secondary"}
+              onClick={() => downloadImage(imageExpand)}
+            >
               <DownloadSolid />
               Baixar imagem
             </Button>

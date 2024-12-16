@@ -16,6 +16,10 @@ export interface User {
   isFollowing: boolean;
   banner: string;
   status: string;
-  likedUsers;
-  likedBy;
+  likedUsers: string[];
+  likedBy: string[];
+  to: string,
+  instagram: string,
+  facebook:string,
+  twitter:string,
 }
