@@ -100,7 +100,7 @@ export default function HomePage() {
             import.meta.env.VITE_POST_GET
           }${token}/${skip}/${limit}`
         );
-
+        
         if (response.data.validToken === false) {
           window.location.href = "/auth/login";
         }
@@ -152,6 +152,7 @@ export default function HomePage() {
             <UserFollowing />
             
             {posts.map((post) => {
+              
               const followingMentionedUsers = post.mentionedUsers.map((mentionedId) =>
                 userData.following.includes(mentionedId)
               );

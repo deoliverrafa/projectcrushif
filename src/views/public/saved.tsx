@@ -39,12 +39,16 @@ const SavedLayout = ({ savedPosts }: { savedPosts: CardProps[] }) => {
     try {
       const token = localStorage.getItem("token");
       const response = await axios.delete(
-        `${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_POST_DELETE}`,
+        `${import.meta.env.VITE_API_BASE_URL}${
+          import.meta.env.VITE_POST_DELETE
+        }`,
         { data: { postId, token } }
       );
 
       if (response.data.deleted) {
-        setPosts((prevPosts) => prevPosts.filter((post) => post._id !== postId));
+        setPosts((prevPosts) =>
+          prevPosts.filter((post) => post._id !== postId)
+        );
       } else {
         console.error("Erro ao deletar post:", response.data.message);
       }
@@ -52,12 +56,15 @@ const SavedLayout = ({ savedPosts }: { savedPosts: CardProps[] }) => {
       console.error("Erro ao excluir post:", error);
     }
   };
-  
-  getStatusUser(userId)
+
+  getStatusUser(userId);
+
+  React.useEffect(() => {
+    setPosts(savedPosts)
+  }, [savedPosts]);
 
   return (
     <React.Fragment>
-
       {postsSaved.map((post) => {
         const followingMentionedUsers = post.mentionedUsers.map((mentionedId) =>
           userData.following.includes(mentionedId)
@@ -105,7 +112,6 @@ const SavedPage = () => {
             import.meta.env.VITE_POST_SAVED
           }${token}/${skip}/${limit}`
         );
-
         if (response.data.likedPosts.length === 0) {
           setFinishedPosts(true);
         } else {
