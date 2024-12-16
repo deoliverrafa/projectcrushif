@@ -477,12 +477,12 @@ export const CardPost = (props: CardProps) => {
 
       if (friends.length > 0) {
         Promise.all(friends.map((friendId) => getUserDataById(friendId))).then(
-          (usersData) => {
+          (usersData: any) => {
             setFriendsWhoLikedData(usersData);
           }
         );
       } else {
-        setFriendsWhoLikedData([]);
+        setFriendsWhoLikedData(null);
       }
     }
   }, [props.likedBy, dataUser?.following]);

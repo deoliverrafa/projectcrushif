@@ -44,7 +44,13 @@ export function getUserData() {
     banner: "",
     gender: "",
     isFollowing: false,
-    status: "indisponível"
+    status: "indisponível",
+    facebook: "",
+    instagram: "",
+    likedBy: [],
+    likedUsers: [],
+    to: "",
+    twitter: "",
   });
 
   useEffect(() => {
