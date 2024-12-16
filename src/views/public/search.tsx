@@ -238,6 +238,7 @@ const SearchLayout = () => {
                   const isFollowing = userData?.following.some(
                     (followingId) => followingId === user._id
                   );
+                  
                   return (
                     <>
                     <ScrollArea className="h-full w-full rounded-md">
