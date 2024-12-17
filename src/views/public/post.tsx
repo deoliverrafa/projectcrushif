@@ -1,10 +1,16 @@
 import * as React from "react";
-import { useParams } from "react-router-dom";
+import {
+  useParams
+} from "react-router-dom";
 
 import LoadingPage from "./loading";
 
-import { NavBarReturn } from "../../components/navbar";
-import { CardPost } from "../../components/post";
+import {
+  NavBarReturn
+} from "../../components/navbar";
+import {
+  CardPost
+} from "../../components/post";
 
 interface Post {
   className?: string;
@@ -17,23 +23,33 @@ interface Post {
   id?: string;
   likeCount: number;
   likedBy: string[];
+  favoritedBy: string[];
   commentCount: number;
   mentionedUsers: string[];
 }
 
-import { getPostDataById } from "../../utils/getPostDataById";
-import { getUserData } from "../../utils/getUserData";
-import { getStatusUser } from "../../utils/getStatusUser.tsx"
+import {
+  getPostDataById
+} from "../../utils/getPostDataById";
+import {
+  getUserData
+} from "../../utils/getUserData";
+import {
+  getStatusUser
+} from "../../utils/getStatusUser.tsx"
 
 import axios from "axios";
 
 const PostLayout = () => {
-  const { id } = useParams<string>();
-  const [userId] = React.useState<string | null>(
+  const {
+    id
+  } = useParams < string > ();
+  const [userId] = React.useState < string | null > (
     localStorage.getItem("userId")
   );
-  
-  const [viewingPost, setViewingPost] = React.useState<Post | null>(null);
+
+  const [viewingPost,
+    setViewingPost] = React.useState < Post | null > (null);
   const postId = id || "";
   const userData = getUserData();
 
@@ -50,7 +66,8 @@ const PostLayout = () => {
     };
 
     fetchViewingPostData();
-  }, [postId]);
+  },
+    [postId]);
 
   if (!viewingPost) {
     return <LoadingPage />;
@@ -61,9 +78,13 @@ const PostLayout = () => {
       const token = localStorage.getItem("token");
       await axios.delete(
         `${import.meta.env.VITE_API_BASE_URL}${
-          import.meta.env.VITE_POST_DELETE
+        import.meta.env.VITE_POST_DELETE
         }`,
-        { data: { postId, token } }
+        {
+          data: {
+            postId, token
+          }
+        }
       );
     } catch (error) {
       console.error("Erro ao excluir post:", error);
@@ -74,7 +95,7 @@ const PostLayout = () => {
     (mentionedId) => userData.following.includes(mentionedId)
   );
   const isFollowingUserPost = userData.following.includes(viewingPost.userId);
-  
+
   getStatusUser(userId);
 
   return (
@@ -90,12 +111,13 @@ const PostLayout = () => {
         insertAt={viewingPost.insertAt}
         likeCount={viewingPost.likeCount}
         likedBy={viewingPost.likedBy}
+        favoritedBy={viewingPost.favoritedBy}
         commentCount={viewingPost.commentCount}
         mentionedUsers={viewingPost.mentionedUsers}
         followingMentionedUsers={followingMentionedUsers}
         isFollowingUserPost={isFollowingUserPost}
         onDelete={deletePostFromState}
-      />
+        />
     </React.Fragment>
   );
 };
