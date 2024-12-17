@@ -55,18 +55,18 @@ interface CardProps {
   mentionedUsers: string[];
 }
 
-const SavedLayout = ({
-  savedPosts
+const FavoritedLayout = ({
+  favoritedPosts
 }: {
-  savedPosts: CardProps[]
+  favoritedPosts: CardProps[]
 }) => {
   const userData = getUserData();
   const [userId] = React.useState < string | null > (
     localStorage.getItem("userId")
   );
 
-  const [postsSaved,
-    setPosts] = React.useState < CardProps[] > (savedPosts);
+  const [postsFavorited,
+    setPosts] = React.useState < CardProps[] > (favoritedPosts);
 
   const deletePostFromState = async (postId: string) => {
     try {
@@ -97,12 +97,12 @@ const SavedLayout = ({
   getStatusUser(userId);
 
   React.useEffect(() => {
-    setPosts(savedPosts);
-  }, [savedPosts]);
+    setPosts(favoritedPosts);
+  }, [favoritedPosts]);
 
   return (
     <React.Fragment>
-      {postsSaved.map(post => {
+      {postsFavorited.map(post => {
         const followingMentionedUsers = post.mentionedUsers.map(
           mentionedId => userData.following.includes(mentionedId)
         );
@@ -135,9 +135,9 @@ const SavedLayout = ({
   );
 };
 
-const SavedPage = () => {
-  const [savedPosts,
-    setSavedPosts] = React.useState < CardProps[] > ([]);
+const FavoritedPage = () => {
+  const [favoritedPosts,
+    setFavoritedPosts] = React.useState < CardProps[] > ([]);
   const [skip,
     setSkip] = React.useState(0);
   const [limit] = React.useState(5);
@@ -148,31 +148,31 @@ const SavedPage = () => {
   const token = localStorage.getItem("token");
 
   React.useEffect(() => {
-    const fetchSavedPosts = async () => {
+    const fetchFavoritedPosts = async () => {
       try {
         setLoading(true);
         const response = await axios.get(
           `${import.meta.env.VITE_API_BASE_URL}${
-          import.meta.env.VITE_POST_SAVED
+          import.meta.env.VITE_POST_FAVORITED
           }${token}/${skip}/${limit}`
         );
-        if (response.data.likedPosts.length === 0) {
+        if (response.data.favoritedPosts.length === 0) {
           setFinishedPosts(true);
         } else {
-          setSavedPosts(prevPosts => [
+          setFavoritedPosts(prevPosts => [
             ...prevPosts,
-            ...response.data.likedPosts
+            ...response.data.favoritedPosts
           ]);
         }
       } catch (error) {
-        console.error("Erro ao carregar posts salvos:", error);
+        console.error("Erro ao carregar posts favoritados:", error);
       } finally {
         setLoading(false);
       }
     };
 
     if (!finishedPosts && token) {
-      fetchSavedPosts();
+      fetchFavoritedPosts();
     }
   },
     [skip,
@@ -208,7 +208,7 @@ const SavedPage = () => {
 
           <DrawerContent>
             <DrawerHeader>
-              <DrawerTitle>Salvos </DrawerTitle>
+              <DrawerTitle>Favoritos </DrawerTitle>
             </DrawerHeader>
 
             <div className="flex items-center gap-2 p-4 pb-0">
@@ -218,14 +218,14 @@ const SavedPage = () => {
               alt="logo"
               />
             <DrawerDescription className="text-foreground">
-              Publicações curtidas
+              Publicações favoritadas
               por esté perfil no Crush IF.
             </DrawerDescription>
           </div>
 
           <DrawerFooter>
             <DrawerDescription className="text-xs md:text-xs text-center">
-              Você está vendo as postagens salvas por esté
+              Você está vendo as postagens favoritadas por esté
               perfil no Crush IF.
             </DrawerDescription>
           </DrawerFooter>
@@ -237,10 +237,10 @@ const SavedPage = () => {
 
 return (
   <React.Fragment>
-    <NavBarReturn title="Salvos" menu={<MenuNavbar />} />
+    <NavBarReturn title="Favoritos" menu={<MenuNavbar />} />
 
     <main className="w-full h-full flex flex-col justify-center items-center">
-      {savedPosts.length === 0 && !loading ? (
+      {favoritedPosts.length === 0 && !loading ? (
         <Card className="mt-2 w-full md:w-6/12">
           <CardContent className="flex flex-col justify-center items-center space-y-2 w-full">
             <img
@@ -249,12 +249,12 @@ return (
             alt="404"
             />
           <CardDescription>
-            Sem publicações curtidas
+            Sem publicações favoritadas
           </CardDescription>
         </CardContent>
       </Card>
     ): (
-      <SavedLayout savedPosts={savedPosts} />
+      <FavoritedLayout favoritedPosts={favoritedPosts} />
     )}
 
     {loading && (
@@ -270,4 +270,4 @@ return (
 );
 };
 
-export default SavedPage;
+export default FavoritedPage;

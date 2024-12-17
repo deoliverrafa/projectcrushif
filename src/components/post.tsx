@@ -1,13 +1,25 @@
 import * as React from "react";
-import { Link } from "react-router-dom";
+import {
+  Link
+} from "react-router-dom";
 import axios from "axios";
-import { formatDistanceToNow } from "date-fns";
-import { ptBR } from "date-fns/locale";
+import {
+  formatDistanceToNow
+} from "date-fns";
+import {
+  ptBR
+} from "date-fns/locale";
 
-import { MentionedUsers } from "./mentionedUsers.tsx";
-import { Comment } from "./comment.tsx";
+import {
+  MentionedUsers
+} from "./mentionedUsers.tsx";
+import {
+  Comment
+} from "./comment.tsx";
 
-import { Badge } from "./ui/badge.tsx";
+import {
+  Badge
+} from "./ui/badge.tsx";
 
 import {
   Card,
@@ -30,8 +42,12 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "./ui/tooltip.tsx";
-import { Button } from "./ui/button.tsx";
-import { Input } from "./ui/input.tsx";
+import {
+  Button
+} from "./ui/button.tsx";
+import {
+  Input
+} from "./ui/input.tsx";
 import {
   Drawer,
   DrawerContent,
@@ -45,8 +61,14 @@ import {
   ContextMenuItem,
   ContextMenuTrigger,
 } from "./ui/context-menu.tsx";
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar.tsx";
-import { Separator } from "./ui/separator.tsx";
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage
+} from "./ui/avatar.tsx";
+import {
+  Separator
+} from "./ui/separator.tsx";
 import {
   Dialog,
   DialogContent,
@@ -55,8 +77,12 @@ import {
   DialogHeader,
   DialogTitle,
 } from "../components/ui/dialog.tsx";
-import { Label } from "../components/ui/label.tsx";
-import { ScrollArea } from "./ui/scroll-area.tsx";
+import {
+  Label
+} from "../components/ui/label.tsx";
+import {
+  ScrollArea
+} from "./ui/scroll-area.tsx";
 
 import {
   HeartBrokenSolid,
@@ -82,10 +108,18 @@ import AnonymousIcon from "../../public/images/anonymous.png";
 import UserIcon from "../../public/images/user.png";
 import NotFoundArt from "../../public/images/not_found_art.png";
 
-import { User } from "../interfaces/userInterface.ts";
-import { toggleFollow } from "../utils/followUtils.js";
-import { getUserData } from "../utils/getUserData.tsx";
-import { getUserDataById } from "../utils/getUserDataById.tsx";
+import {
+  User
+} from "../interfaces/userInterface.ts";
+import {
+  toggleFollow
+} from "../utils/followUtils.js";
+import {
+  getUserData
+} from "../utils/getUserData.tsx";
+import {
+  getUserDataById
+} from "../utils/getUserDataById.tsx";
 
 interface CardProps {
   classNames?: string;
@@ -101,10 +135,11 @@ interface CardProps {
   likeCount: number;
   commentCount: number;
   likedBy: string[];
+  favoritedBy: string[];
   mentionedUsers: string[];
   followingMentionedUsers: boolean[];
   isFollowingUserPost: boolean;
-  onDelete: (postId: string) => Promise<void>; // Adicione o método para exclusão
+  onDelete: (postId: string) => Promise < void >; // Adicione o método para exclusão
 }
 
 export const CardPost = (props: CardProps) => {
@@ -112,29 +147,40 @@ export const CardPost = (props: CardProps) => {
   const token = localStorage.getItem("token");
   const dataUser = getUserData();
 
-  const [viewingUser, setViewingUser] = React.useState<User | undefined>(
+  const [viewingUser,
+    setViewingUser] = React.useState < User | undefined > (
     undefined
   );
-  const [formattedData, setFormattedData] = React.useState("");
+  const [formattedData,
+    setFormattedData] = React.useState("");
 
-  const [liked, setLiked] = React.useState(false);
-  const [likeCount, setLikeCount] = React.useState(props.likeCount);
-  const [showHeart, setShowHeart] = React.useState(false);
-  const [animateClick, setAnimateClick] = React.useState(false);
-  const [favorited, setFavorited] = React.useState(false);
-  const [showFavorited, setShowFavorited] = React.useState(false);
+  const [liked,
+    setLiked] = React.useState(false);
+  const [favorited,
+    setFavorited] = React.useState(false);
+  const [likeCount,
+    setLikeCount] = React.useState(props.likeCount);
+  const [showHeart,
+    setShowHeart] = React.useState(false);
+  const [showFavorited,
+    setShowFavorited] = React.useState(false);
+  const [animateClick,
+    setAnimateClick] = React.useState(false);
 
-  const [followedUser, setFollowedUser] = React.useState<boolean>(
+  const [followedUser,
+    setFollowedUser] = React.useState < boolean > (
     props.isFollowingUserPost
   );
 
-  const [showFullContent, setShowFullContent] = React.useState(false);
+  const [showFullContent,
+    setShowFullContent] = React.useState(false);
 
   const toggleContent = () => {
     setShowFullContent(!showFullContent);
   };
 
-  const [zoomLevel, setZoomLevel] = React.useState(100);
+  const [zoomLevel,
+    setZoomLevel] = React.useState(100);
   const increaseZoom = () => {
     setZoomLevel((prevZoom) => Math.min(prevZoom + 10, 200));
   };
@@ -146,7 +192,16 @@ export const CardPost = (props: CardProps) => {
     if (props.likedBy.includes(localStorage.getItem("userId") || "")) {
       setLiked(true);
     }
-  }, []);
+  },
+    [props.likedBy]);
+
+  React.useEffect(() => {
+    const favoritedBy = Array.isArray(props.favoritedBy) ? props.favoritedBy: [];
+    if (favoritedBy.includes(localStorage.getItem("userId") || "")) {
+      setFavorited(true);
+    }
+  },
+    [props.favoritedBy]);
 
   const handleLike = () => {
     const newLiked = !liked;
@@ -157,15 +212,19 @@ export const CardPost = (props: CardProps) => {
     if (newLiked) {
       axios.post(
         `${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_POST_LIKE}`,
-        { token: localStorage.getItem("token"), postId: props._id }
+        {
+          token: localStorage.getItem("token"), postId: props._id
+        }
       );
       setLikeCount(likeCount + 1);
     } else {
       axios.post(
         `${import.meta.env.VITE_API_BASE_URL}${
-          import.meta.env.VITE_POST_UNLIKE
+        import.meta.env.VITE_POST_UNLIKE
         }`,
-        { token: localStorage.getItem("token"), postId: props._id }
+        {
+          token: localStorage.getItem("token"), postId: props._id
+        }
       );
       setLikeCount(likeCount - 1);
     }
@@ -177,24 +236,52 @@ export const CardPost = (props: CardProps) => {
     }, 500);
   };
 
+  const handleFavorite = () => {
+    const newFavorited = !favorited;
+
+    setFavorited(newFavorited);
+
+    if (newFavorited) {
+      axios.post(
+        `${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_POST_FAVORITE}`,
+        {
+          token: localStorage.getItem("token"), postId: props._id
+        }
+      );
+    } else {
+      axios.post(
+        `${import.meta.env.VITE_API_BASE_URL}${
+        import.meta.env.VITE_POST_UNFAVORITE
+        }`,
+        {
+          token: localStorage.getItem("token"), postId: props._id
+        }
+      );
+    }
+
+    setShowFavorited(true);
+    setTimeout(() => {
+      setShowFavorited(false);
+    }, 500);
+  };
+
   const handleDoubleLike = (e: React.MouseEvent) => {
     e.stopPropagation();
     handleLike();
   };
 
-  const handleFavorite = () => {
-    setFavorited(!favorited);
-    setShowFavorited(true);
-    setTimeout(() => setShowFavorited(false), 500);
-  };
+  const [openShare,
+    setOpenShare] = React.useState(false);
 
-  const [openShare, setOpenShare] = React.useState(false);
+  const [openDelete,
+    setOpenDelete] = React.useState(false);
+  const [isDeleting,
+    setIsDeleting] = React.useState(false);
 
-  const [openDelete, setOpenDelete] = React.useState(false);
-  const [isDeleting, setIsDeleting] = React.useState(false);
-
-  const [openImage, setOpenImage] = React.useState(false);
-  const [imageExpand, setImageExpand] = React.useState("");
+  const [openImage,
+    setOpenImage] = React.useState(false);
+  const [imageExpand,
+    setImageExpand] = React.useState("");
 
   const handleImageExpand = (image: string) => {
     setOpenImage(true);
@@ -215,8 +302,9 @@ export const CardPost = (props: CardProps) => {
     }
   };
 
-  const [copied, setCopied] = React.useState(false);
-  const inputRef = React.useRef<HTMLInputElement>(null);
+  const [copied,
+    setCopied] = React.useState(false);
+  const inputRef = React.useRef < HTMLInputElement > (null);
 
   const handleCopy = async () => {
     if (inputRef.current) {
@@ -242,7 +330,8 @@ export const CardPost = (props: CardProps) => {
     if (props.userId) {
       fetchViewingUserData();
     }
-  }, [props.userId]);
+  },
+    [props.userId]);
 
   React.useEffect(() => {
     if (props.insertAt) {
@@ -253,11 +342,13 @@ export const CardPost = (props: CardProps) => {
         })
       );
     }
-  }, [props.userId, props.insertAt]);
+  },
+    [props.userId,
+      props.insertAt]);
 
   const handleFollowToggle = () => {
     if (token) {
-      toggleFollow({
+      toggleFollow( {
         userId: props.userId,
         token,
         followed: followedUser,
@@ -267,20 +358,23 @@ export const CardPost = (props: CardProps) => {
   };
 
   // Lógica para comentar
-  const [comment, setComment] = React.useState<string | undefined>();
-  const [errorMessage, setErrorMessage] = React.useState<string | undefined>(
+  const [comment,
+    setComment] = React.useState < string | undefined > ();
+  const [errorMessage,
+    setErrorMessage] = React.useState < string | undefined > (
     undefined
   );
-  const [commentCount, setCommentCount] = React.useState<number>(
+  const [commentCount,
+    setCommentCount] = React.useState < number > (
     props.commentCount
   );
 
-  const handleCommentSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleCommentSubmit = async (e: React.FormEvent < HTMLFormElement >) => {
     e.preventDefault();
     try {
       const response = await axios.post(
         `${import.meta.env.VITE_API_BASE_URL}${
-          import.meta.env.VITE_POST_COMMENT
+        import.meta.env.VITE_POST_COMMENT
         }`,
         {
           content: comment,
@@ -301,7 +395,9 @@ export const CardPost = (props: CardProps) => {
           mentionedUsers: [],
           replies: [],
           userData: dataUser,
-          getComments: { getNewstComments },
+          getComments: {
+            getNewstComments
+          },
         };
 
         // Adiciona o novo comentário imediatamente ao estado
@@ -321,8 +417,10 @@ export const CardPost = (props: CardProps) => {
     }
   };
 
-  const handleCommentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = e.target;
+  const handleCommentChange = (e: React.ChangeEvent < HTMLInputElement >) => {
+    const {
+      value
+    } = e.target;
 
     setComment(value);
   };
@@ -339,14 +437,19 @@ export const CardPost = (props: CardProps) => {
     userData: User;
   }
 
-  const [comments, setComments] = React.useState<Comment[]>([]);
-  const [skip, setSkip] = React.useState(0);
+  const [comments,
+    setComments] = React.useState < Comment[] > ([]);
+  const [skip,
+    setSkip] = React.useState(0);
   const limit = 10;
-  const [loading, setLoading] = React.useState(false);
-  const [hasMore, setHasMore] = React.useState(true);
-  const [commentUserData, setCommentUserData] = React.useState<{
+  const [loading,
+    setLoading] = React.useState(false);
+  const [hasMore,
+    setHasMore] = React.useState(true);
+  const [commentUserData,
+    setCommentUserData] = React.useState < {
     [key: string]: User;
-  }>({});
+  } > ({});
 
   const fetchUserData = async (userId: string) => {
     if (!commentUserData[userId]) {
@@ -368,9 +471,13 @@ export const CardPost = (props: CardProps) => {
     try {
       const response = await axios.get(
         `${import.meta.env.VITE_API_BASE_URL}${
-          import.meta.env.VITE_POST_GETCOMMENTS
+        import.meta.env.VITE_POST_GETCOMMENTS
         }${localStorage.getItem("token")}/${props._id}`,
-        { params: { skip, limit } }
+        {
+          params: {
+            skip, limit
+          }
+        }
       );
 
       const newComments: Comment[] = response.data.comments;
@@ -410,7 +517,7 @@ export const CardPost = (props: CardProps) => {
   const handleScroll = () => {
     if (
       window.innerHeight + document.documentElement.scrollTop ===
-        document.documentElement.offsetHeight &&
+      document.documentElement.offsetHeight &&
       hasMore &&
       !loading
     ) {
@@ -437,7 +544,7 @@ export const CardPost = (props: CardProps) => {
           <span
             key={`${part}-${index}`}
             className="text-primary font-medium md:font-normal"
-          >
+            >
             {part}
           </span>
         );
@@ -466,14 +573,15 @@ export const CardPost = (props: CardProps) => {
     }
   };
 
-  const [friendsWhoLikedData, setFriendsWhoLikedData] =
-    React.useState<User | null>(null);
+  const [friendsWhoLikedData,
+    setFriendsWhoLikedData] =
+  React.useState < User | null > (null);
 
   React.useEffect(() => {
     if (props.likedBy && dataUser?.following) {
       const friends = props.likedBy
-        .filter((likedUserId) => dataUser.following.includes(likedUserId))
-        .slice(0, 3);
+      .filter((likedUserId) => dataUser.following.includes(likedUserId))
+      .slice(0, 3);
 
       if (friends.length > 0) {
         Promise.all(friends.map((friendId) => getUserDataById(friendId))).then(
@@ -485,7 +593,9 @@ export const CardPost = (props: CardProps) => {
         setFriendsWhoLikedData(null);
       }
     }
-  }, [props.likedBy, dataUser?.following]);
+  },
+    [props.likedBy,
+      dataUser?.following]);
 
   return (
     <React.Fragment>
@@ -493,42 +603,40 @@ export const CardPost = (props: CardProps) => {
         <ContextMenuTrigger className="relative flex justify-center w-full">
           <Card
             className={`select-none my-1 w-full md:w-6/12 ${props.classNames} ${
-              isDeleting ? "slide-out-elliptic-top-bck" : ""
+            isDeleting ? "slide-out-elliptic-top-bck": ""
             }`}
             onDoubleClick={handleDoubleLike}
-          >
+            >
             <CardHeader className="flex flex-row justify-between items-center">
               {!props.isAnonymous ? (
                 <Link to={`/profile/${props.id}`} className="flex space-x-2">
                   <div className="relative">
                     <Avatar className="shadow-lg border-2 border-border">
                       <AvatarFallback>
-                        {!props.isAnonymous ? viewingUser?.nickname : ""}
+                        {!props.isAnonymous ? viewingUser?.nickname: ""}
                       </AvatarFallback>
 
                       <AvatarImage
                         className="object-cover"
                         src={
-                          !props.isAnonymous ? viewingUser?.avatar : UserIcon
+                        !props.isAnonymous ? viewingUser?.avatar: UserIcon
                         }
-                      />
+                        />
                     </Avatar>
 
                     <div className="pulse-status-container bottom-0 right-1 rounded-full text-xs absolute">
                       <span
                         className={`pulse-status ${
-                          viewingUser?.status === "online"
-                            ? "bg-success/70"
-                            : "bg-secondary/70"
+                        viewingUser?.status === "online"
+                        ? "bg-success/70": "bg-secondary/70"
                         }`}
-                      ></span>
+                        ></span>
                       <span
                         className={`pulse-status-core h-2.5 w-2.5 ${
-                          viewingUser?.status === "online"
-                            ? "bg-success"
-                            : "bg-secondary"
+                        viewingUser?.status === "online"
+                        ? "bg-success": "bg-secondary"
                         }`}
-                      ></span>
+                        ></span>
                     </div>
                   </div>
 
@@ -537,39 +645,35 @@ export const CardPost = (props: CardProps) => {
                       <div>
                         <CardTitle className="text-foreground font-semibold md:font-medium text-lg md:text-md tracking-tight">
                           {!props.isAnonymous
-                            ? viewingUser?.nickname
-                            : "Anônimo"}
+                          ? viewingUser?.nickname: "Anônimo"}
                         </CardTitle>
                       </div>
                       <div>
                         <HeartWavesSolid
                           className={`${
-                            viewingUser?.type === "Plus"
-                              ? "text-info"
-                              : viewingUser?.type === "Admin"
-                              ? "text-danger"
-                              : viewingUser?.type === "verified"
-                              ? "text-success"
-                              : "hidden"
+                          viewingUser?.type === "Plus"
+                          ? "text-info": viewingUser?.type === "Admin"
+                          ? "text-danger": viewingUser?.type === "verified"
+                          ? "text-success": "hidden"
                           } h-4 w-4`}
-                        />
+                          />
                       </div>
                     </div>
                   </div>
                 </Link>
-              ) : (
+              ): (
                 <div className="flex space-x-2">
                   <Avatar className="shadow-lg border-2 border-border">
                     <AvatarFallback>
-                      {!props.isAnonymous ? viewingUser?.nickname : "Anônimo"}
+                      {!props.isAnonymous ? viewingUser?.nickname: "Anônimo"}
                     </AvatarFallback>
 
                     <AvatarImage
                       className="object-cover"
                       src={
-                        !props.isAnonymous ? viewingUser?.avatar : AnonymousIcon
+                      !props.isAnonymous ? viewingUser?.avatar: AnonymousIcon
                       }
-                    />
+                      />
                   </Avatar>
 
                   <div className="flex flex-col items-start justify-center space-y-1">
@@ -577,8 +681,7 @@ export const CardPost = (props: CardProps) => {
                       <div>
                         <CardTitle className="font-semibold md:font-medium text-lg md:text-md tracking-tight">
                           {!props.isAnonymous
-                            ? viewingUser?.nickname
-                            : "Anônimo"}
+                          ? viewingUser?.nickname: "Anônimo"}
                         </CardTitle>
                       </div>
                     </div>
@@ -596,581 +699,587 @@ export const CardPost = (props: CardProps) => {
                         <CarouselItem
                           className="relative"
                           key={`${photo}-${index}`}
-                        >
+                          >
                           <img
-                            className="rounded-lg object-cover min-h-[500px] max-h-[500px] w-[300px] md:w-[450px]"
-                            src={photo}
-                            alt={`Imagem ${index + 1}`}
+                          className="rounded-lg object-cover min-h-[500px] max-h-[500px] w-[300px] md:w-[450px]"
+                          src={photo}
+                          alt={`Imagem ${index + 1}`}
                           />
 
-                          <Button
-                            className="absolute top-1 left-6 h-8 w-8 rounded-full"
-                            variant={"outline"}
-                            size={"icon"}
-                            onClick={() => handleImageExpand(photo)}
+                        <Button
+                          className="absolute top-1 left-6 h-8 w-8 rounded-full"
+                          variant={"outline"}
+                          size={"icon"}
+                          onClick={() => handleImageExpand(photo)}
                           >
-                            <MaximizeSolid className="h-4 w-4" />
-                          </Button>
+                          <MaximizeSolid className="h-4 w-4" />
+                        </Button>
 
-                          <Badge
-                            className="absolute top-2 right-2"
-                            variant="outline"
+                        <Badge
+                          className="absolute top-2 right-2"
+                          variant="outline"
                           >
-                            {index + 1}/{props.photoURLs.length}
-                          </Badge>
-                        </CarouselItem>
+                          {index + 1}/{props.photoURLs.length}
+                        </Badge>
+                      </CarouselItem>
                       ))}
-                    </CarouselContent>
-                    <CarouselPrevious
-                      className={`${
-                        props.photoURLs.length <= 1 ? "hidden" : ""
-                      } left-4`}
+                  </CarouselContent>
+                  <CarouselPrevious
+                    className={`${
+                    props.photoURLs.length <= 1 ? "hidden": ""
+                    } left-4`}
                     />
-                    <CarouselNext
-                      className={`${
-                        props.photoURLs.length <= 1 ? "hidden" : ""
-                      } right-4`}
+                  <CarouselNext
+                    className={`${
+                    props.photoURLs.length <= 1 ? "hidden": ""
+                    } right-4`}
                     />
-                  </Carousel>
-                )}
+                </Carousel>
+              )}
 
-                <p>{props.mentionedUsers ? null : "error"}</p>
+              <p>
+                {props.mentionedUsers ? null: "error"}
+              </p>
 
-                {showHeart && (
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <HeartSolid className="animate-ping text-primary h-20 w-20" />
-                  </div>
-                )}
+              {showHeart && (
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <HeartSolid className="animate-ping text-primary h-20 w-20" />
+                </div>
+              )}
 
-                {showFavorited && (
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <BookmarkSolid className="animate-ping text-warning h-20 w-20" />
-                  </div>
-                )}
+              {showFavorited && (
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <BookmarkSolid className="animate-ping text-warning h-20 w-20" />
+                </div>
+              )}
 
-                <div className="flex flex-row items-center h-full w-full">
-                  <CardDescription className="text-foreground font-normal md:font-light tracking-tight text-md md:text-sm break-words">
-                    <span className="font-semibold md:font-medium">
-                      {!props.isAnonymous ? viewingUser?.nickname : "anônimo"}:{" "}
-                    </span>
-                    {showFullContent ? (
-                      <>{highlightMentionsAndHashtags(props.content)}</>
-                    ) : (
-                      highlightMentionsAndHashtags(
-                        props.content.substring(0, 50)
-                      )
-                    )}
-                    {props.content.length > 50 && (
-                      <span
-                        className="text-muted-foreground tracking-tight font-normal md:font-light cursor-pointer"
-                        onClick={toggleContent}
+              <div className="flex flex-row items-center h-full w-full">
+                <CardDescription className="text-foreground font-normal md:font-light tracking-tight text-md md:text-sm break-words">
+                  <span className="font-semibold md:font-medium">
+                    {!props.isAnonymous ? viewingUser?.nickname: "anônimo"}:{" "}
+                  </span>
+                  {showFullContent ? (
+                    <>{highlightMentionsAndHashtags(props.content)}</>
+                  ): (
+                    highlightMentionsAndHashtags(
+                      props.content.substring(0, 50)
+                    )
+                  )}
+                  {props.content.length > 50 && (
+                    <span
+                      className="text-muted-foreground tracking-tight font-normal md:font-light cursor-pointer"
+                      onClick={toggleContent}
                       >
-                        {showFullContent ? " ...ver menos" : " ...ver mais"}
+                      {showFullContent ? " ...ver menos": " ...ver mais"}
+                    </span>
+                  )}
+                </CardDescription>
+              </div>
+            </div>
+
+            <div className="flex justify-start w-fit">
+              {Array.isArray(friendsWhoLikedData) &&
+              friendsWhoLikedData.length > 0 ? (
+                <Link
+                  to={`/likedByPost/${props._id}`}
+                  className="flex flex-row items-center gap-1 w-fit"
+                  >
+                  <div className="flex -space-x-3 *:ring *:ring-background">
+                    {friendsWhoLikedData.map((friend, index) => (
+                      <Avatar
+                        key={`${friend._id}-${index}`}
+                        className="h-6 w-6 shadow-lg border border-border"
+                        >
+                        <AvatarFallback>
+                          {friend.nickname ? friend.nickname.slice(0, 2): ""}
+                        </AvatarFallback>
+                        <AvatarImage
+                          className="object-cover"
+                          src={friend.avatar ? friend.avatar: UserIcon}
+                          />
+                      </Avatar>
+                    ))}
+                  </div>
+
+                  <CardDescription className="text-xs md:text-xs">
+                    Curtido(a) por{" "}
+                    {friendsWhoLikedData.map((friend, index) => (
+                      <span
+                        key={`${friend._id}-${index}`}
+                        className="text-foreground"
+                        >
+                        {friend.nickname}
+                        {index < friendsWhoLikedData.length - 1 ? ", ": ""}
                       </span>
+                    ))}{" "}
+                    {props.likedBy.length - friendsWhoLikedData.length >
+                    0 && (
+                      <>
+                        e{" "}
+                        {props.likedBy.length - friendsWhoLikedData.length > 1
+                        ? "outras": "outra"}{" "}
+                        <span className="text-foreground">
+                          {props.likedBy.length - friendsWhoLikedData.length}{" "}
+                          {props.likedBy.length - friendsWhoLikedData.length >
+                          1
+                          ? "pessoas": "pessoa"}
+                        </span>
+                      </>
                     )}
                   </CardDescription>
-                </div>
-              </div>
+                </Link>
+              ): (
+                <Link to={`/likedByPost/${props._id}`} className="w-fit">
+                  <CardDescription className="text-xs md:text-xs">
+                    Curtido(a) por{" "}
+                    <span className="text-foreground">
+                      {props.likedBy.length}{" "}
+                      {props.likedBy.length > 1 ? "pessoas": "pessoa"}
+                    </span>
+                  </CardDescription>
+                </Link>
+              )}
+            </div>
+          </CardContent>
 
-              <div className="flex justify-start w-fit">
-                {Array.isArray(friendsWhoLikedData) &&
-                friendsWhoLikedData.length > 0 ? (
-                  <Link
-                    to={`/likedByPost/${props._id}`}
-                    className="flex flex-row items-center gap-1 w-fit"
-                  >
-                    <div className="flex -space-x-3 *:ring *:ring-background">
-                      {friendsWhoLikedData.map((friend, index) => (
-                        <Avatar
-                          key={`${friend._id}-${index}`}
-                          className="h-6 w-6 shadow-lg border border-border"
-                        >
-                          <AvatarFallback>
-                            {friend.nickname ? friend.nickname.slice(0, 2) : ""}
-                          </AvatarFallback>
-                          <AvatarImage
-                            className="object-cover"
-                            src={friend.avatar ? friend.avatar : UserIcon}
-                          />
-                        </Avatar>
-                      ))}
-                    </div>
+          <Separator className="my-2" />
 
-                    <CardDescription className="text-xs md:text-xs">
-                      Curtido(a) por{" "}
-                      {friendsWhoLikedData.map((friend, index) => (
-                        <span
-                          key={`${friend._id}-${index}`}
-                          className="text-foreground"
-                        >
-                          {friend.nickname}
-                          {index < friendsWhoLikedData.length - 1 ? ", " : ""}
-                        </span>
-                      ))}{" "}
-                      {props.likedBy.length - friendsWhoLikedData.length >
-                        0 && (
-                        <>
-                          e{" "}
-                          {props.likedBy.length - friendsWhoLikedData.length > 1
-                            ? "outras"
-                            : "outra"}{" "}
-                          <span className="text-foreground">
-                            {props.likedBy.length - friendsWhoLikedData.length}{" "}
-                            {props.likedBy.length - friendsWhoLikedData.length >
-                            1
-                              ? "pessoas"
-                              : "pessoa"}
-                          </span>
-                        </>
-                      )}
-                    </CardDescription>
-                  </Link>
-                ) : (
-                  <Link to={`/likedByPost/${props._id}`} className="w-fit">
-                    <CardDescription className="text-xs md:text-xs">
-                      Curtido(a) por{" "}
-                      <span className="text-foreground">
-                        {props.likedBy.length}{" "}
-                        {props.likedBy.length > 1 ? "pessoas" : "pessoa"}
-                      </span>
-                    </CardDescription>
-                  </Link>
-                )}
-              </div>
-            </CardContent>
-
-            <Separator className="my-2" />
-
-            <CardFooter className="flex-col justify-start items-start space-y-2">
-              {formattedData && (
-                <div className="flex flex-row justify-between items-center w-full">
-                  <div className="flex flex-row space-x-2">
-                    <Button
-                      className="gap-1"
-                      variant="outline"
-                      size="sm"
-                      onClick={handleLike}
+          <CardFooter className="flex-col justify-start items-start space-y-2">
+            {formattedData && (
+              <div className="flex flex-row justify-between items-center w-full">
+                <div className="flex flex-row space-x-2">
+                  <Button
+                    className="gap-1"
+                    variant="outline"
+                    size="sm"
+                    onClick={handleLike}
                     >
-                      {liked ? (
-                        <HeartSolid
-                          className={`${
-                            animateClick ? "animate__heartBeat" : ""
-                          } text-primary h-5 md:h-4 w-5 md:w-4`}
+                    {liked ? (
+                      <HeartSolid
+                        className={`${
+                        animateClick ? "animate__heartBeat": ""
+                        } text-primary h-5 md:h-4 w-5 md:w-4`}
                         />
-                      ) : (
-                        <HeartBrokenSolid
-                          className={`${
-                            animateClick ? "animate__heartBeat" : ""
-                          } h-5 md:h-4 w-5 md:w-4`}
+                    ): (
+                      <HeartBrokenSolid
+                        className={`${
+                        animateClick ? "animate__heartBeat": ""
+                        } h-5 md:h-4 w-5 md:w-4`}
                         />
-                      )}
-                      {likeCount}
-                    </Button>
+                    )}
+                    {likeCount}
+                  </Button>
 
-                    <Drawer>
-                      <DrawerTrigger asChild>
-                        <Button
-                          variant={"outline"}
-                          className="gap-1"
-                          size={"sm"}
-                          onClick={() => {
-                            fetchComments();
-                          }}
+                  <Drawer>
+                    <DrawerTrigger asChild>
+                      <Button
+                        variant={"outline"}
+                        className="gap-1"
+                        size={"sm"}
+                        onClick={() => {
+                          fetchComments();
+                        }}
                         >
-                          <MessageSolid className="h-5 md:h-4 w-5 md:w-4" />
-                          {commentCount}
-                        </Button>
-                      </DrawerTrigger>
+                        <MessageSolid className="h-5 md:h-4 w-5 md:w-4" />
+                        {commentCount}
+                      </Button>
+                    </DrawerTrigger>
 
-                      <DrawerContent>
-                        <div className="w-full max-w-sm mx-auto">
-                          <ScrollArea className="h-72 w-full rounded-md">
-                            {loading ? (
-                              // Skeleton enquanto os comentários estão carregando
-                              <div className="flex flex-col items-center">
-                                {[...Array(3)].map((_, index) => (
-                                  <Card
-                                    key={index}
-                                    className="w-full max-w-md my-1"
+                    <DrawerContent>
+                      <div className="w-full max-w-sm mx-auto">
+                        <ScrollArea className="h-72 w-full rounded-md">
+                          {loading ? (
+                            // Skeleton enquanto os comentários estão carregando
+                            <div className="flex flex-col items-center">
+                              {[...Array(3)].map((_, index) => (
+                                <Card
+                                  key={index}
+                                  className="w-full max-w-md my-1"
                                   >
-                                    <div className="flex justify-start w-fit">
-                                      <CardHeader className="flex flex-row items-center space-x-4 p-4">
-                                        <span className="bg-muted-foreground rounded-full animate-pulse h-10 w-10"></span>
+                                  <div className="flex justify-start w-fit">
+                                    <CardHeader className="flex flex-row items-center space-x-4 p-4">
+                                      <span className="bg-muted-foreground rounded-full animate-pulse h-10 w-10"></span>
 
-                                        <div className="flex flex-col gap-1">
-                                          <div className="flex items-center gap-1">
-                                            <span className="bg-muted-foreground rounded animate-pulse h-3 w-10"></span>
+                                      <div className="flex flex-col gap-1">
+                                        <div className="flex items-center gap-1">
+                                          <span className="bg-muted-foreground rounded animate-pulse h-3 w-10"></span>
 
-                                            <span className="bg-muted-foreground rounded animate-pulse h-3.5 w-3.5"></span>
-                                          </div>
-                                          <span className="bg-muted-foreground rounded animate-pulse h-2 w-16"></span>
+                                          <span className="bg-muted-foreground rounded animate-pulse h-3.5 w-3.5"></span>
                                         </div>
-                                      </CardHeader>
-                                    </div>
+                                        <span className="bg-muted-foreground rounded animate-pulse h-2 w-16"></span>
+                                      </div>
+                                    </CardHeader>
+                                  </div>
 
-                                    <CardContent className="relative pb-0 gap-1 flex flex-row items-center">
-                                      <div className="bg-muted-foreground rounded animate-pulse h-3 w-8"></div>
-                                      <div className="bg-muted-foreground rounded animate-pulse h-3 w-28"></div>
-                                    </CardContent>
+                                  <CardContent className="relative pb-0 gap-1 flex flex-row items-center">
+                                    <div className="bg-muted-foreground rounded animate-pulse h-3 w-8"></div>
+                                    <div className="bg-muted-foreground rounded animate-pulse h-3 w-28"></div>
+                                  </CardContent>
 
-                                    <Separator className="my-2" />
+                                  <Separator className="my-2" />
 
-                                    <CardFooter className="flex flex-row justify-between items-center pb-4">
-                                      <div className="flex flex-col items-center w-full">
-                                        <div className="flex flex-row justify-between items-center w-full">
-                                          <div className="flex flex-row items-center gap-2">
-                                            <Button
-                                              className="gap-1"
-                                              variant="outline"
-                                              size="sm"
+                                  <CardFooter className="flex flex-row justify-between items-center pb-4">
+                                    <div className="flex flex-col items-center w-full">
+                                      <div className="flex flex-row justify-between items-center w-full">
+                                        <div className="flex flex-row items-center gap-2">
+                                          <Button
+                                            className="gap-1"
+                                            variant="outline"
+                                            size="sm"
                                             >
-                                              <span className="bg-muted-foreground rounded animate-pulse h-3.5 w-3.5"></span>
-                                              <span className="bg-muted-foreground rounded animate-pulse h-2.5 w-8"></span>
-                                            </Button>
+                                            <span className="bg-muted-foreground rounded animate-pulse h-3.5 w-3.5"></span>
+                                            <span className="bg-muted-foreground rounded animate-pulse h-2.5 w-8"></span>
+                                          </Button>
 
-                                            <Button
-                                              className="gap-1"
-                                              variant="outline"
-                                              size="sm"
+                                          <Button
+                                            className="gap-1"
+                                            variant="outline"
+                                            size="sm"
                                             >
-                                              <span className="bg-muted-foreground rounded animate-pulse h-3.5 w-3.5"></span>
-                                              <span className="bg-muted-foreground rounded animate-pulse h-2.5 w-14"></span>
-                                            </Button>
-                                          </div>
+                                            <span className="bg-muted-foreground rounded animate-pulse h-3.5 w-3.5"></span>
+                                            <span className="bg-muted-foreground rounded animate-pulse h-2.5 w-14"></span>
+                                          </Button>
                                         </div>
                                       </div>
-                                    </CardFooter>
-                                  </Card>
-                                ))}
-                              </div>
-                            ) : comments.length > 0 ? (
-                              comments.map((comment) => {
-                                const dataUser =
-                                  commentUserData[comment.userId];
-                                return (
-                                  dataUser && (
-                                    <Comment
-                                      key={comment._id}
-                                      _id={comment._id}
-                                      content={comment.content}
-                                      insertAt={comment.insertAt}
-                                      userId={comment.userId}
-                                      likeCount={comment.likeCount}
-                                      likedBy={comment.likedBy}
-                                      mentionedUsers={comment.mentionedUsers}
-                                      replies={comment.replies}
-                                      postId={props._id}
-                                      userData={dataUser}
-                                      getComments={getNewstComments}
-                                    />
-                                  )
-                                );
-                              })
-                            ) : (
-                              <div className="flex flex-col justify-center items-center space-y-2 w-full">
-                                <img
-                                  src={NotFoundArt}
-                                  className="h-32 md:h-[200px] w-32 md:w-[200px]"
-                                />
-                                <DrawerDescription className="text-center mt-6">
-                                  Nenhum comentário disponível. Seja o primeiro
-                                  a comentar
-                                </DrawerDescription>
-                              </div>
-                            )}
-                          </ScrollArea>
-
-                          <DrawerFooter>
-                            <div className="flex flex-col w-full">
-                              {errorMessage && (
-                                <DrawerDescription className="text-danger text-xs md:text-xs">
-                                  {errorMessage}
-                                </DrawerDescription>
-                              )}
-
-                              <div className="flex flex-row justify-between items-center gap-1 w-full">
-                                <Avatar className="shadow-lg border-2 border-border">
-                                  <AvatarFallback>
-                                    {dataUser?.nickname[0]}
-                                  </AvatarFallback>
-                                  <AvatarImage
-                                    className="object-cover"
-                                    src={
-                                      dataUser?.avatar
-                                        ? dataUser?.avatar
-                                        : UserIcon
-                                    }
-                                  />
-                                </Avatar>
-
-                                <form
-                                  action=""
-                                  method="POST"
-                                  onSubmit={handleCommentSubmit}
-                                  className="flex flex-row justify-between gap-1 w-full"
-                                >
-                                  <Input
-                                    type="text"
-                                    placeholder="Adicione um comentário"
-                                    value={comment}
-                                    onInput={handleCommentChange}
-                                  />
-
-                                  <Button variant={"outline"} size={"icon"}>
-                                    <FatCornerUpRightSolid className="h-5 w-5" />
-                                  </Button>
-                                </form>
-                              </div>
+                                    </div>
+                                  </CardFooter>
+                                </Card>
+                              ))}
                             </div>
-                          </DrawerFooter>
-                        </div>
-                      </DrawerContent>
-                    </Drawer>
-                  </div>
+                          ): comments.length > 0 ? (
+                            comments.map((comment) => {
+                              const dataUser =
+                              commentUserData[comment.userId];
+                              return (
+                                dataUser && (
+                                  <Comment
+                                    key={comment._id}
+                                    _id={comment._id}
+                                    content={comment.content}
+                                    insertAt={comment.insertAt}
+                                    userId={comment.userId}
+                                    likeCount={comment.likeCount}
+                                    likedBy={comment.likedBy}
+                                    mentionedUsers={comment.mentionedUsers}
+                                    replies={comment.replies}
+                                    postId={props._id}
+                                    userData={dataUser}
+                                    getComments={getNewstComments}
+                                    />
+                                )
+                              );
+                            })
+                          ): (
+                            <div className="flex flex-col justify-center items-center space-y-2 w-full">
+                              <img
+                              src={NotFoundArt}
+                              className="h-32 md:h-[200px] w-32 md:w-[200px]"
+                              />
+                            <DrawerDescription className="text-center mt-6">
+                              Nenhum comentário disponível. Seja o primeiro
+                              a comentar
+                            </DrawerDescription>
+                          </div>
+                        )}
+                      </ScrollArea>
 
-                  <div className="flex flex-row">
-                    <div className="flex flex-row items-center space-x-1">
-                      {
-                        <div className="flex flex-row items-center gap-2">
-                          {props.mentionedUsers.length > 0 && (
-                            <MentionedUsers
-                              _id={props._id}
-                              content={props.content}
-                              insertAt={props.insertAt}
-                              userId={props.userId}
-                              likeCount={props.likeCount}
-                              likedBy={props.likedBy}
-                              mentionedUsers={props.mentionedUsers}
-                              followingMentionedUsers={
-                                props.followingMentionedUsers
-                              }
-                            />
+                      <DrawerFooter>
+                        <div className="flex flex-col w-full">
+                          {errorMessage && (
+                            <DrawerDescription className="text-danger text-xs md:text-xs">
+                              {errorMessage}
+                            </DrawerDescription>
                           )}
+
+                          <div className="flex flex-row justify-between items-center gap-1 w-full">
+                            <Avatar className="shadow-lg border-2 border-border">
+                              <AvatarFallback>
+                                {dataUser?.nickname[0]}
+                              </AvatarFallback>
+                              <AvatarImage
+                                className="object-cover"
+                                src={
+                                dataUser?.avatar
+                                ? dataUser?.avatar: UserIcon
+                                }
+                                />
+                            </Avatar>
+
+                            <form
+                              action=""
+                              method="POST"
+                              onSubmit={handleCommentSubmit}
+                              className="flex flex-row justify-between gap-1 w-full"
+                              >
+                              <Input
+                                type="text"
+                                placeholder="Adicione um comentário"
+                                value={comment}
+                                onInput={handleCommentChange}
+                                />
+
+                              <Button variant={"outline"} size={"icon"}>
+                                <FatCornerUpRightSolid className="h-5 w-5" />
+                              </Button>
+                            </form>
+                          </div>
                         </div>
-                      }
+                      </DrawerFooter>
                     </div>
-                  </div>
-                </div>
-              )}
-
-              <ContextMenuContent>
-                {props.isAnonymous || props.id === dataUser?._id ? null : (
-                  <ContextMenuItem
-                    className="cursor-pointer focus:text-primary/70"
-                    onClick={handleFollowToggle}
-                  >
-                    {followedUser ? (
-                      <>
-                        <UserCheckSolid className="h-4 w-4 mr-1" />
-                        Seguindo
-                      </>
-                    ) : (
-                      <>
-                        <UserPlusSolid className="h-4 w-4 mr-1" />
-                        Seguir
-                      </>
-                    )}
-                  </ContextMenuItem>
-                )}
-
-                <ContextMenuItem
-                  className="cursor-pointer focus:text-primary/70"
-                  onClick={handleFavorite}
-                >
-                  {favorited ? (
-                    <BookmarkSolid className="text-warning h-4 w-4 mr-1" />
-                  ) : (
-                    <BookmarkSolid className="h-4 w-4 mr-1" />
-                  )}
-                  Favoritar
-                </ContextMenuItem>
-
-                <ContextMenuItem
-                  className="cursor-pointer focus:text-primary/70"
-                  onClick={() => setOpenShare(true)}
-                >
-                  <ShareSolid className="h-4 w-4 mr-1" />
-                  Compartilhar
-                </ContextMenuItem>
-
-                {props.id !== dataUser?._id ? null : (
-                  <ContextMenuItem
-                    className="cursor-pointer text-danger focus:text-primary/70"
-                    onClick={() => setOpenDelete(true)}
-                  >
-                    <TrashOneSolid className="h-4 w-4 mr-1" />
-                    Excluir
-                  </ContextMenuItem>
-                )}
-
-                {props.id === dataUser?._id ? null : (
-                  <ContextMenuItem className="cursor-pointer text-danger focus:text-primary/70">
-                    <FlagOneSolid className="h-4 w-4 mr-1" />
-                    Reportar
-                  </ContextMenuItem>
-                )}
-              </ContextMenuContent>
-
-              <div className="flex flex-row justify-between items-center gap-1 w-full">
-                <Avatar className="shadow-lg border-2 border-border">
-                  <AvatarFallback>{dataUser?.nickname}</AvatarFallback>
-
-                  <AvatarImage
-                    className="object-cover"
-                    src={dataUser?.avatar ? dataUser.avatar : UserIcon}
-                  />
-                </Avatar>
-                <form
-                  action=""
-                  method="POST"
-                  onSubmit={handleCommentSubmit}
-                  className="flex flex-row justify-between gap-1 w-full"
-                >
-                  <Input
-                    type="text"
-                    placeholder="Adicione um coméntario"
-                    value={comment}
-                    onInput={handleCommentChange}
-                  />
-
-                  <Button variant={"outline"} size={"icon"}>
-                    <FatCornerUpRightSolid className="h-5 w-5" />
-                  </Button>
-                </form>
+                  </DrawerContent>
+                </Drawer>
               </div>
 
-              {formattedData && (
-                <CardDescription className="text-md md:text-sm font-normal md:font-light tracking-tight">
-                  {formattedData} atrás
-                </CardDescription>
-              )}
-            </CardFooter>
-          </Card>
-        </ContextMenuTrigger>
-      </ContextMenu>
-
-      <Dialog open={openDelete} onOpenChange={setOpenDelete}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader className="space-y-0.5">
-            <DialogTitle>Excluir postagem</DialogTitle>
-
-            <DialogDescription>Deseja excluir está postagem?</DialogDescription>
-          </DialogHeader>
-
-          <DialogFooter>
-            <Button
-              variant={"danger"}
-              onClick={() => {
-                deletePost(props._id);
-              }}
-            >
-              Deletar
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-
-      <Dialog open={openImage} onOpenChange={setOpenImage}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle>Visualizando imagem ampliada</DialogTitle>
-            <DialogDescription>
-              Explore a imagem em maior detalhe. Use o botão de fechar para
-              retornar à visualização anterior.
-            </DialogDescription>
-          </DialogHeader>
-
-          <div className="relative flex justify-center items-center">
-            <img
-              className="rounded-lg object-cover min-h-[500px] max-h-[500px] w-[300px] md:w-[400px] transition-transform duration-300 ease-in-out"
-              src={imageExpand}
-              alt="post"
-              style={{ transform: `scale(${zoomLevel / 100})` }}
-            />
-
-            <div className="absolute flex items-center justify-center gap-2 bg-background border border-border text-foreground font-semibold md:font-medium rounded-lg px-2.5 py-0.5 bottom-2">
-              <button
-                className="flex items-center justify-center p-1 border rounded-full"
-                onClick={decreaseZoom}
-                disabled={zoomLevel <= 10}
-              >
-                <MinusSolid />
-              </button>
-              <span>{zoomLevel}%</span>
-              <button
-                className="flex items-center justify-center p-1 border rounded-full"
-                onClick={increaseZoom}
-                disabled={zoomLevel >= 200}
-              >
-                <PlusSolid />
-              </button>
+              <div className="flex flex-row">
+                <div className="flex flex-row items-center space-x-1">
+                  {
+                  <div className="flex flex-row items-center gap-2">
+                    {props.mentionedUsers.length > 0 && (
+                      <MentionedUsers
+                        _id={props._id}
+                        content={props.content}
+                        insertAt={props.insertAt}
+                        userId={props.userId}
+                        likeCount={props.likeCount}
+                        likedBy={props.likedBy}
+                        mentionedUsers={props.mentionedUsers}
+                        followingMentionedUsers={
+                        props.followingMentionedUsers
+                        }
+                        />
+                    )}
+                  </div>
+                  }
+                </div>
+              </div>
             </div>
-          </div>
-
-          <DialogFooter>
-            <Button
-              variant={"secondary"}
-              onClick={() => downloadImage(imageExpand)}
-            >
-              <DownloadSolid />
-              Baixar imagem
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-
-      <Dialog open={openShare} onOpenChange={setOpenShare}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle>Compartilhar link</DialogTitle>
-            <DialogDescription>
-              Qualquer pessoa com acesso ao link poderá acessar o conteúdo.
-            </DialogDescription>
-          </DialogHeader>
-
-          <div className="flex items-center space-x-2">
-            <div className="grid flex-1 gap-2">
-              <Label htmlFor="link" className="sr-only">
-                Link
-              </Label>
-              <Input
-                id="link"
-                ref={inputRef}
-                value={`https://crushif.vercel.app/post/${props._id}`}
-                readOnly
-              />
-            </div>
-
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger>
-                  <Button
-                    type="submit"
-                    size="icon"
-                    variant={"outline"}
-                    onClick={handleCopy}
-                  >
-                    <span className="sr-only">Copiar</span>
-                    <CopySolid className="h-4 w-4" />
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>Copiar</p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-          </div>
-
-          {copied && (
-            <DialogFooter className="sm:justify-start">
-              <DialogDescription className="text-success flex flex-row items-center gap-2">
-                <CheckSquareOneSolid className="h-4 w-4" />
-                copiado com sucesso!
-              </DialogDescription>
-            </DialogFooter>
           )}
-        </DialogContent>
-      </Dialog>
-    </React.Fragment>
-  );
+
+          <ContextMenuContent>
+            {props.isAnonymous || props.id === dataUser?._id ? null: (
+              <ContextMenuItem
+                className="cursor-pointer focus:text-primary/70"
+                onClick={handleFollowToggle}
+                >
+                {followedUser ? (
+                  <>
+                    <UserCheckSolid className="h-4 w-4 mr-1" />
+                    Seguindo
+                  </>
+                ): (
+                  <>
+                    <UserPlusSolid className="h-4 w-4 mr-1" />
+                    Seguir
+                  </>
+                )}
+              </ContextMenuItem>
+            )}
+
+            <ContextMenuItem
+              className="cursor-pointer focus:text-primary/70"
+              onClick={handleFavorite}
+              >
+              {favorited ? (
+                <>
+                  <BookmarkSolid className="text-warning h-4 w-4 mr-1" />
+                  Favoritado
+                </>
+              ): (
+                <>
+                  <BookmarkSolid className="h-4 w-4 mr-1" />
+                  Favoritar
+                </>
+              )}
+            </ContextMenuItem>
+
+            <ContextMenuItem
+              className="cursor-pointer focus:text-primary/70"
+              onClick={() => setOpenShare(true)}
+              >
+              <ShareSolid className="h-4 w-4 mr-1" />
+              Compartilhar
+            </ContextMenuItem>
+
+            {props.id !== dataUser?._id ? null: (
+              <ContextMenuItem
+                className="cursor-pointer text-danger focus:text-primary/70"
+                onClick={() => setOpenDelete(true)}
+                >
+                <TrashOneSolid className="h-4 w-4 mr-1" />
+                Excluir
+              </ContextMenuItem>
+            )}
+
+            {props.id === dataUser?._id ? null: (
+              <ContextMenuItem className="cursor-pointer text-danger focus:text-primary/70">
+                <FlagOneSolid className="h-4 w-4 mr-1" />
+                Reportar
+              </ContextMenuItem>
+            )}
+          </ContextMenuContent>
+
+          <div className="flex flex-row justify-between items-center gap-1 w-full">
+            <Avatar className="shadow-lg border-2 border-border">
+              <AvatarFallback>{dataUser?.nickname}</AvatarFallback>
+
+              <AvatarImage
+                className="object-cover"
+                src={dataUser?.avatar ? dataUser.avatar: UserIcon}
+                />
+            </Avatar>
+            <form
+              action=""
+              method="POST"
+              onSubmit={handleCommentSubmit}
+              className="flex flex-row justify-between gap-1 w-full"
+              >
+              <Input
+                type="text"
+                placeholder="Adicione um coméntario"
+                value={comment}
+                onInput={handleCommentChange}
+                />
+
+              <Button variant={"outline"} size={"icon"}>
+                <FatCornerUpRightSolid className="h-5 w-5" />
+              </Button>
+            </form>
+          </div>
+
+          {formattedData && (
+            <CardDescription className="text-md md:text-sm font-normal md:font-light tracking-tight">
+              {formattedData} atrás
+            </CardDescription>
+          )}
+        </CardFooter>
+      </Card>
+    </ContextMenuTrigger>
+  </ContextMenu>
+
+  <Dialog open={openDelete} onOpenChange={setOpenDelete}>
+    <DialogContent className="sm:max-w-md">
+      <DialogHeader className="space-y-0.5">
+        <DialogTitle>Excluir postagem</DialogTitle>
+
+        <DialogDescription>Deseja excluir está postagem?</DialogDescription>
+      </DialogHeader>
+
+      <DialogFooter>
+        <Button
+          variant={"danger"}
+          onClick={() => {
+            deletePost(props._id);
+          }}
+          >
+          Deletar
+        </Button>
+      </DialogFooter>
+    </DialogContent>
+  </Dialog>
+
+  <Dialog open={openImage} onOpenChange={setOpenImage}>
+    <DialogContent className="sm:max-w-md">
+      <DialogHeader>
+        <DialogTitle>Visualizando imagem ampliada</DialogTitle>
+        <DialogDescription>
+          Explore a imagem em maior detalhe. Use o botão de fechar para
+          retornar à visualização anterior.
+        </DialogDescription>
+      </DialogHeader>
+
+      <div className="relative flex justify-center items-center">
+        <img
+        className="rounded-lg object-cover min-h-[500px] max-h-[500px] w-[300px] md:w-[400px] transition-transform duration-300 ease-in-out"
+        src={imageExpand}
+        alt="post"
+        style={ { transform: `scale(${zoomLevel / 100})` }}
+        />
+
+      <div className="absolute flex items-center justify-center gap-2 bg-background border border-border text-foreground font-semibold md:font-medium rounded-lg px-2.5 py-0.5 bottom-2">
+        <button
+          className="flex items-center justify-center p-1 border rounded-full"
+          onClick={decreaseZoom}
+          disabled={zoomLevel <= 10}
+          >
+          <MinusSolid />
+        </button>
+        <span>{zoomLevel}%</span>
+        <button
+          className="flex items-center justify-center p-1 border rounded-full"
+          onClick={increaseZoom}
+          disabled={zoomLevel >= 200}
+          >
+          <PlusSolid />
+        </button>
+      </div>
+    </div>
+
+    <DialogFooter>
+      <Button
+        variant={"secondary"}
+        onClick={() => downloadImage(imageExpand)}
+        >
+        <DownloadSolid />
+        Baixar imagem
+      </Button>
+    </DialogFooter>
+  </DialogContent>
+</Dialog>
+
+<Dialog open={openShare} onOpenChange={setOpenShare}>
+  <DialogContent className="sm:max-w-md">
+    <DialogHeader>
+      <DialogTitle>Compartilhar link</DialogTitle>
+      <DialogDescription>
+        Qualquer pessoa com acesso ao link poderá acessar o conteúdo.
+      </DialogDescription>
+    </DialogHeader>
+
+    <div className="flex items-center space-x-2">
+      <div className="grid flex-1 gap-2">
+        <Label htmlFor="link" className="sr-only">
+          Link
+        </Label>
+        <Input
+          id="link"
+          ref={inputRef}
+          value={`https://crushif.vercel.app/post/${props._id}`}
+          readOnly
+          />
+      </div>
+
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger>
+            <Button
+              type="submit"
+              size="icon"
+              variant={"outline"}
+              onClick={handleCopy}
+              >
+              <span className="sr-only">Copiar</span>
+              <CopySolid className="h-4 w-4" />
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>
+              Copiar
+            </p>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
+    </div>
+
+    {copied && (
+      <DialogFooter className="sm:justify-start">
+        <DialogDescription className="text-success flex flex-row items-center gap-2">
+          <CheckSquareOneSolid className="h-4 w-4" />
+          copiado com sucesso!
+        </DialogDescription>
+      </DialogFooter>
+    )}
+  </DialogContent>
+</Dialog>
+</React.Fragment>
+);
 };

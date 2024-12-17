@@ -106,7 +106,7 @@ const LikedByPostLayout = () => {
     return (
       <React.Fragment>
         <Drawer>
-          <DrawerTrigger asChild>
+          <DrawerTrigger>
             <InfoSolid />
           </DrawerTrigger>
 

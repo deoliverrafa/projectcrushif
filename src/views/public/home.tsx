@@ -1,20 +1,41 @@
 import * as React from "react";
 import axios from "axios";
-import { debounce } from "lodash";
-import { Link } from "react-router-dom";
+import {
+  debounce
+} from "lodash";
+import {
+  Link
+} from "react-router-dom";
 
 import LoadingPage from "./loading.tsx";
 
-import { NavBar } from "../../components/navbar.tsx";
-import { BottomBar } from "../../components/bottombar.tsx";
-import { Fab } from "../../components/ui/fab.tsx";
-import { CardPost } from "../../components/post.tsx";
-import { UserFollowing } from "../../components/userSuggestions.tsx"
+import {
+  NavBar
+} from "../../components/navbar.tsx";
+import {
+  BottomBar
+} from "../../components/bottombar.tsx";
+import {
+  Fab
+} from "../../components/ui/fab.tsx";
+import {
+  CardPost
+} from "../../components/post.tsx";
+import {
+  UserFollowing
+} from "../../components/userSuggestions.tsx"
 
-import { PlusSolid, SpinnerSolid } from "@mynaui/icons-react";
+import {
+  PlusSolid,
+  SpinnerSolid
+} from "@mynaui/icons-react";
 
-import { getStatusUser } from "../../utils/getStatusUser.tsx";
-import { User } from "../../interfaces/userInterface.ts";
+import {
+  getStatusUser
+} from "../../utils/getStatusUser.tsx";
+import {
+  User
+} from "../../interfaces/userInterface.ts";
 
 const localAvatarPath = localStorage.getItem("avatar") ?? "";
 
@@ -28,18 +49,24 @@ interface CardProps {
   likeCount: number;
   commentCount: number;
   likedBy: string[];
+  favoritedBy: string[];
   mentionedUsers: string[];
 }
 
 export default function HomePage() {
-  const [userData, setUserData] = React.useState<User | null>(null);
-  const [finishedPosts, setFinishedPosts] = React.useState(false);
-  const [posts, setPosts] = React.useState<CardProps[]>([]);
-  const [skip, setSkip] = React.useState(0);
+  const [userData,
+    setUserData] = React.useState < User | null > (null);
+  const [finishedPosts,
+    setFinishedPosts] = React.useState(false);
+  const [posts,
+    setPosts] = React.useState < CardProps[] > ([]);
+  const [skip,
+    setSkip] = React.useState(0);
   const [limit] = React.useState(5);
-  const [loading, setLoading] = React.useState(false);
+  const [loading,
+    setLoading] = React.useState(false);
 
-  const [userId] = React.useState<string | null>(
+  const [userId] = React.useState < string | null > (
     localStorage.getItem("userId")
   );
 
@@ -48,7 +75,11 @@ export default function HomePage() {
       const token = localStorage.getItem("token");
       const response = await axios.delete(
         `${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_POST_DELETE}`,
-        { data: { postId, token } }
+        {
+          data: {
+            postId, token
+          }
+        }
       );
 
       if (response.data.deleted) {
@@ -73,7 +104,7 @@ export default function HomePage() {
       try {
         const response = await axios.get(
           `${import.meta.env.VITE_API_BASE_URL}${
-            import.meta.env.VITE_USER_TOKEN
+          import.meta.env.VITE_USER_TOKEN
           }${token}`
         );
         setUserData(response.data.userFinded);
@@ -88,7 +119,8 @@ export default function HomePage() {
     }
 
     getUserData();
-  }, []);
+  },
+    []);
 
   React.useEffect(() => {
     async function getPosts() {
@@ -97,10 +129,10 @@ export default function HomePage() {
         const token = localStorage.getItem("token");
         const response = await axios.get(
           `${import.meta.env.VITE_API_BASE_URL}${
-            import.meta.env.VITE_POST_GET
+          import.meta.env.VITE_POST_GET
           }${token}/${skip}/${limit}`
         );
-        
+
         if (response.data.validToken === false) {
           window.location.href = "/auth/login";
         }
@@ -119,7 +151,9 @@ export default function HomePage() {
     if (!finishedPosts) {
       getPosts();
     }
-  }, [skip, finishedPosts]);
+  },
+    [skip,
+      finishedPosts]);
 
   getStatusUser(userId);
 
@@ -127,18 +161,20 @@ export default function HomePage() {
     const handleScroll = debounce(() => {
       if (
         window.innerHeight + document.documentElement.scrollTop >=
-          document.documentElement.offsetHeight - 100 &&
+        document.documentElement.offsetHeight - 100 &&
         !loading &&
         !finishedPosts
       ) {
         setSkip((prevSkip) => prevSkip + limit);
       }
-    }, 200);
+    },
+      200);
 
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    window.addEventListener("scroll",
+      handleScroll);
+    return () => window.removeEventListener("scroll",
+      handleScroll);
   }, [loading, limit, finishedPosts]);
-
 
   return (
     <>
@@ -147,12 +183,12 @@ export default function HomePage() {
           <NavBar
             user={userData}
             avatarPath={userData.avatar || localAvatarPath}
-          />
+            />
           <main className="w-full h-full flex flex-col justify-center items-center">
             <UserFollowing />
-            
+
             {posts.map((post) => {
-              
+
               const followingMentionedUsers = post.mentionedUsers.map((mentionedId) =>
                 userData.following.includes(mentionedId)
               );
@@ -170,19 +206,22 @@ export default function HomePage() {
                   insertAt={post.insertAt}
                   likeCount={post.likeCount}
                   likedBy={post.likedBy}
+                  favoritedBy={post.favoritedBy}
                   commentCount={post.commentCount}
                   mentionedUsers={post.mentionedUsers}
                   followingMentionedUsers={followingMentionedUsers}
                   isFollowingUserPost={isFollowingUserPost}
                   onDelete={deletePostFromState}
-                />
+                  />
               );
             })}
 
             {loading && (
               <div className="flex flex-row items-center">
                 <SpinnerSolid className="animate-spin text-primary mr-2 h-5 w-5" />
-                <p className="text-primary text-sm">Carregando...</p>
+                <p className="text-primary text-sm">
+                  Carregando...
+                </p>
               </div>
             )}
           </main>
@@ -197,7 +236,7 @@ export default function HomePage() {
 
           <BottomBar />
         </div>
-      ) : (
+      ): (
         <LoadingPage />
       )}
     </>

@@ -28,6 +28,7 @@ const LikedByPostPage = React.lazy(
   () => import("./views/public/likedByPost.tsx")
 );
 const SavedPage = React.lazy(() => import("./views/public/saved.tsx"));
+const FavoritedPage = React.lazy(() => import("./views/public/favorited.tsx"));
 
 const ProfilePage = React.lazy(() => import("./views/public/profile.tsx"));
 const EditProfilePage = React.lazy(
@@ -92,6 +93,7 @@ const App = () => {
               <Route path="/post/:id" element={<PostPage />} />
               <Route path="/likedByPost/:id" element={<LikedByPostPage />} />
               <Route path="/saved" element={<SavedPage />} />
+              <Route path="/favorited" element={<FavoritedPage />} />
 
               <Route path="/profile/:id" element={<ProfilePage />} />
               <Route path="/profile/edit" element={<EditProfilePage />} />

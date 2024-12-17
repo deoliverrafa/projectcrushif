@@ -90,7 +90,7 @@ const FollowingLayout = () => {
     return (
       <React.Fragment>
         <Drawer>
-          <DrawerTrigger asChild>
+          <DrawerTrigger>
             <InfoSolid />
           </DrawerTrigger>
 

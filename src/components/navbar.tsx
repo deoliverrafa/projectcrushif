@@ -159,7 +159,7 @@ const Profile = ({ nickname, avatar, type }: profile) => {
             </Link>
 
             <Link
-              to=""
+              to="/favorited"
               className="flex flex-row justify-between items-center px-3 py-1.5"
             >
               <div className="flex flex-row items-center gap-2">

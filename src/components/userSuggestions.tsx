@@ -129,7 +129,7 @@ export const UserSuggestions = (props: UserSuggestions) => {
 
                     <CardContent className="flex flex-col items-center w-16">
                       <div className="flex flex-row items-center gap-0.5">
-                        <CardDescription className="truncate max-w-[80px] text-center font-semibold md:font-medium">
+                        <CardDescription className="truncate max-w-20 text-center font-semibold md:font-medium">
                           {user.nickname}
                         </CardDescription>
 
@@ -146,7 +146,7 @@ export const UserSuggestions = (props: UserSuggestions) => {
                         />
                       </div>
 
-                      <CardDescription className="truncate max-w-[80px] text-xs md:text-xs text-center">
+                      <CardDescription className="truncate max-w-20 text-xs md:text-xs text-center">
                         {user.userName}
                       </CardDescription>
                     </CardContent>
@@ -231,7 +231,7 @@ export const UserFollowing = () => {
                     />
                 </Avatar>
                   
-                <CardDescription className="text-foreground text-xs md:text-xs truncate max-w-[80px] text-center font-medium md:font-normal">Seu perfil</CardDescription>
+                <CardDescription className="text-foreground text-xs md:text-xs truncate max-w-16 text-center font-medium md:font-normal">Seu perfil</CardDescription>
               </Link>
               
             {followingUsers.map((user, index) => (
@@ -254,7 +254,7 @@ export const UserFollowing = () => {
             </div>
               </div>
                   
-              <CardDescription className="text-foreground text-xs md:text-xs truncate max-w-[80px] text-center font-medium md:font-normal">{user.nickname}</CardDescription>
+              <CardDescription className="text-foreground text-xs md:text-xs truncate max-w-16 text-center font-medium md:font-normal">{user.nickname}</CardDescription>
             </Link>
             ))}
           </CardContent>
