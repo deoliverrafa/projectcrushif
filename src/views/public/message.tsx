@@ -1,6 +1,6 @@
 import * as React from "react";
 import { io } from "socket.io-client";
-import { Link, useParams, useNavigate } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 import {
   Card,
@@ -29,6 +29,9 @@ import axios from "axios"; // Importando o Axios
 
 import { getUserDataById } from "../../utils/getUserDataById";
 import { User } from "../../interfaces/userInterface";
+import { UserFollowing } from "../../components/userSuggestions";
+import LoadingPage from "./loading";
+// import { id } from "date-fns/locale";
 
 const socket = io(`${import.meta.env.VITE_API_BASE_URL}`, {
   transports: ["websocket"],
@@ -46,28 +49,44 @@ interface Message {
 }
 
 const MessageLayout = () => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
-  const { id } = useParams<string>();
+  const { id: activeChatUserId } = useParams<string>();
+  const prevId = React.useRef<string>();
   const [chatUser, setChatUser] = React.useState<User>();
   const [messages, setMessages] = React.useState<Message[]>([]);
   const [currentUserId] = React.useState(localStorage.getItem("userId"));
-  const [activeChatUserId] = React.useState(id);
   const [newMessage, setNewMessage] = React.useState("");
+  const [userJoined, setUserJoined] = React.useState(false);
+  const [loading, setLoading] = React.useState(true);
+
+  const handleDisconnect = () => {
+    if (currentUserId && activeChatUserId) {
+      socket.emit("leaveRoom", {
+        senderId: currentUserId,
+        receiverId: activeChatUserId,
+      });
+      socket.disconnect();
+      console.log(
+        `Usuário ${currentUserId} saiu da sala com ${activeChatUserId}`
+      );
+    }
+  };
 
   // Ref para o auto-scroll
   const messagesEndRef = React.useRef<HTMLDivElement>(null);
 
   React.useEffect(() => {
     const fetchUserData = async () => {
-      if (id) {
-        const userData = await getUserDataById(id);
+      if (activeChatUserId) {
+        const userData = await getUserDataById(activeChatUserId);
         setChatUser(userData);
+        setLoading(false);
       }
     };
     // Setando dados do usuário da conversa
     fetchUserData();
-  }, [id]);
+  }, [activeChatUserId]);
 
   React.useEffect(() => {
     if (messages.length > 0 && activeChatUserId) {
@@ -81,8 +100,32 @@ const MessageLayout = () => {
         senderId: currentUserId,
         receiverId: activeChatUserId,
       });
+
+      const handleUserEntered = (userId: string, roomId: string) => {
+        if (userId !== currentUserId) {
+          console.log(`Usuário ${userId} entrou na sala ${roomId}`);
+          setUserJoined(true);
+        }
+      };
+      interface UserDisconnectedPayload {
+        userId: string;
+      }
+      const handleUserDisconnected = ({ userId }: UserDisconnectedPayload) => {
+        if (userId === activeChatUserId) {
+          console.log("Usuário desconectado do chat ativo");
+          setUserJoined(false);
+        }
+      };
+
+      socket.on("userEntered", handleUserEntered);
+      socket.on("userDisconnected", handleUserDisconnected);
+
+      return () => {
+        socket.off("userEntered", handleUserEntered);
+        socket.off("userDisconnected", handleUserDisconnected);
+      };
     }
-  }, [currentUserId, activeChatUserId]); // Certifique-se de passar as dependências corretamente
+  }, [currentUserId, activeChatUserId]);
 
   React.useEffect(() => {
     const fetchMessages = async () => {
@@ -98,10 +141,11 @@ const MessageLayout = () => {
         console.error("Erro ao buscar mensagens", error);
       }
     };
-    if (messages.length == 0) {
+    if (messages.length == 0 || activeChatUserId != prevId.current) {
       fetchMessages();
+      prevId.current = activeChatUserId;
     }
-  }, []);
+  }, [activeChatUserId]);
 
   React.useEffect(() => {
     socket.on("newMessage", (message) => {
@@ -122,7 +166,6 @@ const MessageLayout = () => {
 
   // Variável para fazer o controle da renderização e update do status da mensagem
   const [checkMessage, setCheckMessage] = React.useState(false);
-  console.log("CheckMessageStatus", checkMessage);
 
   React.useEffect(() => {
     socket.on("messageStatusUpdated", ({ messageId, status }) => {
@@ -144,13 +187,12 @@ const MessageLayout = () => {
     socket.on("messagesUpdated", ({ receiverId, status }) => {
       if (receiverId === activeChatUserId) {
         setCheckMessage((prevCheckMessage) => {
-          if (prevCheckMessage) {
+          if (prevCheckMessage || checkMessage) {
             setMessages((prevMessages) =>
               prevMessages.map((msg) =>
                 msg.status !== "read" ? { ...msg, status } : msg
               )
             );
-            console.log("CheckMessageFalse", false);
             return false;
           }
           return prevCheckMessage;
@@ -165,7 +207,7 @@ const MessageLayout = () => {
   }, [activeChatUserId]);
 
   // Auto-scroll ao final do contêiner
-  React.useEffect(() => {    
+  React.useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
@@ -216,6 +258,10 @@ const MessageLayout = () => {
     }
   };
 
+  if (loading || !chatUser) {
+    return <LoadingPage />;
+  }
+
   return (
     <React.Fragment>
       <Card className="select-none mt-1 w-full md:w-6/12">
@@ -226,7 +272,7 @@ const MessageLayout = () => {
                 variant={"outline"}
                 size={"icon"}
                 className="text-muted-foreground hover:text-primary/70 hover:border-primary/70"
-                onClick={() => navigate(-1)}
+                onClick={() => (window.location.href = "/messages")}
               >
                 <ChevronLeft />
               </Button>
@@ -235,7 +281,7 @@ const MessageLayout = () => {
                 to={`/profile/${activeChatUserId}`}
                 className="flex flex-row items-center gap-2"
               >
-                <div className="relative">
+                <div className="relative" onClick={() => {handleDisconnect}}>
                   <Avatar className="shadow-lg border-2 border-border">
                     <AvatarFallback>{chatUser?.nickname}</AvatarFallback>
                     <AvatarImage src={chatUser?.avatar} />
@@ -254,6 +300,9 @@ const MessageLayout = () => {
                   </CardTitle>
                   <CardDescription className="text-xs truncate max-w-[120px]">
                     {chatUser?.userName}
+                  </CardDescription>
+                  <CardDescription className="text-xs truncate max-w-[120px]">
+                    {userJoined ? "Está no chat" : null}
                   </CardDescription>
                 </div>
                 <ChevronRight />
@@ -301,7 +350,8 @@ const MessageLayout = () => {
 const MessagePage = () => {
   return (
     <React.Fragment>
-      <main className="flex flex-col justify-center items-center h-full w-full">
+      <main className="flex flex-col justify-center items-center h-fit w-full">
+        <UserFollowing redirectPage="message" />
         <MessageLayout />
       </main>
     </React.Fragment>

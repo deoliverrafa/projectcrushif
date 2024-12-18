@@ -19,6 +19,7 @@ import UserIcon from "../../public/images/user.png";
 import { toggleFollow } from "../utils/followUtils";
 import { User } from "../interfaces/userInterface";
 import { getUserData } from "../utils/getUserData.tsx";
+import LoadingPage from "../views/public/loading.tsx";
 
 interface UserSuggestions {
   removeUserId: string;
@@ -29,9 +30,9 @@ export const UserSuggestions = (props: UserSuggestions) => {
   const [error, setError] = React.useState<string | null>(null);
   const token = localStorage.getItem("token");
 
-  const [hiddenUsers, setHiddenUsers] = React.useState<{ [key: string]: boolean }>(
-    {}
-  );
+  const [hiddenUsers, setHiddenUsers] = React.useState<{
+    [key: string]: boolean;
+  }>({});
 
   const fetchSuggestedUsers = async () => {
     try {
@@ -95,7 +96,10 @@ export const UserSuggestions = (props: UserSuggestions) => {
           {suggestedUsers.map((user, index) => {
             return (
               !hiddenUsers[user._id] && (
-                <Card key={`${user._id}-${index}`} className="select-none relative flex flex-col items-center">
+                <Card
+                  key={`${user._id}-${index}`}
+                  className="select-none relative flex flex-col items-center"
+                >
                   <Button
                     className="absolute top-0 right-0"
                     variant={"ghost"}
@@ -121,9 +125,21 @@ export const UserSuggestions = (props: UserSuggestions) => {
                         </Avatar>
 
                         <div className="pulse-status-container bottom-0 right-2 rounded-full text-xs absolute">
-              <span className={`pulse-status ${user.status === "online" ? "bg-success/70" : "bg-secondary/70"}`}></span>
-              <span className={`pulse-status-core h-3 w-3 ${user.status === "online" ? "bg-success" : "bg-secondary"}`}></span>
-            </div>
+                          <span
+                            className={`pulse-status ${
+                              user.status === "online"
+                                ? "bg-success/70"
+                                : "bg-secondary/70"
+                            }`}
+                          ></span>
+                          <span
+                            className={`pulse-status-core h-3 w-3 ${
+                              user.status === "online"
+                                ? "bg-success"
+                                : "bg-secondary"
+                            }`}
+                          ></span>
+                        </div>
                       </div>
                     </CardHeader>
 
@@ -172,22 +188,27 @@ export const UserSuggestions = (props: UserSuggestions) => {
   );
 };
 
-export const UserFollowing = () => {
+interface UserFollowingInterface {
+  redirectPage?: string;
+}
+
+export const UserFollowing = (props: UserFollowingInterface) => {
   const [userId] = React.useState<string | null>(
     localStorage.getItem("userId")
   );
   const userData = getUserData();
-  
+
   const [followingUsers, setFollowingUsers] = React.useState<User[]>([]);
-  
+
   const [loading, setLoading] = React.useState(false);
-  
+
   React.useEffect(() => {
     const fetchFollowingUsers = async () => {
       try {
         setLoading(true);
         const response = await axios.get(
-          `${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_FOLLOWING_USER
+          `${import.meta.env.VITE_API_BASE_URL}${
+            import.meta.env.VITE_FOLLOWING_USER
           }${userId}`
         );
 
@@ -208,9 +229,9 @@ export const UserFollowing = () => {
       fetchFollowingUsers();
     }
   }, [userId]);
-  
+
   if (loading) {
-    return (null)
+    return <LoadingPage/>;
   }
 
   return (
@@ -222,47 +243,105 @@ export const UserFollowing = () => {
               <Link to={`/profile/${userData._id}`}>
                 <Avatar className="h-16 w-16 shadow-lg border-2 border-border rounded-full">
                   <AvatarFallback>
-                      {userData.nickname ? userData.nickname : ""}
+                    {userData.nickname ? userData.nickname : ""}
                   </AvatarFallback>
 
                   <AvatarImage
-                      className="object-cover"
-                      src={userData.avatar ? userData.avatar : UserIcon}
-                    />
+                    className="object-cover"
+                    src={userData.avatar ? userData.avatar : UserIcon}
+                  />
                 </Avatar>
-                  
-                <CardDescription className="text-foreground text-xs md:text-xs truncate max-w-16 text-center font-medium md:font-normal">Seu perfil</CardDescription>
+
+                <CardDescription className="text-foreground text-xs md:text-xs truncate max-w-16 text-center font-medium md:font-normal">
+                  Seu perfil
+                </CardDescription>
               </Link>
-              
-            {followingUsers.map((user, index) => (
-            <Link to={`/profile/${user._id}`} key={`${user._id}-${index}`}>
-              <div className="relative">
-                <Avatar className="h-16 w-16 shadow-lg border-2 border-border rounded-full">
-                  <AvatarFallback>
+
+              {
+                !props.redirectPage ?
+                (
+              followingUsers.map((user, index) => (
+                <Link to={`/profile/${user._id}`} key={`${user._id}-${index}`}>
+                  <div className="relative">
+                    <Avatar className="h-16 w-16 shadow-lg border-2 border-border rounded-full">
+                      <AvatarFallback>
+                        {user.nickname ? user.nickname : ""}
+                      </AvatarFallback>
+
+                      <AvatarImage
+                        className="object-cover"
+                        src={user.avatar ? user.avatar : UserIcon}
+                      />
+                    </Avatar>
+
+                    <div className="pulse-status-container bottom-0 right-2 rounded-full text-xs absolute">
+                      <span
+                        className={`pulse-status ${
+                          user.status === "online"
+                            ? "bg-success/70"
+                            : "bg-secondary/70"
+                        }`}
+                      ></span>
+                      <span
+                        className={`pulse-status-core h-3 w-3 ${
+                          user.status === "online"
+                            ? "bg-success"
+                            : "bg-secondary"
+                        }`}
+                      ></span>
+                    </div>
+                  </div>
+
+                  <CardDescription className="text-foreground text-xs md:text-xs truncate max-w-16 text-center font-medium md:font-normal">
+                    {user.nickname}
+                  </CardDescription>
+                </Link>
+              ))
+            )
+            :
+            followingUsers.map((user, index) => (
+              <Link to={`/${props.redirectPage}/${user._id}`} key={`${user._id}-${index}`}>
+                <div className="relative">
+                  <Avatar className="h-16 w-16 shadow-lg border-2 border-border rounded-full">
+                    <AvatarFallback>
                       {user.nickname ? user.nickname : ""}
                     </AvatarFallback>
 
-                  <AvatarImage
+                    <AvatarImage
                       className="object-cover"
                       src={user.avatar ? user.avatar : UserIcon}
                     />
-                </Avatar>
-                  
-                <div className="pulse-status-container bottom-0 right-2 rounded-full text-xs absolute">
-              <span className={`pulse-status ${user.status === "online" ? "bg-success/70" : "bg-secondary/70"}`}></span>
-              <span className={`pulse-status-core h-3 w-3 ${user.status === "online" ? "bg-success" : "bg-secondary"}`}></span>
-            </div>
-              </div>
-                  
-              <CardDescription className="text-foreground text-xs md:text-xs truncate max-w-16 text-center font-medium md:font-normal">{user.nickname}</CardDescription>
-            </Link>
-            ))}
-          </CardContent>
-            
+                  </Avatar>
+
+                  <div className="pulse-status-container bottom-0 right-2 rounded-full text-xs absolute">
+                    <span
+                      className={`pulse-status ${
+                        user.status === "online"
+                          ? "bg-success/70"
+                          : "bg-secondary/70"
+                      }`}
+                    ></span>
+                    <span
+                      className={`pulse-status-core h-3 w-3 ${
+                        user.status === "online"
+                          ? "bg-success"
+                          : "bg-secondary"
+                      }`}
+                    ></span>
+                  </div>
+                </div>
+
+                <CardDescription className="text-foreground text-xs md:text-xs truncate max-w-16 text-center font-medium md:font-normal">
+                  {user.nickname}
+                </CardDescription>
+              </Link>
+            ))
+          }
+            </CardContent>
           </div>
           <ScrollBar orientation="horizontal" />
         </ScrollArea>
       </Card>
     </React.Fragment>
-  )
-}
+  );
+};
