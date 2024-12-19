@@ -1,7 +1,11 @@
 import * as React from "react";
-import { useParams } from "react-router-dom";
+import {
+  useParams
+} from "react-router-dom";
 
-import { NavBarReturn } from "../../components/navbar";
+import {
+  NavBarReturn
+} from "../../components/navbar";
 
 import {
   Card,
@@ -31,7 +35,9 @@ import {
 
 import UserIcon from "../../../public/images/user.png"
 
-import { getUserDataById } from "../../utils/getUserDataById";
+import {
+  getUserDataById
+} from "../../utils/getUserDataById";
 
 interface User {
   userName: string;
@@ -51,8 +57,11 @@ interface User {
 }
 
 const AboutLayout = () => {
-  const { id } = useParams<string>();
-  const [viewingUser, setViewingUser] = React.useState<User | null>(null);
+  const {
+    id
+  } = useParams < string > ();
+  const [viewingUser,
+    setViewingUser] = React.useState < User | null > (null);
 
   React.useEffect(() => {
     const fetchViewingUserData = async () => {
@@ -67,7 +76,8 @@ const AboutLayout = () => {
     if (id) {
       fetchViewingUserData();
     }
-  }, [id]);
+  },
+    [id]);
 
   const formatDate = (dateString: string) => {
     if (!dateString) return "Data não disponível"; // Verifica se a data existe
@@ -87,7 +97,7 @@ const AboutLayout = () => {
             <AvatarFallback>
               {viewingUser?.nickname?.slice(0, 3) || "N/A"}{" "}
             </AvatarFallback>
-            <AvatarImage className="object-cover" src={viewingUser?.avatar ? viewingUser?.avatar : UserIcon} />
+            <AvatarImage className="object-cover" src={viewingUser?.avatar ? viewingUser?.avatar: UserIcon} />
           </Avatar>
 
           <div className="flex flex-row items-center gap-1">
@@ -97,15 +107,12 @@ const AboutLayout = () => {
 
             <HeartWavesSolid
               className={`${
-                viewingUser?.type === "Plus"
-                  ? "text-info"
-                  : viewingUser?.type === "Admin"
-                  ? "text-danger"
-                  : viewingUser?.type === "verified"
-                  ? "text-success"
-                  : "hidden"
+              viewingUser?.type === "Plus"
+              ? "text-info": viewingUser?.type === "Admin"
+              ? "text-danger": viewingUser?.type === "Verified"
+              ? "text-success": "hidden"
               } h-3.5 w-3.5`}
-            />
+              />
           </div>
         </CardHeader>
 
@@ -116,7 +123,7 @@ const AboutLayout = () => {
             <div className="flex flex-col">
               <CardDescription className="text-foreground">id</CardDescription>
               <CardDescription className="text-xs md:text-xs">
-                {viewingUser?._id ? `${viewingUser?._id}` : "indisponível"}
+                {viewingUser?._id ? `${viewingUser?._id}`: "indisponível"}
               </CardDescription>
             </div>
           </div>
@@ -130,8 +137,7 @@ const AboutLayout = () => {
               </CardDescription>
               <CardDescription className="text-xs md:text-xs">
                 {viewingUser?.insertAt
-                  ? formatDate(viewingUser?.insertAt ?? "")
-                  : "indisponível"}
+                ? formatDate(viewingUser?.insertAt ?? ""): "indisponível"}
               </CardDescription>
             </div>
           </div>
@@ -145,8 +151,7 @@ const AboutLayout = () => {
               </CardDescription>
               <CardDescription className="text-xs md:text-xs">
                 {viewingUser?.nickname
-                  ? `${viewingUser?.nickname}`
-                  : "indisponível"}
+                ? `${viewingUser?.nickname}`: "indisponível"}
               </CardDescription>
             </div>
           </div>
@@ -159,7 +164,7 @@ const AboutLayout = () => {
                 Tipo
               </CardDescription>
               <CardDescription className="text-xs md:text-xs">
-                {viewingUser?.type ? `${viewingUser?.type}` : "indisponível"}
+                {viewingUser?.type ? `${viewingUser?.type}`: "indisponível"}
               </CardDescription>
             </div>
           </div>
@@ -173,8 +178,7 @@ const AboutLayout = () => {
               </CardDescription>
               <CardDescription className="text-xs md:text-xs">
                 {viewingUser?.userName
-                  ? `${viewingUser?.userName}`
-                  : "indisponível"}
+                ? `${viewingUser?.userName}`: "indisponível"}
               </CardDescription>
             </div>
           </div>
@@ -188,8 +192,7 @@ const AboutLayout = () => {
               </CardDescription>
               <CardDescription className="text-xs md:text-xs">
                 {viewingUser?.birthdaydata
-                  ? `${viewingUser?.birthdaydata}`
-                  : "indisponível"}
+                ? `${viewingUser?.birthdaydata}`: "indisponível"}
               </CardDescription>
             </div>
           </div>
@@ -197,7 +200,7 @@ const AboutLayout = () => {
           <div className="flex flex-row items-center gap-1">
             {viewingUser?.gender === "Feminino" ? (
               <FemaleSolid />
-            ) : (
+            ): (
               <MaleSolid />
             )}
 
@@ -206,9 +209,8 @@ const AboutLayout = () => {
                 Gênero
               </CardDescription>
               <CardDescription className="text-xs md:text-xs">
-              {viewingUser?.gender
-                  ? `${viewingUser?.gender}`
-                  : "indisponível"}
+                {viewingUser?.gender
+                ? `${viewingUser?.gender}`: "indisponível"}
               </CardDescription>
             </div>
           </div>
@@ -222,8 +224,7 @@ const AboutLayout = () => {
               </CardDescription>
               <CardDescription className="text-xs md:text-xs">
                 {viewingUser?.campus
-                  ? `${viewingUser?.campus}`
-                  : "indisponível"}
+                ? `${viewingUser?.campus}`: "indisponível"}
               </CardDescription>
             </div>
           </div>
@@ -236,7 +237,7 @@ const AboutLayout = () => {
                 Curso
               </CardDescription>
               <CardDescription className="text-xs md:text-xs">
-                {viewingUser?.curso ? `${viewingUser?.curso}` : "indisponível"}
+                {viewingUser?.curso ? `${viewingUser?.curso}`: "indisponível"}
               </CardDescription>
             </div>
           </div>
@@ -247,7 +248,7 @@ const AboutLayout = () => {
             <div className="flex flex-col">
               <CardDescription className="text-foreground">Bio</CardDescription>
               <CardDescription className="text-xs md:text-xs">
-                {viewingUser?.bio ? `${viewingUser?.bio}` : "indisponível"}
+                {viewingUser?.bio ? `${viewingUser?.bio}`: "indisponível"}
               </CardDescription>
             </div>
           </div>

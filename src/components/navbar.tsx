@@ -29,7 +29,7 @@ import {
   SendSolid,
   ChevronDown,
   CogFourSolid,
-  QuestionCircleSolid,
+  SupportSolid,
   HeartWavesSolid,
   ChevronRight,
   HeartSolid,
@@ -120,7 +120,7 @@ const Profile = ({ nickname, avatar, type }: profile) => {
                         ? "text-info"
                         : type === "Admin"
                           ? "text-danger"
-                          : type === "verified"
+                          : type === "Verified"
                             ? "text-success"
                             : "hidden"
                         } h-3.5 w-3.5`}
@@ -430,7 +430,7 @@ export const NavBar = (props: userData) => {
               className="flex flex-row justify-between items-center px-1"
             >
               <DropdownItem className="focus:text-primary/70 w-full cursor-pointer flex flex-row items-center gap-1">
-                <QuestionCircleSolid className="h-5 w-5" />
+                <SupportSolid className="h-5 w-5" />
                   Suporte
               </DropdownItem>
             </Link>

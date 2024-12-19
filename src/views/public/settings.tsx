@@ -1,9 +1,15 @@
 import * as React from "react";
-import { Link } from "react-router-dom";
+import {
+  Link
+} from "react-router-dom";
 import axios from "axios";
 
-import { NavBarReturn } from "../../components/navbar.tsx";
-import { ThemeToggle } from "../../components/ui/theme.tsx";
+import {
+  NavBarReturn
+} from "../../components/navbar.tsx";
+import {
+  ThemeToggle
+} from "../../components/ui/theme.tsx";
 import {
   Card,
   CardContent,
@@ -12,8 +18,12 @@ import {
   CardHeader,
   CardTitle,
 } from "../../components/ui/card.tsx";
-import { Button } from "../../components/ui/button.tsx";
-import { Separator } from "../../components/ui/separator.tsx";
+import {
+  Button
+} from "../../components/ui/button.tsx";
+import {
+  Separator
+} from "../../components/ui/separator.tsx";
 import {
   Avatar,
   AvatarFallback,
@@ -28,9 +38,15 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "../../components/ui/dialog.tsx";
-import { Label } from "../../components/ui/label.tsx";
-import { Input } from "../../components/ui/input.tsx";
-import { Switch } from "../../components/ui/switch.tsx"
+import {
+  Label
+} from "../../components/ui/label.tsx";
+import {
+  Input
+} from "../../components/ui/input.tsx";
+import {
+  Switch
+} from "../../components/ui/switch.tsx"
 
 import UserIcon from "../../../public/images/user.png"
 
@@ -41,9 +57,15 @@ import {
   XSolid,
 } from "@mynaui/icons-react";
 
-import { getUserData } from "../../utils/getUserData.tsx";
-import { getStatusUser } from "../../utils/getStatusUser.tsx";
-import { User } from "../../interfaces/userInterface.ts";
+import {
+  getUserData
+} from "../../utils/getUserData.tsx";
+import {
+  getStatusUser
+} from "../../utils/getStatusUser.tsx";
+import {
+  User
+} from "../../interfaces/userInterface.ts";
 
 const SettingsLayout = ({
   userData,
@@ -52,14 +74,17 @@ const SettingsLayout = ({
   userData: User;
   logOutHandle: () => void;
 }) => {
-  const [userId] = React.useState<string | null>(
+  const [userId] = React.useState < string | null > (
     localStorage.getItem("userId")
   );
-  
-  const [error, setError] = React.useState("");
 
-  const [password, setPassword] = React.useState<string>("");
-  const [inContrast, setInContrast] = React.useState<boolean>(
+  const [error,
+    setError] = React.useState("");
+
+  const [password,
+    setPassword] = React.useState < string > ("");
+  const [inContrast,
+    setInContrast] = React.useState < boolean > (
     localStorage.getItem("inContrast") === "true"
   );
 
@@ -75,7 +100,9 @@ const SettingsLayout = ({
         `${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_USER_DELETE_ACCOUNT
         }`,
         {
-          data: { password, token },
+          data: {
+            password, token
+          },
         }
       );
       alert(response.data.message);
@@ -87,7 +114,7 @@ const SettingsLayout = ({
       }
     }
   };
-  
+
   getStatusUser(userId);
 
   return (
@@ -98,27 +125,27 @@ const SettingsLayout = ({
             Exibição
           </CardTitle>
         </CardHeader>
-        
+
         <Separator className="mb-5" />
-        
+
         <CardContent className="space-y-4">
           <div className="flex flex-row justify-between items-center gap-1">
             <div className="flex flex-col">
-            <CardDescription className="text-foreground">Tema</CardDescription>
-            <CardDescription className="text-xs md:text-xs text-muted-foreground">Selecione um tema para ser aplicado na aplicação</CardDescription>
+              <CardDescription className="text-foreground">Tema</CardDescription>
+              <CardDescription className="text-xs md:text-xs text-muted-foreground">Selecione um tema para ser aplicado na aplicação</CardDescription>
             </div>
             <ThemeToggle />
           </div>
-          
+
           <div className="flex flex-row justify-between items-center gap-1">
             <div className="flex flex-col">
-            <CardDescription className="text-foreground">Texto em alta contraste</CardDescription>
-            <CardDescription className="text-xs md:text-xs text-muted-foreground">O texto ficará mais vísivel para os usuários na aplicação</CardDescription>
+              <CardDescription className="text-foreground">Texto em alta contraste</CardDescription>
+              <CardDescription className="text-xs md:text-xs text-muted-foreground">O texto ficará mais vísivel para os usuários na aplicação</CardDescription>
             </div>
-            <Switch 
+            <Switch
               checked={inContrast}
               onCheckedChange={(checked) => setInContrast(checked)}
-            />
+              />
           </div>
         </CardContent>
       </Card>
@@ -129,25 +156,25 @@ const SettingsLayout = ({
             Conta
           </CardTitle>
         </CardHeader>
-        
+
         <Separator className="mb-5" />
-        
+
         <CardContent>
           <div className="flex flex-row items-center space-x-2">
             <div className="relative">
-            <Avatar className="shadow-lg border-2 border-border">
-              <AvatarFallback>{userData?.userName}</AvatarFallback>
-              <AvatarImage
-                className="object-cover"
-                src={userData?.avatar ? userData?.avatar : UserIcon}
-              />
-            </Avatar>
+              <Avatar className="shadow-lg border-2 border-border">
+                <AvatarFallback>{userData?.userName}</AvatarFallback>
+                <AvatarImage
+                  className="object-cover"
+                  src={userData?.avatar ? userData?.avatar: UserIcon}
+                  />
+              </Avatar>
 
-            <div className="pulse-status-container bottom-0 right-1 rounded-full text-xs absolute">
-              <span className={`pulse-status ${userData.status === "online" ? "bg-success/70" : "bg-secondary/70"}`}></span>
-              <span className={`pulse-status-core h-2.5 w-2.5 ${userData.status === "online" ? "bg-success" : "bg-secondary"}`}></span>
+              <div className="pulse-status-container bottom-0 right-1 rounded-full text-xs absolute">
+                <span className={`pulse-status ${userData.status === "online" ? "bg-success/70": "bg-secondary/70"}`}></span>
+                <span className={`pulse-status-core h-2.5 w-2.5 ${userData.status === "online" ? "bg-success": "bg-secondary"}`}></span>
+              </div>
             </div>
-          </div>
 
             <div className="flex flex-col">
               <div className="flex flex-row items-center space-x-1">
@@ -156,14 +183,11 @@ const SettingsLayout = ({
                 </CardDescription>
                 <HeartWavesSolid
                   className={`${userData?.type === "Plus"
-                      ? "text-info"
-                      : userData?.type === "Admin"
-                        ? "text-danger"
-                        : userData?.type === "verified"
-                          ? "text-success"
-                          : "hidden"
-                    } h-3 w-3`}
-                />
+                  ? "text-info": userData?.type === "Admin"
+                  ? "text-danger": userData?.type === "Verified"
+                  ? "text-success": "hidden"
+                  } h-3 w-3`}
+                  />
               </div>
               <CardDescription className="font-normal md:font-light text-xs md:text-xs">
                 {userData.email}
@@ -198,14 +222,14 @@ const SettingsLayout = ({
                   type="password"
                   id="password"
                   onChange={(e) => setPassword(e.target.value)}
-                />
+                  />
 
                 {error ? (
                   <DialogDescription className="text-danger flex flex-row items-center gap-2">
                     <XSolid className="h-4 w-4" />
                     {error}
                   </DialogDescription>
-                ) : null}
+                ): null}
               </div>
 
               <DialogFooter>
@@ -215,7 +239,7 @@ const SettingsLayout = ({
               </DialogFooter>
             </DialogContent>
           </Dialog>
-          
+
           <Link to={"/"}>
             <Button variant={"danger"} onClick={logOutHandle}>
               <LogoutSolid className="mr-2 h-5 w-5" />

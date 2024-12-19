@@ -653,7 +653,7 @@ export const CardPost = (props: CardProps) => {
                           className={`${
                           viewingUser?.type === "Plus"
                           ? "text-info": viewingUser?.type === "Admin"
-                          ? "text-danger": viewingUser?.type === "verified"
+                          ? "text-danger": viewingUser?.type === "Verified"
                           ? "text-success": "hidden"
                           } h-4 w-4`}
                           />
@@ -858,7 +858,7 @@ export const CardPost = (props: CardProps) => {
                       <HeartSolid
                         className={`${
                         animateClick ? "animate__heartBeat": ""
-                        } text-primary h-5 md:h-4 w-5 md:w-4`}
+                        } heartbeat text-primary h-5 md:h-4 w-5 md:w-4`}
                         />
                     ): (
                       <HeartBrokenSolid
@@ -1147,7 +1147,7 @@ export const CardPost = (props: CardProps) => {
           </div>
 
           {formattedData && (
-            <CardDescription className="text-md md:text-sm font-normal md:font-light tracking-tight">
+            <CardDescription className="text-xs md:text-xs">
               {formattedData} atrás
             </CardDescription>
           )}

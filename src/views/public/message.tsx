@@ -301,7 +301,7 @@ const MessageLayout = () => {
                   <CardDescription className="text-xs truncate max-w-[120px]">
                     {chatUser?.userName}
                   </CardDescription>
-                  <CardDescription className="text-xs truncate max-w-[120px]">
+                  <CardDescription className="text-warning text-xs truncate max-w-[120px]">
                     {userJoined ? "Está no chat" : null}
                   </CardDescription>
                 </div>

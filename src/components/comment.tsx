@@ -1,10 +1,18 @@
 import * as React from "react";
-import { Link } from "react-router-dom";
-import { formatDistanceToNow } from "date-fns";
-import { ptBR } from "date-fns/locale";
+import {
+  Link
+} from "react-router-dom";
+import {
+  formatDistanceToNow
+} from "date-fns";
+import {
+  ptBR
+} from "date-fns/locale";
 import axios from "axios";
 
-import { MentionedUsers } from "./mentionedUsers";
+import {
+  MentionedUsers
+} from "./mentionedUsers";
 
 import {
   Card,
@@ -13,10 +21,20 @@ import {
   CardFooter,
   CardHeader,
 } from "./ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
-import { Separator } from "./ui/separator";
-import { Button } from "./ui/button";
-import { Input } from "./ui/input";
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage
+} from "./ui/avatar";
+import {
+  Separator
+} from "./ui/separator";
+import {
+  Button
+} from "./ui/button";
+import {
+  Input
+} from "./ui/input";
 
 import {
   FatCornerUpRightSolid,
@@ -28,10 +46,18 @@ import {
 
 import UserIcon from "../../public/images/user.png";
 
-import { getUserDataById } from "../utils/getUserDataById";
-import { getReplyById } from "../utils/getReplyById";
-import { User } from "../interfaces/userInterface";
-import { getUserData } from "../utils/getUserData";
+import {
+  getUserDataById
+} from "../utils/getUserDataById";
+import {
+  getReplyById
+} from "../utils/getReplyById";
+import {
+  User
+} from "../interfaces/userInterface";
+import {
+  getUserData
+} from "../utils/getUserData";
 
 interface Comment {
   _id: string;
@@ -48,13 +74,19 @@ interface Comment {
   getComments?: () => void;
 }
 
-const ReplyComment: React.FC<Comment> = (props) => {
-  const [viewingUser, setViewingUser] = React.useState<User | null>(null);
-  const [liked, setLiked] = React.useState(false);
-  const [likeCount, setLikeCount] = React.useState(props.likeCount);
-  const [animateClick, setAnimateClick] = React.useState(false);
-  const [showHeart, setShowHeart] = React.useState(false);
-  const [showFullComment, setShowFullComment] = React.useState(false);
+const ReplyComment: React.FC < Comment > = (props) => {
+  const [viewingUser,
+    setViewingUser] = React.useState < User | null > (null);
+  const [liked,
+    setLiked] = React.useState(false);
+  const [likeCount,
+    setLikeCount] = React.useState(props.likeCount);
+  const [animateClick,
+    setAnimateClick] = React.useState(false);
+  const [showHeart,
+    setShowHeart] = React.useState(false);
+  const [showFullComment,
+    setShowFullComment] = React.useState(false);
 
   const toggleComment = () => {
     setShowFullComment(!showFullComment);
@@ -83,13 +115,14 @@ const ReplyComment: React.FC<Comment> = (props) => {
     try {
       await axios.post(
         `${import.meta.env.VITE_API_BASE_URL}${
-          newLiked
-            ? import.meta.env.VITE_COMMENT_LIKE
-            : import.meta.env.VITE_COMMENT_UNLIKE
+        newLiked
+        ? import.meta.env.VITE_COMMENT_LIKE: import.meta.env.VITE_COMMENT_UNLIKE
         }`,
-        { token: localStorage.getItem("token"), commentId: props._id }
+        {
+          token: localStorage.getItem("token"), commentId: props._id
+        }
       );
-      setLikeCount(newLiked ? likeCount + 1 : likeCount - 1);
+      setLikeCount(newLiked ? likeCount + 1: likeCount - 1);
     } catch (error) {
       console.error("Error updating like:", error);
     }
@@ -129,25 +162,25 @@ const ReplyComment: React.FC<Comment> = (props) => {
           key={props._id}
           className="w-11/12 max-w-md"
           onDoubleClick={handleDoubleLike}
-        >
+          >
           <Link to={`/profile/${props.userId}`}>
             <CardHeader className="flex flex-row items-center space-x-4 p-4">
-            <div className="relative">
-              <Avatar className="h-10 w-10 border-2 border-border">
-                <AvatarFallback>{viewingUser?.nickname[0]}</AvatarFallback>
-                <AvatarImage
-                  className="object-cover"
-                  src={viewingUser?.avatar ? viewingUser?.avatar : UserIcon}
-                  alt={viewingUser?.nickname}
-                />
-              </Avatar>
-              
-              <div className="pulse-status-container bottom-0 right-1 rounded-full text-xs absolute">
-              <span className={`pulse-status ${viewingUser?.status === "online" ? "bg-success/70" : "bg-secondary/70"}`}></span>
-              <span className={`pulse-status-core h-2.5 w-2.5 ${viewingUser?.status === "online" ? "bg-success" : "bg-secondary"}`}></span>
-            </div>
-            </div>
-            
+              <div className="relative">
+                <Avatar className="h-10 w-10 border-2 border-border">
+                  <AvatarFallback>{viewingUser?.nickname[0]}</AvatarFallback>
+                  <AvatarImage
+                    className="object-cover"
+                    src={viewingUser?.avatar ? viewingUser?.avatar: UserIcon}
+                    alt={viewingUser?.nickname}
+                    />
+                </Avatar>
+
+                <div className="pulse-status-container bottom-0 right-1 rounded-full text-xs absolute">
+                  <span className={`pulse-status ${viewingUser?.status === "online" ? "bg-success/70": "bg-secondary/70"}`}></span>
+                  <span className={`pulse-status-core h-2.5 w-2.5 ${viewingUser?.status === "online" ? "bg-success": "bg-secondary"}`}></span>
+                </div>
+              </div>
+
               <div className="flex flex-col">
                 <div className="flex items-center gap-1">
                   <CardDescription className="text-foreground font-semibold md:font-semibold">
@@ -155,15 +188,12 @@ const ReplyComment: React.FC<Comment> = (props) => {
                   </CardDescription>
                   <HeartWavesSolid
                     className={`${
-                      viewingUser?.type === "Plus"
-                        ? "text-info"
-                        : viewingUser?.type === "Admin"
-                        ? "text-danger"
-                        : viewingUser?.type === "verified"
-                        ? "text-success"
-                        : "hidden"
+                    viewingUser?.type === "Plus"
+                    ? "text-info": viewingUser?.type === "Admin"
+                    ? "text-danger": viewingUser?.type === "verified"
+                    ? "text-success": "hidden"
                     } h-3.5 w-3.5`}
-                  />
+                    />
                 </div>
                 <CardDescription className="text-xs md:text-xs">
                   {formatDistanceToNow(new Date(props.insertAt), {
@@ -182,15 +212,15 @@ const ReplyComment: React.FC<Comment> = (props) => {
               </span>
               {showFullComment ? (
                 <>{highlightMentionsAndHashtags(props.content)}</>
-              ) : (
+              ): (
                 highlightMentionsAndHashtags(props.content.substring(0, 50))
               )}
               {props.content.length > 50 && (
                 <span
                   className="text-muted-foreground tracking-tight font-normal md:font-light cursor-pointer"
                   onClick={toggleComment}
-                >
-                  {showFullComment ? " ...ver menos" : " ...ver mais"}
+                  >
+                  {showFullComment ? " ...ver menos": " ...ver mais"}
                 </span>
               )}
             </CardDescription>
@@ -211,19 +241,19 @@ const ReplyComment: React.FC<Comment> = (props) => {
                 size="sm"
                 className="gap-1"
                 onClick={handleLike}
-              >
+                >
                 {liked ? (
                   <HeartSolid
                     className={`${
-                      animateClick ? "animate__heartBeat" : ""
-                    } text-primary h-5 md:h-4 w-5 md:w-4`}
-                  />
-                ) : (
+                    animateClick ? "animate__heartBeat": ""
+                    } heartbeat text-primary h-5 md:h-4 w-5 md:w-4`}
+                    />
+                ): (
                   <HeartBrokenSolid
                     className={`${
-                      animateClick ? "animate__heartBeat" : ""
+                    animateClick ? "animate__heartBeat": ""
                     } h-5 md:h-4 w-5 md:w-4`}
-                  />
+                    />
                 )}
                 {likeCount}
               </Button>
@@ -241,10 +271,10 @@ const ReplyComment: React.FC<Comment> = (props) => {
                   mentionedUsers={props.mentionedUsers}
                   followingMentionedUsers={props.mentionedUsers.map(
                     (mentionedId) =>
-                      props.userData.following.includes(mentionedId)
+                    props.userData.following.includes(mentionedId)
                   )}
                   isFollowing={props.userData.following.includes(props.userId)}
-                />
+                  />
               </div>
             )}
           </CardFooter>
@@ -254,7 +284,7 @@ const ReplyComment: React.FC<Comment> = (props) => {
   );
 };
 
-export const Comment: React.FC<Comment> = (props) => {
+export const Comment: React.FC < Comment > = (props) => {
   // const decodedObject = decodeToken(localStorage.getItem("token") ?? "");
   const dataUser = getUserData();
 
@@ -264,8 +294,8 @@ export const Comment: React.FC<Comment> = (props) => {
   const [animateClick, setAnimateClick] = React.useState(false);
 
   const [showFullComment, setShowFullComment] = React.useState(false);
-  const [viewingUser, setViewingUser] = React.useState<User | null>(null);
-  const [viewingReplies, setViewingReplies] = React.useState<Comment[]>([]);
+  const [viewingUser, setViewingUser] = React.useState < User | null > (null);
+  const [viewingReplies, setViewingReplies] = React.useState < Comment[] > ([]);
 
   const [isHidden, setIsHidden] = React.useState(true);
   const [loading, setLoading] = React.useState(false);
@@ -287,7 +317,9 @@ export const Comment: React.FC<Comment> = (props) => {
     };
 
     fetchUserData();
-  }, [props.userId, props.likedBy]);
+  },
+    [props.userId,
+      props.likedBy]);
 
   const fetchRepliesData = async () => {
     setLoading(true);
@@ -295,11 +327,11 @@ export const Comment: React.FC<Comment> = (props) => {
       if (Array.isArray(props.replies) && props.replies.length > 0) {
         const fetchedReplies = await Promise.all(
           props.replies
-            .filter((replyId) => replyId)
-            .map(async (replyId) => {
-              const replyData = await getReplyById(replyId);
-              return replyData && replyData._id ? replyData : null;
-            })
+          .filter((replyId) => replyId)
+          .map(async (replyId) => {
+            const replyData = await getReplyById(replyId);
+            return replyData && replyData._id ? replyData: null;
+          })
         );
 
         const validReplies = fetchedReplies.filter((reply) => reply !== null);
@@ -325,13 +357,14 @@ export const Comment: React.FC<Comment> = (props) => {
     try {
       await axios.post(
         `${import.meta.env.VITE_API_BASE_URL}${
-          newLiked
-            ? import.meta.env.VITE_COMMENT_LIKE
-            : import.meta.env.VITE_COMMENT_UNLIKE
+        newLiked
+        ? import.meta.env.VITE_COMMENT_LIKE: import.meta.env.VITE_COMMENT_UNLIKE
         }`,
-        { token: localStorage.getItem("token"), commentId: props._id }
+        {
+          token: localStorage.getItem("token"), commentId: props._id
+        }
       );
-      setLikeCount(newLiked ? likeCount + 1 : likeCount - 1);
+      setLikeCount(newLiked ? likeCount + 1: likeCount - 1);
     } catch (error) {
       console.error("Error updating like:", error);
     }
@@ -348,20 +381,24 @@ export const Comment: React.FC<Comment> = (props) => {
     handleLike();
   };
 
-  const [replyText, setReplyText] = React.useState("");
-  const [isReply, setIsReply] = React.useState<boolean>(false);
+  const [replyText,
+    setReplyText] = React.useState("");
+  const [isReply,
+    setIsReply] = React.useState < boolean > (false);
 
-  const handleReplyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = e.target;
+  const handleReplyChange = (e: React.ChangeEvent < HTMLInputElement >) => {
+    const {
+      value
+    } = e.target;
     setReplyText(value);
   };
 
-  const handleReplySubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleReplySubmit = async (e: React.FormEvent < HTMLFormElement >) => {
     e.preventDefault();
     try {
       const response = await axios.post(
         `${import.meta.env.VITE_API_BASE_URL}${
-          import.meta.env.VITE_COMMENT_REPLY
+        import.meta.env.VITE_COMMENT_REPLY
         }`,
         {
           token: localStorage.getItem("token"),
@@ -411,26 +448,26 @@ export const Comment: React.FC<Comment> = (props) => {
         key={props._id}
         className="w-full max-w-md"
         onDoubleClick={handleDoubleLike}
-      >
+        >
         <div className="flex justify-start w-fit">
           <Link to={`/profile/${props.userId}`}>
             <CardHeader className="flex flex-row items-center space-x-4 p-4">
-             <div className="relative">
-              <Avatar className="h-10 w-10 border-2 border-border">
-                <AvatarFallback>{viewingUser?.nickname[0]}</AvatarFallback>
-                <AvatarImage
-                  className="object-cover"
-                  src={viewingUser?.avatar ? viewingUser?.avatar : UserIcon}
-                  alt={viewingUser?.nickname}
-                />
-              </Avatar>
-              
-              <div className="pulse-status-container bottom-0 right-1 rounded-full text-xs absolute">
-              <span className={`pulse-status ${viewingUser?.status === "online" ? "bg-success/70" : "bg-secondary/70"}`}></span>
-              <span className={`pulse-status-core h-2.5 w-2.5 ${viewingUser?.status === "online" ? "bg-success" : "bg-secondary"}`}></span>
-            </div>
-            </div>
-            
+              <div className="relative">
+                <Avatar className="h-10 w-10 border-2 border-border">
+                  <AvatarFallback>{viewingUser?.nickname[0]}</AvatarFallback>
+                  <AvatarImage
+                    className="object-cover"
+                    src={viewingUser?.avatar ? viewingUser?.avatar: UserIcon}
+                    alt={viewingUser?.nickname}
+                    />
+                </Avatar>
+
+                <div className="pulse-status-container bottom-0 right-1 rounded-full text-xs absolute">
+                  <span className={`pulse-status ${viewingUser?.status === "online" ? "bg-success/70": "bg-secondary/70"}`}></span>
+                  <span className={`pulse-status-core h-2.5 w-2.5 ${viewingUser?.status === "online" ? "bg-success": "bg-secondary"}`}></span>
+                </div>
+              </div>
+
               <div className="flex flex-col">
                 <div className="flex items-center gap-1">
                   <CardDescription className="text-foreground font-semibold md:font-semibold">
@@ -438,15 +475,12 @@ export const Comment: React.FC<Comment> = (props) => {
                   </CardDescription>
                   <HeartWavesSolid
                     className={`${
-                      viewingUser?.type === "Plus"
-                        ? "text-info"
-                        : viewingUser?.type === "Admin"
-                        ? "text-danger"
-                        : viewingUser?.type === "verified"
-                        ? "text-success"
-                        : "hidden"
+                    viewingUser?.type === "Plus"
+                    ? "text-info": viewingUser?.type === "Admin"
+                    ? "text-danger": viewingUser?.type === "verified"
+                    ? "text-success": "hidden"
                     } h-3.5 w-3.5`}
-                  />
+                    />
                 </div>
                 <CardDescription className="text-xs md:text-xs">
                   {formatDistanceToNow(new Date(props.insertAt), {
@@ -466,15 +500,15 @@ export const Comment: React.FC<Comment> = (props) => {
             </span>
             {showFullComment ? (
               <>{highlightMentionsAndHashtags(props.content)}</>
-            ) : (
+            ): (
               highlightMentionsAndHashtags(props.content.substring(0, 50))
             )}
             {props.content.length > 50 && (
               <span
                 className="text-muted-foreground tracking-tight font-normal md:font-light cursor-pointer"
                 onClick={toggleComment}
-              >
-                {showFullComment ? " ...ver menos" : " ...ver mais"}
+                >
+                {showFullComment ? " ...ver menos": " ...ver mais"}
               </span>
             )}
           </CardDescription>
@@ -491,8 +525,8 @@ export const Comment: React.FC<Comment> = (props) => {
                 <AvatarFallback>{dataUser?.nickname[0]}</AvatarFallback>
                 <AvatarImage
                   className="object-cover"
-                  src={dataUser?.avatar ? dataUser?.avatar : UserIcon}
-                />
+                  src={dataUser?.avatar ? dataUser?.avatar: UserIcon}
+                  />
               </Avatar>
 
               <form
@@ -500,24 +534,24 @@ export const Comment: React.FC<Comment> = (props) => {
                 method="POST"
                 onSubmit={handleReplySubmit}
                 className="flex flex-row justify-between gap-1 w-full"
-              >
+                >
                 <Input
                   type="text"
                   placeholder="Adicione uma resposta"
                   value={replyText}
                   onInput={handleReplyChange}
-                />
+                  />
 
                 <Button
                   variant={"outline"}
                   size={"icon"}
                   onSubmit={props.getComments}
-                >
+                  >
                   <FatCornerUpRightSolid className="h-5 w-5" />
                 </Button>
               </form>
             </div>
-          ) : null}
+          ): null}
         </CardContent>
 
         <Separator className="my-2" />
@@ -531,19 +565,19 @@ export const Comment: React.FC<Comment> = (props) => {
                   size="sm"
                   className="gap-1"
                   onClick={handleLike}
-                >
+                  >
                   {liked ? (
                     <HeartSolid
                       className={`${
-                        animateClick ? "animate__heartBeat" : ""
-                      } text-primary h-5 md:h-4 w-5 md:w-4`}
-                    />
-                  ) : (
+                      animateClick ? "animate__heartBeat": ""
+                      } heartbeat text-primary h-5 md:h-4 w-5 md:w-4`}
+                      />
+                  ): (
                     <HeartBrokenSolid
                       className={`${
-                        animateClick ? "animate__heartBeat" : ""
+                      animateClick ? "animate__heartBeat": ""
                       } h-5 md:h-4 w-5 md:w-4`}
-                    />
+                      />
                   )}
                   {likeCount}
                 </Button>
@@ -551,9 +585,9 @@ export const Comment: React.FC<Comment> = (props) => {
                   variant="outline"
                   size="sm"
                   onClick={() => handleReplyToUser(viewingUser?.nickname || "")}
-                >
+                  >
                   <MessageSolid className="mr-2 h-4 w-4" />
-                  {isReply ? "Cancelar" : "Responder"}
+                  {isReply ? "Cancelar": "Responder"}
                 </Button>
               </div>
 
@@ -569,12 +603,12 @@ export const Comment: React.FC<Comment> = (props) => {
                     mentionedUsers={props.mentionedUsers}
                     followingMentionedUsers={props.mentionedUsers.map(
                       (mentionedId) =>
-                        props.userData.following.includes(mentionedId)
+                      props.userData.following.includes(mentionedId)
                     )}
                     isFollowing={props.userData.following.includes(
                       props.userId
                     )}
-                  />
+                    />
                 </div>
               )}
             </div>
@@ -584,7 +618,7 @@ export const Comment: React.FC<Comment> = (props) => {
                 <p
                   className="cursor-pointer text-muted-foreground font-poppins text-xs"
                   onClick={() => setIsHidden(!isHidden)}
-                >
+                  >
                   Exibir mais {viewingReplies.length} comentários
                 </p>
               )}
@@ -593,7 +627,7 @@ export const Comment: React.FC<Comment> = (props) => {
                 <p
                   className="cursor-pointer text-muted-foreground font-poppins text-xs"
                   onClick={() => setIsHidden(true)}
-                >
+                  >
                   Ocultar comentários
                 </p>
               )}
@@ -606,27 +640,30 @@ export const Comment: React.FC<Comment> = (props) => {
         <div className="mt-2 w-full">
           {viewingReplies.map(
             (reply) =>
-              reply &&
-              reply._id && (
-                <div className="reply-container">
-                  <ReplyComment
-                    _id={reply._id}
-                    content={reply.content}
-                    insertAt={reply.insertAt}
-                    userId={reply.userId}
-                    likeCount={reply.likeCount}
-                    likedBy={reply.likedBy}
-                    mentionedUsers={reply.mentionedUsers}
-                    replies={reply.replies}
-                    userData={props.userData}
-                    postId={props.postId}
+            reply &&
+            reply._id && (
+              <div className="reply-container">
+                <ReplyComment
+                  _id={reply._id}
+                  content={reply.content}
+                  insertAt={reply.insertAt}
+                  userId={reply.userId}
+                  likeCount={reply.likeCount}
+                  likedBy={reply.likedBy}
+                  mentionedUsers={reply.mentionedUsers}
+                  replies={reply.replies}
+                  userData={props.userData}
+                  postId={props.postId}
                   />
-                </div>
-              )
+              </div>
+            )
           )}
         </div>
       )}
-      {loading && <p>Carregando respostas...</p>}
+      {loading && <p>
+        Carregando respostas...
+      </p>
+      }
     </div>
   );
 };

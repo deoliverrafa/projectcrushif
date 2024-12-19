@@ -1,14 +1,31 @@
 import * as React from "react";
-import { Link } from "react-router-dom";
+import {
+  Link
+} from "react-router-dom";
 
-import { Button } from "./ui/button.js";
-import { Card, CardDescription, CardTitle } from "./ui/card.js";
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar.js";
+import {
+  Button
+} from "./ui/button.js";
+import {
+  Card,
+  CardDescription,
+  CardTitle
+} from "./ui/card.js";
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage
+} from "./ui/avatar.js";
 
-import { ChevronRight, HeartWavesSolid } from "@mynaui/icons-react";
+import {
+  ChevronRight,
+  HeartWavesSolid
+} from "@mynaui/icons-react";
 
 import UserIcon from "../../public/images/user.png";
-import { toggleFollow } from "../utils/followUtils.js";
+import {
+  toggleFollow
+} from "../utils/followUtils.js";
 
 interface User {
   avatar: string;
@@ -25,7 +42,8 @@ interface User {
 }
 
 export const SearchUserCard = (props: User) => {
-  const [followedUser, setFollowedUser] = React.useState<boolean>(
+  const [followedUser,
+    setFollowedUser] = React.useState < boolean > (
     props.following ?? false
   );
   const token = localStorage.getItem("token");
@@ -33,7 +51,7 @@ export const SearchUserCard = (props: User) => {
 
   const handleFollowToggle = () => {
     if (token) {
-      toggleFollow({
+      toggleFollow( {
         userId: props._id,
         token,
         followed: followedUser,
@@ -44,7 +62,7 @@ export const SearchUserCard = (props: User) => {
       }
     }
   };
-  
+
 
   return (
     <Card className="my-1 w-full">
@@ -55,54 +73,50 @@ export const SearchUserCard = (props: User) => {
               <AvatarFallback>{props?.userName}</AvatarFallback>
               <AvatarImage
                 className="object-cover"
-                src={props?.avatar ? props?.avatar : UserIcon}
-              />
+                src={props?.avatar ? props?.avatar: UserIcon}
+                />
             </Avatar>
 
             <div className="pulse-status-container bottom-0 right-1 rounded-full text-xs absolute">
-              <span className={`pulse-status ${props.status === "online" ? "bg-success/70" : "bg-secondary/70"}`}></span>
-              <span className={`pulse-status-core h-2.5 w-2.5 ${props.status === "online" ? "bg-success" : "bg-secondary"}`}></span>
+              <span className={`pulse-status ${props.status === "online" ? "bg-success/70": "bg-secondary/70"}`}></span>
+              <span className={`pulse-status-core h-2.5 w-2.5 ${props.status === "online" ? "bg-success": "bg-secondary"}`}></span>
             </div>
           </div>
 
           <div className="flex flex-col items-start">
             <div className="flex flex-row items-center gap-1">
               <CardTitle className="font-semibold md:font-medium text-md md:text-sm tracking-tight truncate max-w-[120px]">
-                {props.nickname ? `${props.nickname}` : "indisponível"}
+                {props.nickname ? `${props.nickname}`: "indisponível"}
               </CardTitle>
 
               <HeartWavesSolid
                 className={`${
-                  props?.type === "Plus"
-                    ? "text-info"
-                    : props?.type === "Admin"
-                    ? "text-danger"
-                    : props?.type === "verified"
-                    ? "text-success"
-                    : "hidden"
+                props?.type === "Plus"
+                ? "text-info": props?.type === "Admin"
+                ? "text-danger": props?.type === "Verified"
+                ? "text-success": "hidden"
                 } h-3.5 w-3.5`}
-              />
+                />
             </div>
 
             <CardDescription
               className={`text-xs md:text-xs ${
-                userId === props._id
-                  ? "truncate max-w-[220px]"
-                  : "truncate max-w-[120px]"
+              userId === props._id
+              ? "truncate max-w-[220px]": "truncate max-w-[120px]"
               }`}
-            >
-              {props.userName ? props.userName : "indisponível"}
+              >
+              {props.userName ? props.userName: "indisponível"}
             </CardDescription>
           </div>
         </Link>
 
-        {userId === props._id ? null : (
+        {userId === props._id ? null: (
           <Button
-            variant={followedUser ? "secondary" : "default"}
+            variant={followedUser ? "secondary": "default"}
             type="button"
             onClick={handleFollowToggle}
-          >
-            {followedUser ? "Seguindo" : "Seguir"}
+            >
+            {followedUser ? "Seguindo": "Seguir"}
           </Button>
         )}
       </div>
@@ -122,37 +136,34 @@ export const UserCard = (props: User) => {
                   <AvatarFallback>{props?.userName}</AvatarFallback>
                   <AvatarImage
                     className="object-cover"
-                    src={props?.avatar ? props?.avatar : UserIcon}
-                  />
+                    src={props?.avatar ? props?.avatar: UserIcon}
+                    />
                 </Avatar>
 
                 <div className="pulse-status-container bottom-0 right-1 rounded-full text-xs absolute">
-              <span className={`pulse-status ${props.status === "online" ? "bg-success/70" : "bg-secondary/70"}`}></span>
-              <span className={`pulse-status-core h-2.5 w-2.5 ${props.status === "online" ? "bg-success" : "bg-secondary"}`}></span>
-            </div>
+                  <span className={`pulse-status ${props.status === "online" ? "bg-success/70": "bg-secondary/70"}`}></span>
+                  <span className={`pulse-status-core h-2.5 w-2.5 ${props.status === "online" ? "bg-success": "bg-secondary"}`}></span>
+                </div>
               </div>
 
               <div className="flex flex-col items-start">
                 <div className="flex flex-row items-center gap-1">
                   <CardTitle className="font-semibold md:font-medium text-md md:text-sm tracking-tight truncate max-w-[120px]">
-                    {props.userName ? `${props.userName}` : "indisponível"}
+                    {props.userName ? `${props.userName}`: "indisponível"}
                   </CardTitle>
 
                   <HeartWavesSolid
                     className={`${
-                      props?.type === "Plus"
-                        ? "text-info"
-                        : props?.type === "Admin"
-                        ? "text-danger"
-                        : props?.type === "verified"
-                        ? "text-success"
-                        : "hidden"
+                    props?.type === "Plus"
+                    ? "text-info": props?.type === "Admin"
+                    ? "text-danger": props?.type === "Verified"
+                    ? "text-success": "hidden"
                     } h-3.5 w-3.5`}
-                  />
+                    />
                 </div>
 
                 <CardDescription className="text-xs md:text-xs">
-                  {props.description ? props.description : null}
+                  {props.description ? props.description: null}
                 </CardDescription>
               </div>
             </div>
@@ -179,37 +190,34 @@ export const ChatUserCard = (props: User) => {
                   <AvatarFallback>{props?.userName}</AvatarFallback>
                   <AvatarImage
                     className="object-cover"
-                    src={props?.avatar ? props?.avatar : UserIcon}
-                  />
+                    src={props?.avatar ? props?.avatar: UserIcon}
+                    />
                 </Avatar>
 
                 <div className="pulse-status-container bottom-0 right-1 rounded-full text-xs absolute">
-              <span className={`pulse-status ${props.status === "online" ? "bg-success/70" : "bg-secondary/70"}`}></span>
-              <span className={`pulse-status-core h-2.5 w-2.5 ${props.status === "online" ? "bg-success" : "bg-secondary"}`}></span>
-            </div>
+                  <span className={`pulse-status ${props.status === "online" ? "bg-success/70": "bg-secondary/70"}`}></span>
+                  <span className={`pulse-status-core h-2.5 w-2.5 ${props.status === "online" ? "bg-success": "bg-secondary"}`}></span>
+                </div>
               </div>
 
               <div className="flex flex-col items-start">
                 <div className="flex flex-row items-center gap-1">
                   <CardTitle className="font-semibold md:font-medium text-md md:text-sm tracking-tight truncate max-w-[120px]">
-                    {props.nickname ? `${props.nickname}` : "indisponível"}
+                    {props.nickname ? `${props.nickname}`: "indisponível"}
                   </CardTitle>
 
                   <HeartWavesSolid
                     className={`${
-                      props?.type === "Plus"
-                        ? "text-info"
-                        : props?.type === "Admin"
-                        ? "text-danger"
-                        : props?.type === "verified"
-                        ? "text-success"
-                        : "hidden"
+                    props?.type === "Plus"
+                    ? "text-info": props?.type === "Admin"
+                    ? "text-danger": props?.type === "Verified"
+                    ? "text-success": "hidden"
                     } h-3.5 w-3.5`}
-                  />
+                    />
                 </div>
 
                 <CardDescription className="text-xs md:text-xs">
-                  {props.description ? props.description : null}
+                  {props.description ? props.description: null}
                 </CardDescription>
               </div>
             </div>

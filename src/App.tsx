@@ -1,8 +1,13 @@
 import * as React from "react";
-import OneSignal from 'react-onesignal';
 
-import { HexaThemeProvider } from "./components/ui/theme.tsx";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  HexaThemeProvider
+} from "./components/ui/theme.tsx";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route
+} from "react-router-dom";
 import "./styles/main.css";
 import "./styles/animation.css";
 
@@ -58,18 +63,6 @@ const App = () => {
       });
     };
   }, []);
-
- React.useEffect(() => {
-  if (typeof window !== 'undefined') {
-    OneSignal.init({
-      appId: import.meta.env.VITE_ONESIGNAL_APP_ID,
-      safari_web_id: import.meta.env.VITE_ONESIGNAL_SAFARI_ID,
-      notifyButton: {
-        enable: false,
-      },
-    });
-  }
-}, []);
 
   return (
     <>

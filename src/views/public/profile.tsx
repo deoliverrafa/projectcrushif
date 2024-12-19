@@ -471,7 +471,7 @@ const ProfileLayout = () => {
     <React.Fragment>
       <NavBarReturn title={"Perfil"} menu={<MenuNavbar />} />
 
-      <Card className="select-none mt-2 w-full md:w-6/12">
+      <Card className="select-none mt-1 w-full md:w-6/12">
         <div className="relative w-full h-40">
           <img
           src={
@@ -515,7 +515,7 @@ const ProfileLayout = () => {
                 className={`${
                 viewingUser?.type === "Plus"
                 ? "text-info": viewingUser?.type === "Admin"
-                ? "text-danger": viewingUser?.type === "verified"
+                ? "text-danger": viewingUser?.type === "Verified"
                 ? "text-success": "hidden"
                 } ml-1 h-3.5 w-3.5`}
                 />
