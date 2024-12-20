@@ -1,5 +1,14 @@
 import * as React from "react";
 import axios from "axios";
+import {
+  Link
+} from "react-router-dom";
+import {
+  Toaster
+} from "../../components/ui/toaster.tsx"
+import {
+  useToast
+} from "../../hooks/use-toast.ts"
 
 import LoadingPage from "./loading.tsx";
 
@@ -27,12 +36,6 @@ import {
   Button
 } from "../../components/ui/button.tsx";
 import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "../../components/ui/tooltip.tsx";
-import {
   Separator
 } from "../../components/ui/separator.tsx";
 import {
@@ -42,13 +45,22 @@ import {
   Label
 } from "../../components/ui/label.tsx";
 import {
-  Drawer,
-  DrawerContent,
-  DrawerDescription,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from "../../components/ui/drawer.tsx";
+  Dropdown,
+  DropdownContent,
+  DropdownItem,
+  DropdownLabel,
+  DropdownTrigger,
+  DropdownSeparator
+} from "../../components/ui/dropdown.tsx";
+import {
+  Dialog,
+  DialogTrigger,
+  DialogDescription,
+  DialogTitle,
+  DialogContent,
+  DialogHeader,
+  DialogFooter
+} from "../../components/ui/dialog.tsx"
 import {
   Select,
   SelectContent,
@@ -64,18 +76,15 @@ import {
 import {
   HeartWavesSolid,
   At,
-  MenuSolid,
-  CheckSquareOneSolid,
-  XSolid,
   InfoCircleSolid,
-  EnvelopeSolid,
-  ImageSolid,
-  ImageRectangleSolid,
   LockPasswordSolid,
-  MaleSolid,
-  PencilSolid,
-  FemaleSolid,
-  CalendarSolid,
+  DotsVerticalSolid,
+  SignalSolid,
+  CheckSquareOneSolid,
+  BrandInstagramSolid,
+  BrandFacebookSolid,
+  BrandXSolid,
+  UploadSolid
 } from "@mynaui/icons-react";
 
 import UserIcon from "../../../public/images/user.png"
@@ -83,6 +92,9 @@ import UserIcon from "../../../public/images/user.png"
 import {
   getUserData
 } from "../../utils/getUserData.tsx";
+import {
+  getUserDataById
+} from "../../utils/getUserDataById.tsx";
 import {
   getStatusUser
 } from "../../utils/getStatusUser.tsx";
@@ -93,6 +105,9 @@ import {
   IFs,
   CURSOs
 } from "../../utils/infoIFs.ts";
+import {
+  User
+} from "../../interfaces/userInterface.ts";
 
 interface User {
   _id: string;
@@ -109,6 +124,12 @@ interface User {
   gender: string;
   bio: string;
   birthdaydata: string;
+  link: string;
+  instagram: string;
+  facebook: string;
+  twitter: string;
+  likedBy: string[];
+  following: string[];
 }
 
 interface userData {
@@ -118,18 +139,35 @@ interface userData {
 const GENDERs = ["Masculino", "Feminino"];
 
 const EditProfileLayout = (props: userData) => {
+  const currentUser = getUserData();
   const [userId] = React.useState < string | null > (
     localStorage.getItem("userId")
   );
 
-  const [errorMessage,
-    setDataErrorMessage] = React.useState < String > ();
-  const [successMessage,
-    setDataSuccessMessage] = React.useState < String > ();
+  const {
+    toast
+  } = useToast()
+
   const [selectedData,
     setSelectedData] = React.useState < String > ("info");
   const [loading,
     setLoading] = React.useState(false);
+
+  const [nicknameLength,
+    setNicknameLength] = React.useState < number > (0);
+  const [userNameLength,
+    setUserNameLength] = React.useState < number > (0);
+  const [bioLength,
+    setBioLength] = React.useState < number > (0);
+
+  const currentDate = new Date();
+  const formattedDate = `${currentDate.toLocaleDateString()} às ${currentDate.toLocaleTimeString()}`;
+
+  const [showFullBio,
+    setShowFullBio] = React.useState(false);
+  const toggleBio = () => {
+    setShowFullBio(!showFullBio);
+  };
 
   const [nickname,
     setNickname] = React.useState(props.user.nickname || "");
@@ -141,25 +179,28 @@ const EditProfileLayout = (props: userData) => {
     setCurso] = React.useState(props.user?.curso || "");
   const [filteredCourses,
     setFilteredCourses] = React.useState < string[] > ([]);
-
-  const [email,
-    setEmail] = React.useState(props.user.email || "");
+  const [birthdaydata,
+    setBirthdaydata] = React.useState(
+    props.user?.birthdaydata || ""
+  );
+  const [gender,
+    setGender] = React.useState(props.user?.gender || "");
+  const [bio,
+    setBio] = React.useState(props.user?.bio || "");
 
   const [password,
     setPassword] = React.useState("");
   const [novasenha,
     setNovasenha] = React.useState("");
 
-  const [birthdaydata,
-    setBirthdaydata] = React.useState(
-    props.user?.birthdaydata || ""
-  );
-
-  const [gender,
-    setGender] = React.useState(props.user?.gender || "");
-
-  const [bio,
-    setBio] = React.useState(props.user?.bio || "");
+  const [link,
+    setLink] = React.useState(props.user.link || "");
+  const [instagram,
+    setInstagram] = React.useState(props.user.instagram || "");
+  const [facebook,
+    setFacebook] = React.useState(props.user.facebook || "");
+  const [twitter,
+    setTwitter] = React.useState(props.user.twitter || "");
 
   const [responseAvatar,
     setResponseAvatar] = React.useState < string > ();
@@ -176,11 +217,14 @@ const EditProfileLayout = (props: userData) => {
     setUserName(props.user.userName);
     setCampus(props.user.campus);
     setCurso(props.user.curso);
-    setEmail(props.user.email);
     setPassword(props.user.password);
     setBirthdaydata(props.user.birthdaydata);
     setGender(props.user.gender);
     setBio(props.user.bio);
+    setLink(props.user.link);
+    setInstagram(props.user.instagram);
+    setFacebook(props.user.facebook);
+    setTwitter(props.user.twitter);
   }, [props.user]);
 
   function handleSelectedData(data: string) {
@@ -193,49 +237,16 @@ const EditProfileLayout = (props: userData) => {
 
   const handleChangeInfo = async () => {
     try {
-      setDataErrorMessage("");
-      setDataSuccessMessage("");
-
       const formData = new FormData();
       formData.append("nickname", nickname);
       formData.append("curso", curso);
       formData.append("campus", campus);
       formData.append("userName", userName);
+      formData.append("birthdaydata", birthdaydata);
+      formData.append("gender", gender);
+      formData.append("bio", bio);
 
-      const endpoint = import.meta.env.VITE_CHANGE_NAME_CAMPUS_CURSO;
-
-      const response = await axios.post(
-        `${import.meta.env.VITE_API_BASE_URL}${endpoint}${localStorage.getItem(
-          "token"
-        )}`,
-        formData
-      );
-
-      if (response.data.updated) {
-        setDataSuccessMessage("Dados atualizados com sucesso");
-      } else {
-        setDataErrorMessage(response.data.message);
-      }
-    } catch (error: unknown) {
-      if (axios.isAxiosError(error) && error.response) {
-        setDataErrorMessage(
-          error.response.data.message || "Erro ao atualizar dados."
-        );
-      } else {
-        setDataErrorMessage("Erro ao atualizar dados.");
-      }
-    }
-  };
-
-  const handleChangeEmail = async () => {
-    try {
-      setDataErrorMessage("");
-      setDataSuccessMessage("");
-
-      const formData = new FormData();
-      formData.append("email", email);
-
-      const endpoint = import.meta.env.VITE_CHANGE_EMAIL;
+      const endpoint = import.meta.env.VITE_CHANGE_INFO;
 
       const response = await axios.post(
         `${import.meta.env.VITE_API_BASE_URL}${endpoint}${localStorage.getItem(
@@ -245,26 +256,37 @@ const EditProfileLayout = (props: userData) => {
       );
 
       if (response.data.updated) {
-        setDataSuccessMessage("E-mail atualizado com sucesso");
+        toast( {
+          variant: "success",
+          title: "Notificação",
+          description: `Dados atualizados com sucesso, ${formattedDate}`,
+        })
       } else {
-        setDataErrorMessage(response.data.message);
+        toast( {
+          variant: "danger",
+          title: "Notificação",
+          description: `${response.data.message}, ${formattedDate}`,
+        })
       }
     } catch (error: unknown) {
       if (axios.isAxiosError(error) && error.response) {
-        setDataErrorMessage(
-          error.response.data.message || "Erro ao atualizar e-mail."
-        );
+        toast( {
+          variant: "danger",
+          title: "Notificação",
+          description: `${error.response?.data.message || "Erro ao atualizar o dados"}, ${formattedDate}`,
+        })
       } else {
-        setDataErrorMessage("Erro ao atualizar e-mail.");
+        toast( {
+          variant: "danger",
+          title: "Notificação",
+          description: `Erro ao atualizar dados, ${formattedDate}`,
+        })
       }
     }
   };
 
   const handleChangePassword = async () => {
     try {
-      setDataErrorMessage("");
-      setDataSuccessMessage("");
-
       const formData = new FormData();
       formData.append("password", password);
       formData.append("novasenha", novasenha);
@@ -279,30 +301,44 @@ const EditProfileLayout = (props: userData) => {
       );
 
       if (response.data.updated) {
-        setDataSuccessMessage("Senha atualizado com sucesso");
+        toast( {
+          variant: "success",
+          title: "Notificação",
+          description: `Senha atualizado com sucesso, ${formattedDate}`,
+        })
       } else {
-        setDataErrorMessage(response.data.message);
+        toast( {
+          variant: "danger",
+          title: "Notificação",
+          description: `${response.data.message}, ${formattedDate}`,
+        })
       }
     } catch (error: unknown) {
       if (axios.isAxiosError(error) && error.response) {
-        setDataErrorMessage(
-          error.response.data.message || "Erro ao atualizar senha."
-        );
+        toast( {
+          variant: "danger",
+          title: "Notificação",
+          description: `${error.response?.data.message || "Erro ao atualizar senha"}, ${formattedDate}`,
+        })
       } else {
-        setDataErrorMessage("Erro ao atualizar senha.");
+        toast( {
+          variant: "danger",
+          title: "Notificação",
+          description: `Erro ao atualizar senha, ${formattedDate}`,
+        })
       }
     }
   };
 
-  const handleChangeBirthday = async () => {
+  const handleChangeLink = async () => {
     try {
-      setDataErrorMessage("");
-      setDataSuccessMessage("");
-
       const formData = new FormData();
-      formData.append("birthdaydata", birthdaydata);
+      formData.append("link", link);
+      formData.append("instagram", instagram);
+      formData.append("facebook", facebook);
+      formData.append("twitter", twitter);
 
-      const endpoint = import.meta.env.VITE_CHANGE_BIRTHDAY;
+      const endpoint = import.meta.env.VITE_CHANGE_LINK;
 
       const response = await axios.post(
         `${import.meta.env.VITE_API_BASE_URL}${endpoint}${localStorage.getItem(
@@ -312,83 +348,31 @@ const EditProfileLayout = (props: userData) => {
       );
 
       if (response.data.updated) {
-        setDataSuccessMessage("Nascimento atualizado com sucesso");
+        toast( {
+          variant: "success",
+          title: "Notificação",
+          description: `Links atualizados com sucesso, ${formattedDate}`,
+        })
       } else {
-        setDataErrorMessage(response.data.message);
+        toast( {
+          variant: "danger",
+          title: "Notificação",
+          description: `${response.data.message}, ${formattedDate}`,
+        })
       }
     } catch (error: unknown) {
       if (axios.isAxiosError(error) && error.response) {
-        setDataErrorMessage(
-          error.response.data.message || "Erro ao atualizar nascimento."
-        );
+        toast( {
+          variant: "danger",
+          title: "Notificação",
+          description: `${error.response?.data.message || "Erro ao atualizar links"}, ${formattedDate}`,
+        })
       } else {
-        setDataErrorMessage("Erro ao atualizar nascimento.");
-      }
-    }
-  };
-
-  const handleChangeGender = async () => {
-    try {
-      setDataErrorMessage("");
-      setDataSuccessMessage("");
-
-      const formData = new FormData();
-      formData.append("gender", gender);
-
-      const endpoint = import.meta.env.VITE_CHANGE_GENDER;
-
-      const response = await axios.post(
-        `${import.meta.env.VITE_API_BASE_URL}${endpoint}${localStorage.getItem(
-          "token"
-        )}`,
-        formData
-      );
-
-      if (response.data.updated) {
-        setDataSuccessMessage("Gênero atualizado com sucesso");
-      } else {
-        setDataErrorMessage(response.data.message);
-      }
-    } catch (error: unknown) {
-      if (axios.isAxiosError(error) && error.response) {
-        setDataErrorMessage(
-          error.response.data.message || "Erro ao atualizar gênero."
-        );
-      } else {
-        setDataErrorMessage("Erro ao atualizar gênero.");
-      }
-    }
-  };
-
-  const handleChangeBio = async () => {
-    try {
-      setDataErrorMessage("");
-      setDataSuccessMessage("");
-
-      const formData = new FormData();
-      formData.append("bio", bio);
-
-      const endpoint = import.meta.env.VITE_CHANGE_BIO;
-
-      const response = await axios.post(
-        `${import.meta.env.VITE_API_BASE_URL}${endpoint}${localStorage.getItem(
-          "token"
-        )}`,
-        formData
-      );
-
-      if (response.data.updated) {
-        setDataSuccessMessage("Bio atualizado com sucesso");
-      } else {
-        setDataErrorMessage(response.data.message);
-      }
-    } catch (error: unknown) {
-      if (axios.isAxiosError(error) && error.response) {
-        setDataErrorMessage(
-          error.response.data.message || "Erro ao atualizar bio."
-        );
-      } else {
-        setDataErrorMessage("Erro ao atualizar bio.");
+        toast( {
+          variant: "danger",
+          title: "Notificação",
+          description: `Erro ao atualizar links, ${formattedDate}`,
+        })
       }
     }
   };
@@ -397,17 +381,22 @@ const EditProfileLayout = (props: userData) => {
     const file = event.target.files[0];
     if (isValidImage(file)) {
       setAvatarFile(file);
-      setDataErrorMessage("");
     } else {
-      setDataErrorMessage(
-        "Por favor, selecione uma imagem válida (JPEG, PNG ou GIF)."
-      );
+      toast( {
+        variant: "danger",
+        title: "Notificação",
+        description: `Por favor, selecione uma imagem válida (JPEG, PNG ou GIF), ${formattedDate}`,
+      })
     }
   };
 
   const handleChangeAvatar = async () => {
     if (!avatarFile) {
-      setDataErrorMessage("Nenhuma imagem selecionada.");
+      toast( {
+        variant: "danger",
+        title: "Notificação",
+        description: `Nenhuma imagem selecionada, ${formattedDate}`,
+      })
       return;
     }
 
@@ -432,14 +421,24 @@ const EditProfileLayout = (props: userData) => {
       if (response.data.updated) {
         setResponseAvatar(response.data.avatarURL);
         window.dispatchEvent(new Event("storage"));
-        setDataSuccessMessage("Avatar atualizada com sucesso.");
+        toast( {
+          variant: "success",
+          title: "Notificação",
+          description: `Avatar atualizada com sucesso, ${formattedDate}`,
+        })
       } else {
-        setDataErrorMessage(response.data.message);
+        toast( {
+          variant: "danger",
+          title: "Notificação",
+          description: `${response.data.message}, ${formattedDate}`,
+        })
       }
     } catch (error: any) {
-      setDataErrorMessage(
-        error.response?.data.message || "Erro ao atualizar o avatar."
-      );
+      toast( {
+        variant: "danger",
+        title: "Notificação",
+        description: `${error.response?.data.message || "Erro ao atualizar o avatar"}, ${formattedDate}`,
+      })
     } finally {
       setLoading(false);
     }
@@ -449,17 +448,22 @@ const EditProfileLayout = (props: userData) => {
     const file = event.target.files[0];
     if (isValidImage(file)) {
       setBannerFile(file);
-      setDataErrorMessage("");
     } else {
-      setDataErrorMessage(
-        "Por favor, selecione uma imagem válida (JPEG, PNG ou GIF)."
-      );
+      toast( {
+        variant: "danger",
+        title: "Notificação",
+        description: `Por favor, selecione uma imagem válida (JPEG, PNG ou GIF), ${formattedDate}`,
+      })
     }
   };
 
   const handleChangeBanner = async () => {
     if (!bannerFile) {
-      setDataErrorMessage("Nenhuma imagem selecionada.");
+      toast( {
+        variant: "danger",
+        title: "Notificação",
+        description: `Nenhuma imagem selecionada, ${formattedDate}`,
+      })
       return;
     }
 
@@ -484,25 +488,120 @@ const EditProfileLayout = (props: userData) => {
       if (response.data.updated) {
         setResponseBanner(response.data.avatarURL);
         window.dispatchEvent(new Event("storage"));
-        setDataSuccessMessage("Banner atualizada com sucesso.");
+        toast( {
+          variant: "success",
+          title: "Notificação",
+          description: `Banner atualizada com sucesso, ${formattedDate}`,
+        })
       } else {
-        setDataErrorMessage(response.data.message);
+        toast( {
+          variant: "danger",
+          title: "Notificação",
+          description: `${response.data.message}, ${formattedDate}`,
+        })
       }
     } catch (error: any) {
-      setDataErrorMessage(
-        error.response?.data.message || "Erro ao atualizar o banner."
-      );
+      toast( {
+        variant: "danger",
+        title: "Notificação",
+        description: `${error.response?.data.message || "Erro ao atualizar o banner"}, ${formattedDate}`,
+      })
     } finally {
       setLoading(false);
     }
   };
 
+  const [likedByUsers,
+    setLikedByUsers] = React.useState < User[] > ([]);
+
+  const isUserFollowed = (user: User) => {
+    return currentUser?.following?.includes(user._id);
+  };
+
+  const fetchLikedByUsers = async () => {
+    if (props.user?.likedBy?.length) {
+      try {
+        const userIds = props.user.likedBy.slice(0, 3);
+        const userPromises = userIds.map((id) => getUserDataById(id));
+        const users = await Promise.all(userPromises);
+
+        const filteredUsers = users.filter(
+          (user) => user._id !== currentUser?._id && isUserFollowed(user)
+        );
+
+        setLikedByUsers(filteredUsers);
+      } catch (error) {
+        console.error("Erro ao buscar dados dos curtidores:", error);
+      }
+    }
+  };
+
+  React.useEffect(() => {
+    fetchLikedByUsers();
+  }, [props.user?.likedBy]);
+
   getStatusUser(userId)
+
+  const MenuNavbar = () => {
+    return (
+      <React.Fragment>
+        <Dropdown>
+          <DropdownTrigger>
+            <DotsVerticalSolid className="h-8 w-8" />
+          </DropdownTrigger>
+
+          <DropdownContent>
+            <DropdownLabel>
+              Menu
+            </DropdownLabel>
+
+            {selectedData === "info" ? null: (
+              <DropdownItem
+                className="justify-start items-center w-full px-4"
+                onClick={() => {
+                  handleSelectedData("info");
+                }}
+                >
+                <InfoCircleSolid className="h-5 w-5 mr-2" />
+                Informações
+              </DropdownItem>
+            )}
+
+            {selectedData === "password" ? null: (
+              <DropdownItem
+                className="justify-start items-center w-full px-4"
+                onClick={() => {
+                  handleSelectedData("password");
+                }}
+                >
+                <LockPasswordSolid className="h-5 w-5 mr-2" />
+                Senhas
+              </DropdownItem>
+            )}
+
+            {selectedData === "links" ? null: (
+              <DropdownItem
+                className="justify-start items-center w-full px-4"
+                onClick={() => {
+                  handleSelectedData("links");
+                }}
+                >
+                <SignalSolid className="h-5 w-5 mr-2" />
+                Links
+              </DropdownItem>
+            )}
+          </DropdownContent>
+        </Dropdown>
+      </React.Fragment>
+    )
+  }
 
   return (
     <React.Fragment>
+      <NavBarReturn title="Editar perfil" menu={<MenuNavbar />} />
+
       <Card className="mt-2 w-full md:w-6/12">
-        <div className="relative w-full h-40">
+        <div className="relative flex justify-center items-center w-full h-40">
           <img
           src={
           responseBanner
@@ -513,7 +612,48 @@ const EditProfileLayout = (props: userData) => {
           className="absolute top-0 left-0 w-full h-full object-cover"
           />
 
-        <div className="absolute bottom-[-30px] left-4">
+        <Dialog>
+          <DialogTrigger>
+            <Button variant={"outline"} size={"icon"}>
+              <UploadSolid />
+            </Button>
+          </DialogTrigger>
+
+          <DialogContent className="sm:max-w-md">
+            <DialogHeader>
+              <DialogTitle>Upload imagem banner</DialogTitle>
+              <DialogDescription>
+                Upload da imagem do banner. Use o botão de fechar para
+                retornar à visualização anterior.
+              </DialogDescription>
+            </DialogHeader>
+
+            <div className="relative flex justify-center items-center">
+              <div className="flex flex-col gap-1 w-full">
+                <Label htmlFor="banner">Banner</Label>
+                <Input
+                  type="file"
+                  name="banner"
+                  id="banner"
+                  accept="image/jpeg, image/png, image/gif"
+                  onChange={updateBanner}
+                  />
+              </div>
+            </div>
+
+            <DialogFooter>
+              <Button
+                onClick={handleChangeBanner}
+                disabled={loading}
+                variant={"success"}
+                >
+                {loading ? "Salvando...": "Salvar banner"}
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+
+        <div className="absolute flex justify-center items-center bottom-[-30px] left-4">
           <Avatar className="h-20 w-20 shadow-lg border-4 border-border rounded-full">
             <AvatarFallback>{nickname}</AvatarFallback>
             <AvatarImage
@@ -521,173 +661,208 @@ const EditProfileLayout = (props: userData) => {
               src={responseAvatar ? responseAvatar: props.user.avatar ? props.user.avatar: UserIcon}
               />
           </Avatar>
+
+          <Dialog>
+            <DialogTrigger className="absolute bottom-0 right-0">
+              <Button className="h-8 w-8 rounded-full" variant={"outline"} size={"icon"}>
+                <UploadSolid className="h-4 w-4" />
+              </Button>
+            </DialogTrigger>
+
+            <DialogContent className="sm:max-w-md">
+              <DialogHeader>
+                <DialogTitle>Upload imagem avatar</DialogTitle>
+                <DialogDescription>
+                  Upload da imagem do avatar. Use o botão de fechar para
+                  retornar à visualização anterior.
+                </DialogDescription>
+              </DialogHeader>
+
+              <div className="relative flex justify-center items-center">
+                <div className="flex flex-col gap-1 w-full">
+            <Label htmlFor="avatar">Avatar</Label>
+            <Input
+              type="file"
+              name="avatar"
+              id="avatar"
+              accept="image/jpeg, image/png, image/gif"
+              onChange={updateAvatar}
+              />
+          </div>
+              </div>
+
+              <DialogFooter>
+                <Button
+                  onClick={handleChangeAvatar}
+                  disabled={loading}
+                  variant={"success"}
+                  >
+                  {loading ? "Salvando...": "Salvar avatar"}
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
         </div>
       </div>
-      <CardHeader className="flex flex-row justify-between items-center mt-8">
-        <div className="flex flex-col gap-1">
-          <CardTitle className="font-medium text-sm md:text-sm">
-            {props.user.userName ? props.user.userName: "Nome indisponível"}
-          </CardTitle>
 
-          <div className="flex flex-row items-center gap-1">
-            <Badge variant={"outline"} className="font-light w-fit">
-              <At className="h-2.5 w-2.5" />{" "}
+      <CardHeader className="flex flex-row justify-between items-center mt-8">
+        <div className="flex flex-col gap-1 w-full">
+          <div className="flex flex-row justify-between items-center w-full my-0.5">
+            <CardDescription className="flex flex-row items-center text-foreground font-bold md:font-semibold text-sm md:text-sm truncate max-w-72">
+              <At className="h-4 w-4" />
               {props.user.nickname
               ? `${props.user.nickname}`: "indisponível"}
+            </CardDescription>
+
+            <Badge variant={"outline"} className="text-muted-foreground w-fit">
+              {props.user.type}
               <HeartWavesSolid
                 className={`${
                 props.user.type === "Plus"
                 ? "text-info": props.user.type === "Admin"
                 ? "text-danger": props.user.type === "Verified"
                 ? "text-success": "hidden"
-                } ml-1 h-3 w-3`}
+                } ml-1 h-3.5 w-3.5`}
                 />
             </Badge>
           </div>
-        </div>
 
-        <Drawer>
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger>
-                <DrawerTrigger asChild>
-                  <Button variant={"outline"} size={"icon"}>
-                    <MenuSolid className="h-5 w-5" />
-                  </Button>
-                </DrawerTrigger>
-              </TooltipTrigger>
+          <CardTitle className="my-0.5 text-foreground truncate max-w-72">
+            {props.user.userName
+            ? props.user.userName: "Nome indisponível"}
+          </CardTitle>
 
-              <TooltipContent>
-                <p>
-                  Menu
-                </p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-
-          <DrawerContent>
-            <div className="mx-auto w-full max-w-sm">
-              <DrawerHeader>
-                <DrawerTitle>Editar perfil</DrawerTitle>
-                <DrawerDescription>
-                  Selecione a opção desejada
-                </DrawerDescription>
-              </DrawerHeader>
+          {props.user.bio && (
+            <div className="my-0.5">
+              <CardDescription className="text-foreground text-xs md:text-xs break-words">
+                {props.user.bio ? (
+                  <>
+                    {showFullBio ? (
+                      props.user.bio
+                    ): (
+                      `${props.user.bio.slice(0, 50)}${props.user.bio.length > 50 ? "": ""}`
+                    )}
+                    {props.user.bio.length > 50 && (
+                      <span
+                        onClick={toggleBio}
+                        className="text-muted-foreground tracking-tight font-normal md:font-light cursor-pointer"
+                        >
+                        {showFullBio ? " ...ver menos": " ...ver mais"}
+                      </span>
+                    )}
+                  </>
+                ): (
+                  <></>
+                )}
+              </CardDescription>
             </div>
+          )}
 
-            <Separator />
+          {props.user.link && (
+            <div className="flex flex-row justify-start items-center my-0.5">
+              <Link
+                className="text-primary font-bold md:font-semibold underline text-xs md:text-xs truncate max-w-72"
+                to={props.user.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                >
+                {props.user.link}
+              </Link>
+            </div>
+          )}
 
-            <div className="py-5 space-y-2 mx-auto w-full max-w-sm">
-              {selectedData === "info" ? null: (
-                <Button
-                  variant={"ghost"}
-                  className="justify-start w-full"
-                  onClick={() => {
-                    handleSelectedData("info");
-                  }}
-                  >
-                  <InfoCircleSolid className="h-5 md:h-4 w-5 md:w-4 mr-2" />
-                  Informações
+          <div className={`flex flex-row justify-start gap-2 items-center my-0.5 ${!props.user.instagram && !props.user.facebook && !props.user.twitter ? "hidden": ""}`}>
+            {props.user.instagram && (
+              <Link
+                className="text-primary font-bold md:font-semibold underline text-xs md:text-xs truncate max-w-72"
+                to={props.user.instagram}
+                target="_blank"
+                rel="noopener noreferrer"
+                >
+                <Button variant={"outline"} size={"icon"}>
+                  <BrandInstagramSolid />
                 </Button>
-              )}
+              </Link>
+            )}
 
-              {selectedData === "email" ? null: (
-                <Button
-                  variant={"ghost"}
-                  className="justify-start w-full"
-                  onClick={() => {
-                    handleSelectedData("email");
-                  }}
-                  >
-                  <EnvelopeSolid className="h-5 md:h-4 w-5 md:w-4 mr-2" />
-                  E-mail
+            {props.user.facebook && (
+              <Link
+                className="text-primary font-bold md:font-semibold underline text-xs md:text-xs truncate max-w-72"
+                to={props.user.facebook}
+                target="_blank"
+                rel="noopener noreferrer"
+                >
+                <Button variant={"outline"} size={"icon"}>
+                  <BrandFacebookSolid />
                 </Button>
-              )}
+              </Link>
+            )}
 
-              {selectedData === "password" ? null: (
-                <Button
-                  variant={"ghost"}
-                  className="justify-start w-full"
-                  onClick={() => {
-                    handleSelectedData("password");
-                  }}
-                  >
-                  <LockPasswordSolid className="h-5 md:h-4 w-5 md:w-4 mr-2" />
-                  Senha
+            {props.user.twitter && (
+              <Link
+                className="text-primary font-bold md:font-semibold underline text-xs md:text-xs truncate max-w-72"
+                to={props.user.twitter}
+                target="_blank"
+                rel="noopener noreferrer"
+                >
+                <Button variant={"outline"} size={"icon"}>
+                  <BrandXSolid />
                 </Button>
-              )}
+              </Link>
+            )}
+          </div>
 
-              {selectedData === "birthday" ? null: (
-                <Button
-                  variant={"ghost"}
-                  className="justify-start w-full"
-                  onClick={() => {
-                    handleSelectedData("birthday");
-                  }}
-                  >
-                  <CalendarSolid className="h-5 md:h-4 w-5 md:w-4 mr-2" />
-                  Nascimento
-                </Button>
-              )}
+          <div className="flex flex-row justify-start items-center my-0.5">
+            {Array.isArray(likedByUsers) && likedByUsers.length > 0 ? (
+              <Link to={`/likedBy/${props.user._id}`} className="flex flex-row items-center gap-1 w-fit">
+                <div className="flex -space-x-3 *:ring *:ring-background">
+                  {likedByUsers.map((friend, index) => (
+                    <Avatar key={`${friend._id}-${index}`} className="h-6 w-6 shadow-lg border border-border">
+                      <AvatarFallback>
+                        {friend.nickname ? friend.nickname.slice(0, 2): ""}
+                      </AvatarFallback>
+                      <AvatarImage
+                        className="object-cover"
+                        src={friend.avatar ? friend.avatar: UserIcon}
+                        />
+                    </Avatar>
+                  ))}
+                </div>
 
-              {selectedData === "gender" ? null: (
-                <Button
-                  variant={"ghost"}
-                  className="justify-start w-full"
-                  onClick={() => {
-                    handleSelectedData("gender");
-                  }}
-                  >
-                  {props.user.gender === "Feminino" ? (
-                    <FemaleSolid className="h-5 md:h-4 w-5 md:w-4 mr-2" />
-                  ): (
-                    <MaleSolid className="h-5 md:h-4 w-5 md:w-4 mr-2" />
+                <CardDescription className="text-xs md:text-xs">
+                  Curtido(a) por{" "}
+                  {likedByUsers.map((friend, index) => (
+                    <span key={`${friend._id}-${index}`} className="text-foreground">
+                      {friend.nickname}
+                      {index < likedByUsers.length - 1 ? ", ": ""}
+                    </span>
+                  ))}{" "}
+                  {props.user.likedBy.length - likedByUsers.length > 0 && (
+                    <>
+                      e {props.user.likedBy.length - likedByUsers.length > 1
+                      ? "outras": "outra"}{" "}
+                      <span className="text-foreground">
+                        {props.user.likedBy.length - likedByUsers.length}{" "}
+                        {props.user.likedBy.length - likedByUsers.length > 1
+                        ? "pessoas": "pessoa"}
+                      </span>
+                    </>
                   )}
-                  Gênero
-                </Button>
-              )}
-
-              {selectedData === "avatar" ? null: (
-                <Button
-                  variant={"ghost"}
-                  className="justify-start w-full"
-                  onClick={() => {
-                    handleSelectedData("avatar");
-                  }}
-                  >
-                  <ImageSolid className="h-5 md:h-4 w-5 md:w-4 mr-2" />
-                  Avatar
-                </Button>
-              )}
-
-              {selectedData === "banner" ? null: (
-                <Button
-                  variant={"ghost"}
-                  className="justify-start w-full"
-                  onClick={() => {
-                    handleSelectedData("banner");
-                  }}
-                  >
-                  <ImageRectangleSolid className="h-5 md:h-4 w-5 md:w-4 mr-2" />
-                  Banner
-                </Button>
-              )}
-
-              {selectedData === "bio" ? null: (
-                <Button
-                  variant={"ghost"}
-                  className="justify-start w-full"
-                  onClick={() => {
-                    handleSelectedData("bio");
-                  }}
-                  >
-                  <PencilSolid className="h-5 md:h-4 w-5 md:w-4 mr-2" />
-                  Bio
-                </Button>
-              )}
-            </div>
-          </DrawerContent>
-        </Drawer>
+                </CardDescription>
+              </Link>
+            ): (
+              <Link to={`/likedByPost/${props.user._id}`} className="w-fit">
+                <CardDescription className="text-xs md:text-xs">
+                  Curtido(a) por{" "}
+                  <span className="text-foreground">
+                    {props.user.likedBy.length}{" "}
+                    {props.user.likedBy.length > 1 ? "pessoas": "pessoa"}
+                  </span>
+                </CardDescription>
+              </Link>
+            )}
+          </div>
+        </div>
       </CardHeader>
 
       <Separator />
@@ -698,22 +873,65 @@ const EditProfileLayout = (props: userData) => {
             <Label htmlFor="userName">Nome Completo</Label>
             <Input
               value={userName}
+              placeholder="Infome seu nome"
               id="userName"
+              maxLength={72}
               onChange={(e: React.BaseSyntheticEvent) => {
                 setUserName(e.target.value);
+                setUserNameLength(e.target.value.length);
               }}
               />
+            <CardDescription className="ms-2 text-muted-foreground/60 text-xs md:text-xs">{72 - userNameLength} caracteres restantes</CardDescription>
           </div>
 
           <div className="flex flex-col gap-1 w-full">
             <Label htmlFor="nickname">Usuário</Label>
             <Input
               value={nickname}
+              placeholder="Informe seu usuário"
               id="nickname"
+              maxLength={18}
               onChange={(e: React.BaseSyntheticEvent) => {
                 setNickname(e.target.value);
+                setNicknameLength(e.target.value.length);
               }}
               />
+            <CardDescription className="ms-2 text-muted-foreground/60 text-xs md:text-xs">{18 - nicknameLength} caracteres restantes</CardDescription>
+          </div>
+
+          <div className="flex flex-col gap-1 w-full">
+            <Label htmlFor="birthday">Nascimento</Label>
+            <Input
+              type="date"
+              id="birthday"
+              value={birthdaydata}
+              max={new Date().toISOString().split('T')[0]}
+              min={new Date(new Date().setFullYear(new Date().getFullYear() - 100))
+              .toISOString()
+              .split('T')[0]}
+              onChange={(e: React.BaseSyntheticEvent) => {
+                setBirthdaydata(e.target.value);
+              }}
+              />
+          </div>
+
+          <div className="flex flex-col gap-1 w-full">
+            <Label htmlFor="gender">Gênero</Label>
+
+            <Select onValueChange={(value) => setGender(value)} value={gender}>
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Informe seu gênero" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  {GENDERs.map((gender, index) => (
+                    <SelectItem key={index} value={gender}>
+                      {gender}
+                    </SelectItem>
+                  ))}
+                </SelectGroup>
+              </SelectContent>
+            </Select>
           </div>
 
           <div className="flex flex-col gap-1 w-full">
@@ -754,20 +972,20 @@ const EditProfileLayout = (props: userData) => {
               </SelectContent>
             </Select>
           </div>
-        </CardContent>
-      )}
 
-      {selectedData === "email" && (
-        <CardContent className="mt-4 space-y-2">
           <div className="flex flex-col gap-1 w-full">
-            <Label htmlFor="email">E-mail</Label>
-            <Input
-              value={email}
-              id="email"
+            <Label htmlFor="bio">Bio</Label>
+            <Textarea
+              value={bio}
+              id="bio"
+              placeholder="Informe sua bio"
+              maxLength={100}
               onChange={(e: React.BaseSyntheticEvent) => {
-                setEmail(e.target.value);
+                setBio(e.target.value);
+                setBioLength(e.target.value.length)
               }}
               />
+            <CardDescription className="ms-2 text-muted-foreground/60 text-xs md:text-xs">{100 - bioLength} caracteres restantes</CardDescription>
           </div>
         </CardContent>
       )}
@@ -798,85 +1016,56 @@ const EditProfileLayout = (props: userData) => {
         </CardContent>
       )}
 
-      {selectedData === "birthday" && (
+      {selectedData === "links" && (
         <CardContent className="mt-4 space-y-6">
           <div className="flex flex-col gap-1 w-full">
-            <Label htmlFor="birthday">Nascimento</Label>
+            <Label htmlFor="link">Link</Label>
             <Input
-              type="date"
-              id="birthday"
-              value={birthdaydata}
+              value={link}
+              type="text"
+              id="link"
+              placeholder="https://seulink.com/"
               onChange={(e: React.BaseSyntheticEvent) => {
-                setBirthdaydata(e.target.value);
+                setLink(e.target.value);
               }}
               />
           </div>
-        </CardContent>
-      )}
 
-      {selectedData === "gender" && (
-        <CardContent className="mt-4 space-y-6">
           <div className="flex flex-col gap-1 w-full">
-            <Label htmlFor="gender">Gênero</Label>
-
-            <Select onValueChange={(value) => setGender(value)} value={gender}>
-              <SelectTrigger className="w-full">
-                <SelectValue placeholder="Escolha seu gênero" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectGroup>
-                  {GENDERs.map((gender, index) => (
-                    <SelectItem key={index} value={gender}>
-                      {gender}
-                    </SelectItem>
-                  ))}
-                </SelectGroup>
-              </SelectContent>
-            </Select>
-          </div>
-        </CardContent>
-      )}
-
-      {selectedData === "avatar" && (
-        <CardContent className="mt-4">
-          <div className="flex flex-col gap-1 w-full">
-            <Label htmlFor="avatar">Avatar</Label>
+            <Label htmlFor="instagram">Instagram</Label>
             <Input
-              type="file"
-              name="avatar"
-              id="avatar"
-              accept="image/jpeg, image/png, image/gif"
-              onChange={updateAvatar}
-              />
-          </div>
-        </CardContent>
-      )}
-
-      {selectedData === "banner" && (
-        <CardContent className="mt-4">
-          <div className="flex flex-col gap-1 w-full">
-            <Label htmlFor="banner">Banner</Label>
-            <Input
-              type="file"
-              name="banner"
-              id="banner"
-              accept="image/jpeg, image/png, image/gif"
-              onChange={updateBanner}
-              />
-          </div>
-        </CardContent>
-      )}
-
-      {selectedData === "bio" && (
-        <CardContent className="mt-4 space-y-2">
-          <div className="flex flex-col gap-1 w-full">
-            <Label htmlFor="bio">Bio</Label>
-            <Textarea
-              value={bio}
-              id="bio"
-              placeholder="Adicione uma bio aqui..."
+              value={instagram}
+              type="text"
+              id="instagram"
+              placeholder="https://instagram.com/profile/"
               onChange={(e: React.BaseSyntheticEvent) => {
-                setBio(e.target.value);
+                setInstagram(e.target.value);
+              }}
+              />
+          </div>
+
+          <div className="flex flex-col gap-1 w-full">
+            <Label htmlFor="facebook">Facebook</Label>
+            <Input
+              value={facebook}
+              type="text"
+              id="facebook"
+              placeholder="https://facebook.com/profile/"
+              onChange={(e: React.BaseSyntheticEvent) => {
+                setFacebook(e.target.value);
+              }}
+              />
+          </div>
+
+          <div className="flex flex-col gap-1 w-full">
+            <Label htmlFor="twitter">Twitter</Label>
+            <Input
+              value={twitter}
+              type="text"
+              id="twitter"
+              placeholder="https://twitter.com/profile/"
+              onChange={(e: React.BaseSyntheticEvent) => {
+                setTwitter(e.target.value);
               }}
               />
           </div>
@@ -886,31 +1075,9 @@ const EditProfileLayout = (props: userData) => {
       <Separator />
 
       <CardFooter className="flex flex-col items-end space-y-2 mt-4">
-        {successMessage ? (
-          <CardDescription className="text-success flex flex-row items-center gap-2">
-            <CheckSquareOneSolid className="h-4 w-4" />
-            {successMessage}
-          </CardDescription>
-        ): errorMessage ? (
-          <CardDescription className="text-danger flex flex-row items-center gap-2">
-            <XSolid className="h-4 w-4" />
-            {errorMessage}
-          </CardDescription>
-        ): null}
-
         {selectedData === "info" && (
           <Button
             onClick={handleChangeInfo}
-            disabled={loading}
-            variant={"success"}
-            >
-            {loading ? "Salvando...": "Salvar informações"}
-          </Button>
-        )}
-
-        {selectedData === "email" && (
-          <Button
-            onClick={handleChangeEmail}
             disabled={loading}
             variant={"success"}
             >
@@ -928,53 +1095,13 @@ const EditProfileLayout = (props: userData) => {
           </Button>
         )}
 
-        {selectedData === "birthday" && (
+        {selectedData === "links" && (
           <Button
-            onClick={handleChangeBirthday}
+            onClick={handleChangeLink}
             disabled={loading}
             variant={"success"}
             >
-            {loading ? "Salvando...": "Salvar nascimento"}
-          </Button>
-        )}
-
-        {selectedData === "gender" && (
-          <Button
-            onClick={handleChangeGender}
-            disabled={loading}
-            variant={"success"}
-            >
-            {loading ? "Salvando...": "Salvar gênero"}
-          </Button>
-        )}
-
-        {selectedData === "avatar" && (
-          <Button
-            onClick={handleChangeAvatar}
-            disabled={loading}
-            variant={"success"}
-            >
-            {loading ? "Salvando...": "Salvar foto"}
-          </Button>
-        )}
-
-        {selectedData === "banner" && (
-          <Button
-            onClick={handleChangeBanner}
-            disabled={loading}
-            variant={"success"}
-            >
-            {loading ? "Salvando...": "Salvar banner"}
-          </Button>
-        )}
-
-        {selectedData === "bio" && (
-          <Button
-            onClick={handleChangeBio}
-            disabled={loading}
-            variant={"success"}
-            >
-            {loading ? "Salvando...": "Salvar bio"}
+            {loading ? "Salvando...": "Salvar links"}
           </Button>
         )}
       </CardFooter>
@@ -988,11 +1115,10 @@ const userData = getUserData();
 
 return (
 <React.Fragment>
-<NavBarReturn title="Editar perfil" />
-
 {userData ? (
 <main className="flex flex-col justify-center items-center h-full w-full">
 <EditProfileLayout user={userData} />
+<Toaster />
 </main>
 ): (
 <LoadingPage />

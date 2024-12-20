@@ -28,6 +28,7 @@ interface User {
   userName: string;
   following: boolean;
   type: string;
+  status: string;
 }
 
 const LikedByLayout = () => {
@@ -157,6 +158,7 @@ const LikedByLayout = () => {
                   type={user.type}
                   _id={user._id}
                   following={user.following}
+                  status={user.status}
                 />
               ))
             ) : (

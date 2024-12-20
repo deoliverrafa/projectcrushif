@@ -146,7 +146,7 @@ onSubmit={handleSubmit}
 >
 <div className="flex flex-col md:flex-row justify-between items-center space-y-5 md:space-y-0 md:space-x-2">
 <div className="grid items-center gap-1.5 w-full max-w-sm">
-<Label htmlFor="userName">Nome Completo <span className="text-xs">{userNameLength}/72</span></Label>
+<Label htmlFor="userName">Nome Completo</Label>
 <Input
 type="text"
 placeholder="Informe seu nome"
@@ -156,19 +156,21 @@ onChange={handleChange}
 value={formData.userName}
 maxLength={72}
 />
+<CardDescription className="ms-2 text-muted-foreground/60 text-xs md:text-xs">{72 - userNameLength} caracteres restantes</CardDescription>
 </div>
 
 <div className="grid items-center gap-1.5 w-full max-w-sm">
-<Label htmlFor="nickname">Usuário <span className="text-xs">{nicknameLength}/18</span></Label>
+<Label htmlFor="nickname">Usuário</Label>
 <Input
 type="text"
-placeholder="Nome do usuário"
+placeholder="Informe seu usuário"
 id="nickname"
 name="nickname"
 onChange={handleChange}
 value={formData.nickname}
 maxLength={18}
 />
+<CardDescription className="ms-2 text-muted-foreground/60 text-xs md:text-xs">{18 - nicknameLength} caracteres restantes</CardDescription>
 </div>
 </div>
 

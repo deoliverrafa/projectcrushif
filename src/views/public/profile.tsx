@@ -394,7 +394,7 @@ const ProfileLayout = () => {
               >
               {liked ? (
                 <>
-                  <HeartSolid className="text-primary h-5 w-5 mr-2" />
+                  <HeartSolid className="heartbeat text-primary h-5 w-5 mr-2" />
                   {likeCount} Curtidas
                 </>
               ): (
@@ -529,7 +529,7 @@ const ProfileLayout = () => {
 
           {viewingUser.bio && (
             <div className="my-0.5">
-              <CardDescription className="text-foreground text-xs md:text-xs">
+              <CardDescription className="text-foreground text-xs md:text-xs break-words">
                 {viewingUser?.bio ? (
                   <>
                     {showFullBio ? (
@@ -555,27 +555,57 @@ const ProfileLayout = () => {
 
           {viewingUser.link && (
             <div className="flex flex-row justify-start items-center my-0.5">
-              <Link className="text-primary font-bold md:font-semibold underline text-xs md:text-xs" to={viewingUser.link}>
-                https://www.crushif.vercel.app/
+              <Link
+                className="text-primary font-bold md:font-semibold underline text-xs md:text-xs truncate max-w-72"
+                to={viewingUser.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                >
+                {viewingUser.link}
               </Link>
             </div>
           )}
 
-          {viewingUser.instagram || viewingUser.facebook || viewingUser.twitter && (
-            <div className="flex flex-row justify-start gap-2 items-center my-0.5">
-              <Button variant={"outline"} size={"icon"}>
-                <BrandInstagramSolid />
-              </Button>
+          <div className={`flex flex-row justify-start gap-2 items-center my-0.5 ${!viewingUser.instagram && !viewingUser.facebook && !viewingUser.twitter ? "hidden": ""}`}>
+            {viewingUser.instagram && (
+              <Link
+                className="text-primary font-bold md:font-semibold underline text-xs md:text-xs truncate max-w-72"
+                to={viewingUser.instagram}
+                target="_blank"
+                rel="noopener noreferrer"
+                >
+                <Button variant={"outline"} size={"icon"}>
+                  <BrandInstagramSolid />
+                </Button>
+              </Link>
+            )}
 
-              <Button variant={"outline"} size={"icon"}>
-                <BrandFacebookSolid />
-              </Button>
-
-              <Button variant={"outline"} size={"icon"}>
-                <BrandXSolid />
-              </Button>
-            </div>
-          )}
+            {viewingUser.facebook && (
+              <Link
+                className="text-primary font-bold md:font-semibold underline text-xs md:text-xs truncate max-w-72"
+                to={viewingUser.facebook}
+                target="_blank"
+                rel="noopener noreferrer"
+                >
+                <Button variant={"outline"} size={"icon"}>
+                  <BrandFacebookSolid />
+                </Button>
+              </Link>
+            )}
+            
+            {viewingUser.twitter && (
+              <Link
+                className="text-primary font-bold md:font-semibold underline text-xs md:text-xs truncate max-w-72"
+                to={viewingUser.twitter}
+                target="_blank"
+                rel="noopener noreferrer"
+                >
+                <Button variant={"outline"} size={"icon"}>
+                  <BrandXSolid />
+                </Button>
+              </Link>
+            )}
+          </div>
 
           <div className="flex flex-row justify-start items-center my-0.5">
             {Array.isArray(likedByUsers) && likedByUsers.length > 0 ? (
