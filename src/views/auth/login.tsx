@@ -1,7 +1,6 @@
 import * as React from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import OneSignal from "react-onesignal"
 
 import {
   Card,

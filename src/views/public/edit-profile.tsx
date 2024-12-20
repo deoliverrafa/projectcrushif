@@ -50,7 +50,6 @@ import {
   DropdownItem,
   DropdownLabel,
   DropdownTrigger,
-  DropdownSeparator
 } from "../../components/ui/dropdown.tsx";
 import {
   Dialog,
@@ -80,7 +79,6 @@ import {
   LockPasswordSolid,
   DotsVerticalSolid,
   SignalSolid,
-  CheckSquareOneSolid,
   BrandInstagramSolid,
   BrandFacebookSolid,
   BrandXSolid,
@@ -108,29 +106,6 @@ import {
 import {
   User
 } from "../../interfaces/userInterface.ts";
-
-interface User {
-  _id: string;
-  nickname: string;
-  userName: string;
-  email: string;
-  campus: string;
-  className?: string;
-  avatar: string;
-  banner: string;
-  curso: string;
-  type: string;
-  password: string;
-  gender: string;
-  bio: string;
-  birthdaydata: string;
-  link: string;
-  instagram: string;
-  facebook: string;
-  twitter: string;
-  likedBy: string[];
-  following: string[];
-}
 
 interface userData {
   user: User;

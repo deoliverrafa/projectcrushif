@@ -77,9 +77,7 @@ const SupportLayout = () => {
       import.meta.env.VITE_EMAILJS_API_KEY
     )
     .then(
-      (response) => {
-        console.log("E-mail enviado para o administrador com sucesso!");
-
+      () => {
         emailjs
         .send(
           import.meta.env.VITE_EMAILJS_SERVICE_ID,
@@ -88,15 +86,15 @@ const SupportLayout = () => {
           import.meta.env.VITE_EMAILJS_API_KEY
         )
         .then(
-          (response) => {
-            console.log("E-mail enviado para o usuário com sucesso!");
+          (response: any) => {
+            console.log("E-mail enviado para o usuário com sucesso!", response);
           },
-          (error) => {
+          (error: any) => {
             console.error("Erro ao enviar e-mail para o usuário:", error);
           }
         );
       },
-      (error) => {
+      (error: any) => {
         console.error("Erro ao enviar e-mail para o administrador:", error);
       }
     );
