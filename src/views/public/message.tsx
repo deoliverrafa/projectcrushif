@@ -1,6 +1,6 @@
 import * as React from "react";
 import { io } from "socket.io-client";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
 import {
   Card,
@@ -20,6 +20,7 @@ import {
   ChevronRight,
   ChevronLeft,
   FatCornerUpRightSolid,
+  Home,
 } from "@mynaui/icons-react";
 import { Input } from "../../components/ui/input";
 import { ScrollArea } from "../../components/ui/scroll-area";
@@ -31,6 +32,7 @@ import { getUserDataById } from "../../utils/getUserDataById";
 import { User } from "../../interfaces/userInterface";
 import { UserFollowing } from "../../components/userSuggestions";
 import LoadingPage from "./loading";
+import { Fab } from "../../components/ui/fab";
 // import { id } from "date-fns/locale";
 
 const socket = io(`${import.meta.env.VITE_API_BASE_URL}`, {
@@ -257,6 +259,7 @@ const MessageLayout = () => {
       sendMessage();
     }
   };
+  const navigate = useNavigate();
 
   if (loading || !chatUser) {
     return <LoadingPage />;
@@ -272,7 +275,7 @@ const MessageLayout = () => {
                 variant={"outline"}
                 size={"icon"}
                 className="text-muted-foreground hover:text-primary/70 hover:border-primary/70"
-                onClick={() => (window.location.href = "/messages")}
+                onClick={() => navigate(-1)}
               >
                 <ChevronLeft />
               </Button>
@@ -281,7 +284,12 @@ const MessageLayout = () => {
                 to={`/profile/${activeChatUserId}`}
                 className="flex flex-row items-center gap-2"
               >
-                <div className="relative" onClick={() => {handleDisconnect}}>
+                <div
+                  className="relative"
+                  onClick={() => {
+                    handleDisconnect;
+                  }}
+                >
                   <Avatar className="shadow-lg border-2 border-border">
                     <AvatarFallback>{chatUser?.nickname}</AvatarFallback>
                     <AvatarImage src={chatUser?.avatar} />
@@ -340,6 +348,11 @@ const MessageLayout = () => {
             <Button onClick={sendMessage} variant={"outline"} size={"icon"}>
               <FatCornerUpRightSolid className="h-5 w-5" />
             </Button>
+            <Link to={"/"} className="max-md:hidden">
+              <Fab>
+                <Home></Home>
+              </Fab>
+            </Link>
           </CardFooter>
         </CardContent>
       </Card>
