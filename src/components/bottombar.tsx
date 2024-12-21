@@ -1,6 +1,10 @@
 import * as React from "react";
-import { cn } from "../lib/utils";
-import { NavLink } from "react-router-dom";
+import {
+  cn
+} from "../lib/utils";
+import {
+  NavLink
+} from "react-router-dom";
 
 import {
   GridSolid,
@@ -8,13 +12,15 @@ import {
   FireSolid,
 } from "@mynaui/icons-react";
 
-interface BottombarProps extends React.HTMLAttributes<HTMLDivElement> {
+interface BottombarProps extends React.HTMLAttributes < HTMLDivElement > {
   className?: string;
   children: React.ReactNode;
 }
 
-const Bottombar = React.forwardRef<HTMLDivElement, BottombarProps>(
-  ({ className, children, ...props }, ref) => {
+const Bottombar = React.forwardRef < HTMLDivElement, BottombarProps > (
+  ({
+    className, children, ...props
+  }, ref) => {
     const [isVisible, setIsVisible] = React.useState(true);
     const [lastScrollY, setLastScrollY] = React.useState(0);
 
@@ -35,11 +41,11 @@ const Bottombar = React.forwardRef<HTMLDivElement, BottombarProps>(
         ref={ref}
         className={cn(
           "border border-border rounded-t-3xl transition-transform duration-300 bg-background shadow flex flex-row justify-around items-center fixed bottom-0 inset-x-0 px-2 md:px-1 py-1 w-full z-20",
-          isVisible ? "translate-y-0" : "translate-y-full",
+          isVisible ? "translate-y-0": "translate-y-full",
           className
         )}
         {...props}
-      >
+        >
         {children}
       </div>
     );
@@ -48,17 +54,19 @@ const Bottombar = React.forwardRef<HTMLDivElement, BottombarProps>(
 Bottombar.displayName = "Bottombar";
 
 interface BottombarItemProps
-  extends Omit<React.ComponentPropsWithoutRef<typeof NavLink>, "ref"> {
+extends Omit < React.ComponentPropsWithoutRef < typeof NavLink >, "ref" > {
   className?: string;
   children: React.ReactNode;
+  icon: React.ReactNode;
 }
 
-export const BottombarItem: React.FC<BottombarItemProps> = ({
+export const BottombarItem: React.FC < BottombarItemProps > = ({
   className,
   children,
+  icon,
   ...props
 }) => {
-  const handleRipple = (event: React.MouseEvent<HTMLAnchorElement>) => {
+  const handleRipple = (event: React.MouseEvent < HTMLAnchorElement >) => {
     const button = event.currentTarget;
     const circle = document.createElement("span");
 
@@ -67,10 +75,10 @@ export const BottombarItem: React.FC<BottombarItemProps> = ({
 
     circle.style.width = circle.style.height = `${diameter}px`;
     circle.style.left = `${
-      event.clientX - button.getBoundingClientRect().left - radius
+    event.clientX - button.getBoundingClientRect().left - radius
     }px`;
     circle.style.top = `${
-      event.clientY - button.getBoundingClientRect().top - radius
+    event.clientY - button.getBoundingClientRect().top - radius
     }px`;
     circle.style.position = "absolute";
     circle.style.backgroundColor = "rgba(255, 255, 255, 0.6)";
@@ -102,21 +110,38 @@ export const BottombarItem: React.FC<BottombarItemProps> = ({
   return (
     <NavLink
       className={({ isActive }) =>
-        cn(
-          "flex flex-col items-center relative font-bold md:font-semibold text-md md:text-sm px-4 md:px-2 py-1 md:py-0.5 gap-1 overflow-hidden",
-          isActive
-            ? "text-primary animate-clickBounce border-b border-primary"
-            : "text-muted-foreground/70",
-          "hover:text-primary/70",
-          className
-        )
+      cn(
+        "flex flex-col items-center relative font-bold md:font-semibold text-md md:text-sm px-4 md:px-2 py-1 md:py-0.5 gap-1 overflow-hidden",
+        isActive
+        ? "text-primary animate-clickBounce": "text-muted-foreground/70",
+        "hover:text-primary/70",
+        className
+      )
       }
       onClick={(e) => {
         handleRipple(e);
         if (props.onClick) props.onClick(e);
       }}
       {...props}
-    >
+      >
+      <NavLink
+        className={({ isActive }) =>
+        cn(
+          "flex flex-col items-center relative font-bold md:font-semibold text-md md:text-sm px-3.5 py-0.5 overflow-hidden",
+          isActive
+          ? "text-primary bg-primary/30 rounded-3xl animate-clickBounce": "text-muted-foreground/70",
+          "hover:text-primary/70",
+          className
+        )
+        }
+        onClick={(e) => {
+          handleRipple(e);
+          if (props.onClick) props.onClick(e);
+        }}
+        {...props}
+        >
+        {icon}
+      </NavLink>
       {children}
     </NavLink>
   );
@@ -126,18 +151,15 @@ BottombarItem.displayName = "BottombarItem";
 export const BottomBar = () => {
   return (
     <Bottombar className="bg-card flex md:hidden">
-      <BottombarItem to="/">
-        <GridSolid />
+      <BottombarItem icon={<GridSolid />} to="/">
         Inicio
       </BottombarItem>
 
-      <BottombarItem to="/search">
-        <SearchSolid />
+      <BottombarItem icon={<SearchSolid />} to="/search">
         Pesquisar
       </BottombarItem>
 
-      <BottombarItem to="/crush">
-        <FireSolid />
+      <BottombarItem icon={<FireSolid />} to="/crush">
         Crush
       </BottombarItem>
     </Bottombar>

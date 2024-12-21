@@ -1,6 +1,12 @@
 import * as React from "react";
-import { cn } from "../lib/utils.ts";
-import { Link, NavLink, useNavigate } from "react-router-dom";
+import {
+  cn
+} from "../lib/utils.ts";
+import {
+  Link,
+  NavLink,
+  useNavigate
+} from "react-router-dom";
 
 import {
   Sheet,
@@ -17,10 +23,21 @@ import {
   DropdownLabel,
   DropdownTrigger,
 } from "./ui/dropdown.tsx";
-import { Button } from "./ui/button.tsx";
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar.tsx";
-import { Card, CardTitle } from "./ui/card.tsx";
-import { Separator } from "./ui/separator.tsx";
+import {
+  Button
+} from "./ui/button.tsx";
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage
+} from "./ui/avatar.tsx";
+import {
+  Card,
+  CardTitle
+} from "./ui/card.tsx";
+import {
+  Separator
+} from "./ui/separator.tsx";
 
 import {
   GridSolid,
@@ -37,6 +54,7 @@ import {
   LogoutSolid,
   EditOneSolid,
   ChevronLeft,
+  NotificationSolid
 } from "@mynaui/icons-react";
 
 import UserIcon from "../../public/images/user.png";
@@ -63,11 +81,13 @@ interface userData {
   avatarPath?: string;
 }
 
-interface NavbarProps extends React.HTMLAttributes<HTMLElement> {
+interface NavbarProps extends React.HTMLAttributes < HTMLElement > {
   className?: string;
 }
 
-const Profile = ({ nickname, avatar, type }: profile) => {
+const Profile = ({
+  nickname, avatar, type
+}: profile) => {
   const decodedObj = decodeToken(localStorage.getItem("token") ?? "");
   const userData = decodedObj?.user;
 
@@ -81,8 +101,8 @@ const Profile = ({ nickname, avatar, type }: profile) => {
         <Avatar className="shadow-lg border-2 border-border h-8 w-8">
           <AvatarImage
             className="object-cover"
-            src={avatar ? avatar : UserIcon}
-          />
+            src={avatar ? avatar: UserIcon}
+            />
           <AvatarFallback>{nickname}</AvatarFallback>
         </Avatar>
       </SheetTrigger>
@@ -106,25 +126,22 @@ const Profile = ({ nickname, avatar, type }: profile) => {
                     <AvatarFallback>{nickname}</AvatarFallback>
                     <AvatarImage
                       className="object-cover"
-                      src={avatar ? avatar : UserIcon}
-                    />
+                      src={avatar ? avatar: UserIcon}
+                      />
                   </Avatar>
 
                   <div className="flex flex-row items-center gap-1">
                     <CardTitle className="font-semibold md:font-medium text-md md:text-sm tracking-tight">
-                      {nickname ? `${nickname}` : "indisponível"}
+                      {nickname ? `${nickname}`: "indisponível"}
                     </CardTitle>
 
                     <HeartWavesSolid
                       className={`${type === "Plus"
-                        ? "text-info"
-                        : type === "Admin"
-                          ? "text-danger"
-                          : type === "Verified"
-                            ? "text-success"
-                            : "hidden"
-                        } h-3.5 w-3.5`}
-                    />
+                      ? "text-info": type === "Admin"
+                      ? "text-danger": type === "Verified"
+                      ? "text-success": "hidden"
+                      } h-3.5 w-3.5`}
+                      />
                   </div>
                 </div>
 
@@ -143,9 +160,25 @@ const Profile = ({ nickname, avatar, type }: profile) => {
             </SheetDescription>
 
             <Link
+              to="/notifications"
+              className="flex flex-row justify-between items-center px-3 py-1.5"
+              >
+              <div className="flex flex-row items-center gap-2">
+                <NotificationSolid />
+                <p className="font-poppins font-semibold md:font-medium text-md md:text-sm tracking-tight">
+                  Notificações
+                </p>
+              </div>
+
+              <Button variant={"outline"} size={"icon"}>
+                <ChevronRight />
+              </Button>
+            </Link>
+
+            <Link
               to="/saved"
               className="flex flex-row justify-between items-center px-3 py-1.5"
-            >
+              >
               <div className="flex flex-row items-center gap-2">
                 <HeartSolid />
                 <p className="font-poppins font-semibold md:font-medium text-md md:text-sm tracking-tight">
@@ -161,7 +194,7 @@ const Profile = ({ nickname, avatar, type }: profile) => {
             <Link
               to="/favorited"
               className="flex flex-row justify-between items-center px-3 py-1.5"
-            >
+              >
               <div className="flex flex-row items-center gap-2">
                 <BookmarkSolid />
                 <p className="font-poppins font-semibold md:font-medium text-md md:text-sm tracking-tight">
@@ -185,7 +218,7 @@ const Profile = ({ nickname, avatar, type }: profile) => {
             <Link
               to="/profile/edit"
               className="flex flex-row justify-between items-center px-3 py-1.5"
-            >
+              >
               <div className="flex flex-row items-center gap-2">
                 <EditOneSolid />
                 <p className="font-poppins font-semibold md:font-medium text-md md:text-sm tracking-tight">
@@ -202,7 +235,7 @@ const Profile = ({ nickname, avatar, type }: profile) => {
               to="/auth/login"
               className="flex flex-row justify-between items-center px-3 py-1.5"
               onClick={logOutHandle}
-            >
+              >
               <div className="flex flex-row items-center gap-2">
                 <LogoutSolid className="text-danger" />
                 <p className="text-danger font-poppins font-semibold md:font-medium text-md md:text-sm tracking-tight">
@@ -221,9 +254,13 @@ const Profile = ({ nickname, avatar, type }: profile) => {
   );
 };
 
-const Navbar: React.FC<NavbarProps> = ({ className, children, ...props }) => {
-  const [isVisible, setIsVisible] = React.useState(true);
-  const [lastScrollY, setLastScrollY] = React.useState(0);
+const Navbar: React.FC < NavbarProps > = ({
+  className, children, ...props
+}) => {
+  const [isVisible,
+    setIsVisible] = React.useState(true);
+  const [lastScrollY,
+    setLastScrollY] = React.useState(0);
 
   const handleScroll = () => {
     if (window.scrollY > lastScrollY) {
@@ -245,22 +282,22 @@ const Navbar: React.FC<NavbarProps> = ({ className, children, ...props }) => {
     <nav
       className={cn(
         "border border-border rounded-b-3xl transition-transform duration-300 select-none bg-card shadow flex flex-row justify-between items-center sticky top-0 inset-x-0 translate-y-0 md:translate-y-0/2 px-4 md:px-2 py-0 w-full md:w-4/6 md:mx-auto z-20",
-        isVisible ? "translate-y-0" : "-translate-y-full",
+        isVisible ? "translate-y-0": "-translate-y-full",
         className
       )}
       {...props}
-    >
+      >
       {children}
     </nav>
   );
 };
 Navbar.displayName = "Navbar";
 
-interface NavbarContentProps extends React.HTMLAttributes<HTMLDivElement> {
+interface NavbarContentProps extends React.HTMLAttributes < HTMLDivElement > {
   className?: string;
 }
 
-const NavbarContent: React.FC<NavbarContentProps> = ({
+const NavbarContent: React.FC < NavbarContentProps > = ({
   className,
   children,
   ...props
@@ -272,7 +309,7 @@ const NavbarContent: React.FC<NavbarContentProps> = ({
         className
       )}
       {...props}
-    >
+      >
       {children}
     </div>
   );
@@ -280,14 +317,14 @@ const NavbarContent: React.FC<NavbarContentProps> = ({
 NavbarContent.displayName = "NavbarContent";
 
 interface NavbarItemProps
-  extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
+extends React.AnchorHTMLAttributes < HTMLAnchorElement > {
   href: string;
   activeClassName?: string;
   hoverClassName?: string;
   className?: string;
 }
 
-const NavbarItem: React.FC<NavbarItemProps> = ({
+const NavbarItem: React.FC < NavbarItemProps > = ({
   href,
   activeClassName,
   hoverClassName,
@@ -296,7 +333,7 @@ const NavbarItem: React.FC<NavbarItemProps> = ({
   ...props
 }) => {
   const handleRipple = (
-    event: React.MouseEvent<HTMLAnchorElement, MouseEvent>
+    event: React.MouseEvent < HTMLAnchorElement, MouseEvent >
   ) => {
     const button = event.currentTarget;
     const circle = document.createElement("span");
@@ -306,9 +343,9 @@ const NavbarItem: React.FC<NavbarItemProps> = ({
 
     circle.style.width = circle.style.height = `${diameter}px`;
     circle.style.left = `${event.clientX - button.getBoundingClientRect().left - radius
-      }px`;
+    }px`;
     circle.style.top = `${event.clientY - button.getBoundingClientRect().top - radius
-      }px`;
+    }px`;
     circle.style.position = "absolute";
     circle.style.backgroundColor = "rgba(255, 255, 255, 0.6)";
     circle.style.borderRadius = "50%";
@@ -339,14 +376,13 @@ const NavbarItem: React.FC<NavbarItemProps> = ({
   return (
     <NavLink
       className={({ isActive }) =>
-        cn(
-          "font-semibold flex flex-row items-center relative gap-1 overflow-hidden px-4 md:px-2 py-2 md:py-1 text-md md:text-sm",
-          isActive
-            ? "text-primary animate-clickBounce border-t border-primary"
-            : "text-muted-foreground/70",
-          "hover:text-primary/70",
-          className
-        )
+      cn(
+        "font-semibold flex flex-row items-center relative gap-1 overflow-hidden px-4 md:px-2 py-2 md:py-1 text-md md:text-sm",
+        isActive
+        ? "text-primary rounded-3xl bg-primary/30 animate-clickBounce": "text-muted-foreground/70",
+        "hover:text-primary/70",
+        className
+      )
       }
       to={href}
       onClick={(e) => {
@@ -354,7 +390,7 @@ const NavbarItem: React.FC<NavbarItemProps> = ({
         if (props.onClick) props.onClick(e);
       }}
       {...props}
-    >
+      >
       {children}
     </NavLink>
   );
@@ -362,14 +398,14 @@ const NavbarItem: React.FC<NavbarItemProps> = ({
 NavbarItem.displayName = "NavbarItem";
 
 interface NavbarBrandProps
-  extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
+extends React.AnchorHTMLAttributes < HTMLAnchorElement > {
   href: string;
   activeClassName?: string;
   hoverClassName?: string;
   className?: string;
 }
 
-const NavbarBrand: React.FC<NavbarBrandProps> = ({
+const NavbarBrand: React.FC < NavbarBrandProps > = ({
   href,
   activeClassName,
   hoverClassName,
@@ -385,7 +421,7 @@ const NavbarBrand: React.FC<NavbarBrandProps> = ({
       )}
       to={href}
       {...props}
-    >
+      >
       {children}
     </Link>
   );
@@ -404,7 +440,7 @@ export const NavBar = (props: userData) => {
             <NavbarBrand
               className="text-primary font-cookie font-medium md:font-medium text-[2rem] gap-2 md:ms-2"
               href={""}
-            >
+              >
               Crushif
               <ChevronDown className="text-muted-foreground" />
             </NavbarBrand>
@@ -418,7 +454,7 @@ export const NavBar = (props: userData) => {
             <Link
               to={"/settings"}
               className="flex flex-row justify-between items-center px-1"
-            >
+              >
               <DropdownItem className=" w-full flex flex-row items-center gap-1">
                 <CogFourSolid className="h-5 w-5" />
                 Configurações
@@ -428,10 +464,10 @@ export const NavBar = (props: userData) => {
             <Link
               to={"/support"}
               className="flex flex-row justify-between items-center px-1"
-            >
+              >
               <DropdownItem className="focus:text-primary/70 w-full cursor-pointer flex flex-row items-center gap-1">
                 <SupportSolid className="h-5 w-5" />
-                  Suporte
+                Suporte
               </DropdownItem>
             </Link>
           </DropdownContent>
@@ -443,7 +479,7 @@ export const NavBar = (props: userData) => {
           href="/"
           activeClassName="text-primary"
           hoverClassName="text-primary/70"
-        >
+          >
           <GridSolid className="h-5 w-5" />
           Inicio
         </NavbarItem>
@@ -452,7 +488,7 @@ export const NavBar = (props: userData) => {
           href="/search"
           activeClassName="text-primary"
           hoverClassName="text-primary/70"
-        >
+          >
           <SearchSolid className="h-5 w-5" />
           Pesquisar
         </NavbarItem>
@@ -460,7 +496,7 @@ export const NavBar = (props: userData) => {
           href="/crush"
           activeClassName="text-primary"
           hoverClassName="text-primary/70"
-        >
+          >
           <FireSolid className="h-5 w-5" />
           Crush
         </NavbarItem>
@@ -472,17 +508,22 @@ export const NavBar = (props: userData) => {
             href="/messages"
             activeClassName="text-primary"
             hoverClassName="text-primary/70"
-          >
+            className="relative"
+            >
             <SendSolid className="h-6 w-6" />
+            <div className="pulse-status-container top-1 right-1 rounded-full text-xs absolute">
+              <span className="bg-primary pulse-status"></span>
+              <span className="bg-primary pulse-status-core h-3.5 w-3.5 flex justify-center items-center font-semibold md:font-medium text-foreground text-xs">0</span>
+            </div>
           </NavbarItem>
         </div>
 
-        <NavbarItem className="border-0" href={""}>
+        <NavbarItem className="bg-transparent" href={""}>
           <Profile
-            nickname={props.user?.nickname ? props.user.nickname : ""}
-            avatar={props.avatarPath ? props.avatarPath : ""}
-            type={userData?.type ? userData.type : ""}
-          />
+            nickname={props.user?.nickname ? props.user.nickname: ""}
+            avatar={props.avatarPath ? props.avatarPath: ""}
+            type={userData?.type ? userData.type: ""}
+            />
         </NavbarItem>
       </NavbarContent>
     </Navbar>
@@ -506,7 +547,7 @@ export const NavBarReturn = (props: NavBarReturnProps) => {
             size={"icon"}
             className="text-muted-foreground hover:text-primary/70 hover:border-primary/70"
             onClick={() => navigate(-1)}
-          >
+            >
             <ChevronLeft />
           </Button>
         </NavbarContent>
@@ -521,7 +562,7 @@ export const NavBarReturn = (props: NavBarReturnProps) => {
               variant={"outline"}
               size={"icon"}
               className="text-muted-foreground hover:text-primary/70"
-            >
+              >
               {props.menu}
             </Button>
           )}
