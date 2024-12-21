@@ -61,6 +61,7 @@ const LoginLayout = () => {
       if (response.data.logged) {
         localStorage.setItem("token", response.data.token);
         localStorage.setItem("userId", response.data.userId);
+        localStorage.setItem("welcome", "true");
         window.location.href = "/";
       } else {
         setMessageError(response.data.message);

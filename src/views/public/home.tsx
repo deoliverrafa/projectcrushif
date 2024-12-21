@@ -6,6 +6,12 @@ import {
 import {
   Link
 } from "react-router-dom";
+import {
+  Toaster
+} from "../../components/ui/toaster.tsx"
+import {
+  useToast
+} from "../../hooks/use-toast.ts"
 
 import LoadingPage from "./loading.tsx";
 
@@ -69,6 +75,10 @@ export default function HomePage() {
   const [userId] = React.useState < string | null > (
     localStorage.getItem("userId")
   );
+
+  const {
+    toast
+  } = useToast()
 
   const deletePostFromState = async (postId: string) => {
     try {
@@ -176,6 +186,20 @@ export default function HomePage() {
       handleScroll);
   }, [loading, limit, finishedPosts]);
 
+  React.useEffect(() => {
+    if (localStorage.getItem("welcome") === "true" && userData?.nickname) {
+      toast( {
+        title: `Bem-vindo de volta, ${userData.nickname}`,
+        description: `Ficamos felizes em ver você de novo! Seus dados foram atualizados com sucesso.`,
+      });
+
+      setTimeout(() => {
+        localStorage.removeItem("welcome");
+      }, 5000);
+    }
+  },
+    [userData]);
+
   return (
     <>
       {userData ? (
@@ -224,6 +248,8 @@ export default function HomePage() {
                 </p>
               </div>
             )}
+
+            <Toaster />
           </main>
 
           <div className="mt-10"></div>
