@@ -127,6 +127,10 @@ interface Post {
 }
 
 const ProfileLayout = () => {
+  const formatter = Intl.NumberFormat("en", {
+    notation: "compact"
+  });
+  
   const currentUser = getUserData();
   const [viewingUser,
     setViewingUser] = React.useState < User | undefined > (
@@ -395,7 +399,7 @@ const ProfileLayout = () => {
               {liked ? (
                 <>
                   <HeartSolid className="heartbeat text-primary h-5 w-5 mr-2" />
-                  {likeCount} Curtidas
+                  {formatter.format(likeCount)} Curtidas
                 </>
               ): (
                 <>
@@ -668,7 +672,7 @@ const ProfileLayout = () => {
             to={`/followers/${viewingUser._id}`}
             className="flex flex-col items-center"
             >
-            <CardTitle className="text-foreground">{NFollowing}</CardTitle>
+            <CardTitle className="text-foreground">{formatter.format(NFollowing)}</CardTitle>
 
             <CardDescription className="text-foreground">Seguidores</CardDescription>
           </Link>
@@ -679,7 +683,7 @@ const ProfileLayout = () => {
             to={`/following/${viewingUser._id}`}
             className="flex flex-col items-center"
             >
-            <CardTitle className="text-foreground">{viewingUser.Nfollowing}</CardTitle>
+            <CardTitle className="text-foreground">{formatter.format(viewingUser.Nfollowing)}</CardTitle>
 
             <CardDescription className="text-foreground">Seguindo</CardDescription>
           </Link>

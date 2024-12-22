@@ -306,12 +306,14 @@ const MessageLayout = () => {
                   <CardTitle className="font-semibold md:font-medium text-md tracking-tight truncate max-w-[120px]">
                     {chatUser?.nickname}
                   </CardTitle>
-                  <CardDescription className="text-xs truncate max-w-[120px]">
+                  <CardDescription className={`${userJoined ? "hidden" : ""} text-xs truncate max-w-[120px]`}>
                     {chatUser?.userName}
                   </CardDescription>
+                  {userJoined && (
                   <CardDescription className="text-warning text-xs truncate max-w-[120px]">
                     {userJoined ? "Está no chat" : null}
                   </CardDescription>
+                  )}
                 </div>
                 <ChevronRight />
               </Link>

@@ -144,6 +144,10 @@ interface CardProps {
 
 export const CardPost = (props: CardProps) => {
   // const decodedObj = decodeToken(localStorage.getItem("token") ?? "");
+  const formatter = Intl.NumberFormat("en", {
+    notation: "compact"
+  });
+  
   const token = localStorage.getItem("token");
   const dataUser = getUserData();
 
@@ -556,22 +560,25 @@ export const CardPost = (props: CardProps) => {
   // Lógica para deletar Post
 
   const deletePost = async (postId: string) => {
-    try {
-      setIsDeleting(true);
-      setOpenDelete(false);
-      const response: any = await props.onDelete(postId);
+  try {
+    setIsDeleting(true);
+    setOpenDelete(false);
+    
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    const response: any = await props.onDelete(postId);
 
-      if (response.data.deleted) {
-        console.log("Post deletado com sucesso");
-      } else {
-        console.error("Erro: Post não foi deletado");
-      }
-    } catch (error) {
-      console.error("Erro ao deletar post:", error);
-    } finally {
-      setIsDeleting(false);
+    if (response.data.deleted) {
+      console.log("Post deletado com sucesso");
+    } else {
+      console.error("Erro: Post não foi deletado");
     }
-  };
+  } catch (error) {
+    console.error("Erro ao deletar post:", error);
+  } finally {
+    setIsDeleting(false);
+  }
+};
+
 
   const [friendsWhoLikedData,
     setFriendsWhoLikedData] =
@@ -867,7 +874,7 @@ export const CardPost = (props: CardProps) => {
                         } h-5 md:h-4 w-5 md:w-4`}
                         />
                     )}
-                    {likeCount}
+                    {formatter.format(likeCount)}
                   </Button>
 
                   <Drawer>
@@ -881,7 +888,7 @@ export const CardPost = (props: CardProps) => {
                         }}
                         >
                         <MessageSolid className="h-5 md:h-4 w-5 md:w-4" />
-                        {commentCount}
+                        {formatter.format(commentCount)}
                       </Button>
                     </DrawerTrigger>
 

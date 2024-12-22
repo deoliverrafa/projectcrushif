@@ -21,8 +21,7 @@ const EventsPage = React.lazy(() => import("./views/public/events.tsx"));
 const MessagesPage = React.lazy(() => import("./views/public/messages.tsx"));
 const MessagePage = React.lazy(() => import("./views/public/message.tsx"));
 const NotificationsPage = React.lazy(
-  () => import("./views/public/notifications.page.tsx")
-);
+  () => import("./views/public/notifications.tsx"));
 
 const SettingsPage = React.lazy(() => import("./views/public/settings.tsx"));
 const SupportPage = React.lazy(() => import("./views/public/support.tsx"));
