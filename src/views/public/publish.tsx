@@ -1,4 +1,10 @@
 import * as React from "react";
+import {
+  Toaster
+} from "../../components/ui/toaster.tsx"
+import {
+  useToast
+} from "../../hooks/use-toast.ts"
 
 import { NavBarReturn } from "../../components/navbar";
 import {
@@ -10,7 +16,6 @@ import {
 import { Input } from "../../components/ui/input";
 import { Button } from "../../components/ui/button";
 import { Label } from "../../components/ui/label";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../../components/ui/tooltip";
 
 import {
   IncognitoSolid,
@@ -39,12 +44,18 @@ const LogoLayout = () => {
 };
 
 const PublishLayout = () => {
+  const {
+    toast
+  } = useToast()
+  
   const [userId] = React.useState<string | null>(
     localStorage.getItem("userId")
   );
   
+  const currentDate = new Date();
+  const formattedDate = `${currentDate.toLocaleDateString()} às ${currentDate.toLocaleTimeString()}`;
+  
   const [isAnonymous, setAnonymous] = React.useState<boolean>(false);
-  const [errorMessage, setErrorMessage] = React.useState("");
 
   const [cardData, setCardData] = React.useState<CardData>({
     content: "",
@@ -84,14 +95,17 @@ const PublishLayout = () => {
 
       const maxFiles = 5;
       if (uploadedImages.length + files.length > maxFiles) {
-        setErrorMessage(`Você pode fazer upload de até ${maxFiles} imagens no total.`);
+        toast( {
+          variant: "danger",
+          title: "Notificação",
+          description: `Você pode fazer upload de até ${maxFiles} imagens no total, ${formattedDate}`,
+        })
         return;
       }
 
       const newImages = files.map((file) => URL.createObjectURL(file));
       setUploadedImages((prev) => [...prev, ...files]);
       setImages((prev) => [...prev, ...newImages]);
-      setErrorMessage(""); // Limpa a mensagem de erro, se existir
     }
   };
 
@@ -115,16 +129,17 @@ const PublishLayout = () => {
         images.type === "image/png" ||
         images.type === "image/gif"
       ) {
-        setErrorMessage("");
         const imageUrl = URL.createObjectURL(images);
         setCardData((prevData) => ({
           ...prevData,
           photoURLs: imageUrl,
         }));
       } else {
-        setErrorMessage(
-          "Por favor, selecione uma imagem válida (JPEG, PNG ou GIF)."
-        );
+        toast( {
+          variant: "danger",
+          title: "Notificação",
+          description: `Por favor, selecione uma imagem válida (JPEG, PNG ou GIF), ${formattedDate}`,
+        })
       }
     }
   }, [images]);
@@ -166,11 +181,19 @@ const PublishLayout = () => {
       if (result.posted) {
         window.location.href = "/";
       } else {
-        setErrorMessage(result.message || "Falha ao postar. Tente novamente.");
+        toast( {
+          variant: "danger",
+          title: "Notificação",
+          description: `Falha ao postar. Tente novamente, ${formattedDate}`,
+        })
       }
     } catch (error) {
       console.error("Erro:", error);
-      setErrorMessage("Ocorreu um erro ao enviar sua postagem.");
+      toast( {
+          variant: "danger",
+          title: "Notificação",
+          description: `Ocorreu um erro ao enviar sua postagem, ${formattedDate}`,
+        })
     }
   }
 
@@ -180,29 +203,9 @@ const PublishLayout = () => {
     return (
       <div onClick={handleIsAnonymous}>
         {!isAnonymous ? (
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger>
-                <EarthSolid />
-              </TooltipTrigger>
-
-              <TooltipContent>
-                <p>Público</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
+          <EarthSolid />
         ) : (
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger>
-                <IncognitoSolid />
-              </TooltipTrigger>
-
-              <TooltipContent>
-                <p>Anônimo</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
+          <IncognitoSolid />
         )}
       </div>
     )
@@ -262,18 +265,6 @@ const PublishLayout = () => {
                   onChange={handleChangeData}
                 />
 
-                <div className="my-3">
-                  {errorMessage && (
-                    <div
-                      className="p-4 mb-4 text-sm text-danger rounded-lg"
-                      role="alert"
-                    >
-                      <span className="font-medium">Atenção!</span> {errorMessage}
-                    </div>
-                  )}
-                </div>
-
-
                 <Button type="submit" className="w-full">
                   Enviar
                 </Button>
@@ -290,6 +281,7 @@ const PublishPage = () => {
   return (
     <>
       <PublishLayout />
+      <Toaster />
     </>
   );
 };
