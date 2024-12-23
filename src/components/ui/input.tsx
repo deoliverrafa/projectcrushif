@@ -123,8 +123,8 @@ const Input = React.forwardRef < HTMLInputElement, InputProps > (
           }
         }}
         className={cn(
-          "flex h-10 md:h-9 w-11/12 rounded-s-3xl border border-input bg-transparent font-poppins font-medium md:font-normal px-3 py-1 text-md md:text-sm shadow-sm transition-colors placeholder:text-muted-foreground/60 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50",
-          !inputValue && type !== "file" && type !== "password" ? "w-full rounded-3xl": "",
+          "flex h-10 md:h-9 w-11/12 rounded-s-md border border-input bg-gradient-to-br from-background/70 via-background/90 to-background font-poppins font-medium md:font-normal px-3 py-2 text-md md:text-sm shadow-sm transition-colors placeholder:text-muted-foreground/60 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50",
+          !inputValue && type !== "file" && type !== "password" ? "w-full rounded-md": "",
           className
         )}
         ref={ref}
@@ -137,7 +137,7 @@ const Input = React.forwardRef < HTMLInputElement, InputProps > (
     <button
       type="button"
       onClick={togglePasswordVisibility}
-      className="border-y border-e rounded-e-3xl h-10 md:h-9 px-2 text-muted-foreground"
+      className="border-y bg-background border-e rounded-e-md h-10 md:h-9 px-2 text-muted-foreground"
       >
       {inputType === "password" ? (
         <EyeSolid className="h-5 w-5" />
@@ -151,7 +151,7 @@ const Input = React.forwardRef < HTMLInputElement, InputProps > (
     <button
       type="button"
       onClick={clearInput}
-      className={`${inputValue ? "border-y border-e rounded-e-3xl h-10 md:h-9 px-2": ""} text-muted-foreground`}
+      className={`${inputValue ? "border-y border-e bg-background rounded-e-md h-10 md:h-9 px-2": ""} text-muted-foreground`}
       >
       <XCircleSolid className="h-5 w-5" />
     </button>

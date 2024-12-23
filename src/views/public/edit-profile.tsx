@@ -754,7 +754,7 @@ const EditProfileLayout = (props: userData) => {
                 target="_blank"
                 rel="noopener noreferrer"
                 >
-                <Button variant={"outline"} size={"icon"}>
+                <Button variant={"default"} size={"icon"}>
                   <BrandInstagramSolid />
                 </Button>
               </Link>
@@ -767,7 +767,7 @@ const EditProfileLayout = (props: userData) => {
                 target="_blank"
                 rel="noopener noreferrer"
                 >
-                <Button variant={"outline"} size={"icon"}>
+                <Button variant={"info"} size={"icon"}>
                   <BrandFacebookSolid />
                 </Button>
               </Link>
@@ -780,7 +780,7 @@ const EditProfileLayout = (props: userData) => {
                 target="_blank"
                 rel="noopener noreferrer"
                 >
-                <Button variant={"outline"} size={"icon"}>
+                <Button variant={"secondary"} size={"icon"}>
                   <BrandXSolid />
                 </Button>
               </Link>

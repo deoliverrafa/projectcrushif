@@ -1,6 +1,7 @@
 import * as React from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import ReCAPTCHA from "react-google-recaptcha";
 
 import {
   Card,
@@ -34,7 +35,15 @@ const LoginLayout = () => {
   const [formData, setFormData] = React.useState({
     nickname: "",
     password: "",
+    captcha: "",
   });
+
+  const handleCaptcha = (token: string | null) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      captcha: token || "",
+    }));
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -48,6 +57,12 @@ const LoginLayout = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setClickedButton(true);
+    
+    if (!formData.captcha) {
+      setMessageError("Por favor, complete o CAPTCHA.");
+      setClickedButton(false);
+      return;
+    }
 
     try {
       setMessageError("");
@@ -67,7 +82,7 @@ const LoginLayout = () => {
         setMessageError(response.data.message);
       }
     } catch (error: any) {
-      setMessageError(error.response.data.message);
+      setMessageError(error.response?.data?.message || "Erro ao fazer login.");
     } finally {
       setClickedButton(false);
     }
@@ -75,7 +90,7 @@ const LoginLayout = () => {
 
   return (
     <>
-      <div className="flex flex-col justify-center items-center space-y-2 h-screen md:h-full">
+      <div className="flex flex-col justify-center items-center">
         <Card className="max-w-sm">
           <CardHeader>
             <Badge className="w-fit" variant={"outline"}>
@@ -120,6 +135,11 @@ const LoginLayout = () => {
                   {messageError}
                 </CardDescription>
               ) : null}
+              
+              <ReCAPTCHA
+                sitekey={import.meta.env.VITE_RECAPTCHA_KEY}
+                onChange={handleCaptcha}
+              />
 
               <Button disabled={clickedButton} type="submit">
                 {clickedButton ? (

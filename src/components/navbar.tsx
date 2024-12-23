@@ -281,7 +281,7 @@ const Navbar: React.FC < NavbarProps > = ({
   return (
     <nav
       className={cn(
-        "border border-border rounded-b-3xl transition-transform duration-300 select-none bg-card shadow flex flex-row justify-between items-center sticky top-0 inset-x-0 translate-y-0 md:translate-y-0/2 px-4 md:px-2 py-0 w-full md:w-4/6 md:mx-auto z-20",
+        "border border-border rounded-b-md transition-transform duration-300 select-none bg-card shadow flex flex-row justify-between items-center sticky top-0 inset-x-0 translate-y-0 md:translate-y-0/2 px-4 md:px-2 py-0 w-full md:w-4/6 md:mx-auto z-20",
         isVisible ? "translate-y-0": "-translate-y-full",
         className
       )}

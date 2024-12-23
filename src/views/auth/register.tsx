@@ -3,6 +3,7 @@ import axios from "axios";
 import {
   Link
 } from "react-router-dom";
+import ReCAPTCHA from "react-google-recaptcha";
 
 import {
   Card,
@@ -74,7 +75,15 @@ birthdaydata: "",
 campus: "",
 userName: "",
 type: "Free",
+captcha: "",
 });
+
+const handleCaptcha = (token: string | null) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      captcha: token || "",
+    }));
+  };
 
 const handleChange = (
 e: React.ChangeEvent < HTMLInputElement | HTMLSelectElement >
@@ -104,6 +113,12 @@ setMessageError("");
 
 e.preventDefault();
 
+if (!formData.captcha) {
+      setMessageError("Por favor, complete o CAPTCHA.");
+      setClickedButton(false);
+      return;
+    }
+
 try {
 const response = await axios.post(
 `${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_REGISTER_ROUTE
@@ -125,7 +140,7 @@ setClickedButton(false);
 
 return (
 <>
-<div className="flex flex-col justify-center items-center space-y-2 h-screen md:h-full">
+<div className="flex flex-col justify-center items-center">
 <Card className="max-w-sm">
 <CardHeader>
 <Badge className="w-fit" variant={"outline"}>
@@ -207,6 +222,11 @@ value={formData.password}
 {messageError}
 </CardDescription>
 ): null}
+
+              <ReCAPTCHA
+                sitekey={import.meta.env.VITE_RECAPTCHA_KEY}
+                onChange={handleCaptcha}
+              />
 
 <Button disabled={clickedButton} type="submit">
 {clickedButton ? (

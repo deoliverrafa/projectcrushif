@@ -4,22 +4,22 @@ import { cva, VariantProps } from "class-variance-authority";
 import { cn } from "../../lib/utils";
 
 const fabVariants = cva(
-  "fixed inline-flex items-center justify-center whitespace-nowrap rounded-full text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 h-14 md:h-12 w-14 md:w-12 z-10",
+  "fixed inline-flex items-center justify-center shadow font-poppins font-semibold whitespace-nowrap rounded-full text-sm font-medium transition-colors focus-visible:outline-none disabled:pointer-events-none hover:animate-clickBounce disabled:opacity-50 h-14 md:h-12 w-14 md:w-12 z-10",
   {
     variants: {
       variant: {
         default:
-          "bg-primary text-primary-foreground shadow hover:bg-primary/90 font-poppins font-semibold uppercase tracking-wider",
+          "bg-primary text-primary-foreground",
         secondary:
-          "bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80 font-poppins font-semibold uppercase tracking-wider",
+          "bg-secondary text-secondary-foreground",
         outline:
-          "border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground font-poppins font-semibold uppercase tracking-wider",
+          "border border-input bg-background",
         success:
-          "bg-success text-success-foreground shadow-sm hover:bg-success/90 font-poppins font-semibold uppercase tracking-wider",
+          "bg-success text-success-foreground",
         warning:
-          "bg-warning text-warning-foreground shadow-sm hover:bg-warning/90 font-poppins font-semibold uppercase tracking-wider",
+          "bg-warning text-warning-foreground",
         danger:
-          "bg-danger text-danger-foreground shadow-sm hover:bg-danger/90 font-poppins font-semibold uppercase tracking-wider",
+          "bg-danger text-danger-foreground",
       },
       placeholder: {
         topRight: "top-20 right-10",

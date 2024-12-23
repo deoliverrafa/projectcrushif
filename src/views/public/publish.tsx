@@ -21,6 +21,8 @@ import {
   IncognitoSolid,
   EarthSolid,
   TrashOneSolid,
+  Location,
+  ChevronRight
 } from "@mynaui/icons-react";
 
 import { getStatusUser } from "../../utils/getStatusUser.tsx";
@@ -254,7 +256,16 @@ const PublishLayout = () => {
                 </div>
               </CardHeader>
 
-              <CardContent>
+              <CardContent className="flex flex-col">
+                <Button className="justify-between" variant={"outline"} type="button">
+                  <div className="flex flex-row items-center">
+                    <Location className="mr-2" />
+                    Localização
+                  </div>
+                  
+                  <ChevronRight />
+                </Button>
+                
                 <Label htmlFor="content">Descrição</Label>
                 <Input
                   type="text"
