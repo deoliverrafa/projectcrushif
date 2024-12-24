@@ -1,20 +1,12 @@
 import * as React from "react";
-import {
-  Toaster
-} from "../../components/ui/toaster.tsx"
-import {
-  useToast
-} from "../../hooks/use-toast.ts"
-import mapboxgl from "mapbox-gl"
-import axios from "axios"
-import 'mapbox-gl/dist/mapbox-gl.css';
+import { Toaster } from "../../components/ui/toaster.tsx";
+import { useToast } from "../../hooks/use-toast.ts";
+import mapboxgl from "mapbox-gl";
+import axios from "axios";
+import "mapbox-gl/dist/mapbox-gl.css";
 
 import { NavBarReturn } from "../../components/navbar";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-} from "../../components/ui/card";
+import { Card, CardContent, CardHeader } from "../../components/ui/card";
 
 import { Input } from "../../components/ui/input";
 import { Button } from "../../components/ui/button";
@@ -26,12 +18,12 @@ import {
   TrashOneSolid,
   LocationSelectedSolid,
   ChevronRight,
-  AlbumSolid
+  AlbumSolid,
 } from "@mynaui/icons-react";
 
 import { getStatusUser } from "../../utils/getStatusUser.tsx";
 
-import PostingArt from "../../../public/images/posting_art.png"
+import PostingArt from "../../../public/images/posting_art.png";
 
 interface CardData {
   content: string;
@@ -41,26 +33,37 @@ interface CardData {
   mentionedUsers: string[];
 }
 
+interface Location {
+  center: [number, number];
+  place_name: string;
+}
+
+interface SelectedLocation {
+  name: string;
+  coordinates: [number, number];
+}
+
 const LogoLayout = () => {
   return (
     <div className="flex flex-col justify-center items-center">
-      <img src={PostingArt} className="hidden md:flex md:h-[300px] md:w-[300px]" />
+      <img
+        src={PostingArt}
+        className="hidden md:flex md:h-[300px] md:w-[300px]"
+      />
     </div>
   );
 };
 
 const PublishLayout = () => {
-  const {
-    toast
-  } = useToast()
-  
+  const { toast } = useToast();
+
   const [userId] = React.useState<string | null>(
     localStorage.getItem("userId")
   );
-  
+
   const currentDate = new Date();
   const formattedDate = `${currentDate.toLocaleDateString()} às ${currentDate.toLocaleTimeString()}`;
-  
+
   const [isAnonymous, setAnonymous] = React.useState<boolean>(false);
 
   const [cardData, setCardData] = React.useState<CardData>({
@@ -101,11 +104,11 @@ const PublishLayout = () => {
 
       const maxFiles = 5;
       if (uploadedImages.length + files.length > maxFiles) {
-        toast( {
+        toast({
           variant: "danger",
           title: "Notificação",
           description: `Você pode fazer upload de até ${maxFiles} imagens no total, ${formattedDate}`,
-        })
+        });
         return;
       }
 
@@ -114,7 +117,6 @@ const PublishLayout = () => {
       setImages((prev) => [...prev, ...newImages]);
     }
   };
-
 
   const handleDeleteImage = (index: number) => {
     setImages((prev) => prev.filter((_, i) => i !== index));
@@ -141,16 +143,14 @@ const PublishLayout = () => {
           photoURLs: imageUrl,
         }));
       } else {
-        toast( {
+        toast({
           variant: "danger",
           title: "Notificação",
           description: `Por favor, selecione uma imagem válida (JPEG, PNG ou GIF), ${formattedDate}`,
-        })
+        });
       }
     }
   }, [images]);
-
-
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -160,7 +160,10 @@ const PublishLayout = () => {
     formData.append("isAnonymous", isAnonymous.toString());
 
     if (cardData.mentionedUsers.length > 0) {
-      formData.append("mentionedUsers", JSON.stringify(cardData.mentionedUsers));
+      formData.append(
+        "mentionedUsers",
+        JSON.stringify(cardData.mentionedUsers)
+      );
     }
 
     // Adiciona cada arquivo ao FormData
@@ -170,7 +173,8 @@ const PublishLayout = () => {
 
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_POST_PUBLISH
+        `${import.meta.env.VITE_API_BASE_URL}${
+          import.meta.env.VITE_POST_PUBLISH
         }${localStorage.getItem("token")}`,
         {
           method: "POST",
@@ -187,47 +191,49 @@ const PublishLayout = () => {
       if (result.posted) {
         window.location.href = "/";
       } else {
-        toast( {
+        toast({
           variant: "danger",
           title: "Notificação",
           description: `Falha ao postar. Tente novamente, ${formattedDate}`,
-        })
+        });
       }
     } catch (error) {
       console.error("Erro:", error);
-      toast( {
-          variant: "danger",
-          title: "Notificação",
-          description: `Ocorreu um erro ao enviar sua postagem, ${formattedDate}`,
-        })
+      toast({
+        variant: "danger",
+        title: "Notificação",
+        description: `Ocorreu um erro ao enviar sua postagem, ${formattedDate}`,
+      });
     }
   }
-  
+
   const mapContainerRef = React.useRef<HTMLDivElement | null>(null);
   const mapRef = React.useRef<mapboxgl.Map | null>(null);
   const [searchQuery, setSearchQuery] = React.useState("");
-  const [locations, setLocations] = React.useState([]);
-  const [selectedLocation, setSelectedLocation] = React.useState(null);
-  const [marker, setMarker] = React.useState(null);
-  
-  const [select,
-    setSelect] = React.useState(1);
+  const [locations, setLocations] = React.useState<Location[]>([]);
+  const [selectedLocation, setSelectedLocation] =
+    React.useState<SelectedLocation | null>(null);
+    const [marker, setMarker] = React.useState<mapboxgl.Marker | null>(null);
+
+  const [select, setSelect] = React.useState(1);
 
   React.useEffect(() => {
     mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_PRIVATE_KEY;
 
-    mapRef.current = new mapboxgl.Map({
-      container: mapContainerRef.current,
-      style: "mapbox://styles/mapbox/streets-v11",
-      center: [-48.3336, -10.1841], // Palmas, Tocantins
-      zoom: 12,
-    });
+    if (mapContainerRef.current) {
+      mapRef.current = new mapboxgl.Map({
+        container: mapContainerRef.current,
+        style: "mapbox://styles/mapbox/streets-v11",
+        center: [-48.3336, -10.1841], // Palmas, Tocantins
+        zoom: 12,
+      });
+    }
 
     return () => {
-      mapRef.current.remove();
+      mapRef.current?.remove();
     };
   }, []);
-  
+
   const handleSearch = async () => {
     const geocodingUrl = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(
       searchQuery
@@ -247,40 +253,37 @@ const PublishLayout = () => {
     }
   };
 
-  const handleSelectLocation = (location) => {
+  const handleSelectLocation = (location: Location) => {
     const { center, place_name } = location;
 
-    // Atualiza a posição do marcador
     if (marker) {
       marker.remove();
     }
 
-    const newMarker = new mapboxgl.Marker()
-      .setLngLat(center)
-      .addTo(mapRef.current);
+    if (mapRef.current) {
+      const newMarker = new mapboxgl.Marker()
+        .setLngLat(center)
+        .addTo(mapRef.current);
 
-    setMarker(newMarker);
+      setMarker(newMarker);
 
-    // Centraliza o mapa no local selecionado
-    mapRef.current.setCenter(center);
-    mapRef.current.setZoom(15);
+      mapRef.current.setCenter(center);
+      mapRef.current.setZoom(15);
 
-    setSelectedLocation({ name: place_name, coordinates: center });
+      setSelectedLocation({ name: place_name, coordinates: center });
+    }
   };
-  
-  getStatusUser(userId)
+
+
+  getStatusUser(userId);
 
   const MenuNavbar = () => {
     return (
       <div onClick={handleIsAnonymous}>
-        {!isAnonymous ? (
-          <EarthSolid />
-        ) : (
-          <IncognitoSolid />
-        )}
+        {!isAnonymous ? <EarthSolid /> : <IncognitoSolid />}
       </div>
-    )
-  }
+    );
+  };
 
   return (
     <>
@@ -317,106 +320,118 @@ const PublishLayout = () => {
                         />
                       </CardContent>
 
-                      <div onClick={() => handleDeleteImage(index)} className="cursor-pointer bg-danger text-white rounded-full absolute top-1 right-1 p-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <div
+                        onClick={() => handleDeleteImage(index)}
+                        className="cursor-pointer bg-danger text-white rounded-full absolute top-1 right-1 p-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                      >
                         <TrashOneSolid />
                       </div>
                     </Card>
                   ))}
                 </div>
               </CardHeader>
-              
+
               <CardHeader className={`${select === 2 ? "" : "hidden"}`}>
                 <div>
-      <h1>Mapa com Pesquisa e Seleção</h1>
-      <div style={{ display: "flex", gap: "10px", marginBottom: "10px" }}>
-        <input
-          type="text"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          placeholder="Pesquise um local"
-          style={{ width: "300px", padding: "8px" }}
-        />
-        <button onClick={handleSearch} style={{ padding: "8px" }}>
-          Pesquisar
-        </button>
-      </div>
-      
-                <Label htmlFor="map">Mapa</Label>
-                <div
-                  ref={mapContainerRef}
-                  className="h-48 w-full"
-                  id="map"
-                />
-                
-                <div style={{ marginTop: "20px" }}>
-        <h2>Resultados:</h2>
-        {locations.length > 0 ? (
-          <ul>
-            {locations.map((location, index) => (
-              <li key={index}>
-                {location.place_name}{" "}
-                <button onClick={() => handleSelectLocation(location)}>
-                  Selecionar
-                </button>
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p>Nenhum local encontrado.</p>
-        )}
-      </div>
+                  <h1>Mapa com Pesquisa e Seleção</h1>
+                  <div
+                    style={{
+                      display: "flex",
+                      gap: "10px",
+                      marginBottom: "10px",
+                    }}
+                  >
+                    <input
+                      type="text"
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      placeholder="Pesquise um local"
+                      style={{ width: "300px", padding: "8px" }}
+                    />
+                    <button onClick={handleSearch} style={{ padding: "8px" }}>
+                      Pesquisar
+                    </button>
+                  </div>
 
-      {selectedLocation && (
-        <div style={{ marginTop: "20px" }}>
-          <h3>Local Selecionado:</h3>
-          <p>Nome: {selectedLocation.name}</p>
-          <p>
-            Coordenadas: {selectedLocation.coordinates[1]},{" "}
-            {selectedLocation.coordinates[0]}
-          </p>
-        </div>
-      )}
-    </div>
+                  <Label htmlFor="map">Mapa</Label>
+                  <div ref={mapContainerRef} className="h-48 w-full" id="map" />
+
+                  <div style={{ marginTop: "20px" }}>
+                    <h2>Resultados:</h2>
+                    {locations.length > 0 ? (
+                      <ul>
+                        {locations.map((location, index) => (
+                          <li key={index}>
+                            {location.place_name}{" "}
+                            <button
+                              onClick={() => handleSelectLocation(location)}
+                            >
+                              Selecionar
+                            </button>
+                          </li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <p>Nenhum local encontrado.</p>
+                    )}
+                  </div>
+
+                  {selectedLocation && (
+                    <div style={{ marginTop: "20px" }}>
+                      <h3>Local Selecionado:</h3>
+                      <p>Nome: {selectedLocation.name}</p>
+                      <p>
+                        Coordenadas: {selectedLocation.coordinates[1]},{" "}
+                        {selectedLocation.coordinates[0]}
+                      </p>
+                    </div>
+                  )}
+                </div>
               </CardHeader>
 
               <CardContent className="flex flex-col space-y-4">
-                <Button 
-                className={`${select === 1 ? "hidden" : ""} justify-between w-full`}
-                variant={"outline"} 
-                type="button" 
-                onClick={() => setSelect(1)}>
+                <Button
+                  className={`${
+                    select === 1 ? "hidden" : ""
+                  } justify-between w-full`}
+                  variant={"outline"}
+                  type="button"
+                  onClick={() => setSelect(1)}
+                >
                   <div className="flex flex-row items-center gap-1">
-                  <AlbumSolid className />
-                  Galeria
+                    <AlbumSolid className />
+                    Galeria
                   </div>
-                  
+
                   <ChevronRight />
                 </Button>
-                
-                <Button 
-                className={`${select === 2 ? "hidden" : ""} justify-between w-full`}
-                variant={"outline"} 
-                type="button" 
-                onClick={() => setSelect(2)}>
+
+                <Button
+                  className={`${
+                    select === 2 ? "hidden" : ""
+                  } justify-between w-full`}
+                  variant={"outline"}
+                  type="button"
+                  onClick={() => setSelect(2)}
+                >
                   <div className="flex flex-row items-center gap-1">
-                  <LocationSelectedSolid />
-                  Localização
+                    <LocationSelectedSolid />
+                    Localização
                   </div>
-                  
+
                   <ChevronRight />
                 </Button>
-                
+
                 <div>
-                <Label htmlFor="content">Descrição</Label>
-                <Input
-                  type="text"
-                  key="content"
-                  placeholder="Adicione uma descrição"
-                  name="content"
-                  id="content"
-                  onChange={handleChangeData}
-                />
-                
+                  <Label htmlFor="content">Descrição</Label>
+                  <Input
+                    type="text"
+                    key="content"
+                    placeholder="Adicione uma descrição"
+                    name="content"
+                    id="content"
+                    onChange={handleChangeData}
+                  />
                 </div>
 
                 <Button type="submit" className="w-full">

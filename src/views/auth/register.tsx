@@ -50,6 +50,7 @@ interface UserDataRegister {
   campus: string;
   userName: string;
   type: string;
+  captcha: string
 }
 
 const LogoLayout = () => {
