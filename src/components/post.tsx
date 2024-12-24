@@ -955,6 +955,8 @@ export const CardPost = (props: CardProps) => {
                             </div>
                           ): comments.length > 0 ? (
                             comments.map((comment) => {
+                              const dataUser =
+                              commentUserData[comment.userId];
                               return (
                                 dataUser && (
                                   <Comment

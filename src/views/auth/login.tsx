@@ -2,6 +2,12 @@ import * as React from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import ReCAPTCHA from "react-google-recaptcha";
+import {
+  Toaster
+} from "../../components/ui/toaster.tsx"
+import {
+  useToast
+} from "../../hooks/use-toast.ts"
 
 import {
   Card,
@@ -17,24 +23,30 @@ import { Label } from "../../components/ui/label.tsx";
 import { Separator } from "../../components/ui/separator.tsx";
 import { Badge } from "../../components/ui/badge.tsx";
 
-import { FireSolid, XSolid, SpinnerSolid } from "@mynaui/icons-react";
+import { 
+  FireSolid,
+  SpinnerOneSolid,
+} from "@mynaui/icons-react";
 
 import LoginArt from "../../../public/images/login_art.png";
 
 const LogoLayout = () => {
   return (
     <div className="flex flex-col justify-center items-center">
-      <img
-        src={LoginArt}
-        className="hidden md:flex md:h-[300px] md:w-[300px]"
-      />
+      <img src={LoginArt} className="hidden md:flex md:h-[300px] md:w-[300px]" />
     </div>
   );
 };
 
 const LoginLayout = () => {
+  const {
+    toast
+  } = useToast()
+  
+  const currentDate = new Date();
+  const formattedDate = `${currentDate.toLocaleDateString()} às ${currentDate.toLocaleTimeString()}`;
+  
   const [clickedButton, setClickedButton] = React.useState(false);
-  const [messageError, setMessageError] = React.useState<string>("");
   const [formData, setFormData] = React.useState({
     nickname: "",
     password: "",
@@ -60,45 +72,42 @@ const LoginLayout = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setClickedButton(true);
-
+    
     if (!formData.captcha) {
-      setMessageError("Por favor, complete o CAPTCHA.");
+      toast( {
+          variant: "danger",
+          title: "Notificação",
+          description: `Por favor, complete o CAPTCHA. ${formattedDate}`,
+        })
       setClickedButton(false);
       return;
     }
 
     try {
-      setMessageError("");
-
       const response = await axios.post(
-        `${import.meta.env.VITE_API_BASE_URL}${
-          import.meta.env.VITE_LOGIN_ROUTE
+        `${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_LOGIN_ROUTE
         }`,
         formData
       );
+
       if (response.data.logged) {
         localStorage.setItem("token", response.data.token);
         localStorage.setItem("userId", response.data.userId);
         localStorage.setItem("welcome", "true");
         window.location.href = "/";
+      } else {
+        toast( {
+          variant: "danger",
+          title: "Notificação",
+          description: `${response.data.message} ${formattedDate}`,
+        })
       }
-
     } catch (error: any) {
-      setMessageError(error.response?.data?.message || "Erro ao fazer login.");
-      console.log(error);
-      
-      if (error.response.data.emailVerified == false) {
-        const emailResposne = await axios.get(
-          `${import.meta.env.VITE_API_BASE_URL}${
-            import.meta.env.VITE_EMAIL_ROUTE
-          }/${error.response.data.email}`
-        );
-
-        if (emailResposne.data.sendEmail) {
-          window.location.href = `/auth/verify`;
-        }
-        setMessageError(error.response.data.message);
-      }
+      toast( {
+          variant: "danger",
+          title: "Notificação",
+          description: `${error.response?.data?.message || "Erro ao fazer login."} ${formattedDate}`,
+        })
     } finally {
       setClickedButton(false);
     }
@@ -144,14 +153,7 @@ const LoginLayout = () => {
                   onChange={handleChange}
                 />
               </div>
-
-              {messageError ? (
-                <CardDescription className="text-danger flex flex-row items-center gap-2">
-                  <XSolid className="h-4 w-4" />
-                  {messageError}
-                </CardDescription>
-              ) : null}
-
+              
               <ReCAPTCHA
                 sitekey={import.meta.env.VITE_RECAPTCHA_KEY}
                 onChange={handleCaptcha}
@@ -159,7 +161,7 @@ const LoginLayout = () => {
 
               <Button disabled={clickedButton} type="submit">
                 {clickedButton ? (
-                  <SpinnerSolid className="animate-spin mr-2 h-5 w-5" />
+                  <SpinnerOneSolid className="animate-spin mr-1 h-4 w-4" />
                 ) : null}
                 Entrar
               </Button>
@@ -199,6 +201,7 @@ const LoginPage = () => {
       <main className="select-none flex flex-col items-center md:flex-row md:justify-around md:items-center h-svh w-full">
         <LogoLayout />
         <LoginLayout />
+        <Toaster />
       </main>
     </>
   );

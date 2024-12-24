@@ -123,7 +123,7 @@ const Input = React.forwardRef < HTMLInputElement, InputProps > (
           }
         }}
         className={cn(
-          "flex h-10 md:h-9 w-11/12 rounded-s-md border border-input bg-gradient-to-br from-background/70 via-background/90 to-background font-poppins font-medium md:font-normal px-3 py-2 text-md md:text-sm shadow-sm transition-colors placeholder:text-muted-foreground/60 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50",
+          "flex h-10 md:h-9 w-11/12 rounded-s-md border border-input bg-background font-poppins font-medium md:font-normal px-3 py-2 text-md md:text-sm shadow-sm transition-colors placeholder:text-muted-foreground/60 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50",
           !inputValue && type !== "file" && type !== "password" ? "w-full rounded-md": "",
           className
         )}

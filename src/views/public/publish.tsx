@@ -5,6 +5,9 @@ import {
 import {
   useToast
 } from "../../hooks/use-toast.ts"
+import mapboxgl from "mapbox-gl"
+import axios from "axios"
+import 'mapbox-gl/dist/mapbox-gl.css';
 
 import { NavBarReturn } from "../../components/navbar";
 import {
@@ -21,14 +24,14 @@ import {
   IncognitoSolid,
   EarthSolid,
   TrashOneSolid,
-  Location,
-  ChevronRight
+  LocationSelectedSolid,
+  ChevronRight,
+  AlbumSolid
 } from "@mynaui/icons-react";
 
 import { getStatusUser } from "../../utils/getStatusUser.tsx";
 
 import PostingArt from "../../../public/images/posting_art.png"
-import axios from "axios";
 
 interface CardData {
   content: string;
@@ -166,38 +169,105 @@ const PublishLayout = () => {
     });
 
     try {
-      const token = localStorage.getItem("token");
-      const response = await axios.post(
-        `${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_POST_PUBLISH}${token}`,
-        formData,
+      const response = await fetch(
+        `${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_POST_PUBLISH
+        }${localStorage.getItem("token")}`,
         {
-          headers: {
-            'Content-Type': 'multipart/form-data', // Ensure the content type is set correctly
-          },
-          withCredentials: true, // This will include cookies in the request if necessary
+          method: "POST",
+          body: formData,
         }
       );
-    
-      // Check if the response was successful and handle accordingly
-      if (response.data.posted) {
+
+      if (!response.ok) {
+        throw new Error("Erro na resposta do servidor.");
+      }
+
+      const result = await response.json();
+
+      if (result.posted) {
         window.location.href = "/";
       } else {
-        toast({
+        toast( {
           variant: "danger",
           title: "Notificação",
           description: `Falha ao postar. Tente novamente, ${formattedDate}`,
-        });
+        })
       }
-    } catch (error: any) {
+    } catch (error) {
       console.error("Erro:", error);
-      toast({
-        variant: "danger",
-        title: "Notificação",
-        description: `Ocorreu um erro ao enviar sua postagem,${error.response.data.message} ${formattedDate}`,
-      });
+      toast( {
+          variant: "danger",
+          title: "Notificação",
+          description: `Ocorreu um erro ao enviar sua postagem, ${formattedDate}`,
+        })
     }
-  }    
+  }
+  
+  const mapContainerRef = React.useRef<HTMLDivElement | null>(null);
+  const mapRef = React.useRef<mapboxgl.Map | null>(null);
+  const [searchQuery, setSearchQuery] = React.useState("");
+  const [locations, setLocations] = React.useState([]);
+  const [selectedLocation, setSelectedLocation] = React.useState(null);
+  const [marker, setMarker] = React.useState(null);
+  
+  const [select,
+    setSelect] = React.useState(1);
 
+  React.useEffect(() => {
+    mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_PRIVATE_KEY;
+
+    mapRef.current = new mapboxgl.Map({
+      container: mapContainerRef.current,
+      style: "mapbox://styles/mapbox/streets-v11",
+      center: [-48.3336, -10.1841], // Palmas, Tocantins
+      zoom: 12,
+    });
+
+    return () => {
+      mapRef.current.remove();
+    };
+  }, []);
+  
+  const handleSearch = async () => {
+    const geocodingUrl = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(
+      searchQuery
+    )}.json`;
+
+    try {
+      const response = await axios.get(geocodingUrl, {
+        params: {
+          access_token: mapboxgl.accessToken,
+          limit: 5,
+        },
+      });
+
+      setLocations(response.data.features || []);
+    } catch (error) {
+      console.error("Erro ao buscar locais:", error);
+    }
+  };
+
+  const handleSelectLocation = (location) => {
+    const { center, place_name } = location;
+
+    // Atualiza a posição do marcador
+    if (marker) {
+      marker.remove();
+    }
+
+    const newMarker = new mapboxgl.Marker()
+      .setLngLat(center)
+      .addTo(mapRef.current);
+
+    setMarker(newMarker);
+
+    // Centraliza o mapa no local selecionado
+    mapRef.current.setCenter(center);
+    mapRef.current.setZoom(15);
+
+    setSelectedLocation({ name: place_name, coordinates: center });
+  };
+  
   getStatusUser(userId)
 
   const MenuNavbar = () => {
@@ -225,7 +295,7 @@ const PublishLayout = () => {
               onSubmit={handleSubmit}
               className="flex flex-col relative space-y-2"
             >
-              <CardHeader>
+              <CardHeader className={`${select === 1 ? "" : "hidden"}`}>
                 <Label htmlFor="inputFoto">Upload</Label>
                 <Input
                   type="file"
@@ -254,17 +324,89 @@ const PublishLayout = () => {
                   ))}
                 </div>
               </CardHeader>
+              
+              <CardHeader className={`${select === 2 ? "" : "hidden"}`}>
+                <div>
+      <h1>Mapa com Pesquisa e Seleção</h1>
+      <div style={{ display: "flex", gap: "10px", marginBottom: "10px" }}>
+        <input
+          type="text"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          placeholder="Pesquise um local"
+          style={{ width: "300px", padding: "8px" }}
+        />
+        <button onClick={handleSearch} style={{ padding: "8px" }}>
+          Pesquisar
+        </button>
+      </div>
+      
+                <Label htmlFor="map">Mapa</Label>
+                <div
+                  ref={mapContainerRef}
+                  className="h-48 w-full"
+                  id="map"
+                />
+                
+                <div style={{ marginTop: "20px" }}>
+        <h2>Resultados:</h2>
+        {locations.length > 0 ? (
+          <ul>
+            {locations.map((location, index) => (
+              <li key={index}>
+                {location.place_name}{" "}
+                <button onClick={() => handleSelectLocation(location)}>
+                  Selecionar
+                </button>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p>Nenhum local encontrado.</p>
+        )}
+      </div>
 
-              <CardContent className="flex flex-col">
-                <Button className="justify-between" variant={"outline"} type="button">
-                  <div className="flex flex-row items-center">
-                    <Location className="mr-2" />
-                    Localização
+      {selectedLocation && (
+        <div style={{ marginTop: "20px" }}>
+          <h3>Local Selecionado:</h3>
+          <p>Nome: {selectedLocation.name}</p>
+          <p>
+            Coordenadas: {selectedLocation.coordinates[1]},{" "}
+            {selectedLocation.coordinates[0]}
+          </p>
+        </div>
+      )}
+    </div>
+              </CardHeader>
+
+              <CardContent className="flex flex-col space-y-4">
+                <Button 
+                className={`${select === 1 ? "hidden" : ""} justify-between w-full`}
+                variant={"outline"} 
+                type="button" 
+                onClick={() => setSelect(1)}>
+                  <div className="flex flex-row items-center gap-1">
+                  <AlbumSolid className />
+                  Galeria
                   </div>
                   
                   <ChevronRight />
                 </Button>
                 
+                <Button 
+                className={`${select === 2 ? "hidden" : ""} justify-between w-full`}
+                variant={"outline"} 
+                type="button" 
+                onClick={() => setSelect(2)}>
+                  <div className="flex flex-row items-center gap-1">
+                  <LocationSelectedSolid />
+                  Localização
+                  </div>
+                  
+                  <ChevronRight />
+                </Button>
+                
+                <div>
                 <Label htmlFor="content">Descrição</Label>
                 <Input
                   type="text"
@@ -274,6 +416,8 @@ const PublishLayout = () => {
                   id="content"
                   onChange={handleChangeData}
                 />
+                
+                </div>
 
                 <Button type="submit" className="w-full">
                   Enviar

@@ -5,24 +5,24 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "./../../lib/utils";
 
 const buttonVariants = cva(
-  "relative inline-flex items-center justify-center whitespace-nowrap rounded-md text-md md:text-sm font-bold md:font-medium transition-colors focus-visible:outline-none hover:animate-clickBounce disabled:pointer-events-none disabled:opacity-50",
+  "relative inline-flex items-center justify-center whitespace-nowrap rounded-md text-md md:text-sm font-bold md:font-medium transition-colors focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50",
   {
     variants: {
       variant: {
         default:
-          "bg-gradient-to-br from-primary/70 via-primary/90 to-primary text-primary-foreground shadow hover:bg-primary/90",
+          "bg-primary text-primary-foreground shadow hover:bg-primary/90",
         secondary:
-          "bg-gradient-to-br from-secondary/70 via-secondary/90 to-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80",
+          "bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80",
         outline:
-          "border text-muted-foreground border-border bg-gradient-to-br from-background/70 via-background/90 to-background shadow-sm hover:bg-card/80 hover:text-accent-foreground",
+          "border text-muted-foreground border-border bg-background shadow-sm hover:bg-card/80 hover:text-accent-foreground",
         success:
-          "bg-gradient-to-br from-success/70 via-success/90 to-success text-success-foreground shadow-sm hover:bg-success/90",
+          "bg-success text-success-foreground shadow-sm hover:bg-success/90",
         warning:
-          "bg-gradient-to-br from-warning/70 via-warning/90 to-warning text-warning-foreground shadow-sm hover:bg-warning/90",
+          "bg-warning text-warning-foreground shadow-sm hover:bg-warning/90",
         danger:
-          "bg-gradient-to-br from-danger/70 via-danger/90 to-danger text-danger-foreground shadow-sm hover:bg-danger/90",
+          "bg-danger text-danger-foreground shadow-sm hover:bg-danger/90",
         info:
-          "bg-gradient-to-br from-info/70 via-info/90 to-info text-info-foreground shadow-sm hover:bg-info/90",
+          "bg-info text-info-foreground shadow-sm hover:bg-info/90",
         ghost:
           "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",

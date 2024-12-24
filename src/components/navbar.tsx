@@ -513,7 +513,7 @@ export const NavBar = (props: userData) => {
             <SendSolid className="h-6 w-6" />
             <div className="pulse-status-container top-1 right-1 rounded-full text-xs absolute">
               <span className="bg-primary pulse-status"></span>
-              <span className="bg-primary pulse-status-core h-3.5 w-3.5 flex justify-center items-center font-semibold md:font-medium text-foreground text-xs">0</span>
+              <span className="bg-primary pulse-status-core h-3.5 w-3.5 flex justify-center items-center font-semibold md:font-medium text-white text-xs">0</span>
             </div>
           </NavbarItem>
         </div>

@@ -27,7 +27,7 @@ React.ComponentPropsWithoutRef < typeof SelectPrimitive.Trigger > > (({
   <SelectPrimitive.Trigger
     ref={ref}
     className={cn(
-      "flex h-10 md:h-9 w-full items-center justify-between whitespace-nowrap rounded-md border border-input bg-gradient-to-br from-background/70 via-background/90 to-background px-3 py-2 font-poppins font-semibold md:font-medium text-sm shadow-sm ring-offset-background placeholder:text-muted-foreground/60 focus:outline-none focus:ring-1 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1",
+      "flex h-10 md:h-9 w-full items-center justify-between whitespace-nowrap rounded-md border border-input bg-background px-3 py-2 font-poppins font-semibold md:font-medium text-sm shadow-sm ring-offset-background placeholder:text-muted-foreground/60 focus:outline-none focus:ring-1 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1",
       className
     )}
     {...props}
