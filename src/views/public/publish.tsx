@@ -188,12 +188,12 @@ const PublishLayout = () => {
           description: `Falha ao postar. Tente novamente, ${formattedDate}`,
         });
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("Erro:", error);
       toast({
         variant: "danger",
         title: "Notificação",
-        description: `Ocorreu um erro ao enviar sua postagem, ${formattedDate}`,
+        description: `Ocorreu um erro ao enviar sua postagem,${error.response.data.message} ${formattedDate}`,
       });
     }
   }    
