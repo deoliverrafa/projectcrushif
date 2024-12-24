@@ -85,7 +85,8 @@ const LoginLayout = () => {
 
     } catch (error: any) {
       setMessageError(error.response?.data?.message || "Erro ao fazer login.");
-
+      console.log(error);
+      
       if (error.response.data.emailVerified == false) {
         const emailResposne = await axios.get(
           `${import.meta.env.VITE_API_BASE_URL}${

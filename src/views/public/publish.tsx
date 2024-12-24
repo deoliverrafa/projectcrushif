@@ -28,6 +28,7 @@ import {
 import { getStatusUser } from "../../utils/getStatusUser.tsx";
 
 import PostingArt from "../../../public/images/posting_art.png"
+import axios from "axios";
 
 interface CardData {
   content: string;
@@ -165,39 +166,37 @@ const PublishLayout = () => {
     });
 
     try {
-      const response = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_POST_PUBLISH
-        }${localStorage.getItem("token")}`,
+      const token = localStorage.getItem("token");
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_POST_PUBLISH}${token}`,
+        formData,
         {
-          method: "POST",
-          body: formData,
+          headers: {
+            'Content-Type': 'multipart/form-data', // Ensure the content type is set correctly
+          },
+          withCredentials: true, // This will include cookies in the request if necessary
         }
       );
-
-      if (!response.ok) {
-        throw new Error("Erro na resposta do servidor.");
-      }
-
-      const result = await response.json();
-
-      if (result.posted) {
+    
+      // Check if the response was successful and handle accordingly
+      if (response.data.posted) {
         window.location.href = "/";
       } else {
-        toast( {
+        toast({
           variant: "danger",
           title: "Notificação",
           description: `Falha ao postar. Tente novamente, ${formattedDate}`,
-        })
+        });
       }
     } catch (error) {
       console.error("Erro:", error);
-      toast( {
-          variant: "danger",
-          title: "Notificação",
-          description: `Ocorreu um erro ao enviar sua postagem, ${formattedDate}`,
-        })
+      toast({
+        variant: "danger",
+        title: "Notificação",
+        description: `Ocorreu um erro ao enviar sua postagem, ${formattedDate}`,
+      });
     }
-  }
+  }    
 
   getStatusUser(userId)
 
