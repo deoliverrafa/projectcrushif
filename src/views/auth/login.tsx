@@ -24,7 +24,10 @@ import LoginArt from "../../../public/images/login_art.png";
 const LogoLayout = () => {
   return (
     <div className="flex flex-col justify-center items-center">
-      <img src={LoginArt} className="hidden md:flex md:h-[300px] md:w-[300px]" />
+      <img
+        src={LoginArt}
+        className="hidden md:flex md:h-[300px] md:w-[300px]"
+      />
     </div>
   );
 };
@@ -57,7 +60,7 @@ const LoginLayout = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setClickedButton(true);
-    
+
     if (!formData.captcha) {
       setMessageError("Por favor, complete o CAPTCHA.");
       setClickedButton(false);
@@ -68,21 +71,33 @@ const LoginLayout = () => {
       setMessageError("");
 
       const response = await axios.post(
-        `${import.meta.env.VITE_API_BASE_URL}${import.meta.env.VITE_LOGIN_ROUTE
+        `${import.meta.env.VITE_API_BASE_URL}${
+          import.meta.env.VITE_LOGIN_ROUTE
         }`,
         formData
       );
-
       if (response.data.logged) {
         localStorage.setItem("token", response.data.token);
         localStorage.setItem("userId", response.data.userId);
         localStorage.setItem("welcome", "true");
         window.location.href = "/";
-      } else {
-        setMessageError(response.data.message);
       }
+
     } catch (error: any) {
       setMessageError(error.response?.data?.message || "Erro ao fazer login.");
+
+      if (error.response.data.emailVerified == false) {
+        const emailResposne = await axios.get(
+          `${import.meta.env.VITE_API_BASE_URL}${
+            import.meta.env.VITE_EMAIL_ROUTE
+          }/${error.response.data.email}`
+        );
+
+        if (emailResposne.data.sendEmail) {
+          window.location.href = `/auth/verify`;
+        }
+        setMessageError(error.response.data.message);
+      }
     } finally {
       setClickedButton(false);
     }
@@ -135,7 +150,7 @@ const LoginLayout = () => {
                   {messageError}
                 </CardDescription>
               ) : null}
-              
+
               <ReCAPTCHA
                 sitekey={import.meta.env.VITE_RECAPTCHA_KEY}
                 onChange={handleCaptcha}
