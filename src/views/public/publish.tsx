@@ -29,6 +29,7 @@ interface CardData {
   content: string;
   isAnonymous: boolean;
   photoURLs?: string;
+  videoURLs?: string[];
   userPhotoUrls?: string;
   mentionedUsers: string[];
 }
