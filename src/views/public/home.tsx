@@ -227,6 +227,7 @@ export default function HomePage() {
                   content={post.content}
                   isAnonymous={post.isAnonymous}
                   photoURLs={post.photoURLs}
+                  videoURLs={post.videoURLs}
                   userId={post.userId}
                   insertAt={post.insertAt}
                   likeCount={post.likeCount}
@@ -236,7 +237,6 @@ export default function HomePage() {
                   mentionedUsers={post.mentionedUsers}
                   followingMentionedUsers={followingMentionedUsers}
                   isFollowingUserPost={isFollowingUserPost}
-                  videoURLs={post.videoURLs}
                   onDelete={deletePostFromState}
                   />
               );

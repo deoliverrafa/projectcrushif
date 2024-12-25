@@ -46,6 +46,7 @@ interface CardProps {
   content: string;
   isAnonymous: boolean;
   photoURLs: string[];
+  videoURLs: string[];
   insertAt: Date;
   userId: string;
   likeCount: number;
@@ -118,6 +119,7 @@ const FavoritedLayout = ({
             content={post.content}
             isAnonymous={post.isAnonymous}
             photoURLs={post.photoURLs}
+            videoURLs={post.videoURLs}
             insertAt={post.insertAt}
             likeCount={post.likeCount}
             commentCount={post.commentCount}
