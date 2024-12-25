@@ -50,6 +50,7 @@ interface CardProps {
   content: string;
   isAnonymous: boolean;
   photoURLs: string[];
+  videoURLs: string[];
   insertAt: Date;
   userId: string;
   likeCount: number;
@@ -199,7 +200,7 @@ export default function HomePage() {
     }
   },
     [userData]);
-
+    
   return (
     <>
       {userData ? (
@@ -235,6 +236,7 @@ export default function HomePage() {
                   mentionedUsers={post.mentionedUsers}
                   followingMentionedUsers={followingMentionedUsers}
                   isFollowingUserPost={isFollowingUserPost}
+                  videoURLs={post.videoURLs}
                   onDelete={deletePostFromState}
                   />
               );

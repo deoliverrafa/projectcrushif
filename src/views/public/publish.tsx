@@ -71,8 +71,13 @@ const PublishLayout = () => {
     isAnonymous: false,
     mentionedUsers: [],
   });
-
-  const [images, setImages] = React.useState<string[]>([]);
+  console.log(cardData);
+  
+  interface Images {
+    type: string;
+    src: string;
+  }
+  const [images, setImages] = React.useState<Images[]>([]);
   const [uploadedImages, setUploadedImages] = React.useState<File[]>([]);
 
   const handleIsAnonymous = () => {
@@ -112,7 +117,13 @@ const PublishLayout = () => {
         return;
       }
 
-      const newImages = files.map((file) => URL.createObjectURL(file));
+      const newImages = files.map((file) => {
+        return {
+          src: URL.createObjectURL(file),
+          type: file.type,
+        };
+      });
+
       setUploadedImages((prev) => [...prev, ...files]);
       setImages((prev) => [...prev, ...newImages]);
     }
@@ -137,6 +148,7 @@ const PublishLayout = () => {
         images.type === "image/png" ||
         images.type === "image/gif"
       ) {
+        
         const imageUrl = URL.createObjectURL(images);
         setCardData((prevData) => ({
           ...prevData,
@@ -172,23 +184,14 @@ const PublishLayout = () => {
     });
 
     try {
-      const response = await fetch(
+      const response = await axios.post(
         `${import.meta.env.VITE_API_BASE_URL}${
           import.meta.env.VITE_POST_PUBLISH
         }${localStorage.getItem("token")}`,
-        {
-          method: "POST",
-          body: formData,
-        }
+          formData,
       );
 
-      if (!response.ok) {
-        throw new Error("Erro na resposta do servidor.");
-      }
-
-      const result = await response.json();
-
-      if (result.posted) {
+      if (response.data.posted) {
         window.location.href = "/";
       } else {
         toast({
@@ -197,12 +200,12 @@ const PublishLayout = () => {
           description: `Falha ao postar. Tente novamente, ${formattedDate}`,
         });
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("Erro:", error);
       toast({
         variant: "danger",
         title: "Notificação",
-        description: `Ocorreu um erro ao enviar sua postagem, ${formattedDate}`,
+        description: `Ocorreu um erro ao enviar sua postagem, ${error} ${formattedDate}`,
       });
     }
   }
@@ -213,7 +216,7 @@ const PublishLayout = () => {
   const [locations, setLocations] = React.useState<Location[]>([]);
   const [selectedLocation, setSelectedLocation] =
     React.useState<SelectedLocation | null>(null);
-    const [marker, setMarker] = React.useState<mapboxgl.Marker | null>(null);
+  const [marker, setMarker] = React.useState<mapboxgl.Marker | null>(null);
 
   const [select, setSelect] = React.useState(1);
 
@@ -274,7 +277,6 @@ const PublishLayout = () => {
     }
   };
 
-
   getStatusUser(userId);
 
   const MenuNavbar = () => {
@@ -310,14 +312,22 @@ const PublishLayout = () => {
                 />
 
                 <div className="grid grid-cols-3 gap-4">
-                  {images.map((src, index) => (
-                    <Card className="relative w-fit h-fit group">
+                  {images.map((item, index) => (
+                    <Card key={index} className="relative w-fit h-fit group">
                       <CardContent className="h-20 w-20 p-0">
-                        <img
-                          src={src}
-                          alt={`Uploaded ${index}`}
-                          className="rounded-lg object-cover h-20 w-20"
-                        />
+                        {item.type.startsWith("image/") ? (
+                          <img
+                            src={item.src}
+                            alt={`Uploaded ${index}`}
+                            className="rounded-lg object-cover h-20 w-20"
+                          />
+                        ) : item.type.startsWith("video/") ? (
+                          <video
+                            src={item.src}
+                            controls
+                            className="rounded-lg object-cover h-20 w-20"
+                          />
+                        ) : null}
                       </CardContent>
 
                       <div
