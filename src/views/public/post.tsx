@@ -19,6 +19,7 @@ interface Post {
   content: string;
   isAnonymous: boolean;
   photoURLs: string[];
+  videoURLs: string[];
   insertAt: Date;
   id?: string;
   likeCount: number;
@@ -116,6 +117,7 @@ const PostLayout = () => {
         mentionedUsers={viewingPost.mentionedUsers}
         followingMentionedUsers={followingMentionedUsers}
         isFollowingUserPost={isFollowingUserPost}
+        videoURLs={viewingPost.videoURLs}
         onDelete={deletePostFromState}
         />
     </React.Fragment>
